@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Preparation') {
             steps {
-                git url: 'https://github.com/rlsutton1/VaadinUtils.git', branch: 'carma'
+                git url: 'https://github.com/bhorvath/VaadinUtils.git'
             }
         }
         stage('Build') {
@@ -34,3 +34,4 @@ pipeline {
         }
     }
 }
+
