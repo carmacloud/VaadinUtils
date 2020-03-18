@@ -2,7 +2,7 @@ package au.com.vaadinutils.jasper;
 
 public enum AttachmentType
 {
-	PDF("application/pdf", ".pdf"), CSV("text/csv", ".csv"), HTML("text/html", ".html"),EML("application/eml",".eml");
+	PDF("application/pdf", ".pdf"), CSV("text/csv", ".csv"), HTML("text/html", ".html"),EML("application/eml",".eml"), ZIP("application/zip",".zip");
 
 	private String type;
 	private String extension;
