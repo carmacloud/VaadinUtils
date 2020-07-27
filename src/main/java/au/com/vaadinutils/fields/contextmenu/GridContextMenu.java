@@ -10,23 +10,25 @@ public class GridContextMenu<E> extends EntityContextMenu<E>
 	private static final long serialVersionUID = 1L;
 
 	private Grid grid;
+	private boolean loadCrud;
 
 	/**
 	 * Assigns this as the context menu of given table. Allows context menu to
 	 * appear only on certain parts of the table.
-	 *
-	 * @param table
 	 * @param onRow
 	 *            show context menu when row is clicked
 	 * @param onHeader
 	 *            show context menu when header is clicked
 	 * @param onFooter
 	 *            show context menu when footer is clicked
+	 * @param loadCrud If set to false, do not load the crud from the DB.<br>(Meant for grids backed by a Stored Procedure)
+	 * @param table
 	 */
 	public void setAsGridContextMenu(final Grid grid, final boolean onRow, final boolean onHeader,
-			final boolean onFooter)
+			final boolean onFooter, boolean loadCrud)
 	{
 		this.grid = grid;
+		this.loadCrud = loadCrud;
 		extend(grid);
 		setOpenAutomatically(false);
 
@@ -86,8 +88,15 @@ public class GridContextMenu<E> extends EntityContextMenu<E>
 				return;
 			}
 
-			// Make sure we have an up to date copy of the entity from the db
+			// Make sure we have an up to date copy of the entity from the db (if not using a stored proc in the Grid)
+			if(loadCrud) 
+			{
 			targetEntity = loadEntity(itemId);
+			}
+			else 
+			{
+			targetEntity = itemId;
+			}
 			grid.select(itemId);
 
 			fireEvents();
