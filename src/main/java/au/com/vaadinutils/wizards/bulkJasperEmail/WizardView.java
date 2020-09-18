@@ -25,6 +25,7 @@ import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import net.sf.jasperreports.engine.JRException;
 
+@Deprecated
 abstract public class WizardView<Parent extends CrudEntity, Child extends CrudEntity, R extends Recipient> extends VerticalLayout implements WizardProgressListener
 {
 	private static final long serialVersionUID = 1L;

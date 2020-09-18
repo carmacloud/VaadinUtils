@@ -14,6 +14,9 @@ import com.vaadin.ui.Table.FooterClickListener;
 import com.vaadin.ui.Table.HeaderClickEvent;
 import com.vaadin.ui.Table.HeaderClickListener;
 
+/**
+ * @deprecated
+ */
 public class TableContextMenu extends ContextMenu
 {
 	private static final long serialVersionUID = 1L;

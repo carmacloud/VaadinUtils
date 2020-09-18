@@ -22,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
  * 
  * @author bsutton
  * 
+ * @deprecated
  */
 public class PoJoTable<T> extends Table
 {

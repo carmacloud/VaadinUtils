@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 
 import au.com.vaadinutils.errorHandling.ErrorWindow;
 
+@Deprecated
 public class EntityTable<E> extends Table implements EntityList<E>
 {
 

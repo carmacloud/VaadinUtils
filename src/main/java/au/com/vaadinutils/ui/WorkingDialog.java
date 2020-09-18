@@ -19,6 +19,8 @@ import au.com.vaadinutils.listener.CompleteListener;
 import au.com.vaadinutils.listener.ProgressListener;
 
 /**
+ * LC 2020/09/09 retain, but convert to Dialog
+ * 
  * Displays a dialog designed to be shown when a long running task is in
  * progress.
  *

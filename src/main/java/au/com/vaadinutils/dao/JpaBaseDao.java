@@ -27,7 +27,6 @@ import javax.persistence.metamodel.SingularAttribute;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.eclipse.persistence.config.QueryHints;
 import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 
 import com.google.common.base.Preconditions;

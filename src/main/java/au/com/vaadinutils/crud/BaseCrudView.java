@@ -85,6 +85,7 @@ import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.menu.Menus;
 
+@Deprecated
 public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
 		implements RowChangeListener<E>, Selected<E>, DirtyListener, ButtonListener, ParentCrud<E>
 {

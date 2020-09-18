@@ -3,6 +3,7 @@ package au.com.vaadinutils.crud;
 import com.google.common.base.Preconditions;
 import com.vaadin.ui.Table.ColumnGenerator;
 
+@Deprecated
 public class HeadingToPropertyId
 {
 

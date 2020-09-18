@@ -44,6 +44,9 @@ import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.NullFilter;
 
+/**
+ * @deprecated
+ */
 public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collection<C>>
 {
 	private static final long serialVersionUID = -4316521010865902678L;

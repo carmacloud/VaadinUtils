@@ -43,6 +43,7 @@ import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.menu.Menus;
 
+@Deprecated
 public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends CustomComponent
 {
 	private static final long serialVersionUID = 1L;

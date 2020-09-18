@@ -82,6 +82,7 @@ import au.com.vaadinutils.fields.ColorPickerField;
 import au.com.vaadinutils.fields.ComboBoxWithSearchField;
 import au.com.vaadinutils.fields.DataBoundButton;
 
+@Deprecated
 public class FormHelper<E> implements Serializable
 {
 	private static final long serialVersionUID = 1L;
