@@ -20,6 +20,7 @@ import au.com.vaadinutils.dao.JpaBaseDao;
  *            the Entity type of the items contained in the Parent container
  * @param <Child>
  *            the Entity type of the items contained in the Child container
+ *            @deprecated
  */
 public class EntityComboBox<E extends CrudEntity> extends ComboBox
 {
