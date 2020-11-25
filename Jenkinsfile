@@ -9,9 +9,6 @@ pipeline {
         }
     }
     stages {
-    	stage('Clean'){
-    	 	cleanWs()
-    	}
         stage('Preparation') {
             steps {
                 git url: 'https://github.com/carmacloud/VaadinUtils.git'
