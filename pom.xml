@@ -177,9 +177,6 @@
 			<artifactId>vaadin-server</artifactId>
 			<version>${vaadin.version}</version>
 		</dependency>
-		<!-- dont need this as we compile our own widget set <dependency> <groupId>com.vaadin</groupId> 
-			<artifactId>vaadin-client-compiled</artifactId> <version>${vaadin.version}</version> 
-			</dependency> -->
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
 			<groupId>org.vaadin.addon</groupId>
