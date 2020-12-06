@@ -17,6 +17,9 @@ import org.apache.logging.log4j.LogManager;
 import au.com.vaadinutils.listener.ListenerManager;
 import au.com.vaadinutils.listener.ListenerManagerFactory;
 
+/**
+ * @deprecated
+ */
 public class DataBoundButton<T> extends Button implements Field<T>
 {
 
