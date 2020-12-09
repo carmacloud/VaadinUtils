@@ -2,6 +2,9 @@ package au.com.vaadinutils.audit;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * @deprecated Will be removed once dependent classes are removed.
+ */
 public enum AuditFactory
 {
     SELF(new AuditorLoggingImpl());

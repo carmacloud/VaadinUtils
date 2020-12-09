@@ -1,12 +1,12 @@
 package au.com.vaadinutils.user;
 
-public interface UserSettingsStorage
-{
+/**
+ * @deprecated Replaced in Vaadin 14 migration.
+ */
+public interface UserSettingsStorage {
+    void store(String key, String value);
 
-	void store(String key, String value);
+    String get(String string);
 
-	String get(String string);
-
-	void erase(String partialKey);
-
+    void erase(String partialKey);
 }

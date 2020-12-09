@@ -6,7 +6,9 @@ import com.vaadin.data.Container;
 
 import au.com.vaadinutils.fields.TableCheckBoxSelect;
 
-@SuppressWarnings("deprecation")
+/**
+ * @deprecated Replaced in V14 migration.
+ */
 public class SelectableEntityTable<E> extends TableCheckBoxSelect
 {
 	// private static transient Logger logger =

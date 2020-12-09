@@ -1,19 +1,17 @@
 package au.com.vaadinutils.menu;
 
-public class WindowSizerNull implements WindowSizer
-{
+/**
+ * @deprecated Will be removed once dependent classes are removed.
+ */
+public class WindowSizerNull implements WindowSizer {
 
-	@Override
-	public int width()
-	{
-		throw new RuntimeException("Not implemented");
-	}
+    @Override
+    public int width() {
+        throw new RuntimeException("Not implemented");
+    }
 
-	@Override
-	public int height()
-	{
-		throw new RuntimeException("Not implemented");
-
-	}
-	// Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+    @Override
+    public int height() {
+        throw new RuntimeException("Not implemented");
+    }
 }

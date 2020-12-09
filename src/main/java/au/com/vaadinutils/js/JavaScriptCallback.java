@@ -1,8 +1,8 @@
 package au.com.vaadinutils.js;
 
-public interface JavaScriptCallback<T>
-{
-
-	void callback(T value);
-
+/**
+ * @deprecated Replaced in Vaadin 14 migration.
+ */
+public interface JavaScriptCallback<T> {
+    void callback(T value);
 }

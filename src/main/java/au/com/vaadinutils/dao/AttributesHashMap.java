@@ -12,18 +12,14 @@ import javax.persistence.metamodel.SingularAttribute;
  * @param <T> the class of the entity
  */
 @SuppressWarnings("serial")
-public class AttributesHashMap<T> extends HashMap<SingularAttribute<T, Object>, Object>
-{
-	@SuppressWarnings("unchecked")
-	public <K> void safePut(SingularAttribute<T, K> key, K value)
-	{
-		super.put((SingularAttribute<T, Object>) key, value);
-	}
+public class AttributesHashMap<T> extends HashMap<SingularAttribute<T, Object>, Object> {
+    @SuppressWarnings("unchecked")
+    public <K> void safePut(SingularAttribute<T, K> key, K value) {
+        super.put((SingularAttribute<T, Object>) key, value);
+    }
 
-	@Override
-	public Object put(SingularAttribute<T, Object> key, Object value)
-	{
-		throw new RuntimeException("Use safePut method!");
-	}
-
+    @Override
+    public Object put(SingularAttribute<T, Object> key, Object value) {
+        throw new RuntimeException("Use safePut method!");
+    }
 }

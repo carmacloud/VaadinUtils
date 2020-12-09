@@ -2,6 +2,9 @@ package au.com.vaadinutils.dao;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * @deprecated Not used?
+ */
 public class JpaEntityHelper
 {
 

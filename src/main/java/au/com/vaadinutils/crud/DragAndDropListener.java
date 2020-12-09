@@ -1,6 +1,8 @@
 package au.com.vaadinutils.crud;
 
-public interface DragAndDropListener
-{
-	public void dropped();
+/**
+ * @deprecated Replaced in V14 migration.
+ */
+public interface DragAndDropListener {
+    public void dropped();
 }

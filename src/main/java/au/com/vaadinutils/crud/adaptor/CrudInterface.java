@@ -18,35 +18,36 @@ import au.com.vaadinutils.crud.ValidatingFieldGroup;
  * @author rsutton
  *
  * @param <E>
+ * @deprecated Will be removed once dependent classes are removed.
  */
-public interface CrudInterface<E extends CrudEntity>
-{
+public interface CrudInterface<E extends CrudEntity> {
 
-	Component buildEditor(ValidatingFieldGroup<E> fieldGroup2);
+    Component buildEditor(ValidatingFieldGroup<E> fieldGroup2);
 
-	Filter getContainerFilter(String filterString, boolean advancedSearchActive);
+    Filter getContainerFilter(String filterString, boolean advancedSearchActive);
 
-	String getTitleText();
+    String getTitleText();
 
-	List<CrudAction<E>> getCrudActions();
+    List<CrudAction<E>> getCrudActions();
 
-	/**
-	 * if you don't need to modify it, just return newEntity
-	 * 
-	 * @param newEntity
-	 * @param previousEntity
-	 * @return
-	 */
-	E preNew(E newEntity, E previousEntity);
+    /**
+     * if you don't need to modify it, just return newEntity
+     * 
+     * @param newEntity
+     * @param previousEntity
+     * @return
+     */
+    E preNew(E newEntity, E previousEntity);
 
-	void rowChanged(EntityItem<E> item);
+    void rowChanged(EntityItem<E> item);
 
-	void postNew(EntityItem<E> newEntity);
+    void postNew(EntityItem<E> newEntity);
 
-	void interceptSaveValues(EntityItem<E> entityItem) throws Exception;
+    void interceptSaveValues(EntityItem<E> entityItem) throws Exception;
 
-	void resetFilters(JPAContainer<E> container);
+    void resetFilters(JPAContainer<E> container);
 
-	EntityItem<E> createNewEntity(EntityItem<E> newEntity, E previousEntity) throws InstantiationException, IllegalAccessException;
+    EntityItem<E> createNewEntity(EntityItem<E> newEntity, E previousEntity)
+            throws InstantiationException, IllegalAccessException;
 
 }

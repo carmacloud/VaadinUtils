@@ -9,7 +9,8 @@ import java.lang.annotation.Target;
 // Make this annotation accessible at runtime via reflection.
 @Target({ ElementType.TYPE })
 // This annotation can only be applied to classes.
-public @interface Menus
-{
-	Menu[] menus();
+@Deprecated
+// Will be removed once dependent classes are removed.
+public @interface Menus {
+    Menu[] menus();
 }

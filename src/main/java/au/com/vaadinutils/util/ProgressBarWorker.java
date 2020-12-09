@@ -1,19 +1,15 @@
 package au.com.vaadinutils.util;
 
+public class ProgressBarWorker<T> extends Thread {
+    private ProgressBarTask<T> task;
 
-public class ProgressBarWorker<T> extends Thread
-{
-	private ProgressBarTask<T> task;
+    public ProgressBarWorker(ProgressBarTask<T> task) {
+        super(ProgressBarTask.class.getName());
+        this.task = task;
+    }
 
-	public ProgressBarWorker(ProgressBarTask<T> task)
-	{
-		super(ProgressBarTask.class.getName());
-		this.task = task;
-	}
-
-	@Override
-	public void run()
-	{
-		task.run();
-	}
+    @Override
+    public void run() {
+        task.run();
+    }
 }

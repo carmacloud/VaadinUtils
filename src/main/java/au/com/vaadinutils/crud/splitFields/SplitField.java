@@ -3,13 +3,14 @@ package au.com.vaadinutils.crud.splitFields;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 
-public interface SplitField extends Component
-{
+/**
+ * @deprecated Replaced in V14 migration.
+ */
+public interface SplitField extends Component {
 
-	Label getLabel();
+    Label getLabel();
 
-	String getCaption();
+    String getCaption();
 
-	void hideLabel();
-
+    void hideLabel();
 }

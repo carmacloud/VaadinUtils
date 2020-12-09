@@ -1,10 +1,9 @@
 package au.com.vaadinutils.fields.contextmenu;
 
-public interface ContextMenuEvent
-{
+public interface ContextMenuEvent {
 
-	/**
-	 * Called before the context menu opens.
-	 */
-	void preContextMenuOpen();
+    /**
+     * Called before the context menu opens.
+     */
+    void preContextMenuOpen();
 }

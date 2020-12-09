@@ -6,6 +6,9 @@ import com.vaadin.data.Container;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Label;
 
+/**
+ *@deprecated Replaced in V14 migration.
+ */
 public class SplitComboBox extends ComboBox implements SplitField
 {
 	/**

@@ -28,6 +28,9 @@ import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.errorHandling.ErrorWindow;
 
+/**
+ * @deprecated Not used?
+ */
 public class EntityManagerTrackerWrapper implements EntityManager
 {
 	final private EntityManager em;

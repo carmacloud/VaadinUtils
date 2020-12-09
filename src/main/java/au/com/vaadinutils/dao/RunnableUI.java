@@ -1,7 +1,5 @@
 package au.com.vaadinutils.dao;
 
-import org.apache.logging.log4j.Logger;
-
 import com.vaadin.ui.UI;
 
 /**
@@ -13,27 +11,23 @@ import com.vaadin.ui.UI;
  *
  * @param <T>
  */
-public abstract class RunnableUI implements Runnable
-{
+public abstract class RunnableUI implements Runnable {
 
-	final private UI ui;
-	Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+    final private UI ui;
 
-	public RunnableUI(UI ui)
-	{
-		this.ui = ui;
-	}
+    public RunnableUI(UI ui) {
+        this.ui = ui;
+    }
 
-	/**
-	 * throws Exception allows the call method to throw an exception. The
-	 * exception is chained from any exception thrown in the enclosed thread.
-	 */
-	@Override
-	public void run()
-	{
-		run(ui);
-	}
+    /**
+     * throws Exception allows the call method to throw an exception. The exception
+     * is chained from any exception thrown in the enclosed thread.
+     */
+    @Override
+    public void run() {
+        run(ui);
+    }
 
-	protected abstract void run(UI ui);
+    protected abstract void run(UI ui);
 
 }

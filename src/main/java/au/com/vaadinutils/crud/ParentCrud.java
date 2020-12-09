@@ -3,45 +3,46 @@ package au.com.vaadinutils.crud;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
-public interface ParentCrud<T extends CrudEntity>
-{
+/**
+ * @deprecated Replaced in V14 migration.
+ */
+public interface ParentCrud<T extends CrudEntity> {
+    EntityItem<T> getContainerItem(Long id);
 
-	EntityItem<T> getContainerItem(Long id);
+    void fieldGroupIsDirty(boolean b);
 
-	void fieldGroupIsDirty(boolean b);
+    T getCurrent();
 
-	T getCurrent();
+    boolean isDirty();
 
-	boolean isDirty();
+    void reloadDataFromDB();
 
-	void reloadDataFromDB();
+    void save();
 
-	void save();
+    void setSplitPosition(float pos);
 
-	void setSplitPosition(float pos);
+    void setSearchFilterText(String string);
 
-	void setSearchFilterText(String string);
+    void setMainView(boolean isMainView);
 
-	void setMainView(boolean isMainView);
+    void addChildCrudListener(ChildCrudListener<T> listener);
 
-	void addChildCrudListener(ChildCrudListener<T> listener);
+    void removeChildCrudListener(ChildCrudListener<T> listener);
 
-	void removeChildCrudListener(ChildCrudListener<T> listener);
+    ValidatingFieldGroup<T> getFieldGroup();
 
-	ValidatingFieldGroup<T> getFieldGroup();
+    EntityItem<T> getNewEntity();
 
-	EntityItem<T> getNewEntity();
+    BaseCrudSaveCancelButtonTray getButtonLayout();
 
-	BaseCrudSaveCancelButtonTray getButtonLayout();
+    CrudSecurityManager getSecurityManager();
 
-	CrudSecurityManager getSecurityManager();
+    boolean isNew();
 
-	boolean isNew();
+    JPAContainer<T> getContainer();
 
-	JPAContainer<T> getContainer();
+    void addAdvancedModeListener(AdvancedModeListener listener);
 
-	void addAdvancedModeListener(AdvancedModeListener listener);
-
-	boolean isAdvancedMode();
+    boolean isAdvancedMode();
 
 }

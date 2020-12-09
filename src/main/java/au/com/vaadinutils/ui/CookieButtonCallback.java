@@ -1,10 +1,10 @@
 package au.com.vaadinutils.ui;
 
-public interface CookieButtonCallback
-{
+/**
+ * @deprecated Not used?
+ */
+public interface CookieButtonCallback {
+    void on();
 
-	void on();
-
-	void off();
-
+    void off();
 }

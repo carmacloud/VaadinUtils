@@ -10,6 +10,7 @@ import com.vaadin.ui.VerticalLayout;
 
 /**
  * A Vaadin label that allows actions to be run by adding a LayoutClickListener
+ * Retain, needs updating to Flow for UI.
  */
 @SuppressWarnings("serial")
 public class ClickableLabel extends VerticalLayout

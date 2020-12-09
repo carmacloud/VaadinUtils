@@ -5,15 +5,15 @@ import java.util.List;
 
 import org.vaadin.peter.contextmenu.ContextMenu;
 
-public class LabelContextMenu extends ContextMenu
-{
-	private static final long serialVersionUID = 1L;
+/**
+ * @deprecated Not used?
+ */
+public class LabelContextMenu extends ContextMenu {
+    private static final long serialVersionUID = 1L;
 
-	private List<ContextMenuEvent> events = new ArrayList<>();
+    private List<ContextMenuEvent> events = new ArrayList<>();
 
-	public void addEvent(final ContextMenuEvent event)
-	{
-		events.add(event);
-	}
-
+    public void addEvent(final ContextMenuEvent event) {
+        events.add(event);
+    }
 }

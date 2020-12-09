@@ -20,90 +20,75 @@ import com.google.common.base.Preconditions;
  * @author rsutton
  *
  */
-public class PipedOutputStreamWrapper extends OutputStream
-{
+public class PipedOutputStreamWrapper extends OutputStream {
+    final CountDownLatch readLatch = new CountDownLatch(1);
+    final CountDownLatch writeLatch = new CountDownLatch(1);
 
-	final CountDownLatch readLatch = new CountDownLatch(1);
-	final CountDownLatch writeLatch = new CountDownLatch(1);
+    final private PipedInputStream inputStream = new PipedInputStream();
+    volatile private PipedOutputStream outputStream;
 
-	final private PipedInputStream inputStream = new PipedInputStream();
-	volatile private PipedOutputStream outputStream;
+    volatile Long writerThreadId;
 
-	volatile Long writerThreadId;
+    Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 
-	Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+    /**
+     * do not call this method until outputIsReady returns true
+     * 
+     * the thread that calls this method must NOT be the same thread that is writing
+     * to the OutputStream
+     * 
+     * @return
+     * @throws InterruptedException
+     */
+    public InputStream getInputStream() throws InterruptedException {
+        if (!writeLatch.await(10, TimeUnit.SECONDS)) {
+            logger.warn("The writer thread seems to be taking a long time to start, will wait a further 10 minutes.");
+        }
 
-	/**
-	 * do not call this method until outputIsReady returns true
-	 * 
-	 * the thread that calls this method must NOT be the same thread that is
-	 * writing to the OutputStream
-	 * 
-	 * @return
-	 * @throws InterruptedException
-	 */
-	public InputStream getInputStream() throws InterruptedException
-	{
-		if (!writeLatch.await(10, TimeUnit.SECONDS))
-		{
-			logger.warn("The writer thread seems to be taking a long time to start, will wait a further 10 minutes.");
-		}
+        if (!writeLatch.await(10, TimeUnit.MINUTES)) {
+            throw new RuntimeException("Reader timeout, waiting for writer");
+        }
+        Preconditions.checkState(writerThreadId != Thread.currentThread().getId(),
+                "The consumer thread(getInputStream) must not be the producer thread(write)");
+        readLatch.countDown();
+        return inputStream;
+    }
 
-		if (!writeLatch.await(10, TimeUnit.MINUTES))
-		{
-			throw new RuntimeException("Reader timeout, waiting for writer");
-		}
-		Preconditions.checkState(writerThreadId != Thread.currentThread().getId(),
-				"The consumer thread(getInputStream) must not be the producer thread(write)");
-		readLatch.countDown();
-		return inputStream;
-	}
+    volatile boolean writerStarted = false;
 
-	volatile boolean writerStarted = false;
+    @Override
+    public void write(int b) throws IOException {
+        if (!writerStarted) {
+            writerStarted = true;
+            writerThreadId = Thread.currentThread().getId();
+            outputStream = new PipedOutputStream(inputStream);
+            writeLatch.countDown();
+            try {
+                if (!readLatch.await(10, TimeUnit.MINUTES)) {
+                    throw new RuntimeException("Writer timeout, waiting for reader.");
+                }
+            } catch (InterruptedException e) {
+                outputStream.close();
+                inputStream.close();
+                throw new RuntimeException(e);
+            }
+        }
 
-	@Override
-	public void write(int b) throws IOException
-	{
-		if (!writerStarted)
-		{
-			writerStarted = true;
-			writerThreadId = Thread.currentThread().getId();
-			outputStream = new PipedOutputStream(inputStream);
-			writeLatch.countDown();
-			try
-			{
-				if (!readLatch.await(10, TimeUnit.MINUTES))
-				{
-					throw new RuntimeException("Writer timeout, waiting for reader.");
-				}
-			}
-			catch (InterruptedException e)
-			{
-				outputStream.close();
-				inputStream.close();
-				throw new RuntimeException(e);
-			}
-		}
+        outputStream.write(b);
 
-		outputStream.write(b);
+    }
 
-	}
+    public void close() throws IOException {
+        if (outputStream != null) {
+            outputStream.close();
+        }
+    }
 
-	public void close() throws IOException
-	{
-		if (outputStream != null)
-		{
-			outputStream.close();
-		}
-	}
+    public void waitForOutputToBeReady(int duration, TimeUnit unit) throws InterruptedException, TimeoutException {
+        if (!writeLatch.await(duration, unit)) {
+            throw new TimeoutException("Output stream Timeout");
+        }
 
-	public void waitForOutputToBeReady(int duration, TimeUnit unit) throws InterruptedException, TimeoutException
-	{
-		if (!writeLatch.await(duration, unit))
-		{
-			throw new TimeoutException("Output stream Timeout");
-		}
-
-	}
+    }
 
 }

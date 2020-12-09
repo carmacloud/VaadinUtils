@@ -1,7 +1,9 @@
 package au.com.vaadinutils.crud.events;
 
-public enum CrudEventType
-{
-	CREATE, EDIT, DELETE;
+/**
+ * @deprecated Will be removed once dependent classes are removed.
+ */
+public enum CrudEventType {
+    CREATE, EDIT, DELETE;
 
 }

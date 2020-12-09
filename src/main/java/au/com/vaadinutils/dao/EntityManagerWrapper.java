@@ -25,6 +25,9 @@ import javax.persistence.metamodel.Metamodel;
 
 import org.apache.logging.log4j.Logger;
 
+/**
+ * @deprecated
+ */
 public class EntityManagerWrapper implements EntityManager
 {
 	final private EntityManager em;

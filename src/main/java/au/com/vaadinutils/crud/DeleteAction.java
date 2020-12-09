@@ -2,7 +2,9 @@ package au.com.vaadinutils.crud;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 
-public interface DeleteAction<E>
-{
-	public void delete(final EntityItem<E> entity) throws Exception;
+/**
+ * @deprecated Replaced in V14 migration.
+ */
+public interface DeleteAction<E> {
+    public void delete(final EntityItem<E> entity) throws Exception;
 }

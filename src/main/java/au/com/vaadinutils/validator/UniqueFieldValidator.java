@@ -14,6 +14,9 @@ import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.dao.JpaBaseDao;
 
+/**
+ * @deprecated Replaced in Vaadin 14 migration.
+ */
 public class UniqueFieldValidator<E extends CrudEntity, F> implements Validator
 {
 

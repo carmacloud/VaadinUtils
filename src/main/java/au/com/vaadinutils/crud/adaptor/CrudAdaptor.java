@@ -21,32 +21,32 @@ import au.com.vaadinutils.crud.HeadingPropertySet;
  *
  * @param <P>
  * @param <E>
+ * @deprecated Will be removed once dependent classes are removed.
  */
-public interface CrudAdaptor<P, E extends CrudEntity>
-{
+public interface CrudAdaptor<P, E extends CrudEntity> {
 
-	void init(Class<E> class1, JPAContainer<E> container, HeadingPropertySet headings);
+    void init(Class<E> class1, JPAContainer<E> container, HeadingPropertySet headings);
 
-	void setSplitPosition(int normalSplitSize);
+    void setSplitPosition(int normalSplitSize);
 
-	void disallowDelete(boolean b);
+    void disallowDelete(boolean b);
 
-	E getCurrent();
+    E getCurrent();
 
-	JPAContainer<E> getContainer();
+    JPAContainer<E> getContainer();
 
-	E preNew(E previousEntity) throws InstantiationException, IllegalAccessException;
+    E preNew(E previousEntity) throws InstantiationException, IllegalAccessException;
 
-	void disallowNew(boolean b);
+    void disallowNew(boolean b);
 
-	void setLocked(boolean locked);
+    void setLocked(boolean locked);
 
-	List<CrudAction<E>> getDefaultCrudActions();
+    List<CrudAction<E>> getDefaultCrudActions();
 
-	void enableDragAndDropOrdering(final SingularAttribute<E, Long> ordinalField);
+    void enableDragAndDropOrdering(final SingularAttribute<E, Long> ordinalField);
 
-	boolean isNew();
+    boolean isNew();
 
-	public boolean isDirty();
+    public boolean isDirty();
 
 }

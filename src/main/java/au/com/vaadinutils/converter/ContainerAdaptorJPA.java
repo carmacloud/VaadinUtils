@@ -10,68 +10,61 @@ import com.vaadin.data.Property;
 
 import au.com.vaadinutils.crud.CrudEntity;
 
-public class ContainerAdaptorJPA<E extends CrudEntity> implements ContainerAdaptor<E>
-{
+/**
+ * @deprecated Will be removed once dependent classes are removed.
+ */
+public class ContainerAdaptorJPA<E extends CrudEntity> implements ContainerAdaptor<E> {
 
     private JPAContainer<E> container;
 
-    public ContainerAdaptorJPA(JPAContainer<E> containerDataSource)
-    {
-	container = containerDataSource;
+    public ContainerAdaptorJPA(JPAContainer<E> containerDataSource) {
+        container = containerDataSource;
     }
 
     @Override
-    public Item getItem(Object id)
-    {
-	return container.getItem(id);
+    public Item getItem(Object id) {
+        return container.getItem(id);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-    public Property getProperty(E item, Object propertyId)
-    {
-	return container.getContainerProperty(item.getId(), propertyId);
+    @Override
+    public Property getProperty(E item, Object propertyId) {
+        return container.getContainerProperty(item.getId(), propertyId);
     }
 
     @Override
-    public E getEntity(Object id)
-    {
-	return container.getItem(id).getEntity();
+    public E getEntity(Object id) {
+        return container.getItem(id).getEntity();
     }
 
     @Override
-    public Collection<Object> getSortableContainerPropertyIds()
-    {
-	Collection<Object> ids = new HashSet<>();
-	ids.addAll(container.getSortableContainerPropertyIds());
-	return ids;
+    public Collection<Object> getSortableContainerPropertyIds() {
+        Collection<Object> ids = new HashSet<>();
+        ids.addAll(container.getSortableContainerPropertyIds());
+        return ids;
     }
 
     @Override
-    public void sort(String[] propertyId, boolean[] ascending)
-    {
-	container.sort(propertyId, ascending);
+    public void sort(String[] propertyId, boolean[] ascending) {
+        container.sort(propertyId, ascending);
 
-    }
-    
-    @Override
-    public void removeAllContainerFilters()
-    {
-	container.removeAllContainerFilters();
-	
     }
 
     @Override
-    public void addContainerFilter(Filter filter)
-    {
-	container.addContainerFilter(filter);
-	
+    public void removeAllContainerFilters() {
+        container.removeAllContainerFilters();
+
     }
 
-	@Override
-	public Class<E> getEntityClass()
-	{
-		return container.getEntityClass();
-	}
+    @Override
+    public void addContainerFilter(Filter filter) {
+        container.addContainerFilter(filter);
+
+    }
+
+    @Override
+    public Class<E> getEntityClass() {
+        return container.getEntityClass();
+    }
 
 }

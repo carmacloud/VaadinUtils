@@ -2,26 +2,24 @@ package au.com.vaadinutils.errorHandling;
 
 import java.io.ByteArrayOutputStream;
 
-public interface ErrorSettings
-{
+public interface ErrorSettings {
 
-	String getSupportCompanyName();
+    String getSupportCompanyName();
 
-	String getSystemName();
+    String getSystemName();
 
-	String getViewName();
+    String getViewName();
 
-	String getUserName();
+    String getUserName();
 
-	String getTargetEmailAddress();
+    String getTargetEmailAddress();
 
-	public void sendEmail(String emailAddress, String subject, String bodyText, ByteArrayOutputStream attachment,
-			String filename, String MIMEType);
+    public void sendEmail(String emailAddress, String subject, String bodyText, ByteArrayOutputStream attachment,
+            String filename, String MIMEType);
 
-	String getBuildVersion();
+    String getBuildVersion();
 
-	String getUserEmail();
+    String getUserEmail();
 
-	String getCustomHashString(String stackTraceAsString);
-
+    String getCustomHashString(String stackTraceAsString);
 }

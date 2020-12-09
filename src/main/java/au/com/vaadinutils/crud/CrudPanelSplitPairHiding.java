@@ -3,9 +3,11 @@ package au.com.vaadinutils.crud;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * @deprecated Replaced in V14 migration.
+ */
 public class CrudPanelSplitPairHiding extends VerticalLayout implements CrudPanelPair
 {
-	
 	private static final long serialVersionUID = -3273324048011746886L;
 	VerticalLayout firstPanel = new VerticalLayout();
 	VerticalLayout secondPanel = new VerticalLayout();

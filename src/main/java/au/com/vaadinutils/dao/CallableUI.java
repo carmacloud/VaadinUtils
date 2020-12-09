@@ -14,6 +14,7 @@ import com.vaadin.ui.UI;
  * @author bsutton
  *
  * @param <T>
+ * @deprecated
  */
 public abstract class CallableUI<T> implements Callable<T>
 {

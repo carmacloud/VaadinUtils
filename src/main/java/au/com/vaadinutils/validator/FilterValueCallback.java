@@ -1,8 +1,8 @@
 package au.com.vaadinutils.validator;
 
-public interface FilterValueCallback<F>
-{
-
-	F getValue();
-
+/**
+ * @deprecated Replaced in Vaadin 14 migration.
+ */
+public interface FilterValueCallback<F> {
+    F getValue();
 }

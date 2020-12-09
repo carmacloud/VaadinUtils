@@ -1,7 +1,8 @@
 package au.com.vaadinutils.crud;
 
-public enum ShowAdvancedSearchLayout
-{
-	TRUE, FALSE
-
+/**
+ * @deprecated Replaced in V14 migration.
+ */
+public enum ShowAdvancedSearchLayout {
+    TRUE, FALSE
 }

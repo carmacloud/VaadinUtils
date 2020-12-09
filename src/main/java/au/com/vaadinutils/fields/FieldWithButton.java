@@ -10,106 +10,90 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 
-@SuppressWarnings("serial")
-public abstract class FieldWithButton<T> extends CustomComponent
-{
-	protected AbstractField<T> field;
-	private Button button;
+/**
+ * Retain, will need UI converted for Flow
+ */
+public abstract class FieldWithButton<T> extends CustomComponent {
+    private static final long serialVersionUID = 1L;
+    protected AbstractField<T> field;
+    private Button button;
 
-	public FieldWithButton(final String caption)
-	{
-		this(caption, null);
-	}
+    public FieldWithButton(final String caption) {
+        this(caption, null);
+    }
 
-	public FieldWithButton(final String caption, final Button button)
-	{
-		if (button != null)
-		{
-			this.button = button;
-		}
-		else
-		{
-			this.button = new Button();
-		}
+    public FieldWithButton(final String caption, final Button button) {
+        if (button != null) {
+            this.button = button;
+        } else {
+            this.button = new Button();
+        }
 
-		final HorizontalLayout layout = new HorizontalLayout();
-		layout.setSizeFull();
-		layout.setSpacing(true);
-		field = createField();
-		field.setSizeFull();
-		layout.addComponent(field);
-		layout.setExpandRatio(field, 1);
-		layout.addComponent(this.button);
+        final HorizontalLayout layout = new HorizontalLayout();
+        layout.setSizeFull();
+        layout.setSpacing(true);
+        field = createField();
+        field.setSizeFull();
+        layout.addComponent(field);
+        layout.setExpandRatio(field, 1);
+        layout.addComponent(this.button);
 
-		setCompositionRoot(layout);
-		setCaption(caption);
-	}
+        setCompositionRoot(layout);
+        setCaption(caption);
+    }
 
-	protected abstract AbstractField<T> createField();
+    protected abstract AbstractField<T> createField();
 
-	public void setPropertyDataSource(EntityItemProperty newDataSource)
-	{
-		field.setPropertyDataSource(newDataSource);
-	}
+    public void setPropertyDataSource(EntityItemProperty newDataSource) {
+        field.setPropertyDataSource(newDataSource);
+    }
 
-	public void setButtonCaption(String caption)
-	{
-		button.setCaption(caption);
-	}
+    public void setButtonCaption(String caption) {
+        button.setCaption(caption);
+    }
 
-	public void setButtonIcon(Resource icon)
-	{
-		button.setIcon(icon);
-	}
+    public void setButtonIcon(Resource icon) {
+        button.setIcon(icon);
+    }
 
-	public T getValue()
-	{
-		return field.getValue();
-	}
+    public T getValue() {
+        return field.getValue();
+    }
 
-	public void addButtonClickListener(ClickListener listener)
-	{
-		button.addClickListener(listener);
-	}
+    public void addButtonClickListener(ClickListener listener) {
+        button.addClickListener(listener);
+    }
 
-	public void addTextFieldValueChangeListener(ValueChangeListener listener)
-	{
-		field.addValueChangeListener(listener);
-	}
+    public void addTextFieldValueChangeListener(ValueChangeListener listener) {
+        field.addValueChangeListener(listener);
+    }
 
-	public void setButtonDescription(String description)
-	{
-		button.setDescription(description);
-	}
+    public void setButtonDescription(String description) {
+        button.setDescription(description);
+    }
 
-	@Override
-	public void setReadOnly(boolean readOnly)
-	{
-		field.setReadOnly(readOnly);
-	}
+    @Override
+    public void setReadOnly(boolean readOnly) {
+        field.setReadOnly(readOnly);
+    }
 
-	public void setButtonEnabled(boolean enabled)
-	{
-		button.setEnabled(enabled);
-	}
+    public void setButtonEnabled(boolean enabled) {
+        button.setEnabled(enabled);
+    }
 
-	public void setValue(final T newValue)
-	{
-		field.setValue(newValue);
-	}
+    public void setValue(final T newValue) {
+        field.setValue(newValue);
+    }
 
-	public Button getButton()
-	{
-		return button;
-	}
+    public Button getButton() {
+        return button;
+    }
 
-	public AbstractField<T> getField()
-	{
-		return field;
-	}
+    public AbstractField<T> getField() {
+        return field;
+    }
 
-	public void addValidator(final Validator validator)
-	{
-		field.addValidator(validator);
-	}
+    public void addValidator(final Validator validator) {
+        field.addValidator(validator);
+    }
 }

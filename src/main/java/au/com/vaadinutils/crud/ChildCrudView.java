@@ -43,6 +43,8 @@ import au.com.vaadinutils.errorHandling.ErrorWindow;
  *
  * @param <P>
  * @param <E>
+ * 
+ * @deprecated Replaced in V14 migration.
  */
 public abstract class ChildCrudView<P extends CrudEntity, E extends ChildCrudEntity> extends BaseCrudView<E>
 		implements ChildCrudListener<P>

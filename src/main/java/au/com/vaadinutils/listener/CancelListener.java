@@ -1,6 +1,5 @@
 package au.com.vaadinutils.listener;
 
-public interface CancelListener
-{
-	public void cancel();
+public interface CancelListener {
+    public void cancel();
 }

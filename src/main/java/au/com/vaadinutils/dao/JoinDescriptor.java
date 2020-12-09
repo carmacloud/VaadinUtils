@@ -3,6 +3,9 @@ package au.com.vaadinutils.dao;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.metamodel.SingularAttribute;
 
+/**
+ * @deprecated Not used?
+ */
 public class JoinDescriptor<E>
 {
 	private SingularAttribute<? super E, ?> joinAttribute;

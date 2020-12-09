@@ -18,6 +18,7 @@ import java.util.concurrent.Callable;
  * @author bsutton
  *
  * @param <T>
+ * @deprecated
  */
 final public class EntityManagerCallable<T> implements Callable<T>
 {

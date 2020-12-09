@@ -9,6 +9,9 @@ import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.errorHandling.ErrorWindow;
 
+/**
+ * @deprecated Not used?
+ */
 public class Transaction implements Closeable
 {
 	private EntityTransaction transaction;

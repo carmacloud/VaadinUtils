@@ -5,6 +5,9 @@ import org.apache.logging.log4j.Logger;
 import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.crud.events.CrudEventType;
 
+/**
+ * @deprecated Will be removed once dependent classes are removed.
+ */
 public class AuditorLoggingImpl implements Auditor
 {
 	Logger logger = org.apache.logging.log4j.LogManager.getLogger();

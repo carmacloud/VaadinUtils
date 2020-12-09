@@ -1,8 +1,8 @@
 package au.com.vaadinutils.crud;
 
-public interface RowChangeCallback
-{
-
-	void allowRowChange();
-
+/**
+ * @deprecated Replaced in V14 migration.
+ */
+public interface RowChangeCallback {
+    void allowRowChange();
 }

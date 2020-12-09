@@ -16,57 +16,46 @@ import au.com.vaadinutils.dao.JpaBaseDao;
  * 
  * @author bsutton
  * 
- * @param <Parent>
- *            the Entity type of the items contained in the Parent container
- * @param <Child>
- *            the Entity type of the items contained in the Child container
- *            @deprecated
+ * @param <Parent> the Entity type of the items contained in the Parent
+ *                 container
+ * @param <Child>  the Entity type of the items contained in the Child container
+ * @deprecated
  */
-public class EntityComboBox<E extends CrudEntity> extends ComboBox
-{
-	private static final long serialVersionUID = 1L;
+public class EntityComboBox<E extends CrudEntity> extends ComboBox {
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param label
-	 *            label to display adjacent to the ComboBox.
-	 * @param childContainer
-	 *            the entity container used to fill the child ComboBox.
-	 * @param displayAttribute
-	 *            the attribute of the child entity that is used to display in the combo box.
-	 */
-	public EntityComboBox(String label, final EntityContainer<E> childContainer,
-			final SingularAttribute<E, ? extends Object> displayAttribute)
-	{
-		super(label);
-		init(childContainer, displayAttribute.getName());
-	}
-	
-	public EntityComboBox(String label, final EntityContainer<E> childContainer,
-			final String displayAttribute)
-	{
-		super(label);
-		init(childContainer, displayAttribute);
-	}
-	
-	public EntityComboBox(final String label, final String displayAttribute, final Class<E> containerClass)
-	{
-		super(label);
-		final JPAContainer<E> container = JpaBaseDao.getGenericDao(containerClass).createVaadinContainer();
-		init(container, displayAttribute);
-	}
+    /**
+     * @param label            label to display adjacent to the ComboBox.
+     * @param childContainer   the entity container used to fill the child ComboBox.
+     * @param displayAttribute the attribute of the child entity that is used to
+     *                         display in the combo box.
+     */
+    public EntityComboBox(String label, final EntityContainer<E> childContainer,
+            final SingularAttribute<E, ? extends Object> displayAttribute) {
+        super(label);
+        init(childContainer, displayAttribute.getName());
+    }
 
+    public EntityComboBox(String label, final EntityContainer<E> childContainer, final String displayAttribute) {
+        super(label);
+        init(childContainer, displayAttribute);
+    }
 
-	private void init(final EntityContainer<E> childContainer,
-			final String displayAttribute)
-	{
-		this.setItemCaptionMode(ItemCaptionMode.PROPERTY);
-		this.setItemCaptionPropertyId(displayAttribute);
-		this.setContainerDataSource(childContainer);
-		SingleSelectConverter<E> childConverter = new SingleSelectConverter<E>(this);
-		this.setConverter(childConverter);
-		this.setNewItemsAllowed(false);
-		this.setNullSelectionAllowed(false);
-		this.setTextInputAllowed(false);
-		this.setImmediate(true);
-	}
+    public EntityComboBox(final String label, final String displayAttribute, final Class<E> containerClass) {
+        super(label);
+        final JPAContainer<E> container = JpaBaseDao.getGenericDao(containerClass).createVaadinContainer();
+        init(container, displayAttribute);
+    }
+
+    private void init(final EntityContainer<E> childContainer, final String displayAttribute) {
+        this.setItemCaptionMode(ItemCaptionMode.PROPERTY);
+        this.setItemCaptionPropertyId(displayAttribute);
+        this.setContainerDataSource(childContainer);
+        SingleSelectConverter<E> childConverter = new SingleSelectConverter<E>(this);
+        this.setConverter(childConverter);
+        this.setNewItemsAllowed(false);
+        this.setNullSelectionAllowed(false);
+        this.setTextInputAllowed(false);
+        this.setImmediate(true);
+    }
 }

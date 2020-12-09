@@ -10,6 +10,9 @@ import com.vaadin.data.Property;
 
 import au.com.vaadinutils.crud.CrudEntity;
 
+/**
+ * @deprecated Will be removed once dependent classes are removed.
+ */
 public class ContainerAdaptorEntity<E extends CrudEntity> implements ContainerAdaptor<E>
 {
 

@@ -1,13 +1,14 @@
 package au.com.vaadinutils.domain;
 
-public interface iColor
-{
+/**
+ * @deprecated Replaced in V14 migration.
+ */
+public interface iColor {
+    int getRed();
 
-	int getRed();
+    int getAlpha();
 
-	int getAlpha();
+    int getBlue();
 
-	int getBlue();
-
-	int getGreen();
+    int getGreen();
 }

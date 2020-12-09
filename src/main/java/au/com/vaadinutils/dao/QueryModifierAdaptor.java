@@ -12,7 +12,7 @@ import com.vaadin.addon.jpacontainer.QueryModifierDelegate;
 /**
  * An adaptor for QueryModifierDelegate so you just have to implement the methods of interest.
  * @author bsutton
- *
+ * @deprecated Not used?
  */
 public class QueryModifierAdaptor implements QueryModifierDelegate
 {

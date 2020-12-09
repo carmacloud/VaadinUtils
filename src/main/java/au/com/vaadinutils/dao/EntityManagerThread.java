@@ -14,7 +14,7 @@ import java.util.concurrent.Future;
  * em into the thread.
  *
  * @author bsutton
- *
+* @deprecated
  */
 final public class EntityManagerThread<T>
 {

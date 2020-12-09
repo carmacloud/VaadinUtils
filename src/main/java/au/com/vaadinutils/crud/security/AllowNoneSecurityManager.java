@@ -2,61 +2,53 @@ package au.com.vaadinutils.crud.security;
 
 import au.com.vaadinutils.crud.CrudSecurityManager;
 
-public class AllowNoneSecurityManager implements CrudSecurityManager
-{
+/**
+ * @deprecated Will be removed once dependent classes are removed.
+ */
+public class AllowNoneSecurityManager implements CrudSecurityManager {
 
-	@Override
-	public boolean canUserView()
-	{
+    @Override
+    public boolean canUserView() {
+        return false;
+    }
 
-		return false;
-	}
+    @Override
+    public boolean canUser(Enum<?> changeAccountGroups) {
+        return false;
+    }
 
-	@Override
-	public boolean canUser(Enum<?> changeAccountGroups)
-	{
-		return false;
-	}
+    @Override
+    public boolean canUserDelete() {
+        return false;
+    }
 
-	@Override
-	public boolean canUserDelete()
-	{
-		return false;
-	}
+    @Override
+    public boolean canUserEdit() {
+        return false;
+    }
 
-	@Override
-	public boolean canUserEdit()
-	{
-		return false;
-	}
+    @Override
+    public boolean canUserCreate() {
+        return false;
+    }
 
-	@Override
-	public boolean canUserCreate()
-	{
-		return false;
-	}
+    @Override
+    public Long getAccountId() {
+        return -1l;
+    }
 
-	@Override
-	public Long getAccountId()
-	{
-		return -1l;
-	}
+    @Override
+    public boolean isUserSuperUser() {
+        return false;
+    }
 
-	@Override
-	public boolean isUserSuperUser()
-	{
-		return false;
-	}
+    @Override
+    public String getFeatureName() {
+        return "";
+    }
 
-	@Override
-	public String getFeatureName()
-	{
-		return "";
-	}
-
-	@Override
-	public String getUserDisallowedReason(Enum<?> outboundContactHub)
-	{
-		return this.getClass().getSimpleName();
-	}
+    @Override
+    public String getUserDisallowedReason(Enum<?> outboundContactHub) {
+        return this.getClass().getSimpleName();
+    }
 }

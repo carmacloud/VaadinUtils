@@ -13,17 +13,16 @@ import au.com.vaadinutils.crud.CrudEntity;
  *
  * @param <P>
  * @param <E>
+ * @deprecated Will be removed once dependent classes are removed.
  */
-public interface ChildCrudInterface<P extends CrudEntity,E extends ChildCrudEntity> extends CrudInterface<E>
-{
+public interface ChildCrudInterface<P extends CrudEntity, E extends ChildCrudEntity> extends CrudInterface<E> {
 
-	
-	SingularAttribute<E, String>  getGuidAttribute();
+    SingularAttribute<E, String> getGuidAttribute();
 
-	void associateChild(P newParent, E child);
+    void associateChild(P newParent, E child);
 
-	String getNewButtonActionLabel();
+    String getNewButtonActionLabel();
 
-	void selectedParentRowChanged(EntityItem<P> item);
+    void selectedParentRowChanged(EntityItem<P> item);
 
 }

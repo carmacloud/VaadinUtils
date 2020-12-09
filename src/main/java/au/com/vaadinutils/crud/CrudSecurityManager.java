@@ -10,25 +10,22 @@ package au.com.vaadinutils.crud;
  *
  */
 
-public interface CrudSecurityManager
-{
+public interface CrudSecurityManager {
+    boolean canUserView();
 
-	boolean canUserView();
+    boolean canUser(Enum<?> changeAccountGroups);
 
-	boolean canUser(Enum<?> changeAccountGroups);
+    boolean canUserDelete();
 
-	boolean canUserDelete();
+    boolean canUserEdit();
 
-	boolean canUserEdit();
+    boolean canUserCreate();
 
-	boolean canUserCreate();
+    Long getAccountId();
 
-	Long getAccountId();
+    boolean isUserSuperUser();
 
-	boolean isUserSuperUser();
+    String getFeatureName();
 
-	String getFeatureName();
-
-	String getUserDisallowedReason(Enum<?> outboundContactHub);
-
+    String getUserDisallowedReason(Enum<?> outboundContactHub);
 }

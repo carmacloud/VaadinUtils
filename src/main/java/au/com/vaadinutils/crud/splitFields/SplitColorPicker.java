@@ -5,6 +5,9 @@ import com.vaadin.ui.Label;
 import au.com.vaadinutils.domain.iColorFactory;
 import au.com.vaadinutils.fields.ColorPickerField;
 
+/**
+ * @deprecated Replaced in V14 migration.
+ */
 public class SplitColorPicker extends ColorPickerField implements SplitField
 {
 	private static final long serialVersionUID = -1573292123807845727L;

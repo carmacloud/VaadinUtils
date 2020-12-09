@@ -18,253 +18,215 @@ import au.com.vaadinutils.listener.ListenerManager;
 import au.com.vaadinutils.listener.ListenerManagerFactory;
 
 /**
- * @deprecated
+ * @deprecated Replaced in V14 migration.
  */
-public class DataBoundButton<T> extends Button implements Field<T>
-{
+public class DataBoundButton<T> extends Button implements Field<T> {
+    private static final long serialVersionUID = 2137449474336770169L;
+    private Property<T> dataSource;
+    private boolean required = false;
+    private String requiredMessage = "";
+    private T value;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2137449474336770169L;
-	private Property<T> dataSource;
-	private boolean required = false;
-	private String requiredMessage = "";
-	private T value;
+    final Class<T> type;
+    private boolean invalidCommitted = false;
+    private boolean buffered = false;
 
-	final Class<T> type;
-	private boolean invalidCommitted = false;
-	private boolean buffered = false;
+    Set<Validator> validators = new HashSet<>();
+    private boolean invalidAllowed = true;
 
-	Set<Validator> validators = new HashSet<>();
-	private boolean invalidAllowed = true;
+    transient Logger logger = LogManager.getLogger(DataBoundButton.class);
 
-	transient Logger logger = LogManager.getLogger(DataBoundButton.class);
+    ListenerManager<ValueChangeListener> listeners = ListenerManagerFactory.createListenerManager("DataBoundButton",
+            10);
 
-	ListenerManager<ValueChangeListener> listeners = ListenerManagerFactory.createListenerManager("DataBoundButton",
-			10);
+    DataBoundButton(Class<T> type) {
+        super();
+        this.type = type;
+    }
 
-	DataBoundButton(Class<T> type)
-	{
-		super();
-		this.type = type;
-	}
+    public DataBoundButton(String fieldLabel, Class<T> type2) {
+        super(fieldLabel);
+        type = type2;
+    }
 
-	public DataBoundButton(String fieldLabel, Class<T> type2)
-	{
-		super(fieldLabel);
-		type = type2;
-	}
+    @Override
+    public boolean isInvalidCommitted() {
+        return invalidCommitted;
+    }
 
-	@Override
-	public boolean isInvalidCommitted()
-	{
-		return invalidCommitted;
-	}
+    @Override
+    public void setInvalidCommitted(boolean isCommitted) {
+        invalidCommitted = isCommitted;
 
-	@Override
-	public void setInvalidCommitted(boolean isCommitted)
-	{
-		invalidCommitted = isCommitted;
+    }
 
-	}
+    @Override
+    public void commit() throws SourceException, InvalidValueException {
+        dataSource.setValue(value);
 
-	@Override
-	public void commit() throws SourceException, InvalidValueException
-	{
-		dataSource.setValue(value);
+    }
 
-	}
+    @Override
+    public void discard() throws SourceException {
 
-	@Override
-	public void discard() throws SourceException
-	{
+        value = dataSource.getValue();
 
-		value = dataSource.getValue();
+    }
 
-	}
+    @Override
+    public void setBuffered(boolean buffered) {
+        this.buffered = buffered;
 
-	@Override
-	public void setBuffered(boolean buffered)
-	{
-		this.buffered = buffered;
+    }
 
-	}
+    @Override
+    public boolean isBuffered() {
 
-	@Override
-	public boolean isBuffered()
-	{
+        return buffered;
+    }
 
-		return buffered;
-	}
+    @Override
+    public boolean isModified() {
+        return false;
+    }
 
-	@Override
-	public boolean isModified()
-	{
-		return false;
-	}
+    @Override
+    public void addValidator(Validator validator) {
+        validators.add(validator);
 
-	@Override
-	public void addValidator(Validator validator)
-	{
-		validators.add(validator);
+    }
 
-	}
+    @Override
+    public void removeValidator(Validator validator) {
+        validators.remove(validator);
 
-	@Override
-	public void removeValidator(Validator validator)
-	{
-		validators.remove(validator);
+    }
 
-	}
+    @Override
+    public void removeAllValidators() {
+        validators.clear();
 
-	@Override
-	public void removeAllValidators()
-	{
-		validators.clear();
+    }
 
-	}
+    @Override
+    public Collection<Validator> getValidators() {
+        return validators;
+    }
 
-	@Override
-	public Collection<Validator> getValidators()
-	{
-		return validators;
-	}
+    @Override
+    public boolean isValid() {
+        return true;
+    }
 
-	@Override
-	public boolean isValid()
-	{
-		return true;
-	}
+    @Override
+    public void validate() throws InvalidValueException {
 
-	@Override
-	public void validate() throws InvalidValueException
-	{
+    }
 
-	}
+    @Override
+    public boolean isInvalidAllowed() {
+        return invalidAllowed;
+    }
 
-	@Override
-	public boolean isInvalidAllowed()
-	{
-		return invalidAllowed;
-	}
+    @Override
+    public void setInvalidAllowed(boolean invalidValueAllowed) throws UnsupportedOperationException {
+        invalidAllowed = invalidValueAllowed;
+    }
 
-	@Override
-	public void setInvalidAllowed(boolean invalidValueAllowed) throws UnsupportedOperationException
-	{
-		invalidAllowed = invalidValueAllowed;
-	}
+    @Override
+    public T getValue() {
+        logger.info(value);
+        return value;
+    }
 
-	@Override
-	public T getValue()
-	{
-		logger.info(value);
-		return value;
-	}
+    @Override
+    public void setValue(T newValue) throws ReadOnlyException {
+        logger.info(value);
+        value = newValue;
 
-	@Override
-	public void setValue(T newValue) throws ReadOnlyException
-	{
-		logger.info(value);
-		value = newValue;
+    }
 
-	}
+    @Override
+    public Class<T> getType() {
+        return type;
+    }
 
-	@Override
-	public Class<T> getType()
-	{
-		return type;
-	}
+    @Override
+    public void addValueChangeListener(ValueChangeListener listener) {
+        listeners.addListener(listener);
 
-	@Override
-	public void addValueChangeListener(ValueChangeListener listener)
-	{
-		listeners.addListener(listener);
+    }
 
-	}
+    @Override
+    public void addListener(ValueChangeListener listener) {
+        listeners.addListener(listener);
 
-	@Override
-	public void addListener(ValueChangeListener listener)
-	{
-		listeners.addListener(listener);
+    }
 
-	}
+    @Override
+    public void removeValueChangeListener(ValueChangeListener listener) {
+        listeners.removeListener(listener);
 
-	@Override
-	public void removeValueChangeListener(ValueChangeListener listener)
-	{
-		listeners.removeListener(listener);
+    }
 
-	}
+    @Override
+    public void removeListener(ValueChangeListener listener) {
+        listeners.removeListener(listener);
 
-	@Override
-	public void removeListener(ValueChangeListener listener)
-	{
-		listeners.removeListener(listener);
+    }
 
-	}
+    @Override
+    public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+        logger.info("Value changed");
 
-	@Override
-	public void valueChange(com.vaadin.data.Property.ValueChangeEvent event)
-	{
-		logger.info("Value changed");
+    }
 
-	}
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public void setPropertyDataSource(Property newDataSource) {
+        logger.info("data source set");
+        this.dataSource = newDataSource;
+        value = dataSource.getValue();
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	public void setPropertyDataSource(Property newDataSource)
-	{
-		logger.info("data source set");
-		this.dataSource = newDataSource;
-		value = dataSource.getValue();
+    }
 
-	}
+    @Override
+    public Property<T> getPropertyDataSource() {
+        return dataSource;
+    }
 
-	@Override
-	public Property<T> getPropertyDataSource()
-	{
-		return dataSource;
-	}
+    @Override
+    public boolean isRequired() {
+        return required;
+    }
 
-	@Override
-	public boolean isRequired()
-	{
-		return required;
-	}
+    @Override
+    public void setRequired(boolean required) {
+        this.required = required;
 
-	@Override
-	public void setRequired(boolean required)
-	{
-		this.required = required;
+    }
 
-	}
+    @Override
+    public void setRequiredError(String requiredMessage) {
+        this.requiredMessage = requiredMessage;
 
-	@Override
-	public void setRequiredError(String requiredMessage)
-	{
-		this.requiredMessage = requiredMessage;
+    }
 
-	}
+    @Override
+    public String getRequiredError() {
+        return requiredMessage;
+    }
 
-	@Override
-	public String getRequiredError()
-	{
-		return requiredMessage;
-	}
+    @Override
+    public boolean isEmpty() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	@Override
-	public boolean isEmpty()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public void clear() {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void clear()
-	{
-		// TODO Auto-generated method stub
-
-	}
+    }
 
 }

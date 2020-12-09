@@ -1,10 +1,10 @@
 package au.com.vaadinutils.crud;
 
-public interface ButtonListener
-{
+/**
+ * @deprecated Replaced in V14 migration.
+ */
+public interface ButtonListener {
+    void saveClicked();
 
-	void saveClicked();
-
-	void cancelClicked();
-
+    void cancelClicked();
 }

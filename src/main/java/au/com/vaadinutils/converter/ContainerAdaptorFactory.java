@@ -7,22 +7,21 @@ import com.vaadin.data.Container;
 
 import au.com.vaadinutils.crud.CrudEntity;
 
-public class ContainerAdaptorFactory<T extends CrudEntity>
-{
+/**
+ * @deprecated Will be removed once dependent classes are removed.
+ */
+public class ContainerAdaptorFactory<T extends CrudEntity> {
 
     @SuppressWarnings("unchecked")
-    public static<T extends CrudEntity> ContainerAdaptor<T > getAdaptor(Container container)
-    {
-	if (container instanceof JPAContainer)
-	{
-	    return new ContainerAdaptorJPA<T>((JPAContainer<T>) container);
-	}
+    public static <T extends CrudEntity> ContainerAdaptor<T> getAdaptor(Container container) {
+        if (container instanceof JPAContainer) {
+            return new ContainerAdaptorJPA<T>((JPAContainer<T>) container);
+        }
 
-	if (container instanceof EntityContainer)
-	{
-	    return new ContainerAdaptorEntity<T>((EntityContainer<T>) container);
-	}
-	throw new RuntimeException("Unknown container type");
+        if (container instanceof EntityContainer) {
+            return new ContainerAdaptorEntity<T>((EntityContainer<T>) container);
+        }
+        throw new RuntimeException("Unknown container type");
     }
 
 }

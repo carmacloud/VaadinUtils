@@ -49,6 +49,9 @@ import au.com.vaadinutils.fields.contextmenu.EntityContextMenu;
 import au.com.vaadinutils.user.UserSettingsStorageFactory;
 import de.datenhahn.vaadin.componentrenderer.ComponentRenderer;
 
+/**
+ * @deprecated Replaced in V14 migration.
+ */
 public class GridHeadingV2PropertySet<E> implements GridHeadingPropertySetIfc<E>
 {
 	private Logger logger = org.apache.logging.log4j.LogManager.getLogger();

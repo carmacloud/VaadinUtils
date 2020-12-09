@@ -56,148 +56,116 @@ import au.com.vaadinutils.dao.JpaBaseDao.Condition;
  * </pre>
  *
  */
-public class JpaDslTupleBuilderGroup<E>
-{
+public class JpaDslTupleBuilderGroup<E> {
+    private List<JpaDslTupleBuilderGroupItem<E>> builders = new ArrayList<>();
+    private JpaDslTupleBuilderGroupCommon<E> common;
+    private Class<E> entityClass;
+    private List<Tuple> results;
+    private boolean distinct = false;
+    private Map<SingularAttribute<E, ?>, Integer> multiselects = new LinkedHashMap<>();
+    private int positionCounter = 0;
+    private List<JpaDslOrder> orders = new ArrayList<>();
 
-	private List<JpaDslTupleBuilderGroupItem<E>> builders = new ArrayList<>();
-	private JpaDslTupleBuilderGroupCommon<E> common;
-	private Class<E> entityClass;
-	private List<Tuple> results;
-	private boolean distinct = false;
-	private Map<SingularAttribute<E, ?>, Integer> multiselects = new LinkedHashMap<>();
-	private int positionCounter = 0;
-	private List<JpaDslOrder> orders = new ArrayList<>();
+    public JpaDslTupleBuilderGroup(final Class<E> entityClass) {
+        this.entityClass = entityClass;
+    }
 
-	public JpaDslTupleBuilderGroup(final Class<E> entityClass)
-	{
-		this.entityClass = entityClass;
-	}
+    public void addItem(JpaDslTupleBuilderGroupItem<E> builder) {
+        builders.add(builder);
+    }
 
-	public void addItem(JpaDslTupleBuilderGroupItem<E> builder)
-	{
-		builders.add(builder);
-	}
+    public interface JpaDslTupleBuilderGroupItem<E> {
+        public void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
+    }
 
-	public interface JpaDslTupleBuilderGroupItem<E>
-	{
-		public void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
-	}
+    public void setCommon(JpaDslTupleBuilderGroupCommon<E> common) {
+        this.common = common;
+    }
 
-	public void setCommon(JpaDslTupleBuilderGroupCommon<E> common)
-	{
-		this.common = common;
-	}
+    public interface JpaDslTupleBuilderGroupCommon<E> {
+        public void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
+    }
 
-	public interface JpaDslTupleBuilderGroupCommon<E>
-	{
-		public void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
-	}
+    public <T> void multiselect(SingularAttribute<E, T> attribute) {
+        multiselects.put(attribute, positionCounter++);
+    }
 
-	public <T> void multiselect(SingularAttribute<E, T> attribute)
-	{
-		multiselects.put(attribute, positionCounter++);
-	}
+    public <T> T get(final Tuple tuple, final SingularAttribute<E, T> attribute) {
+        final Integer tuplePosition = multiselects.get(attribute);
+        return tuple.get(tuplePosition, attribute.getBindableJavaType());
+    }
 
-	public <T> T get(final Tuple tuple, final SingularAttribute<E, T> attribute)
-	{
-		final Integer tuplePosition = multiselects.get(attribute);
-		return tuple.get(tuplePosition, attribute.getBindableJavaType());
-	}
+    public Object get(final Tuple tuple, final String alias) {
+        // IllegalArgumentException will be thrown if tuple doesn't exist in
+        // query
+        // If this is the case then just return null
+        try {
+            return tuple.get(alias);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 
-	public Object get(final Tuple tuple, final String alias)
-	{
-		// IllegalArgumentException will be thrown if tuple doesn't exist in
-		// query
-		// If this is the case then just return null
-		try
-		{
-			return tuple.get(alias);
-		}
-		catch (IllegalArgumentException e)
-		{
-			return null;
-		}
-	}
+    public List<Tuple> getResults() {
+        final Collection<Tuple> results;
+        if (distinct) {
+            results = new HashSet<>();
+        } else {
+            results = new ArrayList<>();
+        }
 
-	public List<Tuple> getResults()
-	{
-		final Collection<Tuple> results;
-		if (distinct)
-		{
-			results = new HashSet<>();
-		}
-		else
-		{
-			results = new ArrayList<>();
-		}
+        if (builders.size() > 0) {
+            for (JpaDslTupleBuilderGroupItem<E> builder : builders) {
+                results.addAll(makeQuery(builder));
+            }
+        } else {
+            results.addAll(makeQuery(null));
+        }
 
-		if (builders.size() > 0)
-		{
-			for (JpaDslTupleBuilderGroupItem<E> builder : builders)
-			{
-				results.addAll(makeQuery(builder));
-			}
-		}
-		else
-		{
-			results.addAll(makeQuery(null));
-		}
+        if (distinct) {
+            this.results = new ArrayList<>(results);
+        } else {
+            this.results = (List<Tuple>) results;
+        }
 
-		if (distinct)
-		{
-			this.results = new ArrayList<>(results);
-		}
-		else
-		{
-			this.results = (List<Tuple>) results;
-		}
+        return this.results;
+    }
 
-		return this.results;
-	}
+    private List<Tuple> makeQuery(final JpaDslTupleBuilderGroupItem<E> builder) {
+        final JpaDslTupleBuilder<E> q = new JpaDslTupleBuilder<>(entityClass);
 
-	private List<Tuple> makeQuery(final JpaDslTupleBuilderGroupItem<E> builder)
-	{
-		final JpaDslTupleBuilder<E> q = new JpaDslTupleBuilder<>(entityClass);
+        for (Entry<SingularAttribute<E, ?>, Integer> multiselect : multiselects.entrySet()) {
+            q.multiselect(multiselect.getKey());
+        }
 
-		for (Entry<SingularAttribute<E, ?>, Integer> multiselect : multiselects.entrySet())
-		{
-			q.multiselect(multiselect.getKey());
-		}
+        final List<Condition<E>> conditions = new LinkedList<>();
 
-		final List<Condition<E>> conditions = new LinkedList<>();
+        if (common != null) {
+            common.conditionsWillBeAdded(q, conditions);
+        }
 
-		if (common != null)
-		{
-			common.conditionsWillBeAdded(q, conditions);
-		}
+        if (builder != null) {
+            builder.conditionsWillBeAdded(q, conditions);
+        }
 
-		if (builder != null)
-		{
-			builder.conditionsWillBeAdded(q, conditions);
-		}
+        if (distinct) {
+            q.distinct();
+        }
 
-		if (distinct)
-		{
-			q.distinct();
-		}
+        q.where(conditions);
 
-		q.where(conditions);
+        for (JpaDslOrder order : orders) {
+            q.orderBy(order.getField(), order.getAscending());
+        }
 
-		for (JpaDslOrder order : orders)
-		{
-			q.orderBy(order.getField(), order.getAscending());
-		}
+        return q.getResultList();
+    }
 
-		return q.getResultList();
-	}
+    public void distinct() {
+        distinct = true;
+    }
 
-	public void distinct()
-	{
-		distinct = true;
-	}
-
-	public void orderBy(final String field, final boolean ascending)
-	{
-		orders.add(new JpaDslOrder(field, ascending));
-	}
+    public void orderBy(final String field, final boolean ascending) {
+        orders.add(new JpaDslOrder(field, ascending));
+    }
 }

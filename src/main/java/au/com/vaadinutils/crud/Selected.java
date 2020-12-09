@@ -1,10 +1,8 @@
 package au.com.vaadinutils.crud;
 
-
-
-public interface Selected<E>
-{
-
-	E getCurrent();
-
+/**
+ * @deprecated Replaced in V14 migration.
+ */
+public interface Selected<E> {
+    E getCurrent();
 }

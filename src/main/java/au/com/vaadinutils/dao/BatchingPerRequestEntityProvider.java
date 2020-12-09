@@ -34,6 +34,9 @@ import com.vaadin.addon.jpacontainer.provider.CachingMutableLocalEntityProvider;
  * 
  * @author Petter Holmström (Vaadin Ltd)
  * @since 1.0
+ * 
+ * @deprecated Only used JPAContainer
+ *
  */
 public class BatchingPerRequestEntityProvider<T> extends CachingMutableLocalEntityProvider<T> implements
 		BatchableEntityProvider<T>, CachingEntityProvider<T>

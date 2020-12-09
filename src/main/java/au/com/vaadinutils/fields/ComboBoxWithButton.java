@@ -5,42 +5,38 @@ import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 
-@SuppressWarnings("serial")
-public class ComboBoxWithButton extends FieldWithButton<Object>
-{
-	public ComboBoxWithButton(final String caption)
-	{
-		super(caption, null);
-	}
+/**
+ * Retain, will need UI convert to Flow
+ */
+public class ComboBoxWithButton extends FieldWithButton<Object> {
+    private static final long serialVersionUID = 1L;
 
-	public ComboBoxWithButton(final String caption, final Button button)
-	{
-		super(caption, button);
-	}
+    public ComboBoxWithButton(final String caption) {
+        super(caption, null);
+    }
 
-	@Override
-	protected AbstractField<Object> createField()
-	{
-		return new ComboBox();
-	}
+    public ComboBoxWithButton(final String caption, final Button button) {
+        super(caption, button);
+    }
 
-	public void setNullSelectionAllowed(final boolean nullSelectionAllowed)
-	{
-		((ComboBox) field).setNullSelectionAllowed(nullSelectionAllowed);
-	}
+    @Override
+    protected AbstractField<Object> createField() {
+        return new ComboBox();
+    }
 
-	public void setContainerDataSource(final Container newDataSource)
-	{
-		((ComboBox) field).setContainerDataSource(newDataSource);
-	}
+    public void setNullSelectionAllowed(final boolean nullSelectionAllowed) {
+        ((ComboBox) field).setNullSelectionAllowed(nullSelectionAllowed);
+    }
 
-	public void setItemCaptionPropertyId(final Object propertyId)
-	{
-		((ComboBox) field).setItemCaptionPropertyId(propertyId);
-	}
+    public void setContainerDataSource(final Container newDataSource) {
+        ((ComboBox) field).setContainerDataSource(newDataSource);
+    }
 
-	public void select(final Object itemId)
-	{
-		((ComboBox) field).select(itemId);
-	}
+    public void setItemCaptionPropertyId(final Object propertyId) {
+        ((ComboBox) field).setItemCaptionPropertyId(propertyId);
+    }
+
+    public void select(final Object itemId) {
+        ((ComboBox) field).select(itemId);
+    }
 }

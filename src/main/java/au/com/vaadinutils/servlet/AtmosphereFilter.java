@@ -23,7 +23,7 @@ package au.com.vaadinutils.servlet;
 		<async-supported>true</async-supported>
 	</servlet>
 
- * 
+ * @deprecated Not used?
  */
 
 public class AtmosphereFilter 

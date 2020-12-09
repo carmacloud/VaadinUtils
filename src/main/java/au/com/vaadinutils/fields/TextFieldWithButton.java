@@ -4,32 +4,30 @@ import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.TextField;
 
-@SuppressWarnings("serial")
-public class TextFieldWithButton extends FieldWithButton<String>
-{
-	public TextFieldWithButton(final String caption)
-	{
-		super(caption, null);
-	}
+/**
+ * Retain, but update UI for Flow
+ */
+public class TextFieldWithButton extends FieldWithButton<String> {
+    private static final long serialVersionUID = 1L;
 
-	public TextFieldWithButton(final String caption, final Button button)
-	{
-		super(caption, button);
-	}
+    public TextFieldWithButton(final String caption) {
+        super(caption, null);
+    }
 
-	@Override
-	protected AbstractField<String> createField()
-	{
-		return new TextField();
-	}
+    public TextFieldWithButton(final String caption, final Button button) {
+        super(caption, button);
+    }
 
-	public void setNullRepresentation(final String nullRepresentation)
-	{
-		((TextField) field).setNullRepresentation(nullRepresentation);
-	}
+    @Override
+    protected AbstractField<String> createField() {
+        return new TextField();
+    }
 
-	public void setNullSettingAllowed(final boolean nullSettingAllowed)
-	{
-		((TextField) field).setNullSettingAllowed(nullSettingAllowed);
-	}
+    public void setNullRepresentation(final String nullRepresentation) {
+        ((TextField) field).setNullRepresentation(nullRepresentation);
+    }
+
+    public void setNullSettingAllowed(final boolean nullSettingAllowed) {
+        ((TextField) field).setNullSettingAllowed(nullSettingAllowed);
+    }
 }

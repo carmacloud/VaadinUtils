@@ -4,6 +4,9 @@ import org.apache.logging.log4j.Logger;
 
 import org.apache.logging.log4j.LogManager;
 
+/**
+ * @deprecated Not used?
+ */
 public class MouseEventLogged
 {
 	static public abstract class ClickListener implements com.vaadin.event.MouseEvents.ClickListener

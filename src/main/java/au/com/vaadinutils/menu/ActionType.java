@@ -7,6 +7,9 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.UI;
 
+/**
+ * @deprecated Will be removed once dependent classes are removed.
+ */
 public enum ActionType
 {
 	NAVIGATE

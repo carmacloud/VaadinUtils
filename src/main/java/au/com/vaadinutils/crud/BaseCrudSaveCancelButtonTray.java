@@ -9,98 +9,88 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-public class BaseCrudSaveCancelButtonTray extends HorizontalLayout
-{
+/**
+ * @deprecated Replaced in V14 migration.
+ */
+public class BaseCrudSaveCancelButtonTray extends HorizontalLayout {
+    private static final long serialVersionUID = 1L;
+    private boolean disallowEdit;
+    private boolean disallowNew;
 
-	private static final long serialVersionUID = 1L;
-	private boolean disallowEdit;
-	private boolean disallowNew;
+    private Button saveButton = new Button("Save");
+    private Button cancelButton = new Button("Cancel");
 
-	private Button saveButton = new Button("Save");
-	private Button cancelButton = new Button("Cancel");
+    private ButtonListener buttonListener;
 
-	private ButtonListener buttonListener;
+    public BaseCrudSaveCancelButtonTray(boolean disallowEdit, boolean disallowNew, final ButtonListener listener) {
+        this.disallowEdit = disallowEdit;
+        this.disallowNew = disallowNew;
+        this.buttonListener = listener;
 
-	public BaseCrudSaveCancelButtonTray(boolean disallowEdit, boolean disallowNew, final ButtonListener listener)
-	{
-		this.disallowEdit = disallowEdit;
-		this.disallowNew = disallowNew;
-		this.buttonListener = listener;
+        if (disallowEdit && disallowNew) {
+            // hide the buttons completely
+            setHeight("0");
+            return;
+        }
 
-		if (disallowEdit && disallowNew)
-		{
-			// hide the buttons completely
-			setHeight("0");
-			return;
-		}
+        setMargin(new MarginInfo(false, true, false, true));
+        setSizeFull();
+        setWidth("100%");
+        addComponent(cancelButton);
 
-		setMargin(new MarginInfo(false, true, false, true));
-		setSizeFull();
-		setWidth("100%");
-		addComponent(cancelButton);
+        addComponent(saveButton);
+        saveButton.setId("CrudSaveButton");
+        setComponentAlignment(saveButton, Alignment.MIDDLE_RIGHT);
+        setComponentAlignment(cancelButton, Alignment.MIDDLE_LEFT);
+        setHeight("35");
 
-		addComponent(saveButton);
-		saveButton.setId("CrudSaveButton");
-		setComponentAlignment(saveButton, Alignment.MIDDLE_RIGHT);
-		setComponentAlignment(cancelButton, Alignment.MIDDLE_LEFT);
-		setHeight("35");
+        saveButton.addClickListener(new ClickListener() {
 
-		saveButton.addClickListener(new ClickListener()
-		{
+            private static final long serialVersionUID = 1L;
 
-			private static final long serialVersionUID = 1L;
+            @Override
+            public void buttonClick(ClickEvent event) {
+                buttonListener.saveClicked();
 
-			@Override
-			public void buttonClick(ClickEvent event)
-			{
-				buttonListener.saveClicked();
+            }
+        });
+        saveButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        saveButton.setDisableOnClick(true);
 
-			}
-		});
-		saveButton.setStyleName(ValoTheme.BUTTON_PRIMARY);
-		saveButton.setDisableOnClick(true);
+        cancelButton.addClickListener(new ClickListener() {
+            private static final long serialVersionUID = 1L;
 
-		cancelButton.addClickListener(new ClickListener()
-		{
-			private static final long serialVersionUID = 1L;
+            @Override
+            public void buttonClick(ClickEvent event) {
+                buttonListener.cancelClicked();
+            }
+        });
 
-			@Override
-			public void buttonClick(ClickEvent event)
-			{
-				buttonListener.cancelClicked();
-			}
-		});
+        setDefaultState();
 
-		setDefaultState();
+    }
 
-	}
+    public void startNewPhase() {
+        Preconditions.checkArgument(!disallowNew, "New is not allowed!");
+        saveButton.setEnabled(true);
+        cancelButton.setEnabled(true);
+    }
 
-	public void startNewPhase()
-	{
-		Preconditions.checkArgument(!disallowNew, "New is not allowed!");
-		saveButton.setEnabled(true);
-		cancelButton.setEnabled(true);
-	}
+    public void setDefaultState() {
+        saveButton.setEnabled(!disallowEdit);
+        cancelButton.setEnabled(!disallowEdit);
 
-	public void setDefaultState()
-	{
-		saveButton.setEnabled(!disallowEdit);
-		cancelButton.setEnabled(!disallowEdit);
+    }
 
-	}
+    public Button getSaveButton() {
+        return saveButton;
+    }
 
-	public Button getSaveButton()
-	{
-		return saveButton;
-	}
+    public Button getCancelButton() {
+        return cancelButton;
+    }
 
-	public Button getCancelButton()
-	{
-		return cancelButton;
-	}
-
-	public ButtonListener getButtonListener()
-	{
-		return buttonListener;
-	}
+    public ButtonListener getButtonListener() {
+        return buttonListener;
+    }
 }

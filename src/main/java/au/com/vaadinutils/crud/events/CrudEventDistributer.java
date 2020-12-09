@@ -10,53 +10,47 @@ import au.com.vaadinutils.listener.ListenerCallback;
 import au.com.vaadinutils.listener.ListenerManager;
 import au.com.vaadinutils.listener.ListenerManagerFactory;
 
-public enum CrudEventDistributer
-{
-	SELF;
-	// Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+/**
+ * @deprecated Will be removed once dependent classes are removed.
+ */
+public enum CrudEventDistributer {
+    SELF;
+    // Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 
-	Map<Class<? extends BaseCrudView<?>>, ListenerManager<CrudEventListener>> listeners = new ConcurrentHashMap<>();
+    Map<Class<? extends BaseCrudView<?>>, ListenerManager<CrudEventListener>> listeners = new ConcurrentHashMap<>();
 
-	public static synchronized void addListener(Class<? extends BaseCrudView<?>> type, CrudEventListener listener)
-	{
-		ListenerManager<CrudEventListener> list = SELF.listeners.get(type);
-		if (list == null)
-		{
-			list = ListenerManagerFactory.createThreadSafeListenerManager("CrudEventDistributer", 200);
+    public static synchronized void addListener(Class<? extends BaseCrudView<?>> type, CrudEventListener listener) {
+        ListenerManager<CrudEventListener> list = SELF.listeners.get(type);
+        if (list == null) {
+            list = ListenerManagerFactory.createThreadSafeListenerManager("CrudEventDistributer", 200);
 
-			SELF.listeners.put(type, list);
-		}
-		list.addListener(listener);
-	}
+            SELF.listeners.put(type, list);
+        }
+        list.addListener(listener);
+    }
 
-	public static void removeListener(Class<? extends BaseCrudView<?>> type, CrudEventListener listener)
-	{
-		ListenerManager<CrudEventListener> list = SELF.listeners.get(type);
-		if (list != null)
-		{
-			list.removeListener(listener);
-		}
+    public static void removeListener(Class<? extends BaseCrudView<?>> type, CrudEventListener listener) {
+        ListenerManager<CrudEventListener> list = SELF.listeners.get(type);
+        if (list != null) {
+            list.removeListener(listener);
+        }
 
-	}
+    }
 
-	public static <T extends CrudEntity> void publishEvent(BaseCrudView<T> view, final CrudEventType event,
-			final T entity)
-	{
-		ListenerManager<CrudEventListener> interestedParties = SELF.listeners.get(view.getClass());
-		if (interestedParties != null)
-		{
-			interestedParties.notifyListeners(new ListenerCallback<CrudEventListener>()
-			{
+    public static <T extends CrudEntity> void publishEvent(BaseCrudView<T> view, final CrudEventType event,
+            final T entity) {
+        ListenerManager<CrudEventListener> interestedParties = SELF.listeners.get(view.getClass());
+        if (interestedParties != null) {
+            interestedParties.notifyListeners(new ListenerCallback<CrudEventListener>() {
 
-				@Override
-				public void invoke(CrudEventListener listener)
-				{
-					listener.crudEvent(event, entity);
-				}
-			});
+                @Override
+                public void invoke(CrudEventListener listener) {
+                    listener.crudEvent(event, entity);
+                }
+            });
 
-		}
+        }
 
-		AuditFactory.getAuditor().audit(event, entity);
-	}
+        AuditFactory.getAuditor().audit(event, entity);
+    }
 }
