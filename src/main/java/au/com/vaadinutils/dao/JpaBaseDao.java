@@ -36,6 +36,7 @@ import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.entity.BaseCrudEntity;
 import au.com.vaadinutils.entity.BaseCrudEntity_;
 
+@SuppressWarnings("deprecation")
 public class JpaBaseDao<E, K> implements Dao<E, K> {
     protected Class<E> entityClass;
 

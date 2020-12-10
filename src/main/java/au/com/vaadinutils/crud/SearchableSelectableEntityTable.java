@@ -100,7 +100,6 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
             private static final long serialVersionUID = 1L;
 
             @Override
-            @SuppressWarnings("deprecation")
             public void itemClick(ItemClickEvent event) {
                 if (event.getButton() == MouseButton.RIGHT) {
                     selectableTable.setValue(event.getItemId());
@@ -178,7 +177,6 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         return layout;
     }
 
-    @SuppressWarnings("deprecation")
     public void disableSelectable() {
         selectableTable.disableSelectable();
     }
@@ -300,7 +298,6 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         return selectableTable.getSelectedIds();
     }
 
-    @SuppressWarnings("deprecation")
     public void addSelectionListener(SelectionListener listener) {
         selectableTable.addSelectionListener(listener);
 
@@ -326,13 +323,11 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
 
     }
 
-    @SuppressWarnings("deprecation")
     public void setSelected(Collection<Long> ids) {
         selectableTable.setSelectedValue(ids);
 
     }
 
-    @SuppressWarnings("deprecation")
     public void setMultiSelect(boolean b) {
         selectableTable.setMultiSelect(true);
 
@@ -347,13 +342,11 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
 
     }
 
-    @SuppressWarnings("deprecation")
     public void deselectAll() {
         selectableTable.deselectAll();
 
     }
 
-    @SuppressWarnings("deprecation")
     public Object getSelectedItems() {
         return selectableTable.getSelectedItems();
     }
@@ -375,7 +368,6 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         return selectableTable;
     }
 
-    @SuppressWarnings("deprecation")
     public void selectAll() {
         selectableTable.selectAll();
     }

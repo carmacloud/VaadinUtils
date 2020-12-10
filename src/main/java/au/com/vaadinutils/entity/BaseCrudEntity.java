@@ -11,10 +11,10 @@ import javax.persistence.MappedSuperclass;
 import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.dao.JpaEntityHelper;
 
-@MappedSuperclass
 /**
  * @deprecated Replaced in V14 migration.
  */
+@MappedSuperclass
 public abstract class BaseCrudEntity implements ChildCrudEntity, Serializable {
     // Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 

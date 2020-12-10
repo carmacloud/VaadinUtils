@@ -20,6 +20,8 @@ import com.vaadin.ui.VerticalLayout;
  * @deprecated Replaced in Vaadin 14 migration.
  */
 public class OrderingListSelect<T> extends CustomComponent {
+    private static final long serialVersionUID = 1L;
+
     public enum Direction {
         UP, DOWN
     }
@@ -60,6 +62,8 @@ public class OrderingListSelect<T> extends CustomComponent {
 
     private void setButtonClickListeners() {
         upButton.addClickListener(new ClickListener() {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public void buttonClick(ClickEvent event) {
                 if (listSelect != null && !listSelect.isEmpty()) {
@@ -69,6 +73,8 @@ public class OrderingListSelect<T> extends CustomComponent {
         });
 
         downButton.addClickListener(new ClickListener() {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public void buttonClick(ClickEvent event) {
                 if (listSelect != null && !listSelect.isEmpty()) {
@@ -148,7 +154,7 @@ public class OrderingListSelect<T> extends CustomComponent {
         return index;
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
+    @SuppressWarnings({ "unchecked" })
     public void save() {
         for (Object itemId : container.getItemIds()) {
             Item item = container.getItem(itemId);
