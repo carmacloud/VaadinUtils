@@ -16,29 +16,26 @@ import com.vaadin.ui.UI;
  * @param <T>
  * @deprecated
  */
-public abstract class CallableUI<T> implements Callable<T>
-{
+public abstract class CallableUI<T> implements Callable<T> {
 
-	final private UI ui;
-	Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+    final private UI ui;
+    Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 
-	public CallableUI(UI ui)
-	{
-		this.ui = ui;
-	}
+    public CallableUI(UI ui) {
+        this.ui = ui;
+    }
 
-	/**
-	 * throws Exception allows the call method to throw an exception. The
-	 * exception is chained from any exception thrown in the enclosed thread.
-	 */
-	@Override
-	public T call() throws Exception
-	{
+    /**
+     * throws Exception allows the call method to throw an exception. The exception
+     * is chained from any exception thrown in the enclosed thread.
+     */
+    @Override
+    public T call() throws Exception {
 
-		return call(ui);
+        return call(ui);
 
-	}
+    }
 
-	protected abstract T call(UI ui) throws Exception;
+    protected abstract T call(UI ui) throws Exception;
 
 }

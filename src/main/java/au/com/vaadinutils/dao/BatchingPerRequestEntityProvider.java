@@ -35,67 +35,54 @@ import com.vaadin.addon.jpacontainer.provider.CachingMutableLocalEntityProvider;
  * @author Petter Holmström (Vaadin Ltd)
  * @since 1.0
  * 
- * @deprecated Only used JPAContainer
+ * @deprecated Only used in JPAContainer implementation
  *
  */
-public class BatchingPerRequestEntityProvider<T> extends CachingMutableLocalEntityProvider<T> implements
-		BatchableEntityProvider<T>, CachingEntityProvider<T>
-{
+public class BatchingPerRequestEntityProvider<T> extends CachingMutableLocalEntityProvider<T>
+        implements BatchableEntityProvider<T>, CachingEntityProvider<T> {
 
-	private static final long serialVersionUID = 9174163487778140520L;
+    private static final long serialVersionUID = 9174163487778140520L;
 
-//	EntityManager em = EntityManagerProvider.getEntityManager();
-	/**
-	 * Creates a new <code>CachingBatchableLocalEntityProvider</code>. The
-	 * entity manager must be set using
-	 * {@link #setEntityManager(javax.persistence.EntityManager) }.
-	 * 
-	 * @param entityClass
-	 *            the entity class (must not be null).
-	 */
-	public BatchingPerRequestEntityProvider(Class<T> entityClass)
-	{
-		super(entityClass);
-		setCacheEnabled(true);
-	}
+    /**
+     * Creates a new <code>CachingBatchableLocalEntityProvider</code>. The entity
+     * manager must be set using
+     * {@link #setEntityManager(javax.persistence.EntityManager) }.
+     * 
+     * @param entityClass the entity class (must not be null).
+     */
+    public BatchingPerRequestEntityProvider(Class<T> entityClass) {
+        super(entityClass);
+        setCacheEnabled(true);
+    }
 
+    static private ThreadLocal<Integer> updating = new ThreadLocal<Integer>();
 
-	static private ThreadLocal<Integer> updating = new ThreadLocal<Integer>();
-	
-	public void batchUpdate(final BatchUpdateCallback<T> callback) throws UnsupportedOperationException
-	{
-		assert callback != null : "callback must not be null";
-		if (updating.get()== null)
-		{
-			updating.set(1);
-			getEntityManager().getTransaction().commit();
-		}
-		setFireEntityProviderChangeEvents(false);
-		try
-		{
-			runInTransaction(new Runnable()
-			{
+    public void batchUpdate(final BatchUpdateCallback<T> callback) throws UnsupportedOperationException {
+        assert callback != null : "callback must not be null";
+        if (updating.get() == null) {
+            updating.set(1);
+            getEntityManager().getTransaction().commit();
+        }
+        setFireEntityProviderChangeEvents(false);
+        try {
+            runInTransaction(new Runnable() {
 
-				public void run()
-				{
-					callback.batchUpdate(BatchingPerRequestEntityProvider.this);
-					
-				}
-			});
-		}
-		finally
-		{
-			int count = updating.get()-1;
-			updating.set(count);
-			if (count == 0)
-			{
-				getEntityManager().getTransaction().begin();
-				updating.set(null);
-			}
-			setFireEntityProviderChangeEvents(true);
-		}
-		fireEntityProviderChangeEvent(new BatchUpdatePerformedEvent<T>(this));
-	}
+                public void run() {
+                    callback.batchUpdate(BatchingPerRequestEntityProvider.this);
+
+                }
+            });
+        } finally {
+            int count = updating.get() - 1;
+            updating.set(count);
+            if (count == 0) {
+                getEntityManager().getTransaction().begin();
+                updating.set(null);
+            }
+            setFireEntityProviderChangeEvents(true);
+        }
+        fireEntityProviderChangeEvent(new BatchUpdatePerformedEvent<T>(this));
+    }
 
 //	protected EntityManager doGetEntityManager() throws IllegalStateException
 //	{
@@ -107,16 +94,14 @@ public class BatchingPerRequestEntityProvider<T> extends CachingMutableLocalEnti
 //		return em;
 //	}
 
-	protected EntityManager doGetEntityManager() throws IllegalStateException
-	{
-		return EntityManagerProvider.getEntityManager();
-	}
+    protected EntityManager doGetEntityManager() throws IllegalStateException {
+        return EntityManagerProvider.getEntityManager();
+    }
 
-	public EntityManager getEntityManager()
-	{
-		return EntityManagerProvider.getEntityManager();
-	}
-	
+    public EntityManager getEntityManager() {
+        return EntityManagerProvider.getEntityManager();
+    }
+
 //	  protected void runInTransaction(Runnable operation) {
 //	        assert operation != null : "operation must not be null";
 //	        if (isTransactionsHandledByProvider()) {
@@ -141,6 +126,5 @@ public class BatchingPerRequestEntityProvider<T> extends CachingMutableLocalEnti
 //	            operation.run();
 //	        }
 //	    }
-
 
 }

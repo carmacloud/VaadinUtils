@@ -9,10 +9,8 @@ import javax.persistence.metamodel.SingularAttribute;
 public class JoinDescriptor<E>
 {
 	private SingularAttribute<? super E, ?> joinAttribute;
-
 	private JoinType joinType;
 
-	// Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 	<J> JoinDescriptor(SingularAttribute<? super E, J> joinAttribute, JoinType joinType)
 	{
 		this.joinAttribute = joinAttribute;

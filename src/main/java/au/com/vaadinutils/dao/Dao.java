@@ -4,17 +4,16 @@ import java.util.List;
 
 import javax.persistence.metamodel.SingularAttribute;
 
-public interface Dao<E, K>
-{
-	void persist(E entity);
+public interface Dao<E, K> {
+    void persist(E entity);
 
-	public E merge(E entity);
+    public E merge(E entity);
 
-	void remove(E entity);
+    void remove(E entity);
 
-	E findById(K id);
+    E findById(K id);
 
-	List<E> findAll();
+    List<E> findAll();
 
-	List<E> findAll(SingularAttribute<E, ?> order[]);
+    List<E> findAll(SingularAttribute<E, ?> order[]);
 }

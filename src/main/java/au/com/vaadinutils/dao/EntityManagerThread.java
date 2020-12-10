@@ -14,88 +14,80 @@ import java.util.concurrent.Future;
  * em into the thread.
  *
  * @author bsutton
-* @deprecated
+ * @deprecated
  */
-final public class EntityManagerThread<T>
-{
-	private final Future<T> future;
+final public class EntityManagerThread<T> {
+    private final Future<T> future;
 
-	/**
-	 * Create an thread with a copy of the current threads UI (because you can't
-	 * get the UI from within the new thread), inject an entity manager and
-	 * starts a JPA Transaction then executes the callable on the new thread.
-	 *
-	 * The callable can optionally return a result of type T which can be
-	 * retrieved by calling get().
-	 *
-	 * @param ui
-	 * @param callable
-	 */
+    /**
+     * Create an thread with a copy of the current threads UI (because you can't get
+     * the UI from within the new thread), inject an entity manager and starts a JPA
+     * Transaction then executes the callable on the new thread.
+     *
+     * The callable can optionally return a result of type T which can be retrieved
+     * by calling get().
+     *
+     * @param ui
+     * @param callable
+     */
 
-	public EntityManagerThread(CallableUI<T> callable)
-	{
+    public EntityManagerThread(CallableUI<T> callable) {
 
-		this((Callable<T>) callable);
+        this((Callable<T>) callable);
 
-	}
+    }
 
-	/**
-	 * Injects an entity manager and starts a JPA Transaction and then runs your
-	 * callable.
-	 *
-	 * The callable can optionally return a result of type T which can be
-	 * retrieved by calling get().
-	 *
-	 * @param ui
-	 * @param callable
-	 */
+    /**
+     * Injects an entity manager and starts a JPA Transaction and then runs your
+     * callable.
+     *
+     * The callable can optionally return a result of type T which can be retrieved
+     * by calling get().
+     *
+     * @param ui
+     * @param callable
+     */
 
-	public EntityManagerThread(final Callable<T> callable)
-	{
+    public EntityManagerThread(final Callable<T> callable) {
 
-		ExecutorService executor = Executors.newFixedThreadPool(1);
+        ExecutorService executor = Executors.newFixedThreadPool(1);
 
-		Callable<T> thread = new Callable<T>()
-		{
+        Callable<T> thread = new Callable<T>() {
 
-			@Override
-			public T call() throws Exception
-			{
+            @Override
+            public T call() throws Exception {
 
-				return EntityManagerProvider.setThreadLocalEntityManager(new EntityWorker<T>()
-				{
+                return EntityManagerProvider.setThreadLocalEntityManager(new EntityWorker<T>() {
 
-					@Override
-					public T exec() throws Exception
-					{
-						return callable.call();
-					}
+                    @Override
+                    public T exec() throws Exception {
+                        return callable.call();
+                    }
 
-				});
+                });
 
-			}
+            }
 
-		};
+        };
 
-		future = executor.submit(thread);
-		executor.shutdown();
+        future = executor.submit(thread);
+        executor.shutdown();
 
-	}
+    }
 
-	/**
-	 * Waits until the thread completes and returns the results of the thread.
-	 *
-	 * If the thread throws an exception calling this method will result in the
-	 * original exception being re-thrown so you can catch it and do something
-	 * useful with it.
-	 *
-	 * @return the results of the callable.
-	 * @throws InterruptedException
-	 * @throws ExecutionException
-	 */
-	public T get() throws InterruptedException, ExecutionException
-	{
-		return this.future.get();
-	}
+    /**
+     * Waits until the thread completes and returns the results of the thread.
+     *
+     * If the thread throws an exception calling this method will result in the
+     * original exception being re-thrown so you can catch it and do something
+     * useful with it.
+     *
+     * @return the results of the callable.
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
+    public T get() throws InterruptedException, ExecutionException {
+        return this.future.get();
+    }
 
 }

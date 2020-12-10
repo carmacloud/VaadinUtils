@@ -20,30 +20,26 @@ import java.util.concurrent.Callable;
  * @param <T>
  * @deprecated
  */
-final public class EntityManagerCallable<T> implements Callable<T>
-{
+final public class EntityManagerCallable<T> implements Callable<T> {
 
-	/**
-	 * Wraps the passed Callable with the necessary instrumentation to ensure
-	 * that an EM is available.
-	 */
-	private final Callable<T> wrapper;
+    /**
+     * Wraps the passed Callable with the necessary instrumentation to ensure that
+     * an EM is available.
+     */
+    private final Callable<T> wrapper;
 
-	public EntityManagerCallable(Callable<T> callable)
-	{
-		wrapper = EntityManagerProvider.setThreadLocalEntityManager(callable);
+    public EntityManagerCallable(Callable<T> callable) {
+        wrapper = EntityManagerProvider.setThreadLocalEntityManager(callable);
 
-	}
+    }
 
-	public EntityManagerCallable(CallableUI<T> callable)
-	{
-		this.wrapper = EntityManagerProvider.setThreadLocalEntityManager(callable);
-	}
+    public EntityManagerCallable(CallableUI<T> callable) {
+        this.wrapper = EntityManagerProvider.setThreadLocalEntityManager(callable);
+    }
 
-	@Override
-	public T call() throws Exception
-	{
-		return wrapper.call();
-	}
+    @Override
+    public T call() throws Exception {
+        return wrapper.call();
+    }
 
 }
