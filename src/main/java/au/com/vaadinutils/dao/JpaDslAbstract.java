@@ -1847,6 +1847,11 @@ public abstract class JpaDslAbstract<E, R>
 		return builder.sum(root.get(attribute));
 	}
 
+    public <K, T extends Number> Expression<T> sum(final JoinBuilder<E, K> join, final SingularAttribute<K, T> attribute)
+    {
+        return builder.sum(getJoin(join).get(attribute));
+    }
+
 	public <K> Expression<String> trim(JoinBuilder<E, K> join, SingularAttribute<K, String> attribute)
 	{
 		return builder.trim(getJoin(join).get(attribute));
