@@ -170,15 +170,23 @@
 	</build>
 
 	<dependencies>
+		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-themes</artifactId>
 			<version>${vaadin7.version}</version>
 		</dependency>
+		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-server</artifactId>
 			<version>${vaadin7.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.gwt</groupId>
+					<artifactId>gwt-elemental</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
