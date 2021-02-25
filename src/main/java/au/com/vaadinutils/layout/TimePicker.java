@@ -360,7 +360,7 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
     }
 
     protected void addHourButtons(HorizontalLayout hourButtonPanel, int rows, int cols) {
-        String[] numbers = new String[] { "12", "1", "2", " 3", "4", "5", "6", "7", "8", "9", "10", "11" };
+        String[] numbers = new String[] { "12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" };
         for (int col = 0; col < cols; col++) {
             final VerticalLayout rowsLayout = new VerticalLayout();
             for (int row = 0; row < rows; row++) {
