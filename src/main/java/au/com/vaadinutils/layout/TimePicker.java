@@ -10,6 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.vaadin.data.Property;
@@ -24,7 +25,6 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -36,6 +36,8 @@ import com.vaadin.ui.themes.Reindeer;
  */
 @SuppressWarnings("rawtypes")
 public class TimePicker extends HorizontalLayout implements Field<Date> {
+
+    protected final Logger logger = LogManager.getLogger();
     protected static final String TIME_FORMAT = "hh:mm a";
     protected static final String TIME_FORMAT2 = "hh:mma";
     private static final long serialVersionUID = 1826417125815798837L;
@@ -48,13 +50,12 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
     private String title;
     protected TextField field;
     private Property<Date> datasource;
-    // private boolean isRequired;
     private String requiredErrorMessage;
     private int tabIndex;
     private boolean isBuffered;
     protected Validator timeValidator;
-    Set<Validator> validators = new LinkedHashSet<>();
-    Set<ValueChangeListener> listeners = new LinkedHashSet<>();
+    private Set<Validator> validators = new LinkedHashSet<>();
+    private Set<ValueChangeListener> listeners = new LinkedHashSet<>();
 
     protected Button pickerButton;
 
@@ -72,16 +73,12 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
                     return;
                 }
                 parseDate((String) value);
-
             }
-
         };
         buildUI(title);
-
     }
 
     protected void buildUI(String title) {
-
         field = new TextField();
         field.setWidth("125");
         field.setImmediate(true);
@@ -93,6 +90,7 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
 
             private static final long serialVersionUID = 1L;
 
+            @SuppressWarnings("deprecation")
             @Override
             public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
                 try {
@@ -126,7 +124,7 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
 
         this.title = title;
 
-        CssLayout hl = new CssLayout();
+        final CssLayout hl = new CssLayout();
         hl.addStyleName("v-component-group");
         hl.setWidth("100%");
         hl.setHeight("35");
@@ -178,11 +176,12 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         super.focus();
     }
 
+    @SuppressWarnings("deprecation")
     private void showPopupTimePicker() {
 
         try {
             if (field.getValue() != null) {
-                Date value = parseDate(field.getValue());
+                final Date value = parseDate(field.getValue());
                 if (value != null) {
                     int hourNumber = value.getHours() % 12;
                     if (hourNumber == 0) {
@@ -200,11 +199,10 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         final Window window = new Window(title);
         window.setModal(true);
         window.setResizable(false);
-        // window.setWidth("550");
-        // window.setHeight("220");
+        window.setWidth("430");
         window.setClosable(false);
 
-        HorizontalLayout layout = new HorizontalLayout();
+        final HorizontalLayout layout = new HorizontalLayout();
         layout.setSizeFull();
         layout.setSpacing(true);
         layout.setStyleName(Reindeer.BUTTON_SMALL);
@@ -227,47 +225,47 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
             }
         });
 
-        VerticalLayout hourPanelLabelWrapper = new VerticalLayout();
-        hourPanelLabelWrapper.setWidth("225");
+        final VerticalLayout hourPanelLabelWrapper = new VerticalLayout();
+        hourPanelLabelWrapper.setWidth("245");
 
-        Label hourLabel = new Label("Hour");
+        final Label hourLabel = new Label("Hour");
 
-        hourLabel.setWidth("230");
-        HorizontalLayout innerHourLabelPanel = new HorizontalLayout();
+        hourLabel.setWidth("250");
+        final HorizontalLayout innerHourLabelPanel = new HorizontalLayout();
 
         innerHourLabelPanel.addComponent(hourLabel);
         innerHourLabelPanel.setWidth("100");
         hourPanelLabelWrapper.addComponent(innerHourLabelPanel);
 
-        VerticalLayout minuteLabelWrapper = new VerticalLayout();
+        final VerticalLayout minuteLabelWrapper = new VerticalLayout();
         minuteLabelWrapper.setWidth("60");
-        Label minuteLabel = new Label("Minute");
+        final Label minuteLabel = new Label("Minute");
 
         minuteLabel.setWidth("45");
-        VerticalLayout innerMinuteLabelPanel = new VerticalLayout();
+        final VerticalLayout innerMinuteLabelPanel = new VerticalLayout();
         innerMinuteLabelPanel.addComponent(minuteLabel);
         innerMinuteLabelPanel.setWidth("45");
 
         minuteLabelWrapper.addComponent(innerMinuteLabelPanel);
 
-        HorizontalLayout hourPanel = new HorizontalLayout();
+        final HorizontalLayout hourPanel = new HorizontalLayout();
 
-        HorizontalLayout amPmPanel = new HorizontalLayout();
+        final HorizontalLayout amPmPanel = new HorizontalLayout();
 
-        VerticalLayout amPmButtonPanel = new VerticalLayout();
+        final VerticalLayout amPmButtonPanel = new VerticalLayout();
         amPmPanel.addComponent(amPmButtonPanel);
         addAmPmButtons(amPmButtonPanel);
 
-        HorizontalLayout hourButtonPanel = new HorizontalLayout();
+        final HorizontalLayout hourButtonPanel = new HorizontalLayout();
         hourPanel.addComponent(hourButtonPanel);
         addHourButtons(hourButtonPanel, 2, 6);
 
-        HorizontalLayout minutePanel = new HorizontalLayout();
-        HorizontalLayout minuteButtonPanel = new HorizontalLayout();
+        final HorizontalLayout minutePanel = new HorizontalLayout();
+        final HorizontalLayout minuteButtonPanel = new HorizontalLayout();
         minutePanel.addComponent(minuteButtonPanel);
         addMinuteButtons(minuteButtonPanel, 2, 4);
 
-        HorizontalLayout amPmHourWrapper = new HorizontalLayout();
+        final HorizontalLayout amPmHourWrapper = new HorizontalLayout();
         amPmHourWrapper.addComponent(hourPanel);
         amPmHourWrapper.addComponent(amPmPanel);
         hourPanelLabelWrapper.addComponent(amPmHourWrapper);
@@ -278,16 +276,13 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         layout.addComponent(minuteLabelWrapper);
         layout.setExpandRatio(minuteLabelWrapper, 1);
 
-        HorizontalLayout okcancel = new HorizontalLayout();
+        final HorizontalLayout okcancel = new HorizontalLayout();
         okcancel.setSizeFull();
-        Button ok = new Button("OK");
+        final Button ok = new Button("OK");
 
         ok.setWidth("75");
         ok.addClickListener(new ClickListener() {
 
-            /**
-             * 
-             */
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -297,29 +292,22 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
             }
         });
 
-        Button cancel = new Button("Cancel");
+        final Button cancel = new Button("Cancel");
         cancel.setWidth("75");
         cancel.addClickListener(new ClickListener() {
 
-            /**
-             * 
-             */
             private static final long serialVersionUID = 1L;
 
             @Override
             public void buttonClick(ClickEvent event) {
                 window.close();
-
             }
         });
 
-        Button clear = new Button("Clear");
+        final Button clear = new Button("Clear");
         clear.setWidth("75");
         clear.addClickListener(new ClickListener() {
 
-            /**
-             * 
-             */
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -336,7 +324,7 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         okcancel.setSpacing(true);
         okcancel.setExpandRatio(displayTime, 0.50f);
 
-        VerticalLayout wrapper = new VerticalLayout();
+        final VerticalLayout wrapper = new VerticalLayout();
 
         wrapper.addComponent(layout);
         wrapper.addComponent(okcancel);
@@ -349,56 +337,41 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
     }
 
     protected void addMinuteButtons(HorizontalLayout minuteButtonPanel, int rows, int cols) {
-        String[] numbers = new String[] { "00", "10", "15", "20", "30", "40", "45", "50" };
+        final String[] numbers = new String[] { "00", "10", "15", "20", "30", "40", "45", "50" };
         for (int col = 0; col < cols; col++) {
-            VerticalLayout rowsLayout = new VerticalLayout();
+            final VerticalLayout rowsLayout = new VerticalLayout();
             for (int row = 0; row < rows; row++) {
 
-                final NativeButton button = new NativeButton("" + numbers[row + (col * rows)]);
+                final Button button = new Button("" + numbers[row + (col * rows)]);
                 rowsLayout.addComponent(button);
-
-                button.setStyleName(Reindeer.BUTTON_SMALL);
-
-                button.setWidth("30");
-
                 button.addClickListener(new ClickListener() {
 
-                    /**
-                     * 
-                     */
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void buttonClick(ClickEvent event) {
 
-                        String title = button.getCaption();
+                        final String title = button.getCaption();
                         dateTime.set(Calendar.MINUTE, Integer.parseInt(title));
                         isSet = true;
                         setNewValue();
-
                     }
                 });
-
             }
             minuteButtonPanel.addComponent(rowsLayout);
         }
     }
 
     protected void addHourButtons(HorizontalLayout hourButtonPanel, int rows, int cols) {
-        int[] numbers = new int[] { 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+        String[] numbers = new String[] { "12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11" };
         for (int col = 0; col < cols; col++) {
-            VerticalLayout rowsLayout = new VerticalLayout();
+            final VerticalLayout rowsLayout = new VerticalLayout();
             for (int row = 0; row < rows; row++) {
-                final NativeButton button = new NativeButton("" + numbers[col + (row * cols)]);
+                final Button button = new Button("" + numbers[col + (row * cols)]);
                 rowsLayout.addComponent(button);
-                button.setStyleName(Reindeer.BUTTON_SMALL);
-                button.setWidth("30");
-
+                button.setWidth("35");
                 button.addClickListener(new ClickListener() {
 
-                    /**
-                     * 
-                     */
                     private static final long serialVersionUID = 1L;
 
                     @Override
@@ -421,19 +394,12 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
     }
 
     protected void addAmPmButtons(VerticalLayout amPmButtonPanel) {
-        final NativeButton am = new NativeButton("AM");
-        final NativeButton pm = new NativeButton("PM");
+        final Button am = new Button("AM");
+        final Button pm = new Button("PM");
         amPmButtonPanel.addComponent(am);
         amPmButtonPanel.addComponent(pm);
-
-        am.setStyleName(Reindeer.BUTTON_SMALL);
-        am.setWidth("35");
-
         am.addClickListener(new ClickListener() {
 
-            /**
-             * 
-             */
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -443,9 +409,6 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
                 setNewValue();
             }
         });
-        pm.setStyleName(Reindeer.BUTTON_SMALL);
-        pm.setWidth("35");
-
         pm.addClickListener(new ClickListener() {
 
             private static final long serialVersionUID = 1L;
@@ -512,7 +475,6 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         internalSetReadonlyFieldValue(getValueAsString());
         if (changedHandler != null) {
             changedHandler.onChanged(getValueAsString());
-
         }
     }
 
@@ -527,7 +489,6 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
 
     @Override
     public void commit() throws SourceException, InvalidValueException {
-
         datasource.setValue(getValue());
     }
 
@@ -548,15 +509,13 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         return isBuffered;
     }
 
-    Logger logger = org.apache.logging.log4j.LogManager.getLogger();
-
     @Override
     public boolean isModified() {
-        Date value = getValue();
+        final Date value = getValue();
         if (datasource == null) {
             return false;
         }
-        Date dsValue = datasource.getValue();
+        final Date dsValue = datasource.getValue();
         if (dsValue == null) {
             boolean ret = value != null;
             if (ret) {
@@ -569,9 +528,9 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
             return true;
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mma");
-        String v1 = sdf.format(dsValue);
-        String v2 = sdf.format(value);
+        final SimpleDateFormat sdf = new SimpleDateFormat("hh:mma");
+        final String v1 = sdf.format(dsValue);
+        final String v2 = sdf.format(value);
         boolean ret = !v1.equals(v2);
         if (ret) {
             logger.info("Values {} and {}", v1, v2);
@@ -596,7 +555,7 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
 
     @Override
     public Collection<Validator> getValidators() {
-        Collection<Validator> validators = new LinkedList<>();
+        final Collection<Validator> validators = new LinkedList<>();
         validators.add(timeValidator);
         validators.addAll(this.validators);
         return validators;
@@ -619,7 +578,6 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         for (Validator validator : validators) {
             validator.validate(getValue());
         }
-
     }
 
     @Override
@@ -649,7 +607,6 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
 
     @Override
     public Class<Date> getType() {
-
         return Date.class;
     }
 
@@ -688,7 +645,6 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         if (datasource != null && datasource.getValue() != null) {
             setValues(datasource.getValue());
         }
-
     }
 
     @Override
@@ -704,25 +660,20 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
     @Override
     public void setTabIndex(int tabIndex) {
         this.tabIndex = tabIndex;
-
     }
 
     @Override
     public boolean isRequired() {
         return isVisible();
-
     }
 
     @Override
     public void setRequired(boolean required) {
-        // isRequired = required;
-
     }
 
     @Override
     public void setRequiredError(String requiredMessage) {
         requiredErrorMessage = requiredMessage;
-
     }
 
     @Override
@@ -737,7 +688,5 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
 
     @Override
     public void clear() {
-
     }
-
 }
