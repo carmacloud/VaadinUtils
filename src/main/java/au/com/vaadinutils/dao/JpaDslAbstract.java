@@ -869,6 +869,21 @@ public abstract class JpaDslAbstract<E, R>
 			}
 		};
 	}
+	
+	public <V extends Comparable<? super V>> Condition<E> lessThan(final Expression<V> expression,
+                final V value)
+	{
+            return new AbstractCondition<E>()
+            {
+
+                @Override
+                public Predicate getPredicates()
+                {
+
+                        return builder.lessThan(expression, value);
+                }
+            };
+	}
 
 	public <J, V extends Comparable<? super V>> Condition<E> lessThanOrEqualTo(final JoinBuilder<E, J> join,
 			final SingularAttribute<J, V> field, final SingularAttribute<E, V> value)
