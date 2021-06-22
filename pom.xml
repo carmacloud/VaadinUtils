@@ -123,14 +123,14 @@
 				<configuration>
 					<additionalparam>${javadoc.opts}</additionalparam>
 				</configuration>
-				<executions>
+				<!-- <executions>
 					<execution>
 						<id>attach-javadocs</id>
 						<goals>
 							<goal>jar</goal>
 						</goals>
 					</execution>
-				</executions>
+				</executions> -->
 			</plugin>
 		</plugins>
 		<pluginManagement>
