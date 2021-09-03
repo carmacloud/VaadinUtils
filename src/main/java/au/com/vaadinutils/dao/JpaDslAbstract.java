@@ -1598,4 +1598,15 @@ public abstract class JpaDslAbstract<E, R> {
         predicate = builder.and(predicates.toArray(new Predicate[predicates.size()]));
         return this;
     }
+
+    public <K extends Comparable<? super K>> Condition<E> greaterThan(final Expression<? extends K> expression,
+            final Expression<? extends K> expression2) {
+        return new AbstractCondition<E>() {
+
+            @Override
+            public Predicate getPredicates() {
+                return builder.greaterThan(expression, expression2);
+            }
+        };
+    }
 }
