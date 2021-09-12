@@ -1609,4 +1609,37 @@ public abstract class JpaDslAbstract<E, R> {
             }
         };
     }
+
+    public <K extends Comparable<? super K>> Condition<E> greaterThanOrEqualTo(final Expression<? extends K> expression,
+            final Expression<? extends K> expression2) {
+        return new AbstractCondition<E>() {
+
+            @Override
+            public Predicate getPredicates() {
+                return builder.greaterThanOrEqualTo(expression, expression2);
+            }
+        };
+    }
+
+    public <K extends Comparable<? super K>> Condition<E> lessThan(final Expression<? extends K> expression,
+            final Expression<? extends K> expression2) {
+        return new AbstractCondition<E>() {
+
+            @Override
+            public Predicate getPredicates() {
+                return builder.lessThan(expression, expression2);
+            }
+        };
+    }
+
+    public <K extends Comparable<? super K>> Condition<E> lessThanOrEqualTo(final Expression<? extends K> expression,
+            final Expression<? extends K> expression2) {
+        return new AbstractCondition<E>() {
+
+            @Override
+            public Predicate getPredicates() {
+                return builder.lessThanOrEqualTo(expression, expression2);
+            }
+        };
+    }
 }
