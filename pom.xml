@@ -20,6 +20,9 @@
 		<openjpa.version>2.3.0</openjpa.version>
 		<!-- Testing -->
 		<junit.version>4.13</junit.version>
+		<!-- Vaadin 14 properties -->
+		<vaadin.version>14.6.9</vaadin.version>
+		<vaadin-flow-version>2.6.8</vaadin-flow-version>
 	</properties>
 
 	<repositories>
@@ -51,6 +54,18 @@
 			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-bom</artifactId>
+				<version>${vaadin.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<distributionManagement>
 		<repository>
@@ -170,6 +185,50 @@
 	</build>
 
 	<dependencies>
+	<!-- Added Vaadin 14 dependencies below here -->
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin</artifactId>
+			<exclusions>
+				<!-- Webjars are only needed when running in Vaadin 13 compatibility 
+					mode -->
+				<exclusion>
+					<groupId>com.vaadin.webjar</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.insites</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.polymer</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.polymerelements</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.vaadin</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.webcomponents</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-bom</artifactId>
+				<type>pom</type>
+				<scope>import</scope>
+				<version>${vaadin.version}</version>
+			</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>mpr-v7</artifactId>
+		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
