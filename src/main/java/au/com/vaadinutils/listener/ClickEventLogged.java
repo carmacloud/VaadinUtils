@@ -22,7 +22,7 @@ public class ClickEventLogged {
             try {
                 clicked(event);
             } catch (Throwable e) {
-                ErrorWindow.showErrorWindow(e);
+                ErrorWindow.showErrorWindow(e, null);
             }
         }
     }

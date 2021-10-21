@@ -131,7 +131,7 @@ public class EntityTable<E> extends Table implements EntityList<E> {
                 super.changeVariables(source, variables);
             }
         } catch (Exception e) {
-            ErrorWindow.showErrorWindow(e);
+            ErrorWindow.showErrorWindow(e, null);
         }
     }
 

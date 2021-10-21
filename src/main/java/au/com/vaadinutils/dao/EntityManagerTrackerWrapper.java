@@ -56,7 +56,7 @@ public class EntityManagerTrackerWrapper implements EntityManager {
 
             @Override
             public void run() {
-                ErrorWindow.showErrorWindow(created);
+                ErrorWindow.showErrorWindow(created, getClass().getSimpleName());
             }
         };
         future = scheduler.scheduleAtFixedRate(runnable, 40, 40, TimeUnit.SECONDS);

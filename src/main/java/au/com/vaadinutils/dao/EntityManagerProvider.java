@@ -204,7 +204,7 @@ public enum EntityManagerProvider {
                     } catch (ConstraintViolationException e) {
                         // ensure we get the cause of an underlying constraint
                         // violation
-                        ErrorWindow.showErrorWindow(e);
+                        ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
                         throw e;
                     } finally {
                         try {
@@ -244,7 +244,7 @@ public enum EntityManagerProvider {
                 try (AutoCloseableEM closer = EntityManagerProvider.setThreadLocalEntityManagerTryWithResources()) {
                     runnable.run();
                 } catch (Exception e) {
-                    ErrorWindow.showErrorWindow(e);
+                    ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
                 }
 
             }

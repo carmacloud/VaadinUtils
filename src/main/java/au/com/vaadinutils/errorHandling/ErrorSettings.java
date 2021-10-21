@@ -8,8 +8,6 @@ public interface ErrorSettings {
 
     String getSystemName();
 
-    String getViewName();
-
     String getUserName();
 
     String getTargetEmailAddress();

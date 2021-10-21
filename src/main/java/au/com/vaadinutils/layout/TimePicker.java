@@ -90,7 +90,6 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
 
             private static final long serialVersionUID = 1L;
 
-            @SuppressWarnings("deprecation")
             @Override
             public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
                 try {
@@ -176,7 +175,6 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         super.focus();
     }
 
-    @SuppressWarnings("deprecation")
     private void showPopupTimePicker() {
 
         try {

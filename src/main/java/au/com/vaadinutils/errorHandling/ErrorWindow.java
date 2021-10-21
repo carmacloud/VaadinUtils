@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.addons.screenshot.Screenshot;
 import org.vaadin.addons.screenshot.ScreenshotImage;
@@ -17,29 +18,27 @@ import org.vaadin.addons.screenshot.ScreenshotListener;
 import org.vaadin.addons.screenshot.ScreenshotMimeType;
 
 import com.google.common.base.Stopwatch;
-import com.vaadin.server.DefaultErrorHandler;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.mpr.LegacyWrapper;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextArea;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
-import com.vaadin.ui.themes.ValoTheme;
 
 /**
- * Retain, but might need UI adapting for Flow
+ * Retain, but might will be adapted for Flow
  */
 public class ErrorWindow {
     public static final String ERROR_WINDOW_CLOSE_BUTTON = "ErrorWindowCloseButton";
-    private Button close = new Button("OK");
     private Label uploadStatus = new Label("&nbsp;", ContentMode.HTML);
+    private static String viewName;
 
-    static Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+    static Logger logger = LogManager.getLogger();
 
     /**
      * throttle for sending emails about errors the user hasn't seen. Allow bursting
@@ -48,23 +47,13 @@ public class ErrorWindow {
     final static ErrorRateController emailRateController = new ErrorRateController(20, 1, TimeUnit.MINUTES);
 
     public ErrorWindow() {
-        // Configure the error handler for the UI
-        UI.getCurrent().setErrorHandler(new DefaultErrorHandler() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void error(com.vaadin.server.ErrorEvent event) {
-                new ErrorWindow(true).internalShowErrorWindow(event.getThrowable());
-            }
-
-        });
     }
 
     ErrorWindow(boolean noUI) {
-
     }
 
-    public static void showErrorWindow(Throwable e) {
+    public static void showErrorWindow(Throwable e, String name) {
+        viewName = name;
         new ErrorWindow(true).internalShowErrorWindow(e);
     }
 
@@ -131,29 +120,23 @@ public class ErrorWindow {
 
         if (!isExempted(cause)) {
             if (UI.getCurrent() != null) {
-                UI.getCurrent().access(new Runnable() {
+                UI.getCurrent().access(() -> {
+                    Stopwatch lastTime = (Stopwatch) UI.getCurrent().getSession()
+                            .getAttribute("Last Time Error Window Shown");
 
-                    @Override
-                    public void run() {
+                    // don't display the error window more than once every 2
+                    // seconds
+                    if (lastTime == null || lastTime.elapsed(TimeUnit.SECONDS) > 2) {
 
-                        Stopwatch lastTime = (Stopwatch) UI.getCurrent().getSession()
-                                .getAttribute("Last Time Error Window Shown");
+                        displayVaadinErrorWindow(finalCauseClass, finalId, time, finalId, finalTrace, reference);
 
-                        // don't display the error window more than once every 2
-                        // seconds
-                        if (lastTime == null || lastTime.elapsed(TimeUnit.SECONDS) > 2) {
-
-                            displayVaadinErrorWindow(finalCauseClass, finalId, time, finalId, finalTrace, reference);
-
-                            UI.getCurrent().getSession().setAttribute("Last Time Error Window Shown",
-                                    Stopwatch.createStarted());
-                        } else {
-                            emailErrorWithoutShowing(time, finalId, finalTrace, reference);
-                        }
+                        UI.getCurrent().getSession().setAttribute("Last Time Error Window Shown",
+                                Stopwatch.createStarted());
+                    } else {
+                        emailErrorWithoutShowing(time, finalId, finalTrace, reference);
                     }
                 });
             } else {
-
                 emailErrorWithoutShowing(time, finalId, finalTrace, reference);
             }
         } else {
@@ -233,8 +216,7 @@ public class ErrorWindow {
             final String finalId, final String finalTrace, final String reference) {
 
         // generate screen shot!
-
-        final Window window = new Window();
+        final Dialog window = new Dialog();
         final Screenshot screenshot = Screenshot.newBuilder().withLogging(true).withMimeType(ScreenshotMimeType.PNG)
                 .build();
         screenshot.addScreenshotListener(new ScreenshotListener() {
@@ -247,11 +229,10 @@ public class ErrorWindow {
             }
         });
 
-        window.setContent(screenshot);
-        window.setClosable(false);
+        window.add(new LegacyWrapper(screenshot));
         window.setResizable(false);
 
-        UI.getCurrent().addWindow(window);
+        UI.getCurrent().add(window);
         screenshot.setTargetComponent(null);
         screenshot.takeScreenshot();
 
@@ -259,17 +240,12 @@ public class ErrorWindow {
 
     private void showWindow(String causeClass, String id, final Date time, final String finalId,
             final String finalTrace, final String reference, final byte[] imageData) {
-        final Window window = new Window();
-        UI.getCurrent().addWindow(window);
-        window.setModal(true);
-        window.center();
-        window.setResizable(false);
-        window.setCaption("Error " + id);
-        window.setClosable(false);
+        final ConfirmDialog window = new ConfirmDialog();
+        UI.getCurrent().add(window);
+        window.setWidth("600px");
+        window.setHeader("Error " + id);
 
-        // window.setHeight("50%");
-        window.setWidth("50%");
-        VerticalLayout layout = new VerticalLayout();
+        final VerticalLayout layout = new VerticalLayout();
         layout.setMargin(true);
         layout.setSpacing(true);
 
@@ -277,42 +253,41 @@ public class ErrorWindow {
                 "<b>An error has occurred (" + causeClass + ").<br><br>Reference:</b> " + reference);
         message.setContentMode(ContentMode.HTML);
 
-        Label describe = new Label("<b>Please describe what you were doing when this error occured (Optional)<b>");
+        final Label describe = new Label(
+                "<b>Please describe what you were doing when this error occured (Optional)<b>");
         describe.setContentMode(ContentMode.HTML);
 
         final TextArea notes = new TextArea();
         notes.setWidth("100%");
         final String supportEmail = getTargetEmailAddress();
 
-        close.addClickListener(new ClickListener() {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void buttonClick(ClickEvent event) {
-                try {
-                    generateEmail(time, finalId, finalTrace, reference, notes.getValue(), supportEmail, getViewName(),
-                            getUserName(), getUserEmail(), imageData);
-                } catch (Exception e) {
-                    logger.error(e, e);
-                    Notification.show("Error sending error report", Type.ERROR_MESSAGE);
-                } finally {
-                    window.close();
-                }
+        final Button saveButton = new Button("Save");
+        window.setConfirmButton(saveButton);
+        saveButton.addClickListener(click -> {
+            try {
+                logger.info(getViewName());
+                generateEmail(time, finalId, finalTrace, reference, notes.getValue(), supportEmail, getViewName(),
+                        getUserName(), getUserEmail(), imageData);
+            } catch (Exception e) {
+                logger.error(e, e);
+                Notification.show("Error sending error report", Type.ERROR_MESSAGE);
+            } finally {
+                window.close();
             }
-
         });
-        close.setStyleName(ValoTheme.BUTTON_DANGER);
+        saveButton.getElement().setAttribute("theme", "error primary");
 
-        close.setId(ERROR_WINDOW_CLOSE_BUTTON);
+        saveButton.setId(ERROR_WINDOW_CLOSE_BUTTON);
 
         layout.addComponent(message);
         layout.addComponent(describe);
         layout.addComponent(notes);
         layout.addComponent(uploadStatus);
-        layout.addComponent(close);
         layout.addComponent(new Label("Information about this error will be sent to " + getSupportCompanyName()));
-        window.setContent(layout);
+        final LegacyWrapper content = new LegacyWrapper(layout);
+        content.setSizeFull();
+        window.add(content);
+        window.open();
     }
 
     private void generateEmail(final Date time, final String finalId, final String finalTrace, final String reference,
@@ -355,11 +330,9 @@ public class ErrorWindow {
     }
 
     private String getViewName() {
-        try {
-            return ErrorSettingsFactory.getErrorSettings().getViewName();
-        } catch (Exception e) {
-            logger.error(e, e);
-        }
+       if(viewName != null) {
+           return viewName;
+       }
         return "Error getting View name";
     }
 

@@ -236,9 +236,9 @@ public class JSCallWithReturnValue {
                     String value = arguments.getString(0);
                     logger.error(jsToExecute + " -> resulted in the error: " + value, trace);
                     Exception ex = new JavaScriptException(trace.getMessage() + " , JS Cause: " + value, trace);
-                    ErrorWindow.showErrorWindow(ex);
+                    ErrorWindow.showErrorWindow(ex, null);
                 } catch (Exception e) {
-                    ErrorWindow.showErrorWindow(trace);
+                    ErrorWindow.showErrorWindow(trace, null);
                 } finally {
                     future.cancel(false);
                     JavaScript.getCurrent().removeFunction(hookName);

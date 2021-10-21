@@ -49,7 +49,7 @@ public class Transaction implements Closeable {
                     throw new IllegalStateException("Commit has already been called on the transaction");
             }
         } catch (Exception e) {
-            ErrorWindow.showErrorWindow(e);
+            ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
             throw e;
         }
 

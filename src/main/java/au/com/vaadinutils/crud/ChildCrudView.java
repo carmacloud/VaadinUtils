@@ -423,7 +423,7 @@ public abstract class ChildCrudView<P extends CrudEntity, E extends ChildCrudEnt
 		}
 		catch (Exception e)
 		{
-			ErrorWindow.showErrorWindow(e);
+			ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
 		}
 		finally
 		{
@@ -921,7 +921,7 @@ public abstract class ChildCrudView<P extends CrudEntity, E extends ChildCrudEnt
 		}
 		catch (Exception e)
 		{
-			ErrorWindow.showErrorWindow(e);
+			ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
 		}
 
 	}
@@ -996,7 +996,7 @@ public abstract class ChildCrudView<P extends CrudEntity, E extends ChildCrudEnt
 		}
 		catch (UnsupportedFilterException e)
 		{
-			ErrorWindow.showErrorWindow(e);
+			ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
 		}
 	}
 

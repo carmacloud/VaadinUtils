@@ -15,11 +15,6 @@ public class DefaultErrorSettings implements ErrorSettings {
     }
 
     @Override
-    public String getViewName() {
-        return "View not know, call ErrorSettingsFactory.setErrorSettings and implement appropriate settings";
-    }
-
-    @Override
     public String getUserName() {
         return "User not known, call ErrorSettingsFactory.setErrorSettings and implement appropriate settings";
     }

@@ -229,7 +229,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
         try {
             entityTable.init(this.getClass().getSimpleName());
         } catch (Exception e) {
-            ErrorWindow.showErrorWindow(e);
+            ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
 
         }
     }
@@ -319,7 +319,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
                         try {
                             invokeTopLevelCrudSave();
                         } catch (Exception e) {
-                            ErrorWindow.showErrorWindow(e);
+                            ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
                         }
                     } else {
                         logger.error("draggedOrdinalProp is null");
@@ -1289,7 +1289,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
             } else if (e instanceof javax.persistence.OptimisticLockException) {
                 Notification.show(LOCKING_EXCEPTION_USER_MESSAGE, Type.ERROR_MESSAGE);
             } else {
-                ErrorWindow.showErrorWindow(e);
+                ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
             }
         } finally {
             if (newEntity != null) {
@@ -1385,7 +1385,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
                 Notification.show(LOCKING_EXCEPTION_USER_MESSAGE, Type.ERROR_MESSAGE);
 
             } else {
-                ErrorWindow.showErrorWindow(e);
+                ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
             }
         } finally {
             // detach the temp listener
@@ -1519,7 +1519,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
 
             entityTable.select(entityTable.firstItemId());
         } catch (Exception e) {
-            ErrorWindow.showErrorWindow(e);
+            ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
         }
     }
 
@@ -1594,7 +1594,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
                 callback.allowRowChange();
 
             } catch (Exception e) {
-                ErrorWindow.showErrorWindow(e);
+                ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
 
             }
         }
@@ -1841,7 +1841,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
 
                     buttonLayout.startNewPhase();
                 } catch (Exception e) {
-                    ErrorWindow.showErrorWindow(e);
+                    ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
                 }
             }
         });
@@ -2013,7 +2013,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
         try {
             container.removeAllContainerFilters();
         } catch (Exception e) {
-            ErrorWindow.showErrorWindow(e);
+            ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
 
         }
     }
