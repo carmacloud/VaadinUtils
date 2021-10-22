@@ -21,8 +21,8 @@
 		<!-- Testing -->
 		<junit.version>4.13</junit.version>
 		<!-- Vaadin 14 properties -->
-		<vaadin.version>14.6.9</vaadin.version>
-		<vaadin-flow-version>2.6.8</vaadin-flow-version>
+		<vaadin.version>14.7.2</vaadin.version>
+		<vaadin-flow-version>2.7.2</vaadin-flow-version>
 	</properties>
 
 	<repositories>
