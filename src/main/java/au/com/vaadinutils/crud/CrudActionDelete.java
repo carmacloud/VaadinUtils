@@ -1,12 +1,11 @@
 package au.com.vaadinutils.crud;
 
 import org.apache.logging.log4j.Logger;
-import org.vaadin.dialogs.ConfirmDialog;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.UI;
 
 /**
  * @deprecated Replaced in V14 migration.
@@ -61,28 +60,21 @@ public class CrudActionDelete<E extends CrudEntity> implements CrudAction<E> {
             if (name == null) {
                 name = "" + entity.getEntity().getId();
             }
-            ConfirmDialog.show(UI.getCurrent(), "Confirm Delete",
+            new ConfirmDialog("Confirm Delete",
                     "Are you sure you want to delete " + titleText + " - '" + name + "' ? " + message, "Delete",
-                    "Cancel", new ConfirmDialog.Listener() {
-                        private static final long serialVersionUID = 1L;
-
-                        @Override
-                        public void onClose(ConfirmDialog dialog) {
-                            if (dialog.isConfirmed()) {
-                                if (action != null) {
-                                    try {
-                                        action.delete(entity);
-                                    } catch (Exception e) {
-                                        logger.error(e, e);
-                                        Notification.show("Errors occurred when deleting " + e.getMessage(),
-                                                Type.ERROR_MESSAGE);
-                                    }
-                                }
-                                crud.delete();
+                    delete -> {
+                        if (action != null) {
+                            try {
+                                action.delete(entity);
+                            } catch (Exception e) {
+                                logger.error(e, e);
+                                Notification.show("Errors occurred when deleting " + e.getMessage(),
+                                        Type.ERROR_MESSAGE);
                             }
                         }
-
-                    });
+                        crud.delete();
+                    }, "Cancel", cancel -> {
+                    }).open();
         } else {
             Notification.show(response.getMessage(), Type.ERROR_MESSAGE);
 

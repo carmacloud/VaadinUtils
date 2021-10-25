@@ -23,7 +23,6 @@ import javax.persistence.metamodel.SingularAttribute;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.vaadin.dialogs.ConfirmDialog;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
@@ -44,6 +43,7 @@ import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.event.dd.acceptcriteria.SourceIsTarget;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.shared.ui.MarginInfo;
@@ -1035,23 +1035,12 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
             }
 
             private ConfirmDialog createPleaseWaitDialog() {
-                final ConfirmDialog pleaseWaitMessage = ConfirmDialog.show(UI.getCurrent(), "Please wait...",
-                        new ConfirmDialog.Listener() {
-
-                            private static final long serialVersionUID = 1L;
-
-                            @Override
-                            public void onClose(ConfirmDialog dialog) {
-                            }
-                        });
-                pleaseWaitMessage.setClosable(false);
-                pleaseWaitMessage.getCancelButton().setVisible(false);
-                pleaseWaitMessage.getOkButton().setVisible(false);
-                pleaseWaitMessage.setModal(true);
-                pleaseWaitMessage.setCaption("Preparing Action");
+                final ConfirmDialog pleaseWaitMessage = new ConfirmDialog();
+                pleaseWaitMessage.setHeader("Preparing Action");
+                pleaseWaitMessage.setText("Please wait...");
+                pleaseWaitMessage.open();
                 return pleaseWaitMessage;
             }
-
         });
 
     }
@@ -1552,43 +1541,33 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
         }
 
         if (fieldGroup.isModified() || newEntity != null || dirty) {
-            ConfirmDialog.show(UI.getCurrent(), "Discard changes?",
+            new ConfirmDialog("Discard changes?",
                     "You have unsaved changes for this record. Continuing will result in those changes being discarded. ",
-                    "Continue", "Cancel", new ConfirmDialog.Listener() {
-                        private static final long serialVersionUID = 1L;
+                    "Continue", cont -> {
 
-                        @Override
-                        public void onClose(ConfirmDialog dialog) {
-                            if (dialog.isConfirmed()) {
-                                /*
-                                 * When an entity is selected from the list, we want to show that in our editor
-                                 * on the right. This is nicely done by the FieldGroup that binds all the fields
-                                 * to the corresponding Properties in our entity at once.
-                                 */
-                                fieldGroup.discard();
+                        // When an entity is selected from the list, we want to show that in our editor
+                        // on the right. This is nicely done by the FieldGroup that binds all the fields
+                        // to the corresponding Properties in our entity at once.
+                        fieldGroup.discard();
 
-                                for (ChildCrudListener<E> child : childCrudListeners) {
-                                    child.discard();
-                                }
-
-                                if (restoreDelete) {
-                                    activateEditMode(false);
-                                    restoreDelete = false;
-                                }
-
-                                newEntity = null;
-                                searchField.setReadOnly(false);
-                                clearButton.setEnabled(true);
-
-                                callback.allowRowChange();
-
-                            } else {
-                                // User did not confirm so don't allow
-                                // the change.
-
-                            }
+                        for (ChildCrudListener<E> child : childCrudListeners) {
+                            child.discard();
                         }
-                    });
+
+                        if (restoreDelete) {
+                            activateEditMode(false);
+                            restoreDelete = false;
+                        }
+
+                        newEntity = null;
+                        searchField.setReadOnly(false);
+                        clearButton.setEnabled(true);
+
+                        callback.allowRowChange();
+
+                    }, "Cancel", cancel -> {
+                        // User did not confirm so don't allow the change.
+                    }).open();
         } else {
             try {
                 callback.allowRowChange();
