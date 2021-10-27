@@ -1,45 +1,49 @@
 package au.com.vaadinutils.ui;
 
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.ProgressBar;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.progressbar.ProgressBar;
 
-import au.com.vaadinutils.dao.EntityManagerRunnable;
 import au.com.vaadinutils.listener.CancelListener;
-import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.listener.CompleteListener;
 import au.com.vaadinutils.listener.ProgressListener;
 
 /**
- * LC 2020/09/09 retain, but convert to Dialog
- * 
+ * LC 2021/10/27 converted to Dialog <br>
  * Displays a dialog designed to be shown when a long running task is in
- * progress.
- *
- * You can use WorkingDialog in one of two ways.
- *
- * 1) Call WorkingDialog Add it to the UI via
- * UI.getCurrent().addWindow(workingDialog); Then set a runnable by calling
- * setWorker(new Runnable() {} ); The working dialog will then display its self
- * and run the Runnable in a background thread. When the Runnable completes the
- * WorkingDialog will be removed from the UI.
- *
- * 2) Call WorkingDialog Add it to the UI via
- * UI.getCurrent().addWindow(workingDialog); Pass it to your own thread as a
- * 'ProgressListener'. When your thread calls either the complete or exception
- * methods the Working Dialog will be closed. Calls to itemError are ignored.
+ * progress.<br>
+ * <br>
+ * You can use WorkingDialog in one of two ways.<br>
+ * <br>
+ * 1. Create a task (implements CancelListener) and pass it in to this. A cancel
+ * button displays allowing the task to be stopped prior to completion.<br>
+ * When the task completes, it returns a call that can be used to close this
+ * dialog.<br>
+ * Note: The task will need to be run in a separate class (ProgressBarWorker<T>)
+ * e.g.<br>
+ * <code> final ProgressBarWorker<String> worker = new ProgressBarWorker<String>(task);
+    worker.start();</code><br>
+ * <br>
+ * 
+ * 2. Just create this with only header and contents and a dialog will display
+ * with no cancel button.<br>
+ * When the task completes, it returns a call that can be used to close this
+ * dialog.<br>
+ * Note: The task will need to be run in a separate class (ProgressBarWorker<T>)
+ * e.g.<br>
+ * <code> final ProgressBarWorker<String> worker = new ProgressBarWorker<String>(task);
+    worker.start();</code><br>
+ * <br>
  *
  */
 
-public class WorkingDialog extends Window implements ProgressListener<String> {
+public class WorkingDialog extends Dialog implements ProgressListener<String> {
     private static final long serialVersionUID = 1L;
     private Label messageLabel;
     private VerticalLayout content;
@@ -48,7 +52,7 @@ public class WorkingDialog extends Window implements ProgressListener<String> {
     private CompleteListener completeListener;
     private VerticalLayout layout;
 
-    final UI ui;
+    private final UI ui;
 
     /**
      * Displays a dialog designed to be shown when a long running task is in
@@ -63,23 +67,18 @@ public class WorkingDialog extends Window implements ProgressListener<String> {
 
     /**
      * Display the Working Dialog with a Cancel Button. If the user clicks the
-     * Cancel button the listener will be sent a cancel button. The setWorker method
-     * does not support being cancelled.
+     * Cancel button the listener will be sent a cancel request.
      *
      * @param caption
      * @param message
      * @param listener
-     * @param refresher
      */
     public WorkingDialog(String caption, String message, CancelListener listener) {
-        super(caption);
-        ui = UI.getCurrent();
+        this.ui = UI.getCurrent();
         this.setModal(true);
-        this.setClosable(false);
         this.setResizable(false);
-        content = new VerticalLayout();
+        content = new VerticalLayout(new Html("<b>" + caption + "</b>"));
         this.setWidth("500px");
-        this.setHeight("150px");
         content.setSizeFull();
         content.setMargin(true);
         content.setSpacing(true);
@@ -90,132 +89,58 @@ public class WorkingDialog extends Window implements ProgressListener<String> {
         layout.setSpacing(true);
         layout.setSizeFull();
 
-        HorizontalLayout progressArea = new HorizontalLayout();
+        final VerticalLayout progressArea = new VerticalLayout();
         progressArea.setSizeFull();
-        ProgressBar progress = new ProgressBar();
-        progressArea.addComponent(progress);
+        final ProgressBar progress = new ProgressBar();
+        progressArea.add(progress);
         progress.setIndeterminate(true);
         messageLabel = new Label(message);
-        messageLabel.setContentMode(ContentMode.HTML);
         messageLabel.setSizeFull();
-        progressArea.addComponent(messageLabel);
-        progressArea.setExpandRatio(messageLabel, 1);
-        layout.addComponent(progressArea);
-        content.addComponent(layout);
+        progressArea.add(messageLabel);
+        layout.add(progressArea);
+        content.add(layout);
 
         if (listener != null) {
             cancel = new Button("Cancel");
-            cancel.addClickListener(new ClickEventLogged.ClickListener() {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void clicked(ClickEvent event) {
-                    WorkingDialog.this.cancelListener.cancel();
-                    WorkingDialog.this.close();
-                }
+            cancel.addClickListener(e -> {
+               cancelListener.cancel();
+                this.close();
             });
-            content.addComponent(cancel);
-            content.setComponentAlignment(cancel, Alignment.BOTTOM_RIGHT);
+            content.add(cancel);
+            content.setHorizontalComponentAlignment(Alignment.END, cancel);
         }
 
-        this.setContent(content);
-        this.center();
+        this.add(content);
 
     }
 
     @Override
     public void close() {
-        ui.accessSynchronously(new Runnable() {
-            @Override
-            public void run() {
-                WorkingDialog.super.close();
-            }
+        ui.accessSynchronously(() -> {
+           super.close();
         });
     }
 
-    /**
-     * Pass a Runnable that WorkingDialog will run in a background thread. On
-     * completion of the thread the complete listener will be notified and the
-     * WorkingDialog will remove itself rom the UI.
-     *
-     * @param runnable the runnable to be run in a background thread.
-     * @param listener a complete listener to be notified when the thread has
-     *                 finished.
-     */
-
-    public void setWorker(EntityManagerRunnable runnable, CompleteListener listener) {
-        this.completeListener = listener;
-
-        Thread worker = new Thread(new Worker(this, runnable), "WorkingDialog");
-        worker.start();
-    }
-
-    /**
-     * convenience method, wraps the runnable in a EntityManagerRunnable and passes
-     * it to setWorker
-     * 
-     * @param runnable
-     * @param listener
-     */
-    public void setEntityWorker(Runnable runnable, CompleteListener listener) {
-        setWorker(new EntityManagerRunnable(runnable), listener);
-
-    }
-
-    class Worker implements Runnable {
-
-        private EntityManagerRunnable runnable;
-        private WorkingDialog parent;
-
-        Worker(WorkingDialog parent, EntityManagerRunnable runnable) {
-            this.parent = parent;
-            this.runnable = runnable;
-        }
-
-        @Override
-        public void run() {
-            try {
-                this.runnable.run();
-            } finally {
-                ui.access(new Runnable() {
-                    @Override
-                    public void run() {
-                        parent.complete(0);
-                    }
-                });
-            }
-        }
-    }
-
     public void addUserComponent(final Component component) {
-        ui.accessSynchronously(new Runnable() {
-            @Override
-            public void run() {
-                layout.addComponent(component);
-            }
+        ui.access(() -> {
+            layout.add(component);
         });
     }
 
     @Override
     public void progress(int count, int max, final String message) {
-        ui.access(new Runnable() {
-            @Override
-            public void run() {
-                messageLabel.setValue(message);
-            }
+        ui.access(() -> {
+            messageLabel.setText(message);
         });
     }
 
     @Override
     public void complete(int sent) {
-        ui.accessSynchronously(new Runnable() {
-
-            @Override
-            public void run() {
-                if (completeListener != null)
-                    completeListener.complete();
-                WorkingDialog.this.close();
+        ui.access(() -> {
+            if (completeListener != null) {
+                completeListener.complete();
             }
+           this.close();
         });
     }
 
@@ -226,18 +151,15 @@ public class WorkingDialog extends Window implements ProgressListener<String> {
 
     @Override
     public void exception(Exception e) {
-        ui.accessSynchronously(new Runnable() {
-
-            @Override
-            public void run() {
-                if (completeListener != null)
-                    completeListener.complete();
-                WorkingDialog.this.close();
+        ui.access(() -> {
+            if (completeListener != null) {
+                completeListener.complete();
             }
+            WorkingDialog.this.close();
         });
     }
 
     public void removeUserComponent(Component component) {
-        layout.removeComponent(component);
+        layout.remove(component);
     }
 }
