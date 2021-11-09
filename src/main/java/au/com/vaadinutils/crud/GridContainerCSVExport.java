@@ -16,6 +16,7 @@ import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
+import org.jsoup.examples.HtmlToPlainText;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
