@@ -111,7 +111,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
         }
 
         this.add(content);
-
+        this.open();
     }
 
     @Override
