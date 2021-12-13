@@ -9,8 +9,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<vaadin.version>7.7.17</vaadin.version>
-		<log4j.version>2.8.2</log4j.version>
-		<slj4f.version>1.7.30</slj4f.version>
+		<log4j.version>2.15.0</log4j.version>
 		<jasperreports.version>6.4.1</jasperreports.version>
 		<eclipselink.version>2.6.9</eclipselink.version>
 		<guava.version>29.0-jre</guava.version>
@@ -274,11 +273,6 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>${log4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slj4f.version}</version>
 		</dependency>
 		<!-- used to suppress warnings -->
 		<dependency>
