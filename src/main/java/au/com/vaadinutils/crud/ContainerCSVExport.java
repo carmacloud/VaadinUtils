@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
-import org.jsoup.examples.HtmlToPlainText;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -42,8 +41,6 @@ import au.com.vaadinutils.util.PipedOutputStreamWrapper;
 
 public class ContainerCSVExport<E>
 {
-        // Logger logger = org.apache.logging.log4j.LogManager.getLogger();
-
         PipedOutputStreamWrapper stream = new PipedOutputStreamWrapper();
         Logger logger = org.apache.logging.log4j.LogManager.getLogger();
         private HeadingPropertySet headingsSet;
