@@ -59,7 +59,7 @@ public class HtmlToPlainText {
      */
     public String getPlainText(Element element) {
         FormattingVisitor formatter = new FormattingVisitor();
-        NodeTraversor.traverse( formatter, element); // walk the DOM, and call .head() and .tail() for each node
+        NodeTraversor.traverse(formatter, element);  // walk the DOM, and call .head() and .tail() for each node
 
         return formatter.toString();
     }
