@@ -8,7 +8,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin7.version>7.7.29</vaadin7.version>
+		<vaadin7.version>7.7.30</vaadin7.version>
 		<log4j.version>2.17.1</log4j.version>
 		<jasperreports.version>6.4.1</jasperreports.version>
 		<eclipselink.version>2.6.9</eclipselink.version>
