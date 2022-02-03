@@ -36,26 +36,26 @@ import com.vaadin.data.util.converter.AbstractStringToNumberConverter;
  * @author Vaadin Ltd
  * @since 7.2
  */
-public class StringToBigDecimalConverter extends
-        AbstractStringToNumberConverter<BigDecimal> {
+public class StringToBigDecimalConverter extends AbstractStringToNumberConverter<BigDecimal> {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-	@Override
+    @Override
     protected NumberFormat getFormat(Locale locale) {
         NumberFormat numberFormat = super.getFormat(locale);
         if (numberFormat instanceof DecimalFormat) {
             ((DecimalFormat) numberFormat).setParseBigDecimal(true);
         }
-
+        // Force this to 4, default is 3 and not sufficient for fields using values with
+        // scale of 4 in DB.
+        numberFormat.setMaximumFractionDigits(4);
         return numberFormat;
     }
 
     @Override
-    public BigDecimal convertToModel(String value,
-            Class<? extends BigDecimal> targetType, Locale locale)
+    public BigDecimal convertToModel(String value, Class<? extends BigDecimal> targetType, Locale locale)
             throws com.vaadin.data.util.converter.Converter.ConversionException {
         return (BigDecimal) convertToNumber(value, BigDecimal.class, locale);
     }
