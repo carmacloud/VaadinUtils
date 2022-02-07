@@ -11,10 +11,6 @@ public class VaadinUtilsConverterFactory extends DefaultConverterFactory {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public VaadinUtilsConverterFactory() {
-	    System.out.println("Setting up Converter Factory...");
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
     protected <PRESENTATION, MODEL> Converter<PRESENTATION, MODEL> findConverter(
