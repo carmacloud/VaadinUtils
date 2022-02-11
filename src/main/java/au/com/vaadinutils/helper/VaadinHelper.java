@@ -3,6 +3,7 @@ package au.com.vaadinutils.helper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -25,13 +26,21 @@ public class VaadinHelper {
             return null;
         }
     }
-    
+
     // Dates
-    public static Date convertToDate(final LocalDateTime dateTime) {
+    public static Date convertFromLocalDateTime(final LocalDateTime dateTime) {
         return Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
     public static LocalDateTime convertToLocalDateTime(final Date date) {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    public static Date convertFromLocalDate(LocalDate dateToConvert) {
+        return Date.from(dateToConvert.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public static LocalDate convertToLocalDate(final Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 }
