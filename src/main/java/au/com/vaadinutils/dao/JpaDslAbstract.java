@@ -183,6 +183,11 @@ public abstract class JpaDslAbstract<E, R>
 		return getJoin(join).get(field).as(String.class);
 	}
 	
+	public Expression<Long> asLong( SingularAttribute<E, ?> field)
+        {
+                return root.get(field).as(Long.class);
+        }
+	
 	public <K> Expression<Long> asLong(final JoinBuilder<E, K> join, SingularAttribute<K, ?> field)
 	{
 		return getJoin(join).get(field).as(Long.class);
