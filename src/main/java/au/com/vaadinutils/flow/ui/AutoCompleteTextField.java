@@ -1,21 +1,25 @@
 package au.com.vaadinutils.flow.ui;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.vaadin.flow.component.contextmenu.ContextMenu;
-import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.listbox.ListBox;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.value.ValueChangeMode;
 
 public class AutoCompleteTextField<E> extends TextField {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = -6634513296678504250L;
+    private final Dialog dialog = new Dialog();
+    private final ListBox<String> list = new ListBox<String>();
+    private final Map<String, E> options = new LinkedHashMap<>();
     private AutoCompleteQueryListener<E> listener;
-    private Map<E, String> options = new LinkedHashMap<>();
     private AutoCompleteOptionSelected<E> optionListener;
-    private ContextMenu contextMenu;
-    private boolean isContextMenuOpen = false;
+
 
     /**
      * <pre>
@@ -56,60 +60,43 @@ public class AutoCompleteTextField<E> extends TextField {
      * selecting anything.
      */
 
-    public AutoCompleteTextField(final String caption) {
-        this();
-        setLabel(caption);
-    }
+    public AutoCompleteTextField(final String fieldCaption, final String listCaption) {
+        setClassName(fieldCaption);
+        dialog.add(list);
 
-    public AutoCompleteTextField() {
-//        setTextChangeEventMode(TextChangeEventMode.LAZY);
-//        setImmediate(true);
+        setValueChangeMode(ValueChangeMode.LAZY);
         addValueChangeListener(valueChangeListener -> {
-                options.clear();
+            options.clear();
 
-                if (listener != null) {
-                    listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
-                }
+            if (listener != null) {
+                listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
+            }
 
-                if (!options.isEmpty()) {
-                    createContextMenu();
+            if (!options.isEmpty()) {
+                if (valueChangeListener.isFromClient()) {
                     showOptionMenu();
                 }
-        });
-    }
-
-    private void createContextMenu() {
-        // Don't create a new context menu if the existing one is still open
-        if (isContextMenuOpen) {
-            return;
-        }
-
-        // Create a new ContextMenu as each instance can only be added and
-        // removed from a parent once
-        contextMenu = new ContextMenu(this);
-//        contextMenu.setAsContextMenuOf(this);
-//        contextMenu.setOpenAutomatically(false);
-
-        contextMenu.addOpenedChangeListener(listener -> {
-                isContextMenuOpen = listener.isOpened();
+            }
         });
     }
 
     private void showOptionMenu() {
-//        contextMenu.removeAllItems();
-//        contextMenu.open();
-        isContextMenuOpen = true;
-
-        for (final Entry<E, String> option : options.entrySet()) {
-            final MenuItem menuItem = contextMenu.addItem(option.getValue());
-            menuItem.addClickListener(itemClickListener -> {
-                    optionListener.optionSelected(AutoCompleteTextField.this, option.getKey());
-
-                    // Remove the context menu when it gets closed to allow the
-                    // default context menu to still be available
-                    contextMenu.remove();
-            });
+        final List<String> listItems = new ArrayList<String>();
+        for (final Entry<String, E> option : options.entrySet()) {
+            listItems.add(option.getKey());
         }
+
+        list.setItems(listItems);
+        dialog.open();
+        list.addValueChangeListener(value -> {
+            if (value.isFromClient()) {
+                final E key = options.get(value.getValue());
+                if (key != null) {
+                    optionListener.optionSelected(AutoCompleteTextField.this, key);
+                }
+                dialog.close();
+            }
+        });
     }
 
     public void setOptionSelectionListener(AutoCompleteOptionSelected<E> listener) {
@@ -129,12 +116,14 @@ public class AutoCompleteTextField<E> extends TextField {
     }
 
     public void addOption(E option, String optionLabel) {
-        options.put(option, optionLabel);
+        options.put(optionLabel, option);
+    }
+
+    public ListBox<String> getList() {
+        return list;
     }
 
     public void hideAutoComplete() {
-        if (contextMenu != null) {
-            contextMenu.close();
-        }
+        dialog.close();
     }
 }
