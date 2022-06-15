@@ -1,4 +1,4 @@
-package au.com.vaadinutils.ui;
+package au.com.vaadinutils.flow.ui;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
@@ -10,12 +10,12 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 
-import au.com.vaadinutils.listener.CancelListener;
-import au.com.vaadinutils.listener.CompleteListener;
-import au.com.vaadinutils.listener.ProgressListener;
+import au.com.vaadinutils.flow.listener.CancelListener;
+import au.com.vaadinutils.flow.listener.CompleteListener;
+import au.com.vaadinutils.flow.listener.ProgressListener;
 
 /**
- * LC 2021/10/27 converted to Dialog <br>
+ * 
  * Displays a dialog designed to be shown when a long running task is in
  * progress.<br>
  * <br>

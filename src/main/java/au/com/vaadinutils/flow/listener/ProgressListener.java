@@ -1,4 +1,4 @@
-package au.com.vaadinutils.listener;
+package au.com.vaadinutils.flow.listener;
 
 /**
  * Used as a generic method to track progress of a job/task/thread.
