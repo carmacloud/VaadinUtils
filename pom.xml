@@ -18,7 +18,7 @@
 		<commons-validator.version>1.7</commons-validator.version>
 		<openjpa.version>2.3.0</openjpa.version>
 		<!-- Testing -->
-		<junit.version>4.13</junit.version>
+		<junit.version>4.13.2</junit.version>
 		<!-- Vaadin 14 properties -->
 		<vaadin.version>14.8.13</vaadin.version>
 	</properties>
@@ -275,7 +275,7 @@
 		<dependency>
 			<groupId>org.vaadin.addons</groupId>
 			<artifactId>ckeditor-wrapper-for-vaadin</artifactId>
-			<version>7.10.10</version>
+			<version>7.12.9</version>
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
@@ -300,9 +300,9 @@
 			<version>2.3</version>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.opencsv</groupId>
+			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>2.3</version>
+			<version>5.6</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-validator</groupId>

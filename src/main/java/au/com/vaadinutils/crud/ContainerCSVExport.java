@@ -34,7 +34,7 @@ import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import com.opencsv.CSVWriter;
 import au.com.vaadinutils.fields.ClickableLabel;
 import au.com.vaadinutils.flow.jasper.AttachmentType;
 import au.com.vaadinutils.util.PipedOutputStreamWrapper;
