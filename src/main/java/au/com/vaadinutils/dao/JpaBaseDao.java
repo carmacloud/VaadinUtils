@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.persistence.TypedQuery;
@@ -35,9 +36,10 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.entity.BaseCrudEntity;
 import au.com.vaadinutils.entity.BaseCrudEntity_;
+import au.com.vaadinutils.flow.dao.GenericDao;
 
 @SuppressWarnings("deprecation")
-public class JpaBaseDao<E, K> implements Dao<E, K> {
+public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     protected Class<E> entityClass;
 
     public interface Condition<E> {
@@ -833,5 +835,17 @@ public class JpaBaseDao<E, K> implements Dao<E, K> {
         }
 
         return ids;
+    }
+
+    @Override
+    public void commitAndContinue() {
+      EntityManagerProvider.commitAndContinue();
+        
+    }
+
+    @Override
+    public EntityTransaction getTransaction() {
+        // TODO LC: Work out if we still need this?
+        return null;
     }
 }
