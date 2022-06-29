@@ -29,18 +29,30 @@ public class VaadinHelper {
 
     // Dates
     public static Date convertFromLocalDateTime(final LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
         return Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
     public static LocalDateTime convertToLocalDateTime(final Date date) {
+        if (date == null) {
+            return null;
+        }
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
     public static Date convertFromLocalDate(LocalDate dateToConvert) {
+        if (dateToConvert == null) {
+            return null;
+        }
         return Date.from(dateToConvert.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     }
 
     public static LocalDate convertToLocalDate(final Date date) {
+        if (date == null) {
+            return null;
+        }
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 }
