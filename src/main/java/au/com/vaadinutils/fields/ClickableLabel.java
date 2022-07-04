@@ -9,6 +9,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 /**
+ * Not needed for migration. Icons or buttons would be a better solution.
  * A Vaadin label that allows actions to be run by adding a LayoutClickListener
  * Retain, needs updating to Flow for UI.
  */

@@ -13,7 +13,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
 
 /**
- * Retain, either convert for Flow or use a component out of the package.
+ * Retain, and convert to use a DataProvider
  */
 public class LazyComboBoxWithButton<E> extends CustomComponent {
     private static final long serialVersionUID = 1L;

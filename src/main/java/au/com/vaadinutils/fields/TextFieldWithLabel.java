@@ -12,7 +12,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
 /**
- * Retain, but update UI for Flow
+ * Not needed in migration. TextField can supply prefix and suffix text.
  */
 public class TextFieldWithLabel extends CustomComponent {
     private static final long serialVersionUID = 1L;
