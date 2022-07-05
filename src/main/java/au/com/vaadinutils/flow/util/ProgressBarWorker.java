@@ -1,4 +1,4 @@
-package au.com.vaadinutils.util;
+package au.com.vaadinutils.flow.util;
 
 public class ProgressBarWorker<T> extends Thread {
     private ProgressBarTask<T> task;

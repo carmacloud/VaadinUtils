@@ -1,4 +1,4 @@
-package au.com.vaadinutils.util;
+package au.com.vaadinutils.flow.util;
 
 import com.vaadin.flow.component.UI;
 

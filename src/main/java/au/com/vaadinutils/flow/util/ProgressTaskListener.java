@@ -1,4 +1,4 @@
-package au.com.vaadinutils.util;
+package au.com.vaadinutils.flow.util;
 
 public interface ProgressTaskListener<T> {
     void taskProgress(final int count, final int max, T status);
