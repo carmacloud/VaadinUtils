@@ -1,4 +1,4 @@
-package au.com.vaadinutils.helper;
+package au.com.vaadinutils.flow.helper;
 
 import com.vaadin.flow.data.binder.Binder;
 

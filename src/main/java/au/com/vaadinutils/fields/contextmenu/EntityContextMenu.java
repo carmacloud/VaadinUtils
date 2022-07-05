@@ -8,6 +8,9 @@ import org.vaadin.peter.contextmenu.ContextMenu;
 import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.dao.JpaBaseDao;
 
+/**
+ * @deprecated context menus are changed for V14+
+ */
 public abstract class EntityContextMenu<E> extends ContextMenu {
     private static final long serialVersionUID = 1L;
 

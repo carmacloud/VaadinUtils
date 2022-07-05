@@ -5,6 +5,9 @@ import com.vaadin.event.ContextClickEvent.ContextClickListener;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.GridContextClickEvent;
 
+/**
+ * @deprecated context menus are changed for V14+
+ */
 public class GridContextMenu<E> extends EntityContextMenu<E> {
     private static final long serialVersionUID = 1L;
 

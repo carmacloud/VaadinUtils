@@ -6,7 +6,7 @@ import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Possibly retain, would need update to Flow.
+ * Remove after Base Crud has been removed.
  */
 public class TopVerticalLayout extends CustomComponent {
     private static final long serialVersionUID = 7166258936287790784L;

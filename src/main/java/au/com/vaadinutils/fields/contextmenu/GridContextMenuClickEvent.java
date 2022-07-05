@@ -1,5 +1,8 @@
 package au.com.vaadinutils.fields.contextmenu;
 
+/**
+ * @deprecated context menus are changed for V14+
+ */
 public class GridContextMenuClickEvent<E> {
     private E entity;
     private int clientX;

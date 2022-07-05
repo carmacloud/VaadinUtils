@@ -1,4 +1,4 @@
-package au.com.vaadinutils.helper;
+package au.com.vaadinutils.flow.helper;
 
 import java.io.File;
 import java.io.IOException;
