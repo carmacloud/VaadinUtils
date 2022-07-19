@@ -5,7 +5,6 @@ import java.util.Map;
 
 public interface MemberSettingsStorage {
 
-    void load();
     void store(String key, String value);
     String get(String key);
     Map<String, String> get(List<String> keys);

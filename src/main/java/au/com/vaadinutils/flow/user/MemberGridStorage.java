@@ -109,8 +109,8 @@ public class MemberGridStorage<T> {
         final String keyStub = uniqueId + "-visible";
         final List<String> columnKeys = new ArrayList<>();
         this.grid.getColumns().forEach(column -> {
-            if (column.isResizable()) {
-                final String key = column.getKey();
+            final String key = column.getKey();
+            if (key != null) {
                 columnKeys.add(keyStub + "-" + key);
             }
         });

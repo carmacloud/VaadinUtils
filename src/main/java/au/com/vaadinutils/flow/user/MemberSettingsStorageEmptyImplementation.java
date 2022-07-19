@@ -10,10 +10,6 @@ public class MemberSettingsStorageEmptyImplementation implements MemberSettingsS
     private Map<String, String> map = new ConcurrentHashMap<>();
 
     @Override
-    public void load() {
-    }
-
-    @Override
     public void store(String key, String value) {
         map.put(key, value);
     }
