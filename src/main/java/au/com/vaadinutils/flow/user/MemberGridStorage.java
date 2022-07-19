@@ -6,12 +6,22 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
+import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 /**
  * Plugin in methods for storing and retrieving column widths, order and
@@ -27,23 +37,44 @@ import com.vaadin.flow.component.grid.Grid.Column;
  *         .setKey("UniqueColumnName");
  * }</pre>
  *
+ * Also allows adding an icon in the header to provide column show/hide
+ * toggle.<br>
+ * In order to do this, the storage must be created before adding columns to the
+ * grid, specifically calling the addColumnToggle method (or not if excluding),
+ * and then calling init().<br>
+ * Otherwise the grid is missing columns and/or the toggle icon is in the wrong
+ * header column.
+ * 
  * @param <T> The underlying bean for the grid.
  */
 public class MemberGridStorage<T> {
 
     private final Logger logger = LogManager.getLogger();
-    private final Grid<T> grid;
+    private Grid<T> grid;
     private String uniqueId;
+    private final Icon toggleIcon = VaadinIcon.MENU.create();
 
     public MemberGridStorage(final Grid<T> grid, final String uniqueId) {
         this.grid = grid;
         this.uniqueId = uniqueId;
+        toggleIcon.setColor("#0066CC");
+        toggleIcon.setSize("12px");
+    }
 
-        if (grid.getColumns().isEmpty()) {
+    /**
+     * Call after adding columns to the grid.
+     * 
+     * @param headersMap A {@link Map} of {@link String} pairs so that column keys
+     *                   can be matched to headings.<br>
+     *                   This is an issue because V14+ doesn't have a getHeaders
+     *                   method.
+     */
+    public void init(final Map<String, String> headersMap) {
+        if (this.grid.getColumns().isEmpty()) {
             logger.warn("Columns not set for " + uniqueId
                     + ". Grid column order, width and visibility will not be stored or retreived.");
         }
-
+        addToggleItems(headersMap);
         configureSaveColumnWidths();
         configureSaveColumnVisible();
         configureSaveColumnOrder();
@@ -121,18 +152,15 @@ public class MemberGridStorage<T> {
             final String setting = keyStub + "-" + key;
             final String setVisible = savedVisible.get(setting);
             if (setVisible != null && !setVisible.isEmpty()) {
-                grid.getColumnByKey(key).setVisible(!Boolean.parseBoolean(setVisible));
+                grid.getColumnByKey(key).setVisible(Boolean.parseBoolean(setVisible));
             }
         });
+    }
 
-        // TODO LC: Cannot do until we implement a function to show/hide columns for
-        // user. Flow provides no listeners for this.
-//        grid.addColumnVisibilityChangeListener(event -> {
-//            final Column column = event.getColumn();
-//            final boolean isVisible = !column.isHidden();
-//            MemberSettingsStorageFactory.getUserSettingsStorage().store(keyStub + "-" + column.getPropertyId(),
-//                    "" + isVisible);
-//        });
+    private void storeVisibiltyUpdate(final Column<T> column) {
+        final String keyStub = uniqueId + "-visible";
+        final boolean isVisible = column.isVisible();
+        MemberSettingsStorageFactory.getUserSettingsStorage().store(keyStub + "-" + column.getKey(), "" + isVisible);
     }
 
     private void configureSaveColumnOrder() {
@@ -202,5 +230,48 @@ public class MemberGridStorage<T> {
         });
 
         return orderedColumns;
+    }
+
+    /**
+     * Call before adding columns to the grid so the toggle icon can be in the first
+     * column.
+     */
+    public void addToggleColumn() {
+        final HorizontalLayout header = new HorizontalLayout(toggleIcon);
+        header.setJustifyContentMode(JustifyContentMode.END);
+
+        grid.addColumn(new ComponentRenderer<>(type -> {
+            return new Span();
+        })).setHeader(header).setWidth("25px").setFlexGrow(0).setFrozen(true);
+    }
+
+    private void addToggleItems(final Map<String, String> headersMap) {
+        final ColumnToggleContextMenu columnToggleContextMenu = new ColumnToggleContextMenu(toggleIcon);
+        grid.getColumns().forEach(column -> {
+            if (column.getKey() != null) {
+                final String header = Optional.ofNullable(headersMap).map(e -> e.get(column.getKey()))
+                        .orElse(column.getKey());
+                columnToggleContextMenu.addColumnToggleItem(header, column);
+            }
+        });
+    }
+
+    private class ColumnToggleContextMenu extends ContextMenu {
+        private static final long serialVersionUID = 1L;
+
+        public ColumnToggleContextMenu(Component target) {
+            super(target);
+            setOpenOnClick(true);
+        }
+
+        void addColumnToggleItem(String label, Grid.Column<T> column) {
+            final MenuItem menuItem = this.addItem(label, e -> {
+                final boolean checked = e.getSource().isChecked();
+                column.setVisible(checked);
+                storeVisibiltyUpdate(column);
+            });
+            menuItem.setCheckable(true);
+            menuItem.setChecked(column.isVisible());
+        }
     }
 }
