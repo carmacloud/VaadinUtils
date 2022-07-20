@@ -16,6 +16,7 @@ import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
+import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -25,7 +26,8 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 /**
  * Plugin in methods for storing and retrieving column widths, order and
- * visibility.<br>
+ * visibility. Also optionally allows an action column to be included that shows
+ * a context menu is present.<br>
  * To use, call after adding columns, supplying the grid and a unique Id. This
  * class will do the rest.<br>
  * For the grid itself, the columns to be processed will need to have an
@@ -37,28 +39,30 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
  *         .setKey("UniqueColumnName");
  * }</pre>
  *
- * Also allows adding an icon in the header to provide column show/hide
- * toggle.<br>
- * In order to do this, the storage must be created before adding columns to the
- * grid, specifically calling the addColumnToggle method (or not if excluding),
- * and then calling init().<br>
- * Otherwise the grid is missing columns and/or the toggle icon is in the wrong
- * header column.
+ * The calls to add the action icon and set context menu must always be before
+ * adding columns to the grid, otherwise the action column ends up at the end of
+ * the grid. We want it as the very first.
  * 
  * @param <T> The underlying bean for the grid.
  */
-public class MemberGridStorage<T> {
+public class GridExtender<T> {
 
     private final Logger logger = LogManager.getLogger();
     private Grid<T> grid;
     private String uniqueId;
-    private final Icon toggleIcon = VaadinIcon.MENU.create();
 
-    public MemberGridStorage(final Grid<T> grid, final String uniqueId) {
+    // For the additional column that optionally contains action filter and/or
+    // context menu.
+    private final Icon actionIcon = VaadinIcon.MENU.create();
+    private boolean setContextIcon = false;
+    private Column<T> actionColumn = null;
+    private boolean setActionIcon = false;
+
+    public GridExtender(final Grid<T> grid, final String uniqueId) {
         this.grid = grid;
         this.uniqueId = uniqueId;
-        toggleIcon.setColor("#0066CC");
-        toggleIcon.setSize("12px");
+        actionIcon.setColor("#0066CC");
+        actionIcon.setSize("12px");
     }
 
     /**
@@ -74,7 +78,7 @@ public class MemberGridStorage<T> {
             logger.warn("Columns not set for " + uniqueId
                     + ". Grid column order, width and visibility will not be stored or retreived.");
         }
-        addToggleItems(headersMap);
+        addActionItems(headersMap);
         configureSaveColumnWidths();
         configureSaveColumnVisible();
         configureSaveColumnOrder();
@@ -232,39 +236,44 @@ public class MemberGridStorage<T> {
         return orderedColumns;
     }
 
-    /**
-     * Call before adding columns to the grid so the toggle icon can be in the first
-     * column.
-     */
-    public void addToggleColumn() {
-        final HorizontalLayout header = new HorizontalLayout(toggleIcon);
+    private void addActionColumn() {
+        // Only add the action icon in the header if it's been set.
+        final HorizontalLayout header = new HorizontalLayout(setActionIcon ? actionIcon : new Span());
         header.setJustifyContentMode(JustifyContentMode.END);
-
-        grid.addColumn(new ComponentRenderer<>(type -> {
-            return new Span();
+        actionColumn = grid.addColumn(new ComponentRenderer<>(type -> {
+            if (setContextIcon) {
+                final Icon actionMenu = VaadinIcon.ELLIPSIS_H.create();
+                actionMenu.setSize("12px");
+                actionMenu.setColor("#0066CC");
+                actionMenu.getElement().setProperty("title",
+                        "Indicates there is a context menu present. Right click on the row to display.");
+                return actionMenu;
+            } else {
+                return new Span();
+            }
         })).setHeader(header).setWidth("25px").setFlexGrow(0).setFrozen(true);
     }
 
-    private void addToggleItems(final Map<String, String> headersMap) {
-        final ColumnToggleContextMenu columnToggleContextMenu = new ColumnToggleContextMenu(toggleIcon);
+    private void addActionItems(final Map<String, String> headersMap) {
+        final ColumnActionContextMenu columnActionContextMenu = new ColumnActionContextMenu(actionIcon);
         grid.getColumns().forEach(column -> {
             if (column.getKey() != null) {
                 final String header = Optional.ofNullable(headersMap).map(e -> e.get(column.getKey()))
                         .orElse(column.getKey());
-                columnToggleContextMenu.addColumnToggleItem(header, column);
+                columnActionContextMenu.addColumnActionItem(header, column);
             }
         });
     }
 
-    private class ColumnToggleContextMenu extends ContextMenu {
+    private class ColumnActionContextMenu extends ContextMenu {
         private static final long serialVersionUID = 1L;
 
-        public ColumnToggleContextMenu(Component target) {
+        public ColumnActionContextMenu(Component target) {
             super(target);
             setOpenOnClick(true);
         }
 
-        void addColumnToggleItem(String label, Grid.Column<T> column) {
+        void addColumnActionItem(String label, Grid.Column<T> column) {
             final MenuItem menuItem = this.addItem(label, e -> {
                 final boolean checked = e.getSource().isChecked();
                 column.setVisible(checked);
@@ -273,5 +282,32 @@ public class MemberGridStorage<T> {
             menuItem.setCheckable(true);
             menuItem.setChecked(column.isVisible());
         }
+    }
+
+    /**
+     * Setting this will add icons for each row to the action column.
+     * 
+     * @param contextmenu The {@link GridContextMenu} added to the grid. Pass in to
+     *                    check it has actually been initialised.
+     */
+    public void setContextMenu(GridContextMenu<T> contextMenu) {
+        setContextIcon = contextMenu != null;
+        resetActionColumn();
+    }
+
+    /**
+     * Setting this will add an icon in the action column header indicating columns
+     * can be shown or hidden.
+     */
+    public void setActionIcon() {
+        setActionIcon = true;
+        resetActionColumn();
+    }
+
+    private void resetActionColumn() {
+        if (actionColumn != null) {
+            grid.removeColumn(actionColumn);
+        }
+        addActionColumn();
     }
 }
