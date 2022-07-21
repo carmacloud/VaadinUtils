@@ -48,6 +48,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 public class GridExtender<T> {
 
     private final Logger logger = LogManager.getLogger();
+    private static final String ACTION_MENU = "_actionMenu";
     private Grid<T> grid;
     private String uniqueId;
 
@@ -251,13 +252,13 @@ public class GridExtender<T> {
             } else {
                 return new Span();
             }
-        })).setHeader(header).setWidth("25px").setFlexGrow(0).setFrozen(true);
+        })).setHeader(header).setWidth("25px").setFlexGrow(0).setFrozen(true).setKey(ACTION_MENU);
     }
 
     private void addActionItems(final Map<String, String> headersMap) {
         final ColumnActionContextMenu columnActionContextMenu = new ColumnActionContextMenu(actionIcon);
         grid.getColumns().forEach(column -> {
-            if (column.getKey() != null) {
+            if (column.getKey() != null && !column.getKey().equalsIgnoreCase(ACTION_MENU)) {
                 final String header = Optional.ofNullable(headersMap).map(e -> e.get(column.getKey()))
                         .orElse(column.getKey());
                 columnActionContextMenu.addColumnActionItem(header, column);
