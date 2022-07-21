@@ -59,6 +59,10 @@ public class GridExtender<T> {
     private Column<T> actionColumn = null;
     private boolean setActionIcon = false;
 
+    // Common method to set columns resizable.
+    private boolean resizable = false;
+    private final List<Column<T>> resizableColumns = new ArrayList<>();
+
     public GridExtender(final Grid<T> grid, final String uniqueId) {
         this.grid = grid;
         this.uniqueId = uniqueId;
@@ -83,6 +87,7 @@ public class GridExtender<T> {
         configureSaveColumnWidths();
         configureSaveColumnVisible();
         configureSaveColumnOrder();
+        setColumnsResizable();
     }
 
     private void configureSaveColumnWidths() {
@@ -311,5 +316,33 @@ public class GridExtender<T> {
             grid.removeColumn(actionColumn);
         }
         addActionColumn();
+    }
+
+    private void setColumnsResizable() {
+        if (resizable) {
+            // Never allow Action Menu column to be resizable.
+            grid.getColumns().forEach(column -> {
+                if (!column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                    column.setResizable(true);
+                }
+            });
+        } else {
+            if (!resizableColumns.isEmpty()) {
+                resizableColumns.forEach(column -> {
+                    if (!column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                        column.setResizable(true);
+                    }
+                });
+            }
+        }
+    }
+
+    public void setAllColumnsResizable(final boolean resizable) {
+        this.resizable = resizable;
+    }
+
+    public void setSelectedColumnsResizable(List<Column<T>> columns) {
+        this.resizableColumns.clear();
+        this.resizableColumns.addAll(columns);
     }
 }
