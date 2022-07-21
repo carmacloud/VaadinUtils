@@ -293,6 +293,7 @@ public class GridExtender<T> {
      */
     public void setContextMenu(GridContextMenu<T> contextMenu) {
         setContextIcon = contextMenu != null;
+        contextMenu.setOpenOnClick(setContextIcon);
         resetActionColumn();
     }
 
