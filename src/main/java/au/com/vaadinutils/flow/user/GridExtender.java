@@ -68,6 +68,7 @@ public class GridExtender<T> {
         this.uniqueId = uniqueId;
         actionIcon.setColor("#0066CC");
         actionIcon.setSize("12px");
+        grid.setColumnReorderingAllowed(true);
     }
 
     /**
@@ -322,7 +323,8 @@ public class GridExtender<T> {
         if (resizable) {
             // Never allow Action Menu column to be resizable.
             grid.getColumns().forEach(column -> {
-                if (!column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                if (column.getKey() != null && !column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                    column.setFlexGrow(1);
                     column.setResizable(true);
                 }
             });
@@ -330,6 +332,7 @@ public class GridExtender<T> {
             if (!resizableColumns.isEmpty()) {
                 resizableColumns.forEach(column -> {
                     if (!column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                        column.setFlexGrow(1);
                         column.setResizable(true);
                     }
                 });
