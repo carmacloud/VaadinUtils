@@ -84,11 +84,11 @@ public class GridExtender<T> {
             logger.warn("Columns not set for " + uniqueId
                     + ". Grid column order, width and visibility will not be stored or retreived.");
         }
+        setColumnsResizable();
         addActionItems(headersMap);
         configureSaveColumnWidths();
         configureSaveColumnVisible();
         configureSaveColumnOrder();
-        setColumnsResizable();
     }
 
     private void configureSaveColumnWidths() {
@@ -324,16 +324,16 @@ public class GridExtender<T> {
             // Never allow Action Menu column to be resizable.
             grid.getColumns().forEach(column -> {
                 if (column.getKey() != null && !column.getKey().equalsIgnoreCase(ACTION_MENU)) {
-                    column.setFlexGrow(1);
                     column.setResizable(true);
+                    column.setFlexGrow(0);
                 }
             });
         } else {
             if (!resizableColumns.isEmpty()) {
                 resizableColumns.forEach(column -> {
                     if (!column.getKey().equalsIgnoreCase(ACTION_MENU)) {
-                        column.setFlexGrow(1);
                         column.setResizable(true);
+                        column.setFlexGrow(0);
                     }
                 });
             }
