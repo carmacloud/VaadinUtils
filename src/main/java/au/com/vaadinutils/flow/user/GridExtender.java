@@ -48,7 +48,7 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
 public class GridExtender<T> {
 
     private final Logger logger = LogManager.getLogger();
-    private static final String ACTION_MENU = "_actionMenu";
+    public static final String ACTION_MENU = "_actionMenu";
     private Grid<T> grid;
     private String uniqueId;
 
@@ -247,18 +247,25 @@ public class GridExtender<T> {
         // Only add the action icon in the header if it's been set.
         final HorizontalLayout header = new HorizontalLayout(setActionIcon ? actionIcon : new Span());
         header.setJustifyContentMode(JustifyContentMode.END);
-        actionColumn = grid.addColumn(new ComponentRenderer<>(type -> {
-            if (setContextIcon) {
-                final Icon actionMenu = VaadinIcon.ELLIPSIS_H.create();
-                actionMenu.setSize("12px");
-                actionMenu.setColor("#0066CC");
-                actionMenu.getElement().setProperty("title",
-                        "Indicates there is a context menu present. Right click on the row to display.");
-                return actionMenu;
-            } else {
-                return new Span();
-            }
-        })).setHeader(header).setWidth("25px").setFlexGrow(0).setFrozen(true).setKey(ACTION_MENU);
+        // Check if the column has already been set. If so, just add the header icon for
+        // the column visibility
+        actionColumn = grid.getColumnByKey(ACTION_MENU);
+        if (actionColumn == null) {
+            actionColumn = grid.addColumn(new ComponentRenderer<>(type -> {
+                if (setContextIcon) {
+                    final Icon actionMenu = VaadinIcon.ELLIPSIS_H.create();
+                    actionMenu.setSize("12px");
+                    actionMenu.setColor("#0066CC");
+                    actionMenu.getElement().setProperty("title",
+                            "Indicates there is a context menu present. Right click on the row to display.");
+                    return actionMenu;
+                } else {
+                    return new Span();
+                }
+            })).setHeader(header).setWidth("25px").setFlexGrow(0).setFrozen(true).setKey(ACTION_MENU);
+        } else {
+            actionColumn.setHeader(header);
+        }
     }
 
     private void addActionItems(final Map<String, String> headersMap) {
@@ -313,9 +320,6 @@ public class GridExtender<T> {
     }
 
     private void resetActionColumn() {
-        if (actionColumn != null) {
-            grid.removeColumn(actionColumn);
-        }
         addActionColumn();
     }
 
