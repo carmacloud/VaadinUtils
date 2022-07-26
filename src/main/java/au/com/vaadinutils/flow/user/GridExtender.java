@@ -16,7 +16,6 @@ import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
-import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -55,9 +54,9 @@ public class GridExtender<T> {
     // For the additional column that optionally contains action filter and/or
     // context menu.
     private final Icon actionIcon = VaadinIcon.MENU.create();
-    private boolean setContextIcon = false;
     private Column<T> actionColumn = null;
     private boolean setActionIcon = false;
+    private ComponentRenderer<Component, T> gridContextMenu;
 
     // Common method to set columns resizable.
     private boolean resizable = false;
@@ -85,6 +84,7 @@ public class GridExtender<T> {
                     + ". Grid column order, width and visibility will not be stored or retreived.");
         }
         setColumnsResizable();
+        addActionColumn();
         addActionItems(headersMap);
         configureSaveColumnWidths();
         configureSaveColumnVisible();
@@ -247,24 +247,22 @@ public class GridExtender<T> {
         // Only add the action icon in the header if it's been set.
         final HorizontalLayout header = new HorizontalLayout(setActionIcon ? actionIcon : new Span());
         header.setJustifyContentMode(JustifyContentMode.END);
-        // Check if the column has already been set. If so, just add the header icon for
-        // the column visibility
+        // Check if the column has already been set. If not, add the column, but only if
+        // either context menu supplied, or action menu is required.
         actionColumn = grid.getColumnByKey(ACTION_MENU);
-        if (actionColumn == null) {
-            actionColumn = grid.addColumn(new ComponentRenderer<>(type -> {
-                if (setContextIcon) {
-                    final Icon actionMenu = VaadinIcon.ELLIPSIS_H.create();
-                    actionMenu.setSize("12px");
-                    actionMenu.setColor("#0066CC");
-                    actionMenu.getElement().setProperty("title",
-                            "Indicates there is a context menu present. Right click on the row to display.");
-                    return actionMenu;
-                } else {
-                    return new Span();
-                }
-            })).setHeader(header).setWidth("25px").setFlexGrow(0).setFrozen(true).setKey(ACTION_MENU);
+        if (gridContextMenu == null && !setActionIcon) {
         } else {
-            actionColumn.setHeader(header);
+            if (actionColumn == null) {
+                if (gridContextMenu != null) {
+                    actionColumn = grid.addColumn(getContextMenu()).setHeader(header).setWidth("25px").setFlexGrow(0)
+                            .setFrozen(true).setKey(ACTION_MENU);
+                } else if (setActionIcon) {
+                    actionColumn = grid.addColumn(getNoContextMenu()).setHeader(header).setWidth("25px").setFlexGrow(0)
+                            .setFrozen(true).setKey(ACTION_MENU);
+                }
+            } else {
+                actionColumn.setHeader(header);
+            }
         }
     }
 
@@ -299,28 +297,33 @@ public class GridExtender<T> {
     }
 
     /**
-     * Setting this will add icons for each row to the action column.
+     * Setting this will add a component for each row to the action column and
+     * allows a context menu to be activated from it.
      * 
-     * @param contextmenu The {@link GridContextMenu} added to the grid. Pass in to
-     *                    check it has actually been initialised.
+     * @param gridContextMenu A {@link ComponentRenderer} that will add a component
+     *                        for each row
      */
-    public void setContextMenu(GridContextMenu<T> contextMenu) {
-        setContextIcon = contextMenu != null;
-        contextMenu.setOpenOnClick(setContextIcon);
-        resetActionColumn();
+    public void setGridContextMenu(ComponentRenderer<Component, T> gridContextMenu) {
+        this.gridContextMenu = gridContextMenu;
+    }
+
+    private ComponentRenderer<Component, T> getContextMenu() {
+        return this.gridContextMenu;
+    }
+
+    private ComponentRenderer<Component, T> getNoContextMenu() {
+        return new ComponentRenderer<>(record -> {
+            return new Span();
+        });
     }
 
     /**
-     * Setting this will add an icon in the action column header indicating columns
-     * can be shown or hidden.
+     * Setting this will add an icon in the action column header allowing columns to
+     * be shown or hidden.
      */
     public void setActionIcon() {
         setActionIcon = true;
-        resetActionColumn();
-    }
-
-    private void resetActionColumn() {
-        addActionColumn();
+//        addActionColumn();
     }
 
     private void setColumnsResizable() {
@@ -344,10 +347,22 @@ public class GridExtender<T> {
         }
     }
 
+    /**
+     * Convenience method to set all columns (except the action column) to be
+     * resizeable.
+     * 
+     * @param resizable A <code>boolean</code>. True to set all columns resizeable,
+     *                  false to leave them locked to the user.
+     */
     public void setAllColumnsResizable(final boolean resizable) {
         this.resizable = resizable;
     }
 
+    /**
+     * Method to set columns resizeable, but only the ones contained in the List
+     * 
+     * @param columns A {@link List} of {@link Column}s that will be set resizeable.
+     */
     public void setSelectedColumnsResizable(List<Column<T>> columns) {
         this.resizableColumns.clear();
         this.resizableColumns.addAll(columns);

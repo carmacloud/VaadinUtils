@@ -17,7 +17,7 @@ public abstract class EntityContextMenu<E> extends ContextMenu {
     public EntityContextMenu() {
     }
 
-    protected E getTargetEntity() {
+    public E getTargetEntity() {
         return targetEntity;
     }
     
