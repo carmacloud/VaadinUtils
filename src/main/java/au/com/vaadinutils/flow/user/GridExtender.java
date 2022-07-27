@@ -247,10 +247,15 @@ public class GridExtender<T> {
         // Only add the action icon in the header if it's been set.
         final HorizontalLayout header = new HorizontalLayout(setActionIcon ? actionIcon : new Span());
         header.setJustifyContentMode(JustifyContentMode.END);
+
+        // Take a copy of the columns so we can reorder with the action column as first
+        // column.
+        final List<Column<T>> columns = grid.getColumns();
         // Check if the column has already been set. If not, add the column, but only if
         // either context menu supplied, or action menu is required.
         actionColumn = grid.getColumnByKey(ACTION_MENU);
         if (gridContextMenu == null && !setActionIcon) {
+            return;
         } else {
             if (actionColumn == null) {
                 if (gridContextMenu != null) {
@@ -264,6 +269,20 @@ public class GridExtender<T> {
                 actionColumn.setHeader(header);
             }
         }
+        // As we are adding this column after the other columns have been added, create
+        // a new list, add the the action column, then add all the previously added
+        // columns.
+        // Then set the grid order to this.
+        final List<Column<T>> newOrderedColumns = new ArrayList<>();
+        // Add the the action column to first position
+        newOrderedColumns.add(0, actionColumn);
+        columns.forEach(column -> {
+            // Now add all other columns, except action column, if it exists.
+            if (!column.getKey().equals(actionColumn.getKey())) {
+                newOrderedColumns.add(column);
+            }
+        });
+        grid.setColumnOrder(newOrderedColumns);
     }
 
     private void addActionItems(final Map<String, String> headersMap) {
@@ -298,7 +317,9 @@ public class GridExtender<T> {
 
     /**
      * Setting this will add a component for each row to the action column and
-     * allows a context menu to be activated from it.
+     * allows a context menu to be activated from it.<br>
+     * Note: this is only needed if adding a context menu button on a plain grid.
+     * VaadinCrud.SearchableGrid has methods to do this.
      * 
      * @param gridContextMenu A {@link ComponentRenderer} that will add a component
      *                        for each row
@@ -323,7 +344,6 @@ public class GridExtender<T> {
      */
     public void setActionIcon() {
         setActionIcon = true;
-//        addActionColumn();
     }
 
     private void setColumnsResizable() {
