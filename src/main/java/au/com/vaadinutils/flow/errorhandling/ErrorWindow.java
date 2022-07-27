@@ -1,4 +1,4 @@
-package au.com.vaadinutils.errorHandling;
+package au.com.vaadinutils.flow.errorhandling;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,30 +18,31 @@ import org.vaadin.addons.screenshot.ScreenshotListener;
 import org.vaadin.addons.screenshot.ScreenshotMimeType;
 
 import com.google.common.base.Stopwatch;
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.mpr.LegacyWrapper;
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.VerticalLayout;
 
 /**
- * Retain, but might will be adapted for Flow
+ * All finished, except need to find replacement for Screenshot addon.
  */
 public class ErrorWindow {
     public static final String ERROR_WINDOW_CLOSE_BUTTON = "ErrorWindowCloseButton";
-    private Label uploadStatus = new Label("&nbsp;", ContentMode.HTML);
+    private Html uploadStatus = new Html("<p>&nbsp;</p>");
     private static String viewName;
 
-    static Logger logger = LogManager.getLogger();
+    private static Logger logger = LogManager.getLogger();
 
     /**
-     * throttle for sending emails about errors the user hasn't seen. Allow bursting
+     * Throttle for sending emails about errors the user hasn't seen. Allow bursting
      * to 20 emails in a minute, over the long term limit to 1 email per minute
      */
     final static ErrorRateController emailRateController = new ErrorRateController(20, 1, TimeUnit.MINUTES);
@@ -151,7 +152,6 @@ public class ErrorWindow {
             logger.error(e, e);
             return fullTrace;
         }
-
     }
 
     private String extractTrace(Throwable t) {
@@ -183,21 +183,21 @@ public class ErrorWindow {
     }
 
     boolean isExempted(Throwable cause) {
-        Map<String, Set<String>> exemptedExceptions = new HashMap<>();
+        final Map<String, Set<String>> exemptedExceptions = new HashMap<>();
         exemptedExceptions.put("ClientAbortException", new HashSet<String>());
         exemptedExceptions.put("SocketException", new HashSet<String>());
         exemptedExceptions.put("UIDetachedException", new HashSet<String>());
 
-        HashSet<String> suppressedRuntimeExceptions = new HashSet<String>();
+        final HashSet<String> suppressedRuntimeExceptions = new HashSet<String>();
         suppressedRuntimeExceptions.add("Couldn't attach to writer stream");
         exemptedExceptions.put("RuntimeException", suppressedRuntimeExceptions);
 
-        HashSet<String> ioSet = new HashSet<String>();
+        final HashSet<String> ioSet = new HashSet<String>();
         ioSet.add("Pipe closed");
         ioSet.add("Pipe not connected");
         exemptedExceptions.put("IOException", ioSet);
 
-        Set<String> expectedMessage = exemptedExceptions.get(cause.getClass().getSimpleName());
+        final Set<String> expectedMessage = exemptedExceptions.get(cause.getClass().getSimpleName());
         if (expectedMessage != null) {
             if (!expectedMessage.isEmpty()) {
                 for (String message : expectedMessage) {
@@ -225,40 +225,31 @@ public class ErrorWindow {
                 image.getImageData();
                 showWindow(causeClass, id, time, finalId, finalTrace, reference, image.getImageData());
                 window.close();
-
             }
         });
 
         window.add(new LegacyWrapper(screenshot));
         window.setResizable(false);
-
-        UI.getCurrent().add(window);
+        window.open();
         screenshot.setTargetComponent(null);
         screenshot.takeScreenshot();
-
     }
 
     private void showWindow(String causeClass, String id, final Date time, final String finalId,
             final String finalTrace, final String reference, final byte[] imageData) {
         final ConfirmDialog window = new ConfirmDialog();
-        UI.getCurrent().add(window);
         window.setWidth("600px");
-        window.setHeader("Error " + id);
+        window.setHeader("Error: " + id);
 
         final VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(true);
-        layout.setSpacing(true);
+        final Html message = new Html(
+                "<p>" + "<b>An error has occurred (" + causeClass + ").<br>Reference: </b>" + reference + "</p> ");
 
-        final Label message = new Label(
-                "<b>An error has occurred (" + causeClass + ").<br><br>Reference:</b> " + reference);
-        message.setContentMode(ContentMode.HTML);
-
-        final Label describe = new Label(
-                "<b>Please describe what you were doing when this error occured (Optional)<b>");
-        describe.setContentMode(ContentMode.HTML);
+        final Html describe = new Html("<b>Please describe what you were doing when this error occured (Optional)<b>");
 
         final TextArea notes = new TextArea();
         notes.setWidth("100%");
+        notes.setHeight("100px");
         final String supportEmail = getTargetEmailAddress();
 
         final Button saveButton = new Button("Save");
@@ -270,23 +261,18 @@ public class ErrorWindow {
                         getUserName(), getUserEmail(), imageData);
             } catch (Exception e) {
                 logger.error(e, e);
-                Notification.show("Error sending error report", Type.ERROR_MESSAGE);
             } finally {
+                Notification.show("Error sending error report", 5000, Position.MIDDLE);
                 window.close();
             }
         });
-        saveButton.getElement().setAttribute("theme", "error primary");
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY, ButtonVariant.LUMO_ERROR);
 
         saveButton.setId(ERROR_WINDOW_CLOSE_BUTTON);
 
-        layout.addComponent(message);
-        layout.addComponent(describe);
-        layout.addComponent(notes);
-        layout.addComponent(uploadStatus);
-        layout.addComponent(new Label("Information about this error will be sent to " + getSupportCompanyName()));
-        final LegacyWrapper content = new LegacyWrapper(layout);
-        content.setSizeFull();
-        window.add(content);
+        layout.add(message, describe, notes, uploadStatus);
+        layout.add(new Label("Information about this error will be sent to " + getSupportCompanyName()));
+        window.add(layout);
         window.open();
     }
 
@@ -322,7 +308,6 @@ public class ErrorWindow {
                                 + userEmail + "\n\n" + "Version: " + buildVersion + "\n\n" + "User notes:" + notes
                                 + "\n\n" + finalTrace,
                         stream, filename, MIMEType);
-
             }
         };
 
@@ -330,9 +315,9 @@ public class ErrorWindow {
     }
 
     private String getViewName() {
-       if(viewName != null) {
-           return viewName;
-       }
+        if (viewName != null) {
+            return viewName;
+        }
         return "Error getting View name";
     }
 

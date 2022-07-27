@@ -1,4 +1,4 @@
-package au.com.vaadinutils.errorHandling;
+package au.com.vaadinutils.flow.errorhandling;
 
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolation;

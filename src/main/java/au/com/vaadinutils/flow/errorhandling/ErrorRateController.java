@@ -1,4 +1,4 @@
-package au.com.vaadinutils.errorHandling;
+package au.com.vaadinutils.flow.errorhandling;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +25,7 @@ public class ErrorRateController {
      *                        permitRateUnits
      * @param permitRateUnits
      */
-    ErrorRateController(long maxBurst, double permitRate, TimeUnit permitRateUnits) {
+    public ErrorRateController(long maxBurst, double permitRate, TimeUnit permitRateUnits) {
         this.maxBurst = maxBurst;
         this.permitRate = permitRate;
         this.permitRateUnits = permitRateUnits;

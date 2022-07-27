@@ -10,6 +10,8 @@ import org.junit.Test;
 
 import com.google.common.base.Stopwatch;
 
+import au.com.vaadinutils.flow.errorhandling.ErrorRateController;
+
 public class ErrorRateControllerTest {
 
     private static final int RATE = 5;

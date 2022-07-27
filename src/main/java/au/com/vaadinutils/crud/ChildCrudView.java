@@ -34,7 +34,7 @@ import com.vaadin.ui.Notification.Type;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.JpaBaseDao;
-import au.com.vaadinutils.errorHandling.ErrorWindow;
+import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
 
 /**
  * child crud does not support nesting.

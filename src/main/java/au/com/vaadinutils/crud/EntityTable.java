@@ -16,9 +16,9 @@ import com.vaadin.shared.MouseEventDetails.MouseButton;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.ValoTheme;
 
-import org.apache.logging.log4j.LogManager;
+import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
 
-import au.com.vaadinutils.errorHandling.ErrorWindow;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * @deprecated Replaced in V14 migration.

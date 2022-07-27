@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.base.Preconditions;
 
-import au.com.vaadinutils.errorHandling.ErrorWindow;
+import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
 
 /**
  * The class is a place holder to allow access to an 'non-injected' entity

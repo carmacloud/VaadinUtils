@@ -13,7 +13,7 @@ import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.JavaScriptFunction;
 
 import au.com.vaadinutils.dao.JpaEntityHelper;
-import au.com.vaadinutils.errorHandling.ErrorWindow;
+import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
 import elemental.json.JsonArray;
 
 /**

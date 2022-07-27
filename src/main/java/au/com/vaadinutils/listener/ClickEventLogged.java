@@ -2,9 +2,9 @@ package au.com.vaadinutils.listener;
 
 import org.apache.logging.log4j.Logger;
 
-import org.apache.logging.log4j.LogManager;
+import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
 
-import au.com.vaadinutils.errorHandling.ErrorWindow;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * Retain, used in Working Dialog
