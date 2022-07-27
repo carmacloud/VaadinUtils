@@ -16,9 +16,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 
-import au.com.vaadinutils.crud.CrudSecurityManager;
-import au.com.vaadinutils.crud.security.SecurityManagerFactoryProxy;
-
 /**
  * @deprecated Will be removed once dependent classes are removed.
  */
@@ -56,11 +53,7 @@ public class MenuBuilder implements Serializable {
         for (final ViewMapping viewmap : this.viewMap) {
             // We don't add a menu item from the default view.
             if (!viewmap.getViewName().equals("")) {
-                CrudSecurityManager model = SecurityManagerFactoryProxy.getSecurityManager(viewmap.getView());
-                if (model.canUserView()) {
-
                     addMenuItems(menubar, unusedTopLevelMenus, viewmap);
-                }
             }
         }
 

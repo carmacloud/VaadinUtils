@@ -38,7 +38,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-import au.com.vaadinutils.crud.security.SecurityManagerFactoryProxy;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.menu.Menus;
@@ -72,12 +71,6 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
     }
 
     public void init(String uniqueId, Class<E> entityClazz) {
-        if (!getSecurityManager().canUserView()) {
-            this.setSizeFull();
-            this.setCompositionRoot(new Label("Sorry, you do not have permission to access " + getTitle()));
-            return;
-        }
-
         container = getContainer();
         grid = new Grid(new GeneratedPropertyContainer(container));
         grid.setSizeFull();
@@ -147,10 +140,6 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
         }
 
         return "Override getTitle() to set a custom title.";
-    }
-
-    private CrudSecurityManager getSecurityManager() {
-        return SecurityManagerFactoryProxy.getSecurityManager(this.getClass());
     }
 
     public void addGeneratedColumn(Object id, ColumnGenerator generatedColumn) {

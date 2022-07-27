@@ -30,7 +30,6 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import com.vaadin.ui.themes.ValoTheme;
 
-import au.com.vaadinutils.crud.security.SecurityManagerFactoryProxy;
 import au.com.vaadinutils.fields.SelectionListener;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.menu.Menu;
@@ -62,11 +61,6 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         selectableTable = new SelectableEntityTable<E>(container, getHeadingPropertySet(), uniqueId);
         selectableTable.setSizeFull();
         this.setSizeFull();
-        if (!getSecurityManager().canUserView()) {
-            this.setSizeFull();
-            this.addComponent(new Label("Sorry, you do not have permission to access " + getTitle()));
-            return;
-        }
 
         searchBar = buildSearchBar();
 
@@ -124,10 +118,6 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         }
 
         return "Override getTitle() to set a custom title.";
-    }
-
-    protected CrudSecurityManager getSecurityManager() {
-        return SecurityManagerFactoryProxy.getSecurityManager(this.getClass());
     }
 
     public void addGeneratedColumn(Object id, ColumnGenerator generatedColumn) {
