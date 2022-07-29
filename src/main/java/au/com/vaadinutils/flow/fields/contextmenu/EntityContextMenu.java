@@ -9,14 +9,14 @@ public abstract class EntityContextMenu<E> extends ContextMenu {
     private static final long serialVersionUID = 1L;
 
     private E targetEntity;
-    
+
     public EntityContextMenu() {
     }
 
     public E getTargetEntity() {
         return targetEntity;
     }
-    
+
     protected void setTargetEntity(E targetEntity) {
         this.targetEntity = targetEntity;
     }

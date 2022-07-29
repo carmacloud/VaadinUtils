@@ -839,8 +839,8 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
 
     @Override
     public void commitAndContinue() {
-      EntityManagerProvider.commitAndContinue();
-        
+        EntityManagerProvider.commitAndContinue();
+
     }
 
     @Override

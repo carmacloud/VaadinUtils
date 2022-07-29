@@ -103,7 +103,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
         if (listener != null) {
             cancel = new Button("Cancel");
             cancel.addClickListener(e -> {
-               cancelListener.cancel();
+                cancelListener.cancel();
                 this.close();
             });
             content.add(cancel);
@@ -117,7 +117,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
     @Override
     public void close() {
         ui.accessSynchronously(() -> {
-           super.close();
+            super.close();
         });
     }
 
@@ -140,7 +140,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
             if (completeListener != null) {
                 completeListener.complete();
             }
-           this.close();
+            this.close();
         });
     }
 

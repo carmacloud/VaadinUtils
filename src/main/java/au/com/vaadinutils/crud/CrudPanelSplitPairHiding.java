@@ -6,72 +6,60 @@ import com.vaadin.ui.VerticalLayout;
 /**
  * @deprecated Replaced in V14 migration.
  */
-public class CrudPanelSplitPairHiding extends VerticalLayout implements CrudPanelPair
-{
-	private static final long serialVersionUID = -3273324048011746886L;
-	VerticalLayout firstPanel = new VerticalLayout();
-	VerticalLayout secondPanel = new VerticalLayout();
-	
-	CrudPanelSplitPairHiding()
-	{
-		addComponent(firstPanel);
-	}
-	
-	@Override
-	public void setFirstComponent(Component c)
-	{
-		firstPanel.addComponent(c);
-		
-	}
+public class CrudPanelSplitPairHiding extends VerticalLayout implements CrudPanelPair {
+    private static final long serialVersionUID = -3273324048011746886L;
+    VerticalLayout firstPanel = new VerticalLayout();
+    VerticalLayout secondPanel = new VerticalLayout();
 
-	@Override
-	public void setSecondComponent(Component c)
-	{
-		secondPanel.addComponent(c);
-		
-	}
+    CrudPanelSplitPairHiding() {
+        addComponent(firstPanel);
+    }
 
-	@Override
-	public Component getPanel()
-	{
+    @Override
+    public void setFirstComponent(Component c) {
+        firstPanel.addComponent(c);
 
-		return this;
-	}
+    }
 
-	@Override
-	public void setSplitPosition(float pos)
-	{
-		
-		
-	}
+    @Override
+    public void setSecondComponent(Component c) {
+        secondPanel.addComponent(c);
 
-	@Override
-	public void showFirstComponent()
-	{
-		removeAllComponents();
-		addComponent(firstPanel);
-	}
+    }
 
-	@Override
-	public void showSecondComponent()
-	{
-		removeAllComponents();
-		addComponent(secondPanel);
-	}
+    @Override
+    public Component getPanel() {
 
-	@Override
-	public void setLocked(boolean locked)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+        return this;
+    }
 
-	@Override
-	public void setSplitPosition(float pos, Unit units)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void setSplitPosition(float pos) {
 
-	
+    }
+
+    @Override
+    public void showFirstComponent() {
+        removeAllComponents();
+        addComponent(firstPanel);
+    }
+
+    @Override
+    public void showSecondComponent() {
+        removeAllComponents();
+        addComponent(secondPanel);
+    }
+
+    @Override
+    public void setLocked(boolean locked) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setSplitPosition(float pos, Unit units) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

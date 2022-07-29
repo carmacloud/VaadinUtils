@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MemberSettingsStorageEmptyImplementation implements MemberSettingsStorage {
-    
+
     private Map<String, String> map = new ConcurrentHashMap<>();
 
     @Override

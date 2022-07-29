@@ -11,11 +11,10 @@ import au.com.vaadinutils.crud.CrudEntity;
 /**
  * @deprecated Will be removed once dependent classes are removed.
  */
-public interface ContainerAdaptor<T extends CrudEntity>
-{
+public interface ContainerAdaptor<T extends CrudEntity> {
 
     Item getItem(Object id);
-    
+
     Property<Object> getProperty(T entity, Object id);
 
     T getEntity(Object id);
@@ -28,6 +27,6 @@ public interface ContainerAdaptor<T extends CrudEntity>
 
     void addContainerFilter(Filter filter);
 
-	Class<T> getEntityClass();
+    Class<T> getEntityClass();
 
 }

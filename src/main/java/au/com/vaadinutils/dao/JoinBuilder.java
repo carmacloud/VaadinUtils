@@ -19,7 +19,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import au.com.vaadinutils.dao.JoinOnBuilder.JoinOnType;
 
 public class JoinBuilder<E, K> {
-    final  List<JoinOnBuilder<K, ?>> joinOnBuilders = new LinkedList<>();
+    final List<JoinOnBuilder<K, ?>> joinOnBuilders = new LinkedList<>();
 
     /*
      * (non-Javadoc)
@@ -63,7 +63,7 @@ public class JoinBuilder<E, K> {
     }
 
     @SuppressWarnings("rawtypes")
-    final  List<JoinMetaData> joins = new LinkedList<>();
+    final List<JoinMetaData> joins = new LinkedList<>();
 
     private JoinBuilder() {
         // TODO Auto-generated constructor stub
@@ -104,7 +104,7 @@ public class JoinBuilder<E, K> {
     }
 
     public <V> Join<E, K> getOnJoin(Join<E, K> join, CriteriaBuilder builder) {
-        final  List<Predicate> predicates = new ArrayList<>(joinOnBuilders.size());
+        final List<Predicate> predicates = new ArrayList<>(joinOnBuilders.size());
         for (JoinOnBuilder<K, ?> joinOnBuilder : joinOnBuilders) {
             switch (joinOnBuilder.getType()) {
             case EQUAL:

@@ -6,9 +6,8 @@ import au.com.vaadinutils.crud.events.CrudEventType;
 /**
  * @deprecated Will be removed once dependent classes are removed.
  */
-public interface Auditor
-{
+public interface Auditor {
 
-	void audit(CrudEventType event, CrudEntity entity);
+    void audit(CrudEventType event, CrudEntity entity);
 
 }

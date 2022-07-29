@@ -3,7 +3,6 @@ package au.com.vaadinutils.crud.splitFields;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Label;
 
-
 /**
  * @deprecated Replaced in V14 migration.
  */

@@ -31,7 +31,7 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
         field = createField();
         final Span label = new Span(caption);
         label.getElement().getStyle().set("font-size", "x-small");
-        
+
         setAlignItems(Alignment.CENTER);
         add(field, this.button);
     }
@@ -64,7 +64,7 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
     public void addButtonClickListener(ComponentEventListener<ClickEvent<Button>> listener) {
         button.addClickListener(listener);
     }
-    
+
     public void setItems(final List<T> items) {
         field.setItems(items);
     }

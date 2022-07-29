@@ -20,7 +20,6 @@ public class AutoCompleteTextField<E> extends TextField {
     private AutoCompleteQueryListener<E> listener;
     private AutoCompleteOptionSelected<E> optionListener;
 
-
     /**
      * <pre>
      * {@code

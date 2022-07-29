@@ -27,7 +27,7 @@ public class TextFieldWithButton extends HorizontalLayout {
         field = createField();
         final Span label = new Span(caption);
         label.getElement().getStyle().set("font-size", "x-small");
-        
+
         setAlignItems(Alignment.CENTER);
         add(field, this.button);
     }

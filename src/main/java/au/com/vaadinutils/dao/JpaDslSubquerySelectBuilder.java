@@ -20,12 +20,13 @@ public class JpaDslSubquerySelectBuilder<P, E> extends JpaDslBuilder<E> {
     private Subquery<Long> subquery;
     private Root<P> parentRoot;
 
-    public JpaDslSubquerySelectBuilder(final Class<E> entityClass, final CriteriaQuery<?> query, final Root<P> parentRoot) {
+    public JpaDslSubquerySelectBuilder(final Class<E> entityClass, final CriteriaQuery<?> query,
+            final Root<P> parentRoot) {
         this(entityClass, query, parentRoot, null);
     }
 
-    public<V> JpaDslSubquerySelectBuilder(final Class<E> entityClass, final CriteriaQuery<?> query, final Root<P> parentRoot,
-            SingularAttribute<E, Long> selectAttribute) {
+    public <V> JpaDslSubquerySelectBuilder(final Class<E> entityClass, final CriteriaQuery<?> query,
+            final Root<P> parentRoot, SingularAttribute<E, Long> selectAttribute) {
         super(entityClass);
         criteria = null;
         this.parentRoot = parentRoot;

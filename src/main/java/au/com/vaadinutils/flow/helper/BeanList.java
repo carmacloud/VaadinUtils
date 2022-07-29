@@ -12,13 +12,13 @@ import com.vaadin.flow.data.binder.Binder;
  */
 public class BeanList<E> {
 
-	private List<E> beanList;
+    private List<E> beanList;
 
-	public List<E> getBeanList() {
-		return beanList;
-	}
+    public List<E> getBeanList() {
+        return beanList;
+    }
 
-	public void setBeanList(List<E> beanList) {
-		this.beanList = beanList;
-	}
+    public void setBeanList(List<E> beanList) {
+        this.beanList = beanList;
+    }
 }

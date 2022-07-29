@@ -53,7 +53,7 @@ public class MenuBuilder implements Serializable {
         for (final ViewMapping viewmap : this.viewMap) {
             // We don't add a menu item from the default view.
             if (!viewmap.getViewName().equals("")) {
-                    addMenuItems(menubar, unusedTopLevelMenus, viewmap);
+                addMenuItems(menubar, unusedTopLevelMenus, viewmap);
             }
         }
 
