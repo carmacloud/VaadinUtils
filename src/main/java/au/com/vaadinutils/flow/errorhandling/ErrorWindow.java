@@ -12,10 +12,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.vaadin.addons.screenshot.Screenshot;
-import org.vaadin.addons.screenshot.ScreenshotImage;
-import org.vaadin.addons.screenshot.ScreenshotListener;
-import org.vaadin.addons.screenshot.ScreenshotMimeType;
+//import org.vaadin.addons.screenshot.Screenshot;
+//import org.vaadin.addons.screenshot.ScreenshotImage;
+//import org.vaadin.addons.screenshot.ScreenshotListener;
+//import org.vaadin.addons.screenshot.ScreenshotMimeType;
 
 import com.google.common.base.Stopwatch;
 import com.vaadin.flow.component.Html;
@@ -23,13 +23,11 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
-import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.mpr.LegacyWrapper;
 
 /**
  * All finished, except need to find replacement for Screenshot addon.
@@ -215,24 +213,25 @@ public class ErrorWindow {
     private void displayVaadinErrorWindow(final String causeClass, final String id, final Date time,
             final String finalId, final String finalTrace, final String reference) {
 
+        // TODO LC: Removed until a Screenshot addon replacement is found.
         // generate screen shot!
-        final Dialog window = new Dialog();
-        final Screenshot screenshot = Screenshot.newBuilder().withLogging(true).withMimeType(ScreenshotMimeType.PNG)
-                .build();
-        screenshot.addScreenshotListener(new ScreenshotListener() {
-            @Override
-            public void screenshotComplete(ScreenshotImage image) {
-                image.getImageData();
-                showWindow(causeClass, id, time, finalId, finalTrace, reference, image.getImageData());
-                window.close();
-            }
-        });
-
-        window.add(new LegacyWrapper(screenshot));
-        window.setResizable(false);
-        window.open();
-        screenshot.setTargetComponent(null);
-        screenshot.takeScreenshot();
+//        final Dialog window = new Dialog();
+//        final Screenshot screenshot = Screenshot.newBuilder().withLogging(true).withMimeType(ScreenshotMimeType.PNG)
+//                .build();
+//        screenshot.addScreenshotListener(new ScreenshotListener() {
+//            @Override
+//            public void screenshotComplete(ScreenshotImage image) {
+//                image.getImageData();
+//              
+//            }
+//        });
+        showWindow(causeClass, id, time, finalId, finalTrace, reference, null);
+//        window.close();
+//        window.add(new LegacyWrapper(screenshot));
+//        window.setResizable(false);
+//        window.open();
+//        screenshot.setTargetComponent(null);
+//        screenshot.takeScreenshot();
     }
 
     private void showWindow(String causeClass, String id, final Date time, final String finalId,
@@ -292,13 +291,14 @@ public class ErrorWindow {
 
                 ByteArrayOutputStream stream = null;
                 String filename = null;
-                String MIMEType = null;
+                String MIMEType = "text/plain";
                 if (imageData != null) {
                     stream = new ByteArrayOutputStream();
                     try {
                         stream.write(imageData);
                         filename = "screen.png";
-                        MIMEType = ScreenshotMimeType.PNG.getMimeType();
+                        // TODO LC: Removed until Screenshot addon replacement is found.
+//                        MIMEType = ScreenshotMimeType.PNG.getMimeType();
                     } catch (IOException e) {
                         logger.error(e, e);
                     }
