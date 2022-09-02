@@ -266,7 +266,7 @@ public abstract class JpaDslAbstract<E, R> {
     /**
      * WARNING, order will not be honoured by this method
      * 
-     * @return
+     * @return An <code>int</code> being the number of entries deleted.
      */
     public int delete() {
         Preconditions.checkArgument(orders.size() == 0, "Order is not supported for delete");
