@@ -311,7 +311,13 @@ public class GridExtender<T> {
                 storeVisibiltyUpdate(column);
             });
             menuItem.setCheckable(true);
-            menuItem.setChecked(column.isVisible());
+            // If the column is setVisible(false) for initial hiding, it may have a stored
+            // setting that overrides that.
+            // Get the stored setting and set the context menu to show the correct status.
+            final String keyStub = uniqueId + "-visible";
+            final String storedVisibleSetting = MemberSettingsStorageFactory.getUserSettingsStorage()
+                    .get(keyStub + "-" + column.getKey());
+            menuItem.setChecked(storedVisibleSetting.equals("true") ? true : column.isVisible());
         }
     }
 
