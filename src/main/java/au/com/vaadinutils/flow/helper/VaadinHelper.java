@@ -1,5 +1,6 @@
 package au.com.vaadinutils.flow.helper;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,9 +23,10 @@ import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
+import com.vaadin.flow.server.StreamResource;
 
 public class VaadinHelper {
-    
+
     /**
      * Determines the position and colour of the {@link Notification}. The 4 types
      * are Error, Warning, Tray and Info.
@@ -33,7 +36,7 @@ public class VaadinHelper {
     }
 
     private final static Logger logger = LogManager.getLogger();
-    
+
     /**
      * Standard carma colour blue
      */
@@ -55,14 +58,38 @@ public class VaadinHelper {
      */
     public static final String CARMA_ORANGE = "#FF9900";
 
-    // File helper
+    /**
+     * Given the full file path (on the local filesystem) to a data file, return the
+     * contents as an array of <code>byte</code> data.
+     * 
+     * @param filePath A {@link String} being the full file path.
+     * @return An array of <code>byte</code> data, or null if the file could not be
+     *         found.
+     */
     public static byte[] getResourceBytes(final String filePath) {
         final File file = new File(filePath);
         try {
             byte[] fileContent = Files.readAllBytes(file.toPath());
             return fileContent;
         } catch (IOException e) {
-            logger.error("File not found...");
+            logger.error("File not found for file path '" + filePath + "'");
+            return null;
+        }
+    }
+
+    /**
+     * Returns a {@link StreamResource} given a <code>byte</code> array of data.
+     * 
+     * @param filePath A {@link String} being the full file path.
+     * @return A {@link StreamResource} or null if there is no <code>byte</code>
+     *         array of data.
+     * @throws IOException Thrown if there are any IO errors during processing.
+     */
+    public static StreamResource getStreamResource(final String filePath) throws IOException {
+        final byte[] pdfBytes = getResourceBytes(filePath);
+        if (pdfBytes != null) {
+            return new StreamResource(FilenameUtils.getName(filePath), () -> new ByteArrayInputStream(pdfBytes));
+        } else {
             return null;
         }
     }
@@ -95,7 +122,7 @@ public class VaadinHelper {
         }
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
-    
+
     /**
      * Method to display a {@link Notification} with a caption, the length of time
      * to display (0 displays Notification until user closes the screen) and the
@@ -147,7 +174,7 @@ public class VaadinHelper {
         final Span contents = new Span(component);
         createNotification(caption, duration, type, contents);
     }
-    
+
     private static void createNotification(final String caption, final int duration, final NotificationType type,
             final Span contents) {
         final Notification notification = new Notification();
@@ -194,7 +221,7 @@ public class VaadinHelper {
         });
         notification.open();
     }
-    
+
     private static Icon addCloseButton(final Notification notification, final String iconColour) {
         final Icon icon = VaadinIcon.CLOSE.create();
         icon.setColor(iconColour);
