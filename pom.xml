@@ -20,7 +20,7 @@
 		<!-- Testing -->
 		<junit.version>4.13.2</junit.version>
 		<!-- Vaadin 14 properties -->
-		<vaadin.version>14.8.16</vaadin.version>
+		<vaadin.version>14.8.17</vaadin.version>
 	</properties>
 
 	<repositories>
