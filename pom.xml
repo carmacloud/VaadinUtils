@@ -8,7 +8,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.7.32</vaadin.version>
+		<vaadin.version>7.7.34</vaadin.version>
 		<log4j.version>2.18.0</log4j.version>
 		<jasperreports.version>6.4.1</jasperreports.version>
 		<eclipselink.version>2.6.9</eclipselink.version>
@@ -169,15 +169,29 @@
 	</build>
 
 	<dependencies>
+	<!-- Remove after Vaadin 14 migration -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-themes</artifactId>
 			<version>${vaadin.version}</version>
 		</dependency>
+		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-server</artifactId>
 			<version>${vaadin.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jsoup</groupId>
+					<artifactId>jsoup</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- Remove after Vaadin 14 migration -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.14.3</version>
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
