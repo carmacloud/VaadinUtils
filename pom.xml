@@ -232,7 +232,17 @@
 					<groupId>com.google.gwt</groupId>
 					<artifactId>gwt-elemental</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.jsoup</groupId>
+					<artifactId>jsoup</artifactId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+		<!-- Remove after Vaadin 14 migration -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.14.3</version>
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
@@ -284,6 +294,7 @@
 			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- deprecated and should move to use Java 8 classes -->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
