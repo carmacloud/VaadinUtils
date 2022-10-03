@@ -14,8 +14,12 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.base.Preconditions;
 
 /**
- * encapsulates the process of joining together a PipedInputStream and a
+ * 
+ * Encapsulates the process of joining together a PipedInputStream and a
  * PipedOutputStream, without leaving either of them hanging
+ * 
+ * @deprecated Does not appear to be used (Even though a variable setup in
+ *             GridContainerCSVExport in carma)<br>
  * 
  * @author rsutton
  *

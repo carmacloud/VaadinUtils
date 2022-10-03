@@ -7,7 +7,7 @@ import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
 import org.apache.logging.log4j.LogManager;
 
 /**
- * Retain, used in Working Dialog
+ * @deprecated Not used.
  */
 public class ClickEventLogged {
     static public abstract class ClickListener implements com.vaadin.ui.Button.ClickListener {

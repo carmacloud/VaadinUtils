@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * @deprecated Not used
+ *
+ */
 public class StaticContentServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final Logger logger = LogManager.getLogger();
