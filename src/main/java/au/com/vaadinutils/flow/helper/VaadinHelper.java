@@ -42,6 +42,10 @@ public class VaadinHelper {
      */
     public static final String CARMA_BLUE = "#0066CC";
     /**
+     * Standard carma clour dark blue
+     */
+    public static final String CARMA_DARK_BLUE = "#002C82";
+    /**
      * Standard carma colour red for error
      */
     public static final String CARMA_ERROR = "#CC0000";
