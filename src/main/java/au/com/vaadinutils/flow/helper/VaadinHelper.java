@@ -15,14 +15,16 @@ import org.apache.logging.log4j.Logger;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.datepicker.DatePicker.DatePickerI18n;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.Notification.Position;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.server.StreamResource;
 
 public class VaadinHelper {
@@ -61,6 +63,9 @@ public class VaadinHelper {
      * Standard carma colour red for orange
      */
     public static final String CARMA_ORANGE = "#FF9900";
+    private static final DatePickerI18n DATE_FORMAT_I18N = new DatePickerI18n();
+
+//    public static final String
 
     /**
      * Given the full file path (on the local filesystem) to a data file, return the
@@ -238,5 +243,28 @@ public class VaadinHelper {
         icon.getElement().getStyle().set("margin-left", "auto");
 
         return icon;
+    }
+
+    /**
+     * Helper method to create a {@link DatePickerI18n} custom date format.<br>
+     * The supplied date parameter is the one the {@link DatePicker} will use to
+     * display the date.<br>
+     * Additional date formats of
+     * <code>"dd-MMM-yy", "dd/MMM/yy", "dd-MM-yy", "dd-mm-yy" </code> are added.<br>
+     * The {@link DatePicker} value can be edited in these formats. <br>
+     * Note: if the primary date format is not supplied, it is set as "dd-MMM-yy".
+     * 
+     * @param primaryDateFormat A {@link String} being the custom format required.
+     *                          This format is the one the {@link DatePicker} will
+     *                          use to display the date.
+     * @return A {@link DatePickerI18n} object with the custom pattern and default
+     *         additional date formats..
+     */
+    public static DatePickerI18n setCustomDateFormats(final String primaryDateFormat) {
+        final String[] additionalDateFormats = { "dd-MMM-yy", "dd/MMM/yy", "dd-MM-yy", "dd/MM/yy" };
+        DATE_FORMAT_I18N.setDateFormats(
+                primaryDateFormat != null && !primaryDateFormat.isEmpty() ? primaryDateFormat : "dd-MMM-yy",
+                additionalDateFormats);
+        return DATE_FORMAT_I18N;
     }
 }
