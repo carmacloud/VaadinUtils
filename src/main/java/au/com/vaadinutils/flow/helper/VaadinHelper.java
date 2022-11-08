@@ -250,7 +250,8 @@ public class VaadinHelper {
      * The supplied date parameter is the one the {@link DatePicker} will use to
      * display the date.<br>
      * Additional date formats of
-     * <code>"dd-MMM-yy", "dd/MMM/yy", "dd-MM-yy", "dd-mm-yy" </code> are added.<br>
+     * <code>"dd-MMM-yyyy", "dd/MMM/yyyy", "dd-MM-yyyy", "dd-mm-yyyy" </code> are
+     * added.<br>
      * The {@link DatePicker} value can be edited in these formats. <br>
      * Note: if the primary date format is not supplied, it is set as "dd-MMM-yy".
      * 
