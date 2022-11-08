@@ -261,7 +261,7 @@ public class VaadinHelper {
      *         additional date formats..
      */
     public static DatePickerI18n setCustomDateFormats(final String primaryDateFormat) {
-        final String[] additionalDateFormats = { "dd-MMM-yy", "dd/MMM/yy", "dd-MM-yy", "dd/MM/yy" };
+        final String[] additionalDateFormats = { "dd/MM/yyyy", "dd/MMM/yyyy", "dd-MM-yyyy", "dd-MMM-yyyy" };
         DATE_FORMAT_I18N.setDateFormats(
                 primaryDateFormat != null && !primaryDateFormat.isEmpty() ? primaryDateFormat : "dd-MMM-yy",
                 additionalDateFormats);
