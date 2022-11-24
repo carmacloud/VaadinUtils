@@ -17,7 +17,7 @@ public class SplitTextField extends TextField implements SplitField {
     }
 
     /**
-     * trim all leading and trailing white space from text feilds
+     * trim all leading and trailing white space from text fields
      */
     @Override
     public String getValue() {

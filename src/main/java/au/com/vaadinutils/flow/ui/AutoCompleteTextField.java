@@ -25,13 +25,13 @@ public class AutoCompleteTextField<E> extends TextField {
      * {@code
      * sample usage
      * 
-     * 	AutoCompleteTextFieldV2<PostCode> suburb = new AutoCompleteTextFieldV2<>();
+     * 	AutoCompleteTextField<PostCode> suburb = new AutoCompleteTextField<>();
      * 
      * suburb.setQueryListener(new AutoCompleteQueryListener<PostCode>()
      * {
      * 
      * 	    &#64;Override
-     * 	    public void handleQuery(AutoCompleteTextFieldV2<PostCode> field,String queryText)
+     * 	    public void handleQuery(AutoCompleteTextField<PostCode> field,String queryText)
      * 	    {
      * 		    field.addOption(new PostCode(3241),"Title");
      * 	    }
@@ -41,7 +41,7 @@ public class AutoCompleteTextField<E> extends TextField {
      * 	{
      * 	    
      * 	    &#64;Override
-     * 	    public void optionSelected(AutoCompleteTextFieldV2<PostCode> field, PostCode option)
+     * 	    public void optionSelected(AutoCompleteTextField<PostCode> field, PostCode option)
      * 	    {
      * 		field.setValue(option.getSuburb());
      * 	    }

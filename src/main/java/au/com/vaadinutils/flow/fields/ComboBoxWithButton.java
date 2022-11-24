@@ -8,31 +8,31 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasValue.ValueChangeListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.provider.DataProvider;
 
 public class ComboBoxWithButton<T> extends HorizontalLayout {
     private static final long serialVersionUID = -383329492696973793L;
     private Button button;
     private final ComboBox<T> field;
+    private String label;
+    private DataProvider<T, String> dataProvider;
 
     public ComboBoxWithButton(final String caption) {
         this(caption, null);
     }
 
-    public ComboBoxWithButton(final String caption, final Button button) {
-        final HorizontalLayout layout = new HorizontalLayout();
-        layout.setSpacing(false);
+    public ComboBoxWithButton(final String label, final Button button) {
+        this.setWidthFull();
+        setSpacing(true);
         if (button != null) {
             this.setButton(button);
         } else {
             this.setButton(new Button());
         }
-        field = createField();
-        final Span label = new Span(caption);
-        label.getElement().getStyle().set("font-size", "x-small");
+        field = createField(label);
 
-        setAlignItems(Alignment.CENTER);
+        setAlignItems(Alignment.END);
         add(field, this.button);
     }
 
@@ -40,8 +40,9 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
         field.setValue(itemId);
     }
 
-    private ComboBox<T> createField() {
-        return new ComboBox<T>();
+    private ComboBox<T> createField(final String label) {
+        this.label = label;
+        return new ComboBox<T>(label);
     }
 
     public ComboBox<T> getField() {
@@ -55,8 +56,12 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
     public void setButton(Button button) {
         this.button = button;
     }
+    
+    public void setFieldWidth(final String width) {
+        field.setWidth(width);
+    }
 
-    public void addValueChangerListener(
+    public void addValueChangeListener(
             ValueChangeListener<? super ComponentValueChangeEvent<ComboBox<T>, T>> listener) {
         field.addValueChangeListener(listener);
     }
@@ -67,5 +72,31 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
 
     public void setItems(final List<T> items) {
         field.setItems(items);
+    }
+
+    public void setDataProvider(final DataProvider<T, String> dataProvider) {
+        this.dataProvider = dataProvider;
+        field.setDataProvider(dataProvider);
+    }
+
+    public String getLabel() {
+        return this.label;
+    }
+    
+    public void setLabel(final String label) {
+        this.label = label;
+        this.field.setLabel(label);
+    }
+    
+    public T getValue() {
+        return field.getValue();
+    }
+
+    public void setValue(final T newFieldValue) {
+        field.setValue(newFieldValue);
+    }
+    
+    public void refresh() {
+        this.dataProvider.refreshAll();
     }
 }
