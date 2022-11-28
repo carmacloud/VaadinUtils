@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.base.Preconditions;
+import com.vaadin.componentfactory.gridlayout.GridLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasLabel;
@@ -54,7 +55,7 @@ public class FormHelper<E extends CrudEntity> {
     public static final int DEFAULT_PAGE_SIZE = 45;
 
     private final Class<E> entityClass;
-    private final HasComponents layout;
+    private final Component layout;
     private final Binder<E> binder;
 
     /**
@@ -71,7 +72,7 @@ public class FormHelper<E extends CrudEntity> {
      * 
      * @param layout The layout to add components to.
      */
-    public FormHelper(final HasComponents layout) {
+    public FormHelper(final Component layout) {
         this(null, layout, null);
     }
 
@@ -93,7 +94,7 @@ public class FormHelper<E extends CrudEntity> {
      * @param layout      the layout to add components to.
      * @param binder      The binder to bind to.
      */
-    public FormHelper(final Class<E> entityClass, final HasComponents layout, final Binder<E> binder) {
+    public FormHelper(final Class<E> entityClass, final Component layout, final Binder<E> binder) {
         this.entityClass = entityClass;
         this.layout = layout;
         this.binder = binder;
@@ -127,7 +128,7 @@ public class FormHelper<E extends CrudEntity> {
         field.setClearButtonVisible(true);
         field.setId(entityClass + "-" + bindingProperty + "-" + caption);
         final Class<?> propertyJavaType = propertyAttribute.getType().getJavaType();
-        Converter<String, ?> converter;
+        final Converter<String, ?> converter;
         if (propertyJavaType.equals(Long.class)) {
             converter = new LongNoGroupingConverter("Error");
         } else if (propertyJavaType.equals(Double.class)) {
@@ -525,7 +526,8 @@ public class FormHelper<E extends CrudEntity> {
      * supplied through the constructor is actually a FormLayout. If so, the
      * captions are used to add as a separate caption on the FormItem and removed
      * from the component. Otherwise the component is just added directly to the
-     * form, allowing it to decide the flex and layout.
+     * form, allowing it to decide the flex and layout. Extra Note: GridLayout does
+     * not extend HasComponents, so need to trap separately to add components to it.
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private void addComponentIfRequired(final Component field) {
@@ -552,8 +554,10 @@ public class FormHelper<E extends CrudEntity> {
                     }
                 }
                 ((FormLayout) layout).addFormItem(field, caption);
+            } else if (layout instanceof GridLayout) {
+                ((GridLayout) layout).addComponent(field);
             } else {
-                layout.add(field);
+                ((HasComponents) layout).add(field);
             }
         }
     }
