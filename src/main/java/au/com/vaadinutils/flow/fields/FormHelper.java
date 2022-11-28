@@ -151,9 +151,9 @@ public class FormHelper<E extends CrudEntity> {
             }
         } else {
             if (validator != null) {
-                binder.forField(field).withValidator(validator).bind(bindingProperty);
+                binder.forField(field).withNullRepresentation("").withValidator(validator).bind(bindingProperty);
             } else {
-                binder.forField(field).bind(bindingProperty);
+                binder.forField(field).withNullRepresentation("").bind(bindingProperty);
             }
         }
 
@@ -237,9 +237,9 @@ public class FormHelper<E extends CrudEntity> {
         field.setWidthFull();
         field.setClearButtonVisible(true);
         if (validator != null) {
-            binder.forField(field).withValidator(validator).bind(bindingProperty);
+            binder.forField(field).withNullRepresentation("").withValidator(validator).bind(bindingProperty);
         } else {
-            binder.forField(field).bind(bindingProperty);
+            binder.forField(field).withNullRepresentation("").bind(bindingProperty);
         }
         field.setId(entityClass + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
