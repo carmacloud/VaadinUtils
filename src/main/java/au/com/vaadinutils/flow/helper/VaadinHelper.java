@@ -58,9 +58,22 @@ public class VaadinHelper {
      */
     public static final String CARMA_GREEN = "#008000";
     /**
-     * Standard carma colour red for orange
+     * Standard carma colour orange
      */
     public static final String CARMA_ORANGE = "#FF9900";
+    /**
+     * Standard carma colour light grey
+     */
+    public static final String CARMA_LIGHT_GREY = "#6C6D6F";
+    /**
+     * Standard carma colour black. Should match the primary text colour.
+     */
+    public static final String CARMA_BLACK = "#131415";
+    /**
+     * Standard carma colour dark black. Black, no shading or other variations.
+     */
+    public static final String CARMA_DARK_BLACK = "#000000";
+    
     private static final DatePickerI18n DATE_FORMAT_I18N = new DatePickerI18n();
 
     /**
