@@ -18,8 +18,6 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.datepicker.DatePicker.DatePickerI18n;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
@@ -64,8 +62,6 @@ public class VaadinHelper {
      */
     public static final String CARMA_ORANGE = "#FF9900";
     private static final DatePickerI18n DATE_FORMAT_I18N = new DatePickerI18n();
-
-//    public static final String
 
     /**
      * Given the full file path (on the local filesystem) to a data file, return the
@@ -133,83 +129,90 @@ public class VaadinHelper {
     }
 
     /**
-     * Method to display a {@link Notification} with a caption, the length of time
-     * to display (0 displays Notification until user closes the screen) and the
-     * {@link NotificationType}.
+     * Method to display a {@link Notification} with a caption and the
+     * {@link NotificationType}.<br>
+     * The duration the dialog stays open is preset to the following values;<br>
+     * Error: no duration, user will need to click the dialog.<br>
+     * Warning: 5 seconds, or the user can click the dialog.<br>
+     * Tray: 3 seconds, or the user can click the dialog.<br>
+     * Info: 3 seconds, or the user can click the dialog.<br>
      * 
-     * @param caption  A {@link String} being the caption.
-     * @param duration An <code>int</code> being the duration in milliseconds the
-     *                 {@link Notification} is displayed.
-     * @param type     A {@link NotificationType} that determines the colour and
-     *                 positioning of the {@link Notification}.
+     * @param caption A {@link String} being the caption.
+     * @param type    A {@link NotificationType} that determines the colour and
+     *                positioning of the {@link Notification}.
      */
-    public static void notificationDialog(final String caption, final int duration, final NotificationType type) {
-        createNotification(caption, duration, type, new Span());
+    public static void notificationDialog(final String caption, final NotificationType type) {
+        createNotification(caption, type, new Span());
     }
 
     /**
      * Method to display a {@link Notification} with a caption, optional message
-     * body, the length of time to display (0 displays Notification until user
-     * closes the screen) and the {@link NotificationType}.
+     * body and the {@link NotificationType}.<br>
+     * The duration the dialog stays open is preset to the following values;<br>
+     * Error: no duration, user will need to click the dialog.<br>
+     * Warning: 5 seconds, or the user can click the dialog.<br>
+     * Tray: 3 seconds, or the user can click the dialog.<br>
+     * Info: 3 seconds, or the user can click the dialog.<br>
      * 
-     * @param caption  A {@link String} being the caption.
-     * @param message  A {@link String} being the message body.
-     * @param duration An <code>int</code> being the duration in milliseconds the
-     *                 {@link Notification} is displayed.
-     * @param type     A {@link NotificationType} that determines the colour and
-     *                 positioning of the {@link Notification}.
+     * @param caption A {@link String} being the caption.
+     * @param message A {@link String} being the message body.
+     * @param type    A {@link NotificationType} that determines the colour and
+     *                positioning of the {@link Notification}.
      */
-    public static void notificationDialog(final String caption, final String message, final int duration,
-            final NotificationType type) {
+    public static void notificationDialog(final String caption, final String message, final NotificationType type) {
         final Span contents = new Span(new Text(message));
-        createNotification(caption, duration, type, contents);
+        createNotification(caption, type, contents);
     }
 
     /**
-     * Method to display a {@link Notification} with a caption, optional component,
-     * the length of time to display (0 displays Notification until user closes the
-     * screen) and the {@link NotificationType}.
+     * Method to display a {@link Notification} with a caption, optional component
+     * and the {@link NotificationType}.<br>
+     * The duration the dialog stays open is preset to the following values;<br>
+     * Error: no duration, user will need to click the dialog.<br>
+     * Warning: 5 seconds, or the user can click the dialog.<br>
+     * Tray: 3 seconds, or the user can click the dialog.<br>
+     * Info: 3 seconds, or the user can click the dialog.<br>
      * 
      * @param caption   A {@link String} being the caption.
      * @param component A {@link Component} being a layout or field to embed in the
      *                  {@link Notification}.
-     * @param duration  An <code>int</code> being the duration in milliseconds the
-     *                  {@link Notification} is displayed.
      * @param type      A {@link NotificationType} that determines the colour and
      *                  positioning of the {@link Notification}.
      */
-    public static void notificationDialog(final String caption, final Component component, final int duration,
+    public static void notificationDialog(final String caption, final Component component,
             final NotificationType type) {
         final Span contents = new Span(component);
-        createNotification(caption, duration, type, contents);
+        createNotification(caption, type, contents);
     }
 
-    private static void createNotification(final String caption, final int duration, final NotificationType type,
-            final Span contents) {
+    private static void createNotification(final String caption, final NotificationType type, final Span contents) {
         final Notification notification = new Notification();
         final HorizontalLayout header = new HorizontalLayout(new Text(caption));
+        header.addClickListener(e -> {
+            notification.close();
+        });
         header.setAlignItems(Alignment.CENTER);
         header.setSpacing(false);
         header.setWidthFull();
-        final String textColour;
         Position position = Position.MIDDLE;
+        final int duration;
         switch (type) {
         case ERROR:
             header.addClassName("notification-error");
-            textColour = CARMA_ERROR;
+            duration = 0;
             break;
         case WARNING:
             header.addClassName("notification-warning");
-            textColour = CARMA_BLUE;
+            duration = 5000;
             break;
         case TRAY:
             header.addClassName("notification-tray");
-            textColour = "#0f0ff5";
+            duration = 3000;
             position = Position.BOTTOM_END;
             break;
         default:
             header.addClassName("notification-info");
-            textColour = "#000000";
+            duration = 3000;
             break;
         }
 
@@ -219,30 +222,12 @@ public class VaadinHelper {
         notification.add(layout);
         notification.setDuration(duration);
         notification.setPosition(position);
-
-        if (duration == 0) {
-            header.add(addCloseButton(notification, textColour));
-            layout.getElement().setProperty("title", "To close, click the X icon.");
-        }
+        layout.getElement().setProperty("title", "To close, click on the text.");
 
         notification.addDetachListener(listener -> {
             notification.close();
         });
         notification.open();
-    }
-
-    private static Icon addCloseButton(final Notification notification, final String iconColour) {
-        final Icon icon = VaadinIcon.CLOSE.create();
-        icon.setColor(iconColour);
-        icon.setSize("12px");
-
-        icon.addClickListener(event -> {
-            notification.close();
-        });
-
-        icon.getElement().getStyle().set("margin-left", "auto");
-
-        return icon;
     }
 
     /**
