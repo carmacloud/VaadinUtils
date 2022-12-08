@@ -32,6 +32,7 @@ public class WizardProgressBar extends VerticalLayout implements WizardProgressL
         progressBar.setWidth("100%");
         progressBar.setHeight("10px");
         progressBar.addClassName("WizardProgressBar");
+        progressBar.addThemeName("transparent");
         captionLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
         captionLayout.setSpacing(false);
         captionLayout.setWidth("100%");
