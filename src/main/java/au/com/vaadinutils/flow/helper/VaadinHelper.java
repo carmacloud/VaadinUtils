@@ -201,9 +201,6 @@ public class VaadinHelper {
     private static void createNotification(final String caption, final NotificationType type, final Span contents) {
         final Notification notification = new Notification();
         final HorizontalLayout header = new HorizontalLayout(new Text(caption));
-        header.addClickListener(e -> {
-            notification.close();
-        });
         header.setAlignItems(Alignment.CENTER);
         header.setSpacing(false);
         header.setWidthFull();
@@ -230,6 +227,9 @@ public class VaadinHelper {
         }
 
         final VerticalLayout layout = new VerticalLayout(header, contents);
+        layout.addClickListener(e -> {
+            notification.close();
+        });
         layout.setMinWidth("100px");
         layout.setMaxWidth("300px");
         notification.add(layout);
