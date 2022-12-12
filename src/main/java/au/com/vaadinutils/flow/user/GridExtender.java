@@ -361,15 +361,20 @@ public class GridExtender<T> {
                     column.setFlexGrow(0);
                 }
             });
-        } else {
-            if (!resizableColumns.isEmpty()) {
-                resizableColumns.forEach(column -> {
-                    if (!column.getKey().equalsIgnoreCase(ACTION_MENU)) {
-                        column.setResizable(true);
-                        column.setFlexGrow(0);
-                    }
-                });
-            }
+        } else if (!resizableColumns.isEmpty()) {
+            resizableColumns.forEach(column -> {
+                if (!column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                    column.setResizable(true);
+                    column.setFlexGrow(0);
+                }
+            });
+        }else {
+            // Set columns resizable if they don't have  setFlexGrow(0)
+            grid.getColumns().forEach(column -> {
+                if (column.getKey() != null && !column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                    column.setResizable(column.getFlexGrow() != 0);
+                }
+            });
         }
     }
 
