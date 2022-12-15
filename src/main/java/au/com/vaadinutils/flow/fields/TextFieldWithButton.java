@@ -1,12 +1,8 @@
 package au.com.vaadinutils.flow.fields;
 
+import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
 import com.vaadin.flow.component.HasValue.ValueChangeListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -17,7 +13,6 @@ import com.vaadin.flow.component.textfield.TextField;
  */
 public class TextFieldWithButton extends HorizontalLayout {
     private static final long serialVersionUID = -6761979395677678269L;
-    private final Logger logger = LogManager.getLogger();
     private Button button;
     private TextField field;
     private String label;
