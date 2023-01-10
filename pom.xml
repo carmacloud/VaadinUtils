@@ -20,7 +20,7 @@
 		<!-- Testing -->
 		<junit.version>4.13.2</junit.version>
 		<!-- Vaadin 14 properties -->
-		<vaadin.version>14.9.3</vaadin.version>
+		<vaadin.version>14.9.4</vaadin.version>
 	</properties>
 
 	<repositories>
@@ -257,11 +257,6 @@
 			<version>3.2.1-nj</version>
 		</dependency>
 		<dependency>
-			<groupId>org.vaadin.addons</groupId>
-			<artifactId>aceeditor</artifactId>
-			<version>0.8.14</version>
-		</dependency>
-		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>${guava.version}</version>
@@ -398,12 +393,6 @@
 			<groupId>org.vaadin.addons</groupId>
 			<artifactId>vaadin-sliderpanel</artifactId>
 			<version>1.4.2</version>
-		</dependency>
-		<!-- Remove after Vaadin 14 migration -->
-		<dependency>
-			<groupId>org.vaadin.alump.gridstack</groupId>
-			<artifactId>gridstack-addon</artifactId>
-			<version>0.3.1-nj</version>
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
