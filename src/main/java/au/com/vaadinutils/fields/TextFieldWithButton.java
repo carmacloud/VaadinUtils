@@ -5,7 +5,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.TextField;
 
 /**
- * Retain, but update UI for Flow
+ * Migrated, but retained until dependent classes are removed.
  */
 public class TextFieldWithButton extends FieldWithButton<String> {
     private static final long serialVersionUID = 1L;
