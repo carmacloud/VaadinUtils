@@ -130,11 +130,11 @@ public class FormHelper<E extends CrudEntity> {
         final Class<?> propertyJavaType = propertyAttribute.getType().getJavaType();
         final Converter<String, ?> converter;
         if (propertyJavaType.equals(Long.class)) {
-            converter = new LongNoGroupingConverter("Error");
+            converter = new LongNoGroupingConverter("Error, number must be a whole number.");
         } else if (propertyJavaType.equals(Double.class)) {
-            converter = new StringToDoubleConverter("Error");
+            converter = new StringToDoubleConverter("Error, numbeer format is incorrect.");
         } else if (propertyJavaType.equals(BigDecimal.class)) {
-            converter = new StringToBigDecimalConverter("Error");
+            converter = new StringToBigDecimalConverter("Error, number format is incorrect.");
         } else if (propertyJavaType.equals(String.class)) {
             converter = null;
         } else {
