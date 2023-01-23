@@ -46,6 +46,10 @@ public class VaadinHelper {
      */
     public static final String CARMA_DARK_BLUE = "#002C82";
     /**
+     * Standard carma clour blue. Used for formatting artwork not received.
+     */
+    public static final String CARMA_BLUE_MID = "#003366";
+    /**
      * Standard carma colour red for error
      */
     public static final String CARMA_ERROR = "#CC0000";
@@ -54,9 +58,13 @@ public class VaadinHelper {
      */
     public static final String CARMA_RED = "#800000";
     /**
-     * Standard carma colour green
+     * Standard carma colour green. Used for formatting checkbox ticks.
      */
     public static final String CARMA_GREEN = "#008000";
+    /**
+     * Standard carma colour green. Used for formatting artwork received.
+     */
+    public static final String CARMA_GREEN_MID = "#009966";
     /**
      * Standard carma colour orange
      */
@@ -73,7 +81,11 @@ public class VaadinHelper {
      * Standard carma colour dark black. Black, no shading or other variations.
      */
     public static final String CARMA_DARK_BLACK = "#000000";
-    
+    /**
+     * Standard carma colour purple. Used for formatting pipeline sales.
+     */
+    public static final String CARMA_PURPLE = "#7A00A3";
+
     private static final DatePickerI18n DATE_FORMAT_I18N = new DatePickerI18n();
 
     /**
