@@ -3,7 +3,9 @@ package au.com.vaadinutils.flow.fields;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.metamodel.SingularAttribute;
 
@@ -21,6 +23,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.formlayout.FormLayout.FormItem;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -57,6 +60,9 @@ public class FormHelper<E extends CrudEntity> {
     private final Class<E> entityClass;
     private final Component layout;
     private final Binder<E> binder;
+
+    // Store and form items so they can be retrieved and enabled/shown etc.
+    private final Map<Component, FormItem> fieldsWithFormItems = new HashMap<>();
 
     /**
      * Use this if you do not require binding and will add components to a layout
@@ -132,7 +138,7 @@ public class FormHelper<E extends CrudEntity> {
         if (propertyJavaType.equals(Long.class)) {
             converter = new LongNoGroupingConverter("Error, number must be a whole number.");
         } else if (propertyJavaType.equals(Double.class)) {
-            converter = new StringToDoubleConverter("Error, numbeer format is incorrect.");
+            converter = new StringToDoubleConverter("Error, number format is incorrect.");
         } else if (propertyJavaType.equals(BigDecimal.class)) {
             converter = new StringToBigDecimalConverter("Error, number format is incorrect.");
         } else if (propertyJavaType.equals(String.class)) {
@@ -553,7 +559,8 @@ public class FormHelper<E extends CrudEntity> {
                         caption = null;
                     }
                 }
-                ((FormLayout) layout).addFormItem(field, caption);
+                final FormItem formItem = ((FormLayout) layout).addFormItem(field, caption);
+                fieldsWithFormItems.put(field, formItem);
             } else if (layout instanceof GridLayout) {
                 ((GridLayout) layout).addComponent(field);
             } else {
@@ -587,5 +594,9 @@ public class FormHelper<E extends CrudEntity> {
             }
         }
         return field;
+    }
+
+    public Map<Component, FormItem> getFieldsWithFormItems() {
+        return this.fieldsWithFormItems;
     }
 }
