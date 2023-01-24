@@ -276,12 +276,19 @@ public class GridExtender<T> {
         final List<Column<T>> newOrderedColumns = new ArrayList<>();
         // Add the the action column to first position
         newOrderedColumns.add(0, actionColumn);
-        columns.forEach(column -> {
-            // Now add all other columns, except action column, if it exists.
-            if (!column.getKey().equals(actionColumn.getKey())) {
-                newOrderedColumns.add(column);
+        int count = 1;
+        for (Column<T> column : columns) {
+            if (column.getKey() != null) {
+                // Now add all other columns, except action column, if it exists.
+                if (!column.getKey().equals(actionColumn.getKey())) {
+                    newOrderedColumns.add(column);
+                }
+            } else {
+                logger.error("Column #"+ count + " is missing it's key. Make sure all columns ahve keys set." );
+                return;
             }
-        });
+            count++;
+        }
         grid.setColumnOrder(newOrderedColumns);
     }
 
@@ -368,8 +375,8 @@ public class GridExtender<T> {
                     column.setFlexGrow(0);
                 }
             });
-        }else {
-            // Set columns resizable if they don't have  setFlexGrow(0)
+        } else {
+            // Set columns resizable if they don't have setFlexGrow(0)
             grid.getColumns().forEach(column -> {
                 if (column.getKey() != null && !column.getKey().equalsIgnoreCase(ACTION_MENU)) {
                     column.setResizable(column.getFlexGrow() != 0);
