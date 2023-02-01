@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.datepicker.DatePicker.DatePickerI18n;
@@ -186,6 +187,26 @@ public class VaadinHelper {
      */
     public static void notificationDialog(final String caption, final String message, final NotificationType type) {
         final Span contents = new Span(new Text(message));
+        createNotification(caption, type, contents);
+    }
+    
+    /**
+     * Method to display a {@link Notification} with a caption, optional message
+     * body and the {@link NotificationType}.<br>
+     * This method allows add markup HTML to the dialog.<br>
+     * The duration the dialog stays open is preset to the following values;<br>
+     * Error: no duration, user will need to click the dialog.<br>
+     * Warning: 5 seconds, or the user can click the dialog.<br>
+     * Tray: 3 seconds, or the user can click the dialog.<br>
+     * Info: 3 seconds, or the user can click the dialog.<br>
+     * 
+     * @param caption A {@link String} being the caption.
+     * @param message A {@link Html} being the message body.
+     * @param type    A {@link NotificationType} that determines the colour and
+     *                positioning of the {@link Notification}.
+     */
+    public static void notificationDialog(final String caption, final Html message, final NotificationType type) {
+        final Span contents = new Span(message);
         createNotification(caption, type, contents);
     }
 

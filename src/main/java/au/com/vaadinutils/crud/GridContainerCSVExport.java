@@ -17,6 +17,7 @@ import java.util.Set;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 
+import com.opencsv.CSVWriter;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.server.FileDownloader;
@@ -26,11 +27,11 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 
-import com.opencsv.CSVWriter;
+import au.com.vaadinutils.flow.helper.VaadinHelper;
+import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
 import au.com.vaadinutils.flow.jasper.AttachmentType;
 import au.com.vaadinutils.util.PipedOutputStreamWrapper;
 
@@ -89,7 +90,7 @@ public class GridContainerCSVExport<E> {
                     return new ByteArrayInputStream(arrayOutputStream.toByteArray());
                 } catch (Throwable e) {
                     logger.error(e, e);
-                    Notification.show(e.getMessage());
+                    VaadinHelper.notificationDialog(e.getMessage(), NotificationType.ERROR);
                 } finally {
                     Runnable runner = new Runnable() {
 

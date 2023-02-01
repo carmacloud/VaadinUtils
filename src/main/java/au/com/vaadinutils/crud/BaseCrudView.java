@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -61,8 +62,6 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
@@ -80,6 +79,8 @@ import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.EntityManagerRunnable;
 import au.com.vaadinutils.dao.RunnableUI;
 import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
+import au.com.vaadinutils.flow.helper.VaadinHelper;
+import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.menu.Menus;
@@ -258,7 +259,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
             public void drop(DragAndDropEvent event) {
 
                 if (isDirty()) {
-                    Notification.show("You must save first", Type.WARNING_MESSAGE);
+                    VaadinHelper.notificationDialog("You must save first", NotificationType.WARNING);
                     return;
                 }
                 Object draggedItemId = event.getTransferable().getData("itemId");
@@ -942,7 +943,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
             @Override
             public void clicked(ClickEvent event) {
                 if (isDirty()) {
-                    Notification.show("You must Save or Discard your changes first", Type.ERROR_MESSAGE);
+                    VaadinHelper.notificationDialog("You must Save or Discard your changes first", NotificationType.ERROR);
                     return;
                 }
                 newClicked();
@@ -967,10 +968,10 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
                             performAction(entityId, action);
                         }
                     } else {
-                        Notification.show("Please select an Action first.");
+                        VaadinHelper.notificationDialog("Please select an Action first.", NotificationType.WARNING);
                     }
                 } else {
-                    Notification.show("Please select record first.");
+                    VaadinHelper.notificationDialog("Please select record first.", NotificationType.WARNING);
                 }
             }
 
@@ -1090,8 +1091,8 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
                 showNoSelectionMessage();
             }
 
-            Notification.show("Changes discarded.", "Any changes you have made to this record been discarded.",
-                    Type.TRAY_NOTIFICATION);
+            VaadinHelper.notificationDialog("Changes discarded.", "Any changes you have made to this record been discarded.",
+                    NotificationType.TRAY);
             buttonLayout.setDefaultState();
         }
     }
@@ -1156,8 +1157,8 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
             logger.error("Exception trying to delete {} from {}", entityId, entityClass.getCanonicalName());
             logger.error(e, e);
             reloadDataFromDB();
-            Notification.show("An error occurred deleting the record, you may have to delete it's children first",
-                    Type.ERROR_MESSAGE);
+            VaadinHelper.notificationDialog("An error occurred deleting the record, you may have to delete it's children first",
+                    NotificationType.ERROR);
         }
 
     }
@@ -1260,22 +1261,22 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
             entityTable.select(newEntity.getId());
 
             splitPanel.showFirstComponent();
-            Notification.show("Changes Saved", "Any changes you have made have been saved.", Type.HUMANIZED_MESSAGE);
+            VaadinHelper.notificationDialog("Changes Saved", "Any changes you have made have been saved.", NotificationType.INFO);
 
             // return save/edit buttons to default settings
             buttonLayout.setDefaultState();
 
         } catch (org.eclipse.persistence.exceptions.OptimisticLockException e) {
-            Notification.show(LOCKING_EXCEPTION_USER_MESSAGE, Type.ERROR_MESSAGE);
+            VaadinHelper.notificationDialog(LOCKING_EXCEPTION_USER_MESSAGE, NotificationType.ERROR);
         } catch (Exception e) {
             if (e instanceof InvalidValueException) {
                 handleInvalidValueException((InvalidValueException) e);
             } else if (e.getCause() instanceof InvalidValueException) {
                 handleInvalidValueException((InvalidValueException) e.getCause());
             } else if (e.getCause() instanceof org.eclipse.persistence.exceptions.OptimisticLockException) {
-                Notification.show(LOCKING_EXCEPTION_USER_MESSAGE, Type.ERROR_MESSAGE);
+                VaadinHelper.notificationDialog(LOCKING_EXCEPTION_USER_MESSAGE, NotificationType.ERROR);
             } else if (e instanceof javax.persistence.OptimisticLockException) {
-                Notification.show(LOCKING_EXCEPTION_USER_MESSAGE, Type.ERROR_MESSAGE);
+                VaadinHelper.notificationDialog(LOCKING_EXCEPTION_USER_MESSAGE, NotificationType.ERROR);
             } else {
                 ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
             }
@@ -1308,7 +1309,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
         if (m.getMessage() != null && m.getMessage().length() > 0) {
             causeMessage += m.getMessage() + ". ";
         }
-        Notification.show("Please fix the form errors and then try again.\n\n " + causeMessage, Type.ERROR_MESSAGE);
+        VaadinHelper.notificationDialog("Please fix the form errors and then try again.\n\n " + causeMessage, NotificationType.ERROR);
     }
 
     /**
@@ -1370,7 +1371,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
             entityReference.set(EntityManagerProvider.getEntityManager().merge(entityReference.get()));
         } catch (Exception e) {
             if (e.getCause() instanceof OptimisticLockException) {
-                Notification.show(LOCKING_EXCEPTION_USER_MESSAGE, Type.ERROR_MESSAGE);
+                VaadinHelper.notificationDialog(LOCKING_EXCEPTION_USER_MESSAGE, NotificationType.ERROR);
 
             } else {
                 ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
@@ -1442,7 +1443,7 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
                     }
                 } catch (Exception e) {
                     logger.error(e, e);
-                    Notification.show(e.getClass().getSimpleName() + " " + e.getMessage(), Type.ERROR_MESSAGE);
+                    VaadinHelper.notificationDialog(e.getClass().getSimpleName() + " " + e.getMessage(), NotificationType.ERROR);
                 }
             }
         });
@@ -1967,8 +1968,8 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
             }
         } catch (EntityNotFoundException e) {
             Page.getCurrent().reload();
-            Notification.show("The record seems to have been deleted by another user, reloading...",
-                    Type.ERROR_MESSAGE);
+            VaadinHelper.notificationDialog("The record seems to have been deleted by another user, reloading...",
+                    NotificationType.ERROR);
 
         }
     }

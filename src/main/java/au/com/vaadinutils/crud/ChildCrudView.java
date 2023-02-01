@@ -29,12 +29,12 @@ import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.UnsupportedFilterException;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
+import au.com.vaadinutils.flow.helper.VaadinHelper;
+import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
 
 /**
  * child crud does not support nesting.
@@ -276,10 +276,10 @@ public abstract class ChildCrudView<P extends CrudEntity, E extends ChildCrudEnt
                 loggerChildCrud.warn(changeInItems
                         + ", The number of items in the container is not the same as it was before the refresh. ");
             } else {
-                Notification.show(
+                VaadinHelper.notificationDialog(
                         "Some of the items may not have been saved, or another user may have been editing the same record at the same time.\n\n"
                                 + "You should refresh the browser page (press F5) and check that your changes were correctly saved.",
-                        Type.ERROR_MESSAGE);
+                        NotificationType.ERROR);
                 loggerChildCrud.error(changeInItems
                         + ", The number of items in the container is not the same as it was before the refresh. "
                         + this.getClass().getSimpleName() + " " + numberOfChildren + " != "
@@ -640,13 +640,13 @@ public abstract class ChildCrudView<P extends CrudEntity, E extends ChildCrudEnt
                 for (ChildCrudListener<E> child : getChildCrudListeners()) {
                     child.saveEditsToTemp();
                 }
-                // Notification.show("Changes Saved",
+                // VaadinHelper.notificationDialog("Changes Saved",
                 // "Any changes you have made have been saved.",
                 // Type.TRAY_NOTIFICATION);
 
             } catch (PersistenceException e) {
                 loggerChildCrud.error(e, e);
-                Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+                VaadinHelper.notificationDialog(e.getMessage(), NotificationType.ERROR);
             } catch (ConstraintViolationException e) {
                 loggerChildCrud.error(e, e);
                 FormHelper.showConstraintViolation(e);
@@ -657,11 +657,11 @@ public abstract class ChildCrudView<P extends CrudEntity, E extends ChildCrudEnt
                     handleInvalidValueException((InvalidValueException) e.getCause());
                 } else {
                     loggerChildCrud.error(e, e);
-                    Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+                    VaadinHelper.notificationDialog(e.getMessage(), NotificationType.ERROR);
                 }
             } catch (Exception e) {
                 loggerChildCrud.error(e, e);
-                Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+                VaadinHelper.notificationDialog(e.getMessage(), NotificationType.ERROR);
             }
 
             finally {

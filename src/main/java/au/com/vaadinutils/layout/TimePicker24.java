@@ -21,13 +21,14 @@ import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeButton;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
+
+import au.com.vaadinutils.flow.helper.VaadinHelper;
+import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
 
 /**
  * @deprecated Replaced in Vaadin 14 migration.
@@ -107,7 +108,7 @@ public class TimePicker24 extends HorizontalLayout implements Field {
                             setValue(parsedDate);
                         }
                     } catch (InvalidValueException e) {
-                        Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+                        VaadinHelper.notificationDialog(e.getMessage(), NotificationType.ERROR);
                     }
                 }
             }

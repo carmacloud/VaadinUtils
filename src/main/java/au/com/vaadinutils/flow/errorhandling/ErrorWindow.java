@@ -24,10 +24,11 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
+
+import au.com.vaadinutils.flow.helper.VaadinHelper;
+import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
 
 /**
  * All finished, except need to find replacement for Screenshot addon.
@@ -261,7 +262,7 @@ public class ErrorWindow {
             } catch (Exception e) {
                 logger.error(e, e);
             } finally {
-                Notification.show("Error sending error report", 5000, Position.MIDDLE);
+                VaadinHelper.notificationDialog("Error sending error report", NotificationType.ERROR);
                 window.close();
             }
         });

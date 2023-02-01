@@ -4,8 +4,9 @@ import org.apache.logging.log4j.Logger;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
+
+import au.com.vaadinutils.flow.helper.VaadinHelper;
+import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
 
 /**
  * @deprecated Replaced in V14 migration.
@@ -46,7 +47,7 @@ public class CrudActionDelete<E extends CrudEntity> implements CrudAction<E> {
     @Override
     public void exec(final BaseCrudView<E> crud, final EntityItem<E> entity) {
         if (entity == null || entity.getEntity() == null) {
-            Notification.show("No record selected to delete.", Type.ERROR_MESSAGE);
+            VaadinHelper.notificationDialog("No record selected to delete.", NotificationType.ERROR);
             return;
         }
         DeleteVetoResponseData response = crud.canDelete(entity.getEntity());
@@ -68,15 +69,15 @@ public class CrudActionDelete<E extends CrudEntity> implements CrudAction<E> {
                                 action.delete(entity);
                             } catch (Exception e) {
                                 logger.error(e, e);
-                                Notification.show("Errors occurred when deleting " + e.getMessage(),
-                                        Type.ERROR_MESSAGE);
+                                VaadinHelper.notificationDialog("Errors occurred when deleting " + e.getMessage(),
+                                        NotificationType.ERROR);
                             }
                         }
                         crud.delete();
                     }, "Cancel", cancel -> {
                     }).open();
         } else {
-            Notification.show(response.getMessage(), Type.ERROR_MESSAGE);
+            VaadinHelper.notificationDialog(response.getMessage(), NotificationType.ERROR);
 
         }
 

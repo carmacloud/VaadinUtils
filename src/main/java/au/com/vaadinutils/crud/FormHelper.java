@@ -49,8 +49,6 @@ import com.vaadin.ui.CustomField;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.Slider;
 import com.vaadin.ui.TextArea;
@@ -81,6 +79,8 @@ import au.com.vaadinutils.fields.CKEditorEmailField.ConfigModifier;
 import au.com.vaadinutils.fields.ColorPickerField;
 import au.com.vaadinutils.fields.ComboBoxWithSearchField;
 import au.com.vaadinutils.fields.DataBoundButton;
+import au.com.vaadinutils.flow.helper.VaadinHelper;
+import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
 
 /**
  * @deprecated Replaced in V14 migration.
@@ -1362,7 +1362,7 @@ public class FormHelper<E> implements Serializable {
 
         }
         logger.error(sb.toString());
-        Notification.show(sb.toString(), Type.ERROR_MESSAGE);
+        VaadinHelper.notificationDialog(sb.toString(), NotificationType.ERROR);
     }
 
     protected AbstractLayout getForm() {
