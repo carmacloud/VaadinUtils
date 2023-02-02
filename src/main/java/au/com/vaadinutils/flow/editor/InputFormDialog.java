@@ -69,7 +69,7 @@ public class InputFormDialog extends Dialog {
         }
 
         if (form instanceof FormLayout) {
-            setWidth("500");
+            setWidth("500px");
         }
     }
 
