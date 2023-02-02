@@ -16,6 +16,8 @@ import org.apache.logging.log4j.Logger;
 import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.mpr.LegacyWrapper;
 import com.vaadin.server.ErrorMessage;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
@@ -26,9 +28,7 @@ import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 
 /**
@@ -194,18 +194,20 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
             clearValue();
         }
 
-        final Window window = new Window(title);
+        final Dialog window = new Dialog();
         window.setModal(true);
         window.setResizable(false);
-        window.setWidth("430");
-        window.setClosable(false);
+        window.setWidth("450px");
+        window.setCloseOnEsc(false);
+        window.setCloseOnOutsideClick(false);
 
         final HorizontalLayout layout = new HorizontalLayout();
+        layout.addComponent(new Label(title));
         layout.setSizeFull();
         layout.setSpacing(true);
         layout.setStyleName(Reindeer.BUTTON_SMALL);
 
-        displayTime.setWidth("100");
+        displayTime.setWidth("100px");
 
         displayTime.addValueChangeListener(new ValueChangeListener() {
 
@@ -224,25 +226,25 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         });
 
         final VerticalLayout hourPanelLabelWrapper = new VerticalLayout();
-        hourPanelLabelWrapper.setWidth("245");
+        hourPanelLabelWrapper.setWidth("245pxtitle");
 
         final Label hourLabel = new Label("Hour");
 
-        hourLabel.setWidth("250");
+        hourLabel.setWidth("250px");
         final HorizontalLayout innerHourLabelPanel = new HorizontalLayout();
 
         innerHourLabelPanel.addComponent(hourLabel);
-        innerHourLabelPanel.setWidth("100");
+        innerHourLabelPanel.setWidth("100px");
         hourPanelLabelWrapper.addComponent(innerHourLabelPanel);
 
         final VerticalLayout minuteLabelWrapper = new VerticalLayout();
-        minuteLabelWrapper.setWidth("60");
+        minuteLabelWrapper.setWidth("60px");
         final Label minuteLabel = new Label("Minute");
 
-        minuteLabel.setWidth("45");
+        minuteLabel.setWidth("45px");
         final VerticalLayout innerMinuteLabelPanel = new VerticalLayout();
         innerMinuteLabelPanel.addComponent(minuteLabel);
-        innerMinuteLabelPanel.setWidth("45");
+        innerMinuteLabelPanel.setWidth("45px");
 
         minuteLabelWrapper.addComponent(innerMinuteLabelPanel);
 
@@ -278,7 +280,7 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         okcancel.setSizeFull();
         final Button ok = new Button("OK");
 
-        ok.setWidth("75");
+        ok.setWidth("75px");
         ok.addClickListener(new ClickListener() {
 
             private static final long serialVersionUID = 1L;
@@ -291,7 +293,7 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         });
 
         final Button cancel = new Button("Cancel");
-        cancel.setWidth("75");
+        cancel.setWidth("75px");
         cancel.addClickListener(new ClickListener() {
 
             private static final long serialVersionUID = 1L;
@@ -303,7 +305,7 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         });
 
         final Button clear = new Button("Clear");
-        clear.setWidth("75");
+        clear.setWidth("75px");
         clear.addClickListener(new ClickListener() {
 
             private static final long serialVersionUID = 1L;
@@ -326,12 +328,11 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
 
         wrapper.addComponent(layout);
         wrapper.addComponent(okcancel);
-        window.setContent(wrapper);
-        wrapper.setMargin(true);
-        wrapper.setSpacing(true);
+        window.add(new LegacyWrapper(wrapper));
+        wrapper.setMargin(false);
+        wrapper.setSpacing(false);
 
-        UI.getCurrent().addWindow(window);
-
+        window.open();
     }
 
     protected void addMinuteButtons(HorizontalLayout minuteButtonPanel, int rows, int cols) {

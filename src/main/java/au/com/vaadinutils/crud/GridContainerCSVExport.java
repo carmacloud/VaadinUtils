@@ -20,15 +20,16 @@ import org.jsoup.Jsoup;
 import com.opencsv.CSVWriter;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
+import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.mpr.LegacyWrapper;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.StreamResource.StreamSource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.VerticalLayout;
 
 import au.com.vaadinutils.flow.helper.VaadinHelper;
 import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
@@ -49,21 +50,20 @@ public class GridContainerCSVExport<E> {
 
         this.grid = grid;
         this.headingsSet = headingsSet;
-        final Window window = new Window();
-        window.setCaption("Download " + fileName + " CSV data");
-        window.center();
-        window.setHeight("100");
-        window.setWidth("300");
-        window.setResizable(false);
+        final Dialog window = new Dialog();
+        window.setHeight("100px");
+        window.setWidth("300px");
         window.setModal(true);
 
-        final HorizontalLayout layout = new HorizontalLayout();
+        final VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
         layout.setMargin(true);
 
-        window.setContent(layout);
+        window.setCloseOnEsc(false);
+        window.setCloseOnOutsideClick(false);
 
-        UI.getCurrent().addWindow(window);
+        window.add(new LegacyWrapper(layout));
+        window.open();
         window.setVisible(true);
 
         final Button downloadButton = createDownloadButton(fileName, window);
@@ -72,7 +72,7 @@ public class GridContainerCSVExport<E> {
         layout.setComponentAlignment(downloadButton, Alignment.MIDDLE_CENTER);
     }
 
-    private Button createDownloadButton(final String fileName, final Window window) {
+    private Button createDownloadButton(final String fileName, final Dialog window) {
         final Button downloadButton = new Button("Download CSV Data");
         downloadButton.setDisableOnClick(true);
 
@@ -92,28 +92,15 @@ public class GridContainerCSVExport<E> {
                     logger.error(e, e);
                     VaadinHelper.notificationDialog(e.getMessage(), NotificationType.ERROR);
                 } finally {
-                    Runnable runner = new Runnable() {
-
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(500);
-
-                                UI.getCurrent().access(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        window.close();
-
-                                    }
-                                });
-                            } catch (InterruptedException e) {
-                                logger.error(e, e);
-                            }
-
-                        }
-                    };
-                    new Thread(runner, "Dialog closer").start();
+                    final UI ui = UI.getCurrent();
+                    try {
+                        Thread.sleep(500);
+                        ui.access(() -> {
+                            window.close();
+                        });
+                    } catch (InterruptedException e1) {
+                        logger.error(e1, e1);
+                    }
                 }
                 return null;
             }
