@@ -495,4 +495,11 @@ public enum EntityManagerProvider {
     public static void evictCache(final Class<?> entityClass, final Object key) {
         INSTANCE.entityManagerThreadLocal.get().getEntityManagerFactory().getCache().evict(entityClass, key);
     }
+    
+    /**
+     * Tests if the transaction is active.
+     */
+    public static boolean isActive() {
+        return INSTANCE.entityManagerThreadLocal.get().getTransaction().isActive();
+    }
 }
