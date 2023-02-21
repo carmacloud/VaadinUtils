@@ -11,6 +11,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 
@@ -63,7 +64,10 @@ public class Wizard extends VerticalLayout {
         footer.add(cancelButton, backButton, nextButton, finishButton);
         footer.setJustifyContentMode(JustifyContentMode.END);
 
-        addAndExpand(contentPanel);
+        final Scroller scroller = new Scroller(contentPanel);
+        scroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
+        scroller.setSizeFull();
+        this.addAndExpand(scroller);
 
         setAlignSelf(Alignment.END, footer);
         add(footer);
