@@ -19,6 +19,8 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
+import au.com.vaadinutils.flow.helper.VaadinHelper;
+import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
 
 public class InputFormDialog extends Dialog {
 
@@ -28,6 +30,7 @@ public class InputFormDialog extends Dialog {
     private Button cancelButton;
     private Button ok;
     private boolean validationError = false;
+    private boolean layoutIsForm = false;
 
     public InputFormDialog(String title, HasValidation primaryFocusField, final Component form,
             final InputFormDialogRecipient recipient) {
@@ -70,6 +73,7 @@ public class InputFormDialog extends Dialog {
 
         if (form instanceof FormLayout) {
             setWidth("500px");
+            layoutIsForm = true;
         }
     }
 
@@ -81,12 +85,14 @@ public class InputFormDialog extends Dialog {
             public void onComponentEvent(ClickEvent<Button> event) {
                 validationError = false;
                 form.getChildren().forEach(child -> {
-                    if (!validationError) {
+                    if (!validationError && !layoutIsForm) {
                         try {
                             final boolean isInvalid = ((HasValidation) child).isInvalid();
                             final String errorMessage = ((HasValidation) child).getErrorMessage();
                             if (isInvalid) {
                                 logger.warn("Form errors, Input Form closing '" + errorMessage + "'");
+                                VaadinHelper.notificationDialog("Form errors, '" + errorMessage + "'",
+                                        NotificationType.WARNING);
                                 validationError = true;
                             }
                         } catch (Exception e) {
@@ -94,7 +100,9 @@ public class InputFormDialog extends Dialog {
                         }
                     }
                 });
-                recipient.onOK();
+                if (!validationError) {
+                    recipient.onOK();
+                }
                 close();
             }
         });
