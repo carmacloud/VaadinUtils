@@ -284,7 +284,7 @@ public class GridExtender<T> {
                     newOrderedColumns.add(column);
                 }
             } else {
-                logger.error("Column #"+ count + " is missing it's key. Make sure all columns ahve keys set." );
+                logger.error("Column #" + count + " is missing it's key. Make sure all columns have keys set.");
                 return;
             }
             count++;
@@ -324,7 +324,8 @@ public class GridExtender<T> {
             final String keyStub = uniqueId + "-visible";
             final String storedVisibleSetting = MemberSettingsStorageFactory.getUserSettingsStorage()
                     .get(keyStub + "-" + column.getKey());
-            menuItem.setChecked(storedVisibleSetting.equals("true") ? true : column.isVisible());
+            menuItem.setChecked((storedVisibleSetting.equals("true") || storedVisibleSetting == null
+                    || storedVisibleSetting.isEmpty()) ? true : false);
         }
     }
 
