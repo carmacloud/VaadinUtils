@@ -10,7 +10,9 @@ import org.vaadin.openesignforms.ckeditor.CKEditorTextField;
  * This implementation needs to be completed as we need to turn it into a full
  * blown widget for it to actually work.
  * 
- * @deprecated Replaced in Vaadin 14 migration.
+ * Although there is a replacement in Vaadin 14, it is not sophisticated enough
+ * for use with templates.<br>
+ * Still using this one until a suitable solution is found.
  */
 
 public class CKEditorEmailField extends CKEditorTextField {
