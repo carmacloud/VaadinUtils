@@ -30,17 +30,17 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
  * To use, call after adding columns, supplying the grid and a unique Id. This
  * class will do the rest.<br>
  * For the grid itself, the columns to be processed will need to have an
- * explicit key set, e.g. <br>
- * 
+ * explicit key set, e.g. 
  * <pre>{@code
- * 
- * grid.addColumn(<ValueProvider>).setWidth("150px").setFlexGrow(0).setHeader("ColumnHeader")
- *         .setKey("UniqueColumnName");
+ * grid.addColumn(<ValueProvider>).setHeader("ColumnHeader").setKey("UniqueColumnName");
  * }</pre>
  *
  * The calls to add the action icon and set context menu must always be before
  * adding columns to the grid, otherwise the action column ends up at the end of
- * the grid. We want it as the very first.
+ * the grid. We want it as the very first.<br>
+ * <br>
+ * Note: columns that are set as frozen before calling init() will not show in
+ * the context menu list of columns that can be shown or hidden.<br>
  * 
  * @param <T> The underlying bean for the grid.
  */
@@ -295,10 +295,12 @@ public class GridExtender<T> {
     private void addActionItems(final Map<String, String> headersMap) {
         final ColumnActionContextMenu columnActionContextMenu = new ColumnActionContextMenu(actionIcon);
         grid.getColumns().forEach(column -> {
-            if (column.getKey() != null && !column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+            if (column.getKey() != null) {
                 final String header = Optional.ofNullable(headersMap).map(e -> e.get(column.getKey()))
                         .orElse(column.getKey());
-                columnActionContextMenu.addColumnActionItem(header, column);
+                if (!column.isFrozen()) {
+                    columnActionContextMenu.addColumnActionItem(header, column);
+                }
             }
         });
     }
