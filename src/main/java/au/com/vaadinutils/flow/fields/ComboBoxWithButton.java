@@ -56,7 +56,7 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
     public void setButton(Button button) {
         this.button = button;
     }
-    
+
     public void setFieldWidth(final String width) {
         field.setWidth(width);
     }
@@ -74,6 +74,10 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
         field.setItems(items);
     }
 
+    public void setItems(@SuppressWarnings("unchecked") T... items) {
+        field.setItems(items);
+    }
+
     public void setDataProvider(final DataProvider<T, String> dataProvider) {
         this.dataProvider = dataProvider;
         field.setDataProvider(dataProvider);
@@ -82,12 +86,12 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
     public String getLabel() {
         return this.label;
     }
-    
+
     public void setLabel(final String label) {
         this.label = label;
         this.field.setLabel(label);
     }
-    
+
     public T getValue() {
         return field.getValue();
     }
@@ -95,7 +99,7 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
     public void setValue(final T newFieldValue) {
         field.setValue(newFieldValue);
     }
-    
+
     public void refresh() {
         this.dataProvider.refreshAll();
     }
