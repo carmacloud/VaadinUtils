@@ -5,25 +5,14 @@ import com.vaadin.flow.component.UI;
 public abstract class ProgressBarTask<T> {
     private ProgressTaskListener<T> listener;
 
-    final UI ui;
+    protected final UI ui;
 
     public ProgressBarTask(ProgressTaskListener<T> listener, final UI ui) {
         this.listener = listener;
         this.ui = ui;
     }
 
-    public void run() {
-        runUI(ui);
-    }
-
-    /**
-     * Changed overload method to make it explicit that you need to use the passed
-     * UI as calls to UI.getCurrent() will fail on a background thread such as the
-     * on the ProgressBarTask is normally called within.
-     * 
-     * @param ui
-     */
-    abstract public void runUI(UI ui);
+    abstract public void run();
 
     protected void taskComplete(final int sent) {
         ui.access(() -> {

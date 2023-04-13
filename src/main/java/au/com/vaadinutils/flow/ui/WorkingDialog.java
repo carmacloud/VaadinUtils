@@ -11,7 +11,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
 
 import au.com.vaadinutils.flow.listener.CancelListener;
-import au.com.vaadinutils.flow.listener.CompleteListener;
 import au.com.vaadinutils.flow.listener.ProgressListener;
 
 /**
@@ -44,12 +43,12 @@ import au.com.vaadinutils.flow.listener.ProgressListener;
  */
 
 public class WorkingDialog extends Dialog implements ProgressListener<String> {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 8696022982897542946L;
     private Label messageLabel;
     private VerticalLayout content;
     private Button cancel;
     private CancelListener cancelListener;
-    private CompleteListener completeListener;
     private VerticalLayout layout;
 
     private final UI ui;
@@ -116,7 +115,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     @Override
     public void close() {
-        ui.accessSynchronously(() -> {
+        ui.access(() -> {
             super.close();
         });
     }
@@ -137,9 +136,6 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
     @Override
     public void complete(int sent) {
         ui.access(() -> {
-            if (completeListener != null) {
-                completeListener.complete();
-            }
             this.close();
         });
     }
@@ -152,14 +148,13 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
     @Override
     public void exception(Exception e) {
         ui.access(() -> {
-            if (completeListener != null) {
-                completeListener.complete();
-            }
             WorkingDialog.this.close();
         });
     }
 
     public void removeUserComponent(Component component) {
-        layout.remove(component);
+        ui.access(() -> {
+            layout.remove(component);
+        });
     }
 }

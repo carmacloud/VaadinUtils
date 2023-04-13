@@ -3,9 +3,7 @@ package au.com.vaadinutils.flow.listener;
 /**
  * Used as a generic method to track progress of a job/task/thread.
  * 
- * 
  * @author bsutton
- *
  */
 public interface ProgressListener<T> {
     /**
@@ -21,7 +19,7 @@ public interface ProgressListener<T> {
     /**
      * Called when the job is complete.
      * 
-     * @param sent umh some value?
+     * @param sent some value?
      */
     void complete(int sent);
 
