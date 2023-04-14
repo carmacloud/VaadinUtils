@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.mpr.LegacyWrapper;
 import com.vaadin.server.ErrorMessage;
@@ -32,7 +33,9 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
 /**
- * @deprecated Replaced in Vaadin 14 migration.
+ * {@link DatePicker} is the new component in Vaadin 14.<br>
+ * This might still be used if this type of functionality is required. Retain
+ * until decision made.
  */
 @SuppressWarnings("rawtypes")
 public class TimePicker extends HorizontalLayout implements Field<Date> {
@@ -80,7 +83,7 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
 
     protected void buildUI(String title) {
         field = new TextField();
-        field.setWidth("125");
+        field.setWidth("125px");
         field.setImmediate(true);
         displayTime.setImmediate(true);
 
@@ -126,7 +129,7 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         final CssLayout hl = new CssLayout();
         hl.addStyleName("v-component-group");
         hl.setWidth("100%");
-        hl.setHeight("35");
+        hl.setHeight("35px");
 
         pickerButton = new Button();
         pickerButton.setIcon(FontAwesome.CLOCK_O);
@@ -226,7 +229,7 @@ public class TimePicker extends HorizontalLayout implements Field<Date> {
         });
 
         final VerticalLayout hourPanelLabelWrapper = new VerticalLayout();
-        hourPanelLabelWrapper.setWidth("245pxtitle");
+        hourPanelLabelWrapper.setWidth("245px");
 
         final Label hourLabel = new Label("Hour");
 
