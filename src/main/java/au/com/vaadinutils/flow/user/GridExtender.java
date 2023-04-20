@@ -30,7 +30,8 @@ import com.vaadin.flow.data.renderer.ComponentRenderer;
  * To use, call after adding columns, supplying the grid and a unique Id. This
  * class will do the rest.<br>
  * For the grid itself, the columns to be processed will need to have an
- * explicit key set, e.g. 
+ * explicit key set, e.g.
+ * 
  * <pre>{@code
  * grid.addColumn(<ValueProvider>).setHeader("ColumnHeader").setKey("UniqueColumnName");
  * }</pre>
@@ -270,8 +271,7 @@ public class GridExtender<T> {
             }
         }
         // As we are adding this column after the other columns have been added, create
-        // a new list, add the the action column, then add all the previously added
-        // columns.
+        // a new list, add the action column, then add all the previously added columns.
         // Then set the grid order to this.
         final List<Column<T>> newOrderedColumns = new ArrayList<>();
         // Add the the action column to first position

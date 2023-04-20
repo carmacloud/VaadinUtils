@@ -299,4 +299,16 @@ public class VaadinHelper {
                 additionalDateFormats);
         return DATE_FORMAT_I18N;
     }
+    
+    /**
+     * 
+     * @param format
+     * @param primaryDateFormat
+     */
+    public static void setCustomDateFormats(final DatePickerI18n format, final String primaryDateFormat) {
+        final String[] additionalDateFormats = { "dd/MM/yyyy", "dd/MMM/yyyy", "dd-MM-yyyy", "dd-MMM-yyyy" };
+        format.setDateFormats(
+                primaryDateFormat != null && !primaryDateFormat.isEmpty() ? primaryDateFormat : "dd-MMM-yy",
+                additionalDateFormats);
+    }
 }
