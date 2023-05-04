@@ -326,8 +326,8 @@ public class GridExtender<T> {
             final String keyStub = uniqueId + "-visible";
             final String storedVisibleSetting = MemberSettingsStorageFactory.getUserSettingsStorage()
                     .get(keyStub + "-" + column.getKey());
-            menuItem.setChecked((storedVisibleSetting.equals("true") || storedVisibleSetting == null
-                    || storedVisibleSetting.isEmpty()) ? true : false);
+            menuItem.setChecked(storedVisibleSetting == null ? false
+                    : (storedVisibleSetting.equals("true") || storedVisibleSetting.isEmpty() ? true : false));
         }
     }
 
