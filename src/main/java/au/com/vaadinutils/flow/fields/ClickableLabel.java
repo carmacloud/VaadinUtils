@@ -22,6 +22,7 @@ public class ClickableLabel extends VerticalLayout {
     }
 
     public void setComponent(Component value) {
+        setId("ClickableLabel"+ value.getId().orElse(""));
         removeAll();
         label = value;
         add(label);
