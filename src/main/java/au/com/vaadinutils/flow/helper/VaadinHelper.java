@@ -43,11 +43,11 @@ public class VaadinHelper {
      */
     public static final String CARMA_BLUE = "#0066CC";
     /**
-     * Standard carma clour dark blue
+     * Standard carma colour dark blue
      */
     public static final String CARMA_DARK_BLUE = "#002C82";
     /**
-     * Standard carma clour blue. Used for formatting artwork not received.
+     * Standard carma colour blue. Used for formatting artwork not received.
      */
     public static final String CARMA_BLUE_MID = "#003366";
     /**
