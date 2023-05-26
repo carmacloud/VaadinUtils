@@ -115,7 +115,8 @@ public class GridExtender<T> {
 
         this.grid.addColumnResizeListener(e -> {
             final String key = e.getResizedColumn().getKey();
-            final String width = e.getResizedColumn().getWidth();
+            // Strip any char so we only store a virtual number.
+            final String width = e.getResizedColumn().getWidth().replaceAll("[a-z]", "");
             MemberSettingsStorageFactory.getUserSettingsStorage().store(keyStub + "-" + key, width);
         });
     }
