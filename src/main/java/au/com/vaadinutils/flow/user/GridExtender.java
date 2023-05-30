@@ -298,8 +298,8 @@ public class GridExtender<T> {
         grid.getColumns().forEach(column -> {
             if (column.getKey() != null) {
                 final String header = Optional.ofNullable(headersMap).map(e -> e.get(column.getKey()))
-                        .orElse(column.getKey());
-                if (!column.isFrozen()) {
+                        .orElse(null);
+                if (!column.isFrozen() && header != null) {
                     columnActionContextMenu.addColumnActionItem(header, column);
                 }
             }
