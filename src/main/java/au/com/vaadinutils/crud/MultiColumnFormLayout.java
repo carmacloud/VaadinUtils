@@ -224,13 +224,6 @@ public class MultiColumnFormLayout<E extends CrudEntity> extends GridLayout {
         return field;
     }
 
-//    public CKEditorEmailField bindEditorField(SingularAttribute<E, String> member, boolean readonly) {
-//        CKEditorEmailField field = formHelper.bindEditorField(this, fieldGroup, member, readonly);
-//        this.fieldList.add(field);
-//        return field;
-//
-//    }
-
     /**
      * Adds a text field to the form without binding it to the FieldGroup
      * 
