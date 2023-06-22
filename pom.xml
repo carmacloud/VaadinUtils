@@ -274,11 +274,6 @@
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
-			<groupId>org.vaadin.addons</groupId>
-			<artifactId>ckeditor-wrapper-for-vaadin</artifactId>
-			<version>7.12.9</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-email</artifactId>
 			<version>${commons-email.version}</version>

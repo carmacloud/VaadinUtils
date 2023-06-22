@@ -25,7 +25,6 @@ import com.vaadin.ui.TextField;
 import au.com.vaadinutils.crud.splitFields.SplitField;
 import au.com.vaadinutils.crud.splitFields.SplitLabel;
 import au.com.vaadinutils.domain.iColorFactory;
-import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.fields.ColorPickerField;
 
 /**
@@ -225,12 +224,12 @@ public class MultiColumnFormLayout<E extends CrudEntity> extends GridLayout {
         return field;
     }
 
-    public CKEditorEmailField bindEditorField(SingularAttribute<E, String> member, boolean readonly) {
-        CKEditorEmailField field = formHelper.bindEditorField(this, fieldGroup, member, readonly);
-        this.fieldList.add(field);
-        return field;
-
-    }
+//    public CKEditorEmailField bindEditorField(SingularAttribute<E, String> member, boolean readonly) {
+//        CKEditorEmailField field = formHelper.bindEditorField(this, fieldGroup, member, readonly);
+//        this.fieldList.add(field);
+//        return field;
+//
+//    }
 
     /**
      * Adds a text field to the form without binding it to the FieldGroup

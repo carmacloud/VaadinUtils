@@ -62,7 +62,6 @@ import au.com.vaadinutils.crud.splitFields.SplitCheckBox;
 import au.com.vaadinutils.crud.splitFields.SplitColorPicker;
 import au.com.vaadinutils.crud.splitFields.SplitComboBox;
 import au.com.vaadinutils.crud.splitFields.SplitDateField;
-import au.com.vaadinutils.crud.splitFields.SplitEditorField;
 import au.com.vaadinutils.crud.splitFields.SplitListSelect;
 import au.com.vaadinutils.crud.splitFields.SplitPasswordField;
 import au.com.vaadinutils.crud.splitFields.SplitTextArea;
@@ -74,8 +73,6 @@ import au.com.vaadinutils.dao.Path;
 import au.com.vaadinutils.domain.iColor;
 import au.com.vaadinutils.domain.iColorFactory;
 import au.com.vaadinutils.fields.AdvancedSearchContentProvider;
-import au.com.vaadinutils.fields.CKEditorEmailField;
-import au.com.vaadinutils.fields.CKEditorEmailField.ConfigModifier;
 import au.com.vaadinutils.fields.ColorPickerField;
 import au.com.vaadinutils.fields.ComboBoxWithSearchField;
 import au.com.vaadinutils.fields.DataBoundButton;
@@ -1242,70 +1239,6 @@ public class FormHelper<E> implements Serializable {
         }
     }
 
-    public <M> CKEditorEmailField bindEditorField(AbstractLayout form, ValidatingFieldGroup<E> group,
-            SingularAttribute<E, M> member, boolean readonly) {
-        CKEditorEmailField field = bindEditorField(form, group, member.getName(), readonly);
-        this.fieldList.add(field);
-        return field;
-    }
-
-    public <M> CKEditorEmailField bindEditorField(SingularAttribute<E, M> member, boolean readonly) {
-        CKEditorEmailField field = bindEditorField(form, group, member.getName(), readonly);
-        this.fieldList.add(field);
-        return field;
-    }
-
-    public CKEditorEmailField bindEditorField(String fieldName, boolean readonly) {
-        CKEditorEmailField field = bindEditorField(form, group, fieldName, readonly);
-        this.fieldList.add(field);
-        return field;
-    }
-
-    public CKEditorEmailField bindEditorField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldName,
-            boolean readonly) {
-        SplitEditorField field = new SplitEditorField(readonly);
-        field.setWidth("100%");
-        field.setImmediate(true);
-        addValueChangeListeners(field);
-        doBinding(group, fieldName, field);
-        form.addComponent(field);
-        return field;
-    }
-
-    // public <L> EntityAutoCompleteField
-    // bindAutoCompleteField(AutoCompleteParent<E> parent,
-    // String fieldLabel, ListAttribute<E, L> entityField, Class<L> listClazz)
-    // {
-    // // hack
-    // ContactDao dao = new DaoFactory().getContactDao();
-    // container = dao.createVaadinContainer();
-    //
-    // //EntityAutoCompleteField<CrudEntity, JpaBaseDao<E,Long>> field = new
-    // EntityAutoCompleteField<CrudEntity, JpaBaseDao<E,Long>>(container, dao,
-    // fieldLabel, parent);
-    // EntityAutoCompleteField field = new EntityAutoCompleteField<CrudEntity,
-    // JpaBaseDao(container, dao, fieldLabel, parent);
-    // return field;
-    //
-    // }
-
-    // public <L> EntityAutoCompleteField
-    // bindAutoCompleteField(AutoCompleteParent<E> parent,
-    // String fieldLabel, ListAttribute<E, L> entityField, Class<L> listClazz)
-    // {
-    // // hack
-    // ContactDao dao = new DaoFactory().getContactDao();
-    // container = dao.createVaadinContainer();
-    //
-    // //EntityAutoCompleteField<CrudEntity, JpaBaseDao<E,Long>> field = new
-    // EntityAutoCompleteField<CrudEntity, JpaBaseDao<E,Long>>(container, dao,
-    // fieldLabel, parent);
-    // EntityAutoCompleteField field = new EntityAutoCompleteField<CrudEntity,
-    // JpaBaseDao(container, dao, fieldLabel, parent);
-    // return field;
-    //
-    // }
-
     public static Container createContainerFromEnumClass(String fieldName, Class<?> clazz) {
         LinkedHashMap<Enum<?>, String> enumMap = new LinkedHashMap<>();
         for (Object enumConstant : clazz.getEnumConstants()) {
@@ -1396,16 +1329,16 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public CKEditorEmailField bindEditorField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldName,
-            boolean readonly, ConfigModifier configModifier) {
-        SplitEditorField field = new SplitEditorField(readonly, configModifier);
-        field.setWidth("100%");
-        field.setImmediate(true);
-        addValueChangeListeners(field);
-        doBinding(group, fieldName, field);
-        form.addComponent(field);
-        return field;
-    }
+//    public CKEditorEmailField bindEditorField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldName,
+//            boolean readonly, ConfigModifier configModifier) {
+//        SplitEditorField field = new SplitEditorField(readonly, configModifier);
+//        field.setWidth("100%");
+//        field.setImmediate(true);
+//        addValueChangeListeners(field);
+//        doBinding(group, fieldName, field);
+//        form.addComponent(field);
+//        return field;
+//    }
 
     public <EN extends Enum<EN>> ComboBox bindEnumField(String fieldLabel, SingularAttribute<E, EN> fieldName) {
         return bindEnumField(fieldLabel, fieldName.getName(), fieldName.getBindableJavaType());
