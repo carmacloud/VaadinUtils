@@ -37,4 +37,8 @@ public abstract class ProgressBarTask<T> {
             listener.taskException(e);
         });
     }
+
+    public UI getUi() {
+        return this.ui;
+    }
 }
