@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 /**
+ * TODO LC: Check if we can still use this, might come in handy.
  * Creates a Thread that has its own private EntityManager attached.
  *
  * This class should be used if you need to access a Dao object in a background
@@ -14,7 +15,6 @@ import java.util.concurrent.Future;
  * em into the thread.
  *
  * @author bsutton
- * @deprecated
  */
 final public class EntityManagerThread<T> {
     private final Future<T> future;
@@ -44,15 +44,14 @@ final public class EntityManagerThread<T> {
      * The callable can optionally return a result of type T which can be retrieved
      * by calling get().
      *
-     * @param ui
      * @param callable
      */
 
     public EntityManagerThread(final Callable<T> callable) {
 
-        ExecutorService executor = Executors.newFixedThreadPool(1);
+        final ExecutorService executor = Executors.newFixedThreadPool(1);
 
-        Callable<T> thread = new Callable<T>() {
+        final Callable<T> thread = new Callable<T>() {
 
             @Override
             public T call() throws Exception {
@@ -63,16 +62,12 @@ final public class EntityManagerThread<T> {
                     public T exec() throws Exception {
                         return callable.call();
                     }
-
                 });
-
             }
-
         };
 
         future = executor.submit(thread);
         executor.shutdown();
-
     }
 
     /**
@@ -89,5 +84,4 @@ final public class EntityManagerThread<T> {
     public T get() throws InterruptedException, ExecutionException {
         return this.future.get();
     }
-
 }
