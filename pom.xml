@@ -420,6 +420,11 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>mpr-v7</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-charts-flow</artifactId>
+			<version>9.0.0</version><!--$NO-MVN-MAN-VER$-->
+		</dependency>
 	</dependencies>
 
 	<profiles>
