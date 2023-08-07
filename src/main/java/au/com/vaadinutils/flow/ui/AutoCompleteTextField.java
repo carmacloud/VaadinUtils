@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.common.base.Preconditions;
 import com.vaadin.componentfactory.Popup;
 import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
@@ -27,7 +24,6 @@ import au.com.vaadinutils.flow.helper.VaadinHelper;
 public class AutoCompleteTextField<E> extends Div {
 
     private static final long serialVersionUID = -6634513296678504250L;
-    private final Logger logger = LogManager.getLogger();
     private final TextField field = new TextField();
     private final Popup popup = new Popup();
     private final Map<String, E> options = new LinkedHashMap<>();
@@ -74,8 +70,8 @@ public class AutoCompleteTextField<E> extends Div {
      */
 
     public AutoCompleteTextField(final String fieldCaption, final String listCaption) {
-        Preconditions.checkNotNull(listCaption, "Field Caption is required to link the popup to the field.");
-        field.setClassName(fieldCaption);
+        Preconditions.checkNotNull(listCaption, "List Caption is required to link the popup to the field.");
+        field.setClassName(listCaption);
         field.setId(listCaption);
         popup.setFor(listCaption);
         
@@ -114,7 +110,6 @@ public class AutoCompleteTextField<E> extends Div {
             span.setId(string);
             layout.add(span);
             span.addClickListener(e -> {
-                logger.info("Clicking on " + span.getId().orElse("No ID"));
                 optionListener.optionSelected(AutoCompleteTextField.this, options.get(string));
                 // Clear list and hide
                 popup.removeAll();
