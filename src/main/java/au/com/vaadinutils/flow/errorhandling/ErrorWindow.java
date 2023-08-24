@@ -29,6 +29,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 
 import au.com.vaadinutils.flow.helper.VaadinHelper;
 import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
+import au.com.vaadinutils.flow.jasper.AttachmentType;
 
 /**
  * All finished, except need to find replacement for Screenshot addon.
@@ -292,7 +293,7 @@ public class ErrorWindow {
 
                 ByteArrayOutputStream stream = null;
                 String filename = null;
-                String MIMEType = "text/plain";
+                String MIMEType = AttachmentType.TXT.getMIMETypeString();
                 if (imageData != null) {
                     stream = new ByteArrayOutputStream();
                     try {
