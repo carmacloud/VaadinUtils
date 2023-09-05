@@ -260,9 +260,9 @@ public class ErrorWindow {
                 generateEmail(time, finalId, finalTrace, reference, notes.getValue(), supportEmail, getViewName(),
                         getUserName(), getUserEmail(), imageData);
             } catch (Exception e) {
+                VaadinHelper.notificationDialog("Error sending error report", NotificationType.ERROR);
                 logger.error(e, e);
             } finally {
-                VaadinHelper.notificationDialog("Error sending error report", NotificationType.ERROR);
                 window.close();
             }
         });
