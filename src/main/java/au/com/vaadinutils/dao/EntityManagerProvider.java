@@ -378,7 +378,7 @@ public enum EntityManagerProvider {
 
             @Override
             public void run() {
-                new Thread(runnable).start();
+                new Thread(runnable, "RegisterTransientPostActionOnNewThread").start();
             }
         });
     }
