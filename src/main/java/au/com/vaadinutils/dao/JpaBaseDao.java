@@ -2,9 +2,11 @@ package au.com.vaadinutils.dao;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -41,6 +43,8 @@ import au.com.vaadinutils.flow.dao.GenericDao;
 @SuppressWarnings("deprecation")
 public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     protected Class<E> entityClass;
+    protected final static int MAX_PARAMETERS = 2000;
+    protected final Logger logger = LogManager.getLogger();
 
     public interface Condition<E> {
 
@@ -847,5 +851,48 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     public EntityTransaction getTransaction() {
         // TODO LC: Work out if we still need this?
         return null;
+    }
+
+    /**
+     * Convenience method to split a {@link List} of {@link Long} ids into a number
+     * of lists with the count <=2000. This prevents excessive records being
+     * returned if we use min and max numbers and between to find records when
+     * caching.<br>
+     * If the list passed in is > allowed size, then the {@link Map} is populated
+     * with as many lists as required to accommodate all the ids. If it is empty,
+     * then the list of ids is < allowed size and can be processed as is.
+     * 
+     * @param ids A {@link List} of Long ids to be split into lists with length <
+     *            2000.
+     * @return A {@link Map} of {@link Integer}/ {@link List}< {@link Long}> pairs
+     *         which are the split lists from the passed in list. If empty, the list
+     *         was under the allowed size.
+     */
+    protected Map<Integer, List<Long>> createSplitLists(final List<Long> ids) {
+        int remaining = ids.size();
+
+        final Map<Integer, List<Long>> splitList = new HashMap<Integer, List<Long>>();
+        if (remaining > MAX_PARAMETERS) {
+
+            int start = 0;
+            int end = MAX_PARAMETERS;
+            int count = 1;
+            while (remaining > 0) {
+                final List<Long> splitIds = ids.subList(start, end);
+                splitList.put(count, splitIds);
+                if (remaining > MAX_PARAMETERS) {
+                    remaining = ids.size() - end;
+                    start = end;
+                    end = start + (remaining > MAX_PARAMETERS ? MAX_PARAMETERS : remaining);
+                } else {
+                    start = end + 1;
+                    end = end + remaining;
+                    remaining = 0;
+                }
+                count++;
+            }
+        }
+
+        return splitList;
     }
 }
