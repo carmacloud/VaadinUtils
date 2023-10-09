@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import javax.persistence.Query;
 
 public class JpaSettings {
-    static Map<String, Object> queryHints = new HashMap<>();
+    static Map<String, Object> queryHints = new HashMap<>(2);
 
     public static void addQueryHint(final String hintName, final Object value) {
         JpaSettings.queryHints.put(hintName, value);

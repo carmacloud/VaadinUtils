@@ -99,7 +99,7 @@ public abstract class JpaDslAbstract<E, R> {
 
     protected Root<E> root;
 
-    Map<JoinBuilder<E, ?>, Join<E, ?>> joins2 = new HashMap<>();
+    final Map<JoinBuilder<E, ?>, Join<E, ?>> joins2 = new HashMap<>(5);
 
     boolean isJpaContainerDelegate;
 
