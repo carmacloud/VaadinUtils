@@ -182,12 +182,12 @@ public class ErrorWindow {
     }
 
     boolean isExempted(Throwable cause) {
-        final Map<String, Set<String>> exemptedExceptions = new HashMap<>();
+        final Map<String, Set<String>> exemptedExceptions = new HashMap<>(8);
         exemptedExceptions.put("ClientAbortException", new HashSet<String>());
         exemptedExceptions.put("SocketException", new HashSet<String>());
         exemptedExceptions.put("UIDetachedException", new HashSet<String>());
 
-        final HashSet<String> suppressedRuntimeExceptions = new HashSet<String>();
+        final HashSet<String> suppressedRuntimeExceptions = new HashSet<String>(2);
         suppressedRuntimeExceptions.add("Couldn't attach to writer stream");
         exemptedExceptions.put("RuntimeException", suppressedRuntimeExceptions);
 

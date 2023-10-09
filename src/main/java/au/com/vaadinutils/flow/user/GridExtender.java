@@ -128,7 +128,7 @@ public class GridExtender<T> {
 
         final Map<String, String> savedWidths = MemberSettingsStorageFactory.getUserSettingsStorage().get(columnKeys);
 
-        final HashMap<String, String> parsedWidths = new HashMap<>();
+        final Map<String, String> parsedWidths = new HashMap<>(savedWidths.size() * 2);
         savedWidths.entrySet().forEach(entry -> {
             final String width = entry.getValue();
             parsedWidths.put(entry.getKey(), width);

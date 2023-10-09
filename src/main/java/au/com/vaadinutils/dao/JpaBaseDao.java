@@ -871,7 +871,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     protected Map<Integer, List<Long>> createSplitLists(final List<Long> ids) {
         int remaining = ids.size();
 
-        final Map<Integer, List<Long>> splitList = new HashMap<Integer, List<Long>>();
+        final Map<Integer, List<Long>> splitList = new HashMap<Integer, List<Long>>(5);
         if (remaining > MAX_PARAMETERS) {
 
             int start = 0;
