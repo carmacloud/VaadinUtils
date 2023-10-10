@@ -1423,7 +1423,17 @@ public abstract class JpaDslAbstract<E, R> {
         } else {
             orders.add(builder.desc(root.get(field)));
         }
+        
+        return this;
+    }
 
+    public JpaDslAbstract<E, R> orderBy(Expression<?> exp, boolean asc) {
+        if (asc) {
+            orders.add(builder.asc(exp));
+        } else {
+            orders.add(builder.desc(exp));
+        }
+        
         return this;
     }
 
