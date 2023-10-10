@@ -21,7 +21,7 @@ public class MemberSettingsStorageEmptyImplementation implements MemberSettingsS
 
     @Override
     public Map<String, String> get(List<String> keys) {
-        final Map<String, String> settings = new HashMap<>();
+        final Map<String, String> settings = new HashMap<>(keys.size() * 2);
         keys.forEach(k -> settings.put(k, map.get(k)));
 
         return settings;

@@ -62,7 +62,7 @@ public class FormHelper<E extends CrudEntity> {
     private final Binder<E> binder;
 
     // Store and form items so they can be retrieved and enabled/shown etc.
-    private final Map<Component, FormItem> fieldsWithFormItems = new HashMap<>();
+    private final Map<Component, FormItem> fieldsWithFormItems = new HashMap<>(10);
 
     /**
      * Use this if you do not require binding and will add components to a layout

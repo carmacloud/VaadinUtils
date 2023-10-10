@@ -32,7 +32,7 @@ public class Wizard extends VerticalLayout {
 
     private static final long serialVersionUID = 1752128905167662825L;
     protected final List<WizardStep> steps = new ArrayList<WizardStep>();
-    protected final Map<String, WizardStep> idMap = new HashMap<String, WizardStep>();
+    protected final Map<String, WizardStep> idMap = new HashMap<String, WizardStep>(6);
 
     protected WizardStep currentStep;
     protected WizardStep lastCompletedStep;
