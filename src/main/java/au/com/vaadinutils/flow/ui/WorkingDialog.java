@@ -1,5 +1,8 @@
 package au.com.vaadinutils.flow.ui;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.UI;
@@ -45,11 +48,13 @@ import au.com.vaadinutils.flow.listener.ProgressListener;
 public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     private static final long serialVersionUID = 8696022982897542946L;
+    private final Logger logger = LogManager.getLogger();
     private Label messageLabel;
     private VerticalLayout content;
     private Button cancel;
     private CancelListener cancelListener;
     private VerticalLayout layout;
+    private final String caption;
 
     private final UI ui;
 
@@ -73,6 +78,8 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
      * @param listener
      */
     public WorkingDialog(String caption, String message, CancelListener listener) {
+        this.caption = caption;
+        logger.info("Process started for " + caption);
         this.ui = UI.getCurrent();
         this.setModal(true);
         this.setResizable(false);
@@ -103,6 +110,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
             cancel = new Button("Cancel");
             cancel.addClickListener(e -> {
                 cancelListener.cancel();
+                logger.info("Process cancelled " + caption);
                 this.close();
             });
             content.add(cancel);
@@ -128,6 +136,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     @Override
     public void progress(int count, int max, final String message) {
+        logger.info("Process progress " + this.caption + " -> " + message);
         ui.access(() -> {
             messageLabel.setText(message);
         });
@@ -135,6 +144,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     @Override
     public void complete(int sent) {
+        logger.info("Process completed " + this.caption);
         ui.access(() -> {
             this.close();
         });
@@ -147,6 +157,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     @Override
     public void exception(Exception e) {
+        logger.info("Process failed " + e.getMessage());
         ui.access(() -> {
             WorkingDialog.this.close();
         });
