@@ -155,7 +155,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     @Override
     public void exception(Exception e) {
-        logger.info("Process failed " + e.getMessage());
+        logger.error("Process failed " + e.getMessage());
         WorkingDialog.this.close();
     }
 
