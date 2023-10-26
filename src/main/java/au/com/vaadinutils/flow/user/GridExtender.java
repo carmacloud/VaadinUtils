@@ -145,7 +145,7 @@ public class GridExtender<T> {
             final String widthToFit = colWidth >= 0 ? String.valueOf(colWidth) : "0";
             column.setWidth(widthToFit + "px");
         } catch (NumberFormatException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage() + " " + column.getKey());
         }
     }
 
@@ -177,6 +177,7 @@ public class GridExtender<T> {
     }
 
     private void configureSaveColumnOrder() {
+        logger.info("Setting up: " + uniqueId);
         if (grid.isColumnReorderingAllowed()) {
             final String keyStub = uniqueId + "-order";
 
@@ -188,7 +189,7 @@ public class GridExtender<T> {
                     try {
                         grid.setColumnOrder(calculateColumnOrder(availableColumns, parsedColumns));
                     } catch (IllegalArgumentException e) {
-                        logger.error(e.getMessage());
+                        logger.error(e.getMessage() + " " + uniqueId);
                     }
                 }
             }
