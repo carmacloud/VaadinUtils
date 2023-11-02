@@ -43,6 +43,7 @@ import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.event.dd.acceptcriteria.SourceIsTarget;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
@@ -68,7 +69,6 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.Table.TableDragMode;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -1008,26 +1008,21 @@ public abstract class BaseCrudView<E extends CrudEntity> extends VerticalLayout
                     @Override
                     protected void run(final UI ui) {
 
-                        ui.access(new Runnable() {
+                        ui.access(() ->{
+                            try {
+                            EntityItem<E> entity = container.getItem(entityId);
 
-                            @Override
-                            public void run() {
-                                try {
-                                    EntityItem<E> entity = container.getItem(entityId);
-
-                                    if (interceptAction(action, entity)) {
-                                        action.exec(BaseCrudView.this, entity);
-                                    }
-                                    container.commit();
-                                    container.refreshItem(entity.getItemId());
-                                    // actionCombo.select(actionCombo.getNullSelectionItemId());
-                                } finally {
-                                    pleaseWaitMessage.close();
-                                    ui.setPollInterval(-1);
-                                }
+                            if (interceptAction(action, entity)) {
+                                action.exec(BaseCrudView.this, entity);
                             }
+                            container.commit();
+                            container.refreshItem(entity.getItemId());
+                            // actionCombo.select(actionCombo.getNullSelectionItemId());
+                        } finally {
+                            pleaseWaitMessage.close();
+                            ui.setPollInterval(-1);
+                        }
                         });
-
                     }
                 });
 

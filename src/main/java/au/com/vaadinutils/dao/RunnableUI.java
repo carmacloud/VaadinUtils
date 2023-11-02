@@ -1,6 +1,6 @@
 package au.com.vaadinutils.dao;
 
-import com.vaadin.ui.UI;
+import com.vaadin.flow.component.UI;
 
 /**
  * Designed to work with EntityManagerCallableUI

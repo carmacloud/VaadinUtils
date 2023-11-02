@@ -79,7 +79,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
      */
     public WorkingDialog(String caption, String message, CancelListener listener) {
         this.caption = caption;
-        logger.info("Process started for " + caption);
+        logger.info("Process started for " + caption + " -> " + message);
         this.ui = UI.getCurrent();
         this.setModal(true);
         this.setResizable(false);
@@ -144,10 +144,8 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     @Override
     public void complete(int sent) {
-        logger.info("Process completed " + this.caption);
-        ui.access(() -> {
-            this.close();
-        });
+        logger.info("Process completed (" + sent + ") " + this.caption);
+        WorkingDialog.this.close();
     }
 
     @Override
@@ -157,10 +155,8 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     @Override
     public void exception(Exception e) {
-        logger.info("Process failed " + e.getMessage());
-        ui.access(() -> {
-            WorkingDialog.this.close();
-        });
+        logger.error("Process failed " + e.getMessage());
+        WorkingDialog.this.close();
     }
 
     public void removeUserComponent(Component component) {

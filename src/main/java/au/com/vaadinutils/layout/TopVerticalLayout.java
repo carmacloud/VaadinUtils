@@ -7,6 +7,7 @@ import com.vaadin.ui.VerticalLayout;
 
 /**
  * Remove after Base Crud has been removed.
+ * @deprecated
  */
 public class TopVerticalLayout extends CustomComponent {
     private static final long serialVersionUID = 7166258936287790784L;
