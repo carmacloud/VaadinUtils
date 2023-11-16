@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -299,8 +300,7 @@ public class GridExtender<T> {
         final ColumnActionContextMenu columnActionContextMenu = new ColumnActionContextMenu(actionIcon);
         grid.getColumns().forEach(column -> {
             if (column.getKey() != null) {
-                final String header = Optional.ofNullable(headersMap).map(e -> e.get(column.getKey()))
-                        .orElse(null);
+                final String header = Optional.ofNullable(headersMap).map(e -> e.get(column.getKey())).orElse(null);
                 if (!column.isFrozen() && header != null) {
                     columnActionContextMenu.addColumnActionItem(header, column);
                 }
@@ -411,10 +411,30 @@ public class GridExtender<T> {
         this.resizableColumns.clear();
         this.resizableColumns.addAll(columns);
     }
-    
+
+    /**
+     * Sets all columns sortable, except the action menu (if included).
+     */
     public void setAllColumnsSortable() {
         this.grid.getColumns().forEach(column -> {
             column.setSortable(!column.getKey().equalsIgnoreCase(ACTION_MENU));
+        });
+    }
+
+    /**
+     * Set column(s) non-sortable.
+     * 
+     * @param keys The list of keys for columns. If the key name is incorrect, or
+     *             not added to the column, there is no change to column sorting
+     *             status.
+     */
+    public void setColumnsNonSortable(Set<String> keys) {
+        keys.forEach(key -> {
+            final Column<?> column = this.grid.getColumnByKey(key);
+            // Check in case an key has not been set for a column
+            if (column != null) {
+                column.setSortable(false);
+            }
         });
     }
 }
