@@ -90,6 +90,7 @@ public class GridExtender<T> {
         configureSaveColumnWidths();
         configureSaveColumnVisible();
         configureSaveColumnOrder();
+        setAllColumnsSortable();
     }
 
     private void configureSaveColumnWidths() {
@@ -409,5 +410,11 @@ public class GridExtender<T> {
     public void setSelectedColumnsResizable(List<Column<T>> columns) {
         this.resizableColumns.clear();
         this.resizableColumns.addAll(columns);
+    }
+    
+    public void setAllColumnsSortable() {
+        this.grid.getColumns().forEach(column -> {
+            column.setSortable(!column.getKey().equalsIgnoreCase(ACTION_MENU));
+        });
     }
 }
