@@ -24,6 +24,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
+import au.com.vaadinutils.flow.helper.VaadinHelper;
+
 /**
  * Plugin in methods for storing and retrieving column widths, order and
  * visibility. Also optionally allows an action column to be included that shows
@@ -67,7 +69,7 @@ public class GridExtender<T> {
     public GridExtender(final Grid<T> grid, final String uniqueId) {
         this.grid = grid;
         this.uniqueId = uniqueId;
-        actionIcon.setColor("#0066CC");
+        actionIcon.setColor(VaadinHelper.CARMA_BLUE);
         actionIcon.setSize("12px");
         grid.setColumnReorderingAllowed(true);
     }
