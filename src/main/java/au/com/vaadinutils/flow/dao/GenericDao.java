@@ -14,6 +14,7 @@
 
 package au.com.vaadinutils.flow.dao;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityTransaction;
@@ -45,5 +46,7 @@ public interface GenericDao<E, K> {
     List<E> findAll();
 
     List<E> findAll(SingularAttribute<E, ?> order[]);
+
+    List<E> findAllByIds(SingularAttribute<E, Long> idAttribute, Collection<K> idsToFind);
 
 }

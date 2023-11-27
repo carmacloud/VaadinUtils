@@ -221,6 +221,25 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return findAll(null);
     }
 
+    @Override
+    public List<E> findAllByIds(SingularAttribute<E, Long> idAttribute, Collection<K> idsToFind) {
+
+        final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+        final CriteriaQuery<E> criteria = builder.createQuery(entityClass);
+        final Root<E> root = criteria.from(entityClass);
+        criteria.select(root);
+
+        // TODO: This would be better is all entities extended BaseCrudEntity, then it
+        // would look like BaseCrudEntity_.id instead of "id"
+        criteria.where(root.get(idAttribute).in(idsToFind));
+
+        TypedQuery<E> query = getEntityManager().createQuery(criteria);
+        JpaSettings.setQueryHints(query);
+
+        return query.getResultList();
+
+    }
+
     /**
      * Returns all rows ordered by the given set of entity attribues.
      *
@@ -446,6 +465,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     /**
      * @deprecated Uses JPAContainer and will be removed.
      */
+    @Deprecated
     public JPAContainer<E> createVaadinContainer() {
         JPAContainer<E> container = new JPAContainer<>(entityClass);
         container.setEntityProvider(new BatchingPerRequestEntityProvider<>(entityClass));
@@ -455,6 +475,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     /**
      * @deprecated Uses EntityContainer and will be removed.
      */
+    @Deprecated
     public EntityContainer<E> createLazyQueryContainer() {
         EntityManager em = getEntityManager();
         boolean compositeItmes = true;
@@ -485,6 +506,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     /**
      * @deprecated Uses JPAContainer and will be removed.
      */
+    @Deprecated
     public JPAContainer<E> createVaadinContainer(final int sizeLimit) {
         JPAContainer<E> container = new JPAContainer<E>(entityClass) {
             private static final long serialVersionUID = -3280358604354247501L;
@@ -507,6 +529,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     /**
      * @deprecated Uses JPAContainer and will be removed.
      */
+    @Deprecated
     public JPAContainer<E> createVaadinContainerAndFlushCache(final int sizeLimit) {
         getEntityManager().getEntityManagerFactory().getCache().evict(entityClass);
         return createVaadinContainer(sizeLimit);
@@ -515,6 +538,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     /**
      * @deprecated Uses JPAContainer and will be removed.
      */
+    @Deprecated
     public JPAContainer<E> createVaadinContainerAndFlushCache() {
         getEntityManager().getEntityManagerFactory().getCache().evict(entityClass);
         return createVaadinContainer();
@@ -599,10 +623,12 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
 
     }
 
+    @Override
     public void flush() {
         getEntityManager().flush();
     }
 
+    @Override
     public void refresh(E entity) {
         getEntityManager().refresh(entity);
     }
@@ -634,6 +660,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     /**
      * @deprecated Uses JPAContainer and will be removed.
      */
+    @Deprecated
     @SuppressWarnings("unchecked")
     public <M extends BaseCrudEntity> M findByEntityId(M entity) {
         if (entity.getId() != null) {
