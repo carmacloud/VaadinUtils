@@ -79,7 +79,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
      */
     public WorkingDialog(String caption, String message, CancelListener listener) {
         this.caption = caption;
-        logger.info("Process started for " + caption + " -> " + message);
+        logger.debug("Process started for " + caption + " -> " + message);
         this.ui = UI.getCurrent();
         this.setModal(true);
         this.setResizable(false);
@@ -110,7 +110,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
             cancel = new Button("Cancel");
             cancel.addClickListener(e -> {
                 cancelListener.cancel();
-                logger.info("Process cancelled " + caption);
+                logger.warn("Process cancelled " + caption);
                 this.close();
             });
             content.add(cancel);
@@ -136,7 +136,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     @Override
     public void progress(int count, int max, final String message) {
-        logger.info("Process progress " + this.caption + " -> " + message);
+        logger.debug("Process progress " + this.caption + " -> " + message);
         ui.access(() -> {
             messageLabel.setText(message);
         });
@@ -144,7 +144,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     @Override
     public void complete(int sent) {
-        logger.info("Process completed (" + sent + ") " + this.caption);
+        logger.debug("Process completed (" + sent + ") " + this.caption);
         WorkingDialog.this.close();
     }
 
