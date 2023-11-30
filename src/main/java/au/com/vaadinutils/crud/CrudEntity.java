@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public interface CrudEntity extends Serializable {
 
-    public Long getId();
+    Long getId();
 
-    public void setId(Long id);
+    void setId(Long id);
 
     /**
      * used when displaying messages that need to identify an individual entity to
@@ -14,5 +14,6 @@ public interface CrudEntity extends Serializable {
      * 
      * @return
      */
-    public String getName();
+    String getName();
+
 }

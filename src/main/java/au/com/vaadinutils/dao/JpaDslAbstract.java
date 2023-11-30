@@ -29,11 +29,15 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.jpa.JpaQuery;
 
 import com.google.common.base.Preconditions;
+import com.google.common.util.concurrent.RateLimiter;
 
+import au.com.vaadinutils.crud.ChildCrudEntity;
+import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.dao.JpaBaseDao.Condition;
 
 /**
@@ -45,6 +49,8 @@ import au.com.vaadinutils.dao.JpaBaseDao.Condition;
  *            case of a Tuple query then it would be Tuple
  */
 public abstract class JpaDslAbstract<E, R> {
+
+    private static final String ORDER_IS_NOT_SUPPORTED_FOR_DELETE = "Order is not supported for delete";
 
     Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 
@@ -93,7 +99,7 @@ public abstract class JpaDslAbstract<E, R> {
     /**
      * used to check that the entityManager doesn't shift under our feet!!!
      */
-    final private EntityManager dontUseThis = EntityManagerProvider.getEntityManager();
+    private final EntityManager dontUseThis = EntityManagerProvider.getEntityManager();
 
     List<Order> orders = new LinkedList<>();
 
@@ -168,7 +174,7 @@ public abstract class JpaDslAbstract<E, R> {
         return root.get(field).as(field.getJavaType());
     }
 
-    public <T> Expression<?> date(SingularAttribute<E, T> callbackdate) {
+    public <T> Expression<Integer> date(SingularAttribute<E, T> callbackdate) {
         return builder.function("date", Integer.class, asExpression(callbackdate));
     }
 
@@ -208,7 +214,7 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
-    public <J, V extends Comparable<? super V>> Condition<E> between(final SingularAttribute<? super E, V> field,
+    public <V extends Comparable<? super V>> Condition<E> between(final SingularAttribute<? super E, V> field,
             final V start, final V end) {
         return new AbstractCondition<E>() {
 
@@ -259,7 +265,7 @@ public abstract class JpaDslAbstract<E, R> {
         return builder.count(getJoin(join).get(attribute));
     }
 
-    public <K, T> Expression<Long> count(final SingularAttribute<E, T> attribute) {
+    public <T> Expression<Long> count(final SingularAttribute<E, T> attribute) {
         return builder.count(root.get(attribute));
     }
 
@@ -269,7 +275,7 @@ public abstract class JpaDslAbstract<E, R> {
      * @return An <code>int</code> being the number of entries deleted.
      */
     public int delete() {
-        Preconditions.checkArgument(orders.size() == 0, "Order is not supported for delete");
+        Preconditions.checkArgument(orders.isEmpty(), ORDER_IS_NOT_SUPPORTED_FOR_DELETE);
         CriteriaDelete<E> deleteCriteria = builder.createCriteriaDelete(entityClass);
         root = deleteCriteria.getRoot();
         if (predicate != null) {
@@ -307,7 +313,7 @@ public abstract class JpaDslAbstract<E, R> {
         return builder.mod(path1, i);
     }
 
-    public Expression<?> toInteger(Expression<Number> expression) {
+    public Expression<Integer> toInteger(Expression<Number> expression) {
         return builder.toInteger(expression);
     }
 
@@ -353,7 +359,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.equal(expression, value);
+                return builder.equal(expression, copyEntityForQuery(value));
             }
         };
     }
@@ -373,7 +379,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.equal(getJoin(join).get(field), value);
+                return builder.equal(getJoin(join).get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -383,7 +389,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.equal(getJoin(join).get(field), value);
+                return builder.equal(getJoin(join).get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -393,7 +399,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.equal(getJoin(join).get(field), value);
+                return builder.equal(getJoin(join).get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -432,7 +438,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 Join<E, J> join = getJoin(joinAttribute, joinType);
-                return builder.equal(join.get(field), value);
+                return builder.equal(join.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -443,7 +449,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.equal(root.get(field), value);
+                return builder.equal(root.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -455,7 +461,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 Join<E, J> join = getJoin(joinAttribute, joinType);
-                return builder.equal(join.get(field), value);
+                return builder.equal(join.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -466,7 +472,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.equal(root.get(field), value);
+                return builder.equal(root.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -478,7 +484,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 Join<E, J> join = getJoin(joinAttribute, joinType);
-                return builder.equal(join.get(field), value);
+                return builder.equal(join.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -489,7 +495,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.equal(root.get(field), value);
+                return builder.equal(root.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -504,7 +510,7 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
-    public <J, V> AbstractCondition<E> in(final SingularAttribute<E, Long> attribute,
+    public <V> AbstractCondition<E> in(final SingularAttribute<E, Long> attribute,
             final JpaDslSubquerySelectBuilder<E, V> subqueryBuilder) {
         return new AbstractCondition<E>() {
 
@@ -637,7 +643,7 @@ public abstract class JpaDslAbstract<E, R> {
         if (dump) {
             logger.warn(prepareQuery.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString());
         }
-        if (resultList.size() == 0) {
+        if (resultList.isEmpty()) {
             return null;
         }
 
@@ -660,7 +666,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.greaterThan(root.get(field), value);
+                return builder.greaterThan(root.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -671,7 +677,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.greaterThanOrEqualTo(getJoin(join).get(field), value);
+                return builder.greaterThanOrEqualTo(getJoin(join).get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -682,7 +688,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.greaterThan(getJoin(join).get(field), value);
+                return builder.greaterThan(getJoin(join).get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -726,7 +732,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
 
-                return builder.lessThan(expression, value);
+                return builder.lessThan(expression, copyEntityForQuery(value));
             }
         };
     }
@@ -761,7 +767,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 Join<E, J> join = getJoin(joinAttribute, joinType);
-                return builder.greaterThanOrEqualTo(join.get(field), value);
+                return builder.greaterThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -811,7 +817,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 Join<E, J> join = getJoin(joinAttribute, joinType);
-                return builder.greaterThanOrEqualTo(join.get(field), value);
+                return builder.greaterThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -824,7 +830,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 Join<E, J> join = getJoin(joinAttribute, joinType);
-                return builder.greaterThanOrEqualTo(join.get(field), value);
+                return builder.greaterThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -836,7 +842,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
 
-                return builder.greaterThanOrEqualTo(root.get(field), value);
+                return builder.greaterThanOrEqualTo(root.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -848,7 +854,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
 
-                return builder.greaterThanOrEqualTo(field.path, value);
+                return builder.greaterThanOrEqualTo(field.path, copyEntityForQuery(value));
             }
         };
     }
@@ -860,7 +866,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
 
-                return builder.greaterThanOrEqualTo(expression, value);
+                return builder.greaterThanOrEqualTo(expression, copyEntityForQuery(value));
             }
         };
     }
@@ -900,7 +906,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return getJoin(join).get(attribute).in(values);
+                return getJoin(join).get(attribute).in(copyEntityForQueryCollection(values));
             }
         };
     }
@@ -911,7 +917,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return getJoin(join).get(attribute).in(values);
+                return getJoin(join).get(attribute).in(copyEntityForQueryCollection(values));
             }
         };
     }
@@ -921,7 +927,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return root.get(attribute).in(values);
+                return root.get(attribute).in(copyEntityForQueryCollection(values));
             }
         };
     }
@@ -931,7 +937,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return root.get(agents).in(agent);
+                return root.get(agents).in(copyEntityForQuery(agent));
             }
         };
     }
@@ -946,17 +952,7 @@ public abstract class JpaDslAbstract<E, R> {
                             + attribute.getName());
                     return builder.isFalse(builder.literal(true));
                 }
-                return root.get(attribute).in(values);
-            }
-        };
-    }
-
-    public <V> Condition<E> in(final SingularAttribute<E, V> attribute, final V[] values) {
-        return new AbstractCondition<E>() {
-
-            @Override
-            public Predicate getPredicates() {
-                return root.get(attribute).in(values);
+                return root.get(attribute).in(copyEntityForQueryCollection(values));
             }
         };
     }
@@ -1148,7 +1144,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 Join<E, J> join = getJoin(joinAttribute, joinType);
-                return builder.lessThan(join.get(field), value);
+                return builder.lessThan(join.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -1159,7 +1155,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.lessThan(root.get(field), value);
+                return builder.lessThan(root.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -1183,7 +1179,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 Join<E, J> join = getJoin(joinAttribute, joinType);
-                return builder.lessThanOrEqualTo(join.get(field), value);
+                return builder.lessThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -1196,7 +1192,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 Join<E, J> join = getJoin(joinAttribute, joinType);
-                return builder.lessThanOrEqualTo(join.get(field), value);
+                return builder.lessThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -1209,7 +1205,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 Join<E, J> join = getJoin(joinAttribute, joinType);
-                return builder.lessThanOrEqualTo(join.get(field), value);
+                return builder.lessThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -1221,7 +1217,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
 
-                return builder.lessThanOrEqualTo(root.get(field), value);
+                return builder.lessThanOrEqualTo(root.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -1233,7 +1229,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
 
-                return builder.lessThanOrEqualTo(field.path, value);
+                return builder.lessThanOrEqualTo(field.path, copyEntityForQuery(value));
             }
         };
     }
@@ -1245,7 +1241,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
 
-                return builder.lessThanOrEqualTo(expression, value);
+                return builder.lessThanOrEqualTo(expression, copyEntityForQuery(value));
             }
         };
     }
@@ -1293,7 +1289,7 @@ public abstract class JpaDslAbstract<E, R> {
 
     public <J, V extends Comparable<? super V>> Condition<E> lt(final SingularAttribute<? super E, J> joinAttribute,
             final JoinType joinType, final SingularAttribute<J, V> field, final V value) {
-        return lessThan(joinAttribute, joinType, field, value);
+        return lessThan(joinAttribute, joinType, field, copyEntityForQuery(value));
     }
 
     public <V> Condition<E> ltEq(final JoinBuilder<E, V> joinBuilder, final SingularAttribute<V, Date> field,
@@ -1332,7 +1328,7 @@ public abstract class JpaDslAbstract<E, R> {
         return builder.least(root.get(attribute));
     }
 
-    public <J> AbstractCondition<E> not(final Condition<E> condition) {
+    public AbstractCondition<E> not(final Condition<E> condition) {
         return new AbstractCondition<E>() {
 
             @Override
@@ -1348,7 +1344,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.notEqual(getJoin(join).get(field), value);
+                return builder.notEqual(getJoin(join).get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -1358,7 +1354,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                return builder.notEqual(root.get(field), value);
+                return builder.notEqual(root.get(field), copyEntityForQuery(value));
             }
         };
     }
@@ -1423,7 +1419,7 @@ public abstract class JpaDslAbstract<E, R> {
         } else {
             orders.add(builder.desc(root.get(field)));
         }
-        
+
         return this;
     }
 
@@ -1433,7 +1429,7 @@ public abstract class JpaDslAbstract<E, R> {
         } else {
             orders.add(builder.desc(exp));
         }
-        
+
         return this;
     }
 
@@ -1466,7 +1462,7 @@ public abstract class JpaDslAbstract<E, R> {
         if (predicate != null) {
             criteria.where(predicate);
         }
-        if (orders.size() > 0) {
+        if (!orders.isEmpty()) {
             criteria.orderBy(orders);
         }
         TypedQuery<R> query = getEntityManager().createQuery(criteria);
@@ -1499,11 +1495,11 @@ public abstract class JpaDslAbstract<E, R> {
         return new JpaDslSubqueryBuilder<>(target, criteria, root);
     }
 
-    public <J, V> JpaDslSubquerySelectBuilder<E, J> subquerySelect(final Class<J> target) {
+    public <J> JpaDslSubquerySelectBuilder<E, J> subquerySelect(final Class<J> target) {
         return new JpaDslSubquerySelectBuilder<>(target, criteria, root);
     }
 
-    public <J, V> JpaDslSubquerySelectBuilder<E, J> subquerySelect(final Class<J> target,
+    public <J> JpaDslSubquerySelectBuilder<E, J> subquerySelect(final Class<J> target,
             final SingularAttribute<J, Long> selectAttribute) {
         return new JpaDslSubquerySelectBuilder<>(target, criteria, root, selectAttribute);
     }
@@ -1534,7 +1530,7 @@ public abstract class JpaDslAbstract<E, R> {
      * @return
      */
     public <F extends Object> int update(Map<SingularAttribute<E, F>, F> updatemap) {
-        Preconditions.checkArgument(orders.size() == 0, "Order is not supported for delete");
+        Preconditions.checkArgument(orders.isEmpty(), ORDER_IS_NOT_SUPPORTED_FOR_DELETE);
         CriteriaUpdate<E> updateCriteria = builder.createCriteriaUpdate(entityClass);
         root = updateCriteria.getRoot();
         if (predicate != null) {
@@ -1568,7 +1564,7 @@ public abstract class JpaDslAbstract<E, R> {
      * @return
      */
     public <F> int update(SingularAttribute<E, F> attribute, F value) {
-        Preconditions.checkArgument(orders.size() == 0, "Order is not supported for delete");
+        Preconditions.checkArgument(orders.isEmpty(), ORDER_IS_NOT_SUPPORTED_FOR_DELETE);
         CriteriaUpdate<E> updateCriteria = builder.createCriteriaUpdate(entityClass);
         root = updateCriteria.getRoot();
         if (predicate != null) {
@@ -1657,4 +1653,94 @@ public abstract class JpaDslAbstract<E, R> {
             }
         };
     }
+
+    private static final RateLimiter rateLimiter = RateLimiter.create(1);
+
+    /**
+     * The purpose of this method is to copy an entity with only it's ID set. <br>
+     * <br>
+     * An entity may have large amounts of data attached to it, for example whole
+     * relationships may have been fetched and are therefore attached. <br>
+     * <br>
+     * The problem this seeks to solve is that EclipseLinks cache stores the Query
+     * along with the data. The data is stored with a weak link meaning GC can
+     * remove it any time it wants. However the Query is stored with a normal link
+     * which means it can not be garbage collected. <br>
+     * <br>
+     * If we use an entity with a bunch of attached data it will be locked in to
+     * memory for an indefinite period - a memory leak. <br>
+     * <br>
+     * <b>IMPORTANT</b> <br>
+     * For this to function correctly <b>CrudEntities</b> need to implement getId
+     * and setId correctly, otherwise it is not possible to create a usable copy ane
+     * memory leaks will surely follow. <br>
+     * <br>
+     * <b>Functions and StoredProcedures</b> <br>
+     * This can not work for Functions and StoredProcedures, but I would never
+     * expect them to be passing through here. This method simply returns the passed
+     * in object if the package name contains <b>.function. or .storedprocedure.</b>
+     * <br>
+     * <br>
+     * <b>Views</b> <br>
+     * This can work for Views and views should implement getId and SetId where
+     * possible. Using a view CrudEntity in a Query that does not implement getId
+     * and setId will lead to a memory leak. <br>
+     * <br>
+     * For Crud entities that fail to implement getId and setId correctly this
+     * method will emit a single Error line indicating the involved class. <b>
+     * NOTE:</b> The error output is rate limited to once per second system wide so
+     * we don't kill the system with logging if something bad happens.
+     * 
+     * 
+     * @param <T>
+     * @param entity
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    static <T> T copyEntityForQuery(T entity) {
+        if (entity instanceof CrudEntity) {
+            try {
+
+                Class<? extends CrudEntity> clazz = (Class<? extends CrudEntity>) entity.getClass();
+
+                if (clazz.getName().contains(".function.") || clazz.getName().contains(".storedprocedure.")
+                        || clazz == ChildCrudEntity.class) {
+                    return entity;
+                }
+
+                CrudEntity crudEntity = (CrudEntity) entity;
+                CrudEntity crudResult = crudEntity.getClass().getConstructor().newInstance();
+                crudResult.setId(crudEntity.getId());
+                if (crudEntity.getId().equals(crudResult.getId())) {
+                    return (T) crudResult;
+                } else {
+                    if (rateLimiter.tryAcquire()) {
+                        LogManager.getLogger()
+                                .error("Failed to set ID, this may lead to memory leaks " + clazz.getName());
+                    }
+                }
+
+            } catch (Exception e) {
+                if (rateLimiter.tryAcquire()) {
+                    LogManager.getLogger().error(e, e);
+                }
+            }
+
+        }
+
+        return entity;
+    }
+
+    static <K> Collection<K> copyEntityForQueryCollection(Collection<K> values) {
+
+        if (values == null) {
+            return null;
+        }
+        ArrayList<K> result = new ArrayList<>(values.size());
+        for (K value : values) {
+            result.add(copyEntityForQuery(value));
+        }
+        return result;
+    }
+
 }
