@@ -1696,7 +1696,7 @@ public abstract class JpaDslAbstract<E, R> {
      * @return
      */
     @SuppressWarnings("unchecked")
-    static <T> T copyEntityForQuery(T entity) {
+    static <T> T copyEntityForQuery(final T entity) {
 
         if (!(entity instanceof CrudEntity)) {
             // it's not a crud entity, just return it.
@@ -1715,11 +1715,11 @@ public abstract class JpaDslAbstract<E, R> {
             }
 
             CrudEntity crudEntity = (CrudEntity) entity;
-            CrudEntity crudResult = crudEntity.getClass().getConstructor().newInstance();
-            crudResult.setId(crudEntity.getId());
-            if (crudEntity.getId().equals(crudResult.getId())) {
+            CrudEntity copyEntity = crudEntity.getClass().getConstructor().newInstance();
+            copyEntity.setId(crudEntity.getId());
+            if (crudEntity.getId() != null && crudEntity.getId().equals(copyEntity.getId())) {
                 // Id was successfully set on the new copy - we're good return the new copy.
-                return (T) crudResult;
+                return (T) copyEntity;
             } else {
                 // The id did not stick, CrudEntity is not properly implemented
                 if (rateLimiter.tryAcquire()) {
