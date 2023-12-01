@@ -29,7 +29,6 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.jpa.JpaQuery;
 
@@ -52,7 +51,7 @@ public abstract class JpaDslAbstract<E, R> {
 
     private static final String ORDER_IS_NOT_SUPPORTED_FOR_DELETE = "Order is not supported for delete";
 
-    Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+    private final static Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 
     public abstract class AbstractCondition<Z> implements Condition<Z> {
         @Override
@@ -1698,34 +1697,40 @@ public abstract class JpaDslAbstract<E, R> {
      */
     @SuppressWarnings("unchecked")
     static <T> T copyEntityForQuery(T entity) {
-        if (entity instanceof CrudEntity) {
-            try {
 
-                Class<? extends CrudEntity> clazz = (Class<? extends CrudEntity>) entity.getClass();
+        if (!(entity instanceof CrudEntity)) {
+            return entity;
+        }
+        try {
 
-                if (clazz.getName().contains(".function.") || clazz.getName().contains(".storedprocedure.")
-                        || clazz == ChildCrudEntity.class) {
-                    return entity;
-                }
+            Class<? extends CrudEntity> clazz = (Class<? extends CrudEntity>) entity.getClass();
 
-                CrudEntity crudEntity = (CrudEntity) entity;
-                CrudEntity crudResult = crudEntity.getClass().getConstructor().newInstance();
-                crudResult.setId(crudEntity.getId());
-                if (crudEntity.getId().equals(crudResult.getId())) {
-                    return (T) crudResult;
-                } else {
-                    if (rateLimiter.tryAcquire()) {
-                        LogManager.getLogger()
-                                .error("Failed to set ID, this may lead to memory leaks " + clazz.getName());
-                    }
-                }
+            if (clazz.getName().contains(".function.") || clazz.getName().contains(".storedprocedure.")
+                    || clazz == ChildCrudEntity.class) {
+                return entity;
+            }
 
-            } catch (Exception e) {
+            CrudEntity crudEntity = (CrudEntity) entity;
+            CrudEntity crudResult = crudEntity.getClass().getConstructor().newInstance();
+            crudResult.setId(crudEntity.getId());
+            if (crudEntity.getId().equals(crudResult.getId())) {
+                return (T) crudResult;
+            } else {
                 if (rateLimiter.tryAcquire()) {
-                    LogManager.getLogger().error(e, e);
+                    // might need to suppress this for certain View Classes, but be careful of
+                    // allowing memory leaks
+                    logger.error("Failed to set ID, this may lead to memory leaks " + clazz.getName());
                 }
             }
 
+        } catch (NullPointerException e) {
+            if (rateLimiter.tryAcquire()) {
+                logger.error("Processing " + entity.getClass().getName() + " " + e, e);
+            }
+        } catch (Exception e) {
+            if (rateLimiter.tryAcquire()) {
+                logger.error(e, e);
+            }
         }
 
         return entity;
