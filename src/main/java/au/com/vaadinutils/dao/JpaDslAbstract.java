@@ -1699,6 +1699,7 @@ public abstract class JpaDslAbstract<E, R> {
     static <T> T copyEntityForQuery(T entity) {
 
         if (!(entity instanceof CrudEntity)) {
+            // it's not a crud entity, just return it.
             return entity;
         }
         try {
@@ -1707,6 +1708,9 @@ public abstract class JpaDslAbstract<E, R> {
 
             if (clazz.getName().contains(".function.") || clazz.getName().contains(".storedprocedure.")
                     || clazz == ChildCrudEntity.class) {
+                // we can not handle functions and storedprocedures, and I reasonably expect
+                // that they will never be passed as an argument. Just return it.
+
                 return entity;
             }
 
@@ -1714,8 +1718,10 @@ public abstract class JpaDslAbstract<E, R> {
             CrudEntity crudResult = crudEntity.getClass().getConstructor().newInstance();
             crudResult.setId(crudEntity.getId());
             if (crudEntity.getId().equals(crudResult.getId())) {
+                // Id was successfully set on the new copy - we're good return the new copy.
                 return (T) crudResult;
             } else {
+                // The id did not stick, CrudEntity is not properly implemented
                 if (rateLimiter.tryAcquire()) {
                     // might need to suppress this for certain View Classes, but be careful of
                     // allowing memory leaks
@@ -1733,6 +1739,8 @@ public abstract class JpaDslAbstract<E, R> {
             }
         }
 
+        // failing all else return the original object, at least the system will keep
+        // running for now.
         return entity;
     }
 
