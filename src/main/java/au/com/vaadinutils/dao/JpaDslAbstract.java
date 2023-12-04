@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -1653,6 +1654,13 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
+    private static final AtomicBoolean copyEntityForQueryEnabled = new AtomicBoolean(true);
+
+    public static void enableCopyEntityForQuery(boolean enable) {
+        copyEntityForQueryEnabled.set(enable);
+
+    }
+
     private static final RateLimiter rateLimiter = RateLimiter.create(1);
 
     /**
@@ -1697,6 +1705,10 @@ public abstract class JpaDslAbstract<E, R> {
      */
     @SuppressWarnings("unchecked")
     static <T> T copyEntityForQuery(final T entity) {
+
+        if (!copyEntityForQueryEnabled.get()) {
+            return entity;
+        }
 
         if (!(entity instanceof CrudEntity)) {
             // it's not a crud entity, just return it.
@@ -1754,6 +1766,10 @@ public abstract class JpaDslAbstract<E, R> {
             result.add(copyEntityForQuery(value));
         }
         return result;
+    }
+
+    public static boolean isEnableCopyEntityForQuery() {
+        return copyEntityForQueryEnabled.get();
     }
 
 }
