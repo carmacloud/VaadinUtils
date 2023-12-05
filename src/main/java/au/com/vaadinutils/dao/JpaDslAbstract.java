@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.persistence.EntityManager;
@@ -1727,9 +1728,22 @@ public abstract class JpaDslAbstract<E, R> {
             }
 
             CrudEntity crudEntity = (CrudEntity) entity;
+
+            if (crudEntity.getId() == null) {
+                // Entity passed in has a Null ID, this is probably nothing.
+                if (rateLimiter.tryAcquire()
+                        && (loggedNullIdClasses.putIfAbsent((Class<CrudEntity>) crudEntity.getClass(), true) == null)) {
+                    Exception ex = new Exception(
+                            "Diagnostic Stack trace, Entity has Null ID " + entity.getClass().getName());
+                    logger.error(ex, ex);
+
+                }
+                return entity;
+            }
+
             CrudEntity copyEntity = crudEntity.getClass().getConstructor().newInstance();
             copyEntity.setId(crudEntity.getId());
-            if (crudEntity.getId() != null && crudEntity.getId().equals(copyEntity.getId())) {
+            if (crudEntity.getId().equals(copyEntity.getId())) {
                 // Id was successfully set on the new copy - we're good return the new copy.
                 return (T) copyEntity;
             } else {
@@ -1738,6 +1752,10 @@ public abstract class JpaDslAbstract<E, R> {
                     // might need to suppress this for certain View Classes, but be careful of
                     // allowing memory leaks
                     logger.error("Failed to set ID, this may lead to memory leaks " + clazz.getName());
+                    if (loggedFailureClasses.putIfAbsent((Class<CrudEntity>) crudEntity.getClass(), true) == null) {
+                        Exception ex = new Exception("Diagnostic Stack trace");
+                        logger.error(ex, ex);
+                    }
                 }
             }
 
@@ -1755,6 +1773,10 @@ public abstract class JpaDslAbstract<E, R> {
         // running for now.
         return entity;
     }
+
+    private static final ConcurrentHashMap<Class<CrudEntity>, Boolean> loggedFailureClasses = new ConcurrentHashMap<>();
+
+    private static final ConcurrentHashMap<Class<CrudEntity>, Boolean> loggedNullIdClasses = new ConcurrentHashMap<>();
 
     static <K> Collection<K> copyEntityForQueryCollection(Collection<K> values) {
 
