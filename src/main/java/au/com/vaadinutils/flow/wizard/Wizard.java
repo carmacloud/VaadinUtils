@@ -51,7 +51,7 @@ public class Wizard extends VerticalLayout {
 
     public Wizard() {
         setSizeFull();
-        setPadding(false);
+        setPadding(true);
         setMargin(false);
         contentPanel = new VerticalLayout();
         contentPanel.getStyle().set("border", "1px solid #E1E3E6");
@@ -63,14 +63,11 @@ public class Wizard extends VerticalLayout {
         footer.setWidthFull();
         footer.add(cancelButton, backButton, nextButton, finishButton);
         footer.setJustifyContentMode(JustifyContentMode.END);
+    
+        this.add(contentPanel);
 
-        final Scroller scroller = new Scroller(contentPanel);
-        scroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
-        scroller.setSizeFull();
-        this.addAndExpand(scroller);
-
-        setAlignSelf(Alignment.END, footer);
         add(footer);
+        setAlignSelf(Alignment.END, footer);
 
         initDefaultHeader();
     }
@@ -377,10 +374,11 @@ public class Wizard extends VerticalLayout {
             }
             // Note: using component.replace(old component, new component) does not work.
             contentPanel.removeAll();
-            contentPanel.add(step.getContent());
-        } else {
-            contentPanel.add(step.getContent());
-        }
+        } 
+        
+        final Scroller scroller = new Scroller(step.getContent(), Scroller.ScrollDirection.VERTICAL);
+        scroller.setSizeFull();
+        contentPanel.add(scroller);
 
         currentStep = step;
 
