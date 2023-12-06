@@ -54,6 +54,7 @@ public class GridExtender<T> {
     public static final String ACTION_MENU = "_actionMenu";
     private Grid<T> grid;
     private String uniqueId;
+    private List<String> columnsHiddenOnLoad;
 
     // For the additional column that optionally contains action filter and/or
     // context menu.
@@ -77,16 +78,20 @@ public class GridExtender<T> {
     /**
      * Call after adding columns to the grid.
      * 
-     * @param headersMap A {@link Map} of {@link String} pairs so that column keys
-     *                   can be matched to headings.<br>
-     *                   This is an issue because V14+ doesn't have a getHeaders
-     *                   method.
+     * @param headersMap          A {@link Map} of {@link String} pairs so that
+     *                            column keys can be matched to headings.<br>
+     *                            This is an issue because V14+ doesn't have a
+     *                            getHeaders method.
+     * @param columnsHiddenOnLoad A {@link List} of {@link String} irems being the
+     *                            key for a column that is to hidden on load,
+     *                            despite any stored settings.
      */
-    public void init(final Map<String, String> headersMap) {
+    public void init(final Map<String, String> headersMap, final List<String> columnsHiddenOnLoad) {
         if (this.grid.getColumns().isEmpty()) {
             logger.warn("Columns not set for " + uniqueId
                     + ". Grid column order, width and visibility will not be stored or retreived.");
         }
+        this.columnsHiddenOnLoad = columnsHiddenOnLoad;
         setColumnsResizable();
         addActionColumn();
         addActionItems(headersMap);
@@ -166,8 +171,9 @@ public class GridExtender<T> {
 
         this.grid.getColumns().forEach(column -> {
             final String key = column.getKey();
+            final boolean columnNotVisible = columnsHiddenOnLoad != null ? columnsHiddenOnLoad.contains(key) : false;
             final String setting = keyStub + "-" + key;
-            final String setVisible = savedVisible.get(setting);
+            final String setVisible = columnNotVisible ? "false" : savedVisible.get(setting);
             if (setVisible != null && !setVisible.isEmpty()) {
                 grid.getColumnByKey(key).setVisible(Boolean.parseBoolean(setVisible));
             }
@@ -328,9 +334,13 @@ public class GridExtender<T> {
             // If the column is setVisible(false) for initial hiding, it may have a stored
             // setting that overrides that.
             // Get the stored setting and set the context menu to show the correct status.
+            // Some columns are set to be hidden at load, despite stored settings. Find
+            // these and override if present.
             final String keyStub = uniqueId + "-visible";
-            final String storedVisibleSetting = MemberSettingsStorageFactory.getUserSettingsStorage()
-                    .get(keyStub + "-" + column.getKey());
+            final boolean columnNotVisible = columnsHiddenOnLoad != null ? columnsHiddenOnLoad.contains(column.getKey())
+                    : false;
+            final String storedVisibleSetting = columnNotVisible ? "false"
+                    : MemberSettingsStorageFactory.getUserSettingsStorage().get(keyStub + "-" + column.getKey());
             menuItem.setChecked(storedVisibleSetting == null ? false
                     : (storedVisibleSetting.equals("true") || storedVisibleSetting.isEmpty() ? true : false));
         }
