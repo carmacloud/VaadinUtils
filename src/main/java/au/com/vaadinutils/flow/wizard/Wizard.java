@@ -64,7 +64,7 @@ public class Wizard extends VerticalLayout {
         footer.add(cancelButton, backButton, nextButton, finishButton);
         footer.setJustifyContentMode(JustifyContentMode.END);
     
-        this.add(contentPanel);
+        this.addAndExpand(contentPanel);
 
         add(footer);
         setAlignSelf(Alignment.END, footer);
