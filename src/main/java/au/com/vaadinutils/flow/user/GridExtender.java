@@ -187,7 +187,7 @@ public class GridExtender<T> {
     }
 
     private void configureSaveColumnOrder() {
-        logger.info("Setting up: " + uniqueId);
+        logger.debug("Setting up: " + uniqueId);
         if (grid.isColumnReorderingAllowed()) {
             final String keyStub = uniqueId + "-order";
 
@@ -199,7 +199,8 @@ public class GridExtender<T> {
                     try {
                         grid.setColumnOrder(calculateColumnOrder(availableColumns, parsedColumns));
                     } catch (IllegalArgumentException e) {
-                        logger.error(e.getMessage() + " " + uniqueId);
+                        logger.error(
+                                e.getMessage() + " Error caused by missing entry in TblUserSettings for " + keyStub);
                     }
                 }
             }
