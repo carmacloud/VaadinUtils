@@ -342,8 +342,13 @@ public class GridExtender<T> {
                     : false;
             final String storedVisibleSetting = columnNotVisible ? "false"
                     : MemberSettingsStorageFactory.getUserSettingsStorage().get(keyStub + "-" + column.getKey());
-            menuItem.setChecked((storedVisibleSetting == null || !column.isVisible()) ? false
-                    : (storedVisibleSetting.equals("true") || storedVisibleSetting.isEmpty() ? true : false));
+            boolean showColumn = false;
+            if (storedVisibleSetting == "true" || column.isVisible()) {
+                showColumn = true;
+            } else if ((storedVisibleSetting == "false") || !column.isVisible()) {
+                showColumn = false;
+            }
+            menuItem.setChecked(showColumn);
         }
     }
 
