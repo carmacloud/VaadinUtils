@@ -71,6 +71,10 @@ public class VaadinHelper {
      */
     public static final String CARMA_ORANGE = "#FF9900";
     /**
+     * Standard carma colour orange, used on Sales View
+     */
+    public static final String CARMA_ORANGE_MID = "#FF6600";
+    /**
      * Standard carma colour light grey
      */
     public static final String CARMA_LIGHT_GREY = "#6C6D6F";
