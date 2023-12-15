@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -354,10 +355,12 @@ public class GridExtender<T> {
             final String storedVisibleSetting = columnNotVisible ? "false"
                     : MemberSettingsStorageFactory.getUserSettingsStorage().get(keyStub + "-" + column.getKey());
             boolean showColumn = false;
-            if (storedVisibleSetting == "true" || column.isVisible()) {
+            if (StringUtils.equals(storedVisibleSetting, "true")) {
                 showColumn = true;
-            } else if ((storedVisibleSetting == "false") || !column.isVisible()) {
+            } else if ((StringUtils.equals(storedVisibleSetting, "false"))) {
                 showColumn = false;
+            } else {
+                showColumn = column.isVisible();
             }
             menuItem.setChecked(showColumn);
         }
