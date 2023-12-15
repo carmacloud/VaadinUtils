@@ -101,6 +101,17 @@ public class GridExtender<T> {
         setAllColumnsSortable();
     }
 
+    public List<String> getVisiableColumns() {
+        final List<String> columnKeys = new ArrayList<>();
+        this.grid.getColumns().forEach(column -> {
+            if (column.isVisible()) {
+                final String columnKey = column.getKey();
+                columnKeys.add(columnKey);
+            }
+        });
+        return columnKeys;
+    }
+
     private void configureSaveColumnWidths() {
         final String keyStub = uniqueId + "-width";
         final List<String> columnKeys = new ArrayList<>();
@@ -387,14 +398,14 @@ public class GridExtender<T> {
         if (resizable) {
             // Never allow Action Menu column to be resizable.
             grid.getColumns().forEach(column -> {
-                if (column.getKey() != null && !column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                if (column.getKey() != null && !ACTION_MENU.equalsIgnoreCase(column.getKey())) {
                     column.setResizable(true);
                     column.setFlexGrow(0);
                 }
             });
         } else if (!resizableColumns.isEmpty()) {
             resizableColumns.forEach(column -> {
-                if (!column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                if (!ACTION_MENU.equalsIgnoreCase(column.getKey())) {
                     column.setResizable(true);
                     column.setFlexGrow(0);
                 }
@@ -402,7 +413,7 @@ public class GridExtender<T> {
         } else {
             // Set columns resizable if they don't have setFlexGrow(0)
             grid.getColumns().forEach(column -> {
-                if (column.getKey() != null && !column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                if (column.getKey() != null && !ACTION_MENU.equalsIgnoreCase(column.getKey())) {
                     column.setResizable(column.getFlexGrow() != 0);
                 }
             });
@@ -435,7 +446,7 @@ public class GridExtender<T> {
      */
     public void setAllColumnsSortable() {
         this.grid.getColumns().forEach(column -> {
-            column.setSortable(!column.getKey().equalsIgnoreCase(ACTION_MENU));
+            column.setSortable(!ACTION_MENU.equalsIgnoreCase(column.getKey()));
         });
     }
 
