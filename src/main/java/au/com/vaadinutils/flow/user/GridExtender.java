@@ -211,8 +211,9 @@ public class GridExtender<T> {
                     try {
                         grid.setColumnOrder(calculateColumnOrder(availableColumns, parsedColumns));
                     } catch (IllegalArgumentException e) {
-                        logger.error(
-                                e.getMessage() + " Error caused by missing entry in TblUserSettings for " + keyStub);
+                        logger.warn(e.getMessage()
+                                + "\nError caused by missing entry (or entries) in TblUserSettings for SettingKey: "
+                                + keyStub);
                     }
                 }
             }
@@ -461,8 +462,10 @@ public class GridExtender<T> {
      *             status.
      */
     public void setColumnsNonSortable(Set<String> keys) {
+        logger.info("Non-Sort: " + keys);
         keys.forEach(key -> {
             final Column<?> column = this.grid.getColumnByKey(key);
+
             // Check in case an key has not been set for a column
             if (column != null) {
                 column.setSortable(false);
