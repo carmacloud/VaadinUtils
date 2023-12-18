@@ -102,7 +102,7 @@ public class GridExtender<T> {
         setAllColumnsSortable();
     }
 
-    public List<String> getVisiableColumns() {
+    public List<String> getVisibleColumns() {
         final List<String> columnKeys = new ArrayList<>();
         this.grid.getColumns().forEach(column -> {
             if (column.isVisible()) {
