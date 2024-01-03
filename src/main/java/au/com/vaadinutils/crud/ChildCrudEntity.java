@@ -1,35 +1,31 @@
 package au.com.vaadinutils.crud;
 
 /**
- * TODO LC: Check if this is still needed, or simply using CrudEntity is
- * sufficient.
+ * This is so a crud can select the same record after saving one or more
+ * new records.<br>
+ * 
+ * As the id doesn't exist before the entity is persisted and the child crud has
+ * possibly multiple records uncommitted it needs a "GUID" that is created when
+ * the entity is instantiated so that it can locate the record again after being
+ * persisted.<br>
+ * 
+ * Recommended implementation looks like this...<br>
+ * 
+ * <pre>
+ * <code>
+ * 
+* @Override
+* public String getGuid() {
+*     return guid;
+* }
+*
+* @Column(updatable = false)
+* private String guid = UUID.randomUUID().toString();
+ * </code>
+ * </pre>
+ * 
  */
 public interface ChildCrudEntity extends CrudEntity {
-    /**
-     * This is so the child crud can select the same record after saving one or more
-     * new records
-     * 
-     * as the id doesn't exist before the entity is persisted and the child crud has
-     * possibly multiple records uncommitted it needs a "GUID" that is created when
-     * the entity is instantiated so that it can locate the record again after being
-     * persisted.
-     * 
-     * recommended implementation looks like this...
-     * 
-     * <pre>
-     * <code>
-     * 
-     * {@literal @}NotNull
-     * {@literal @}Column(updatable = false) 
-     * String guid = JpaEntityHelper.getGuid(this);
-     * 
-     * {@literal @}Override public String getGuid() 
-     * { 
-     * 		return guid; 
-     * }
-     * </code>
-     * </pre>
-     * 
-     */
+   
     String getGuid();
 }

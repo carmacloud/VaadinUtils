@@ -36,11 +36,8 @@ import com.google.common.base.Preconditions;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.crud.CrudEntity;
-import au.com.vaadinutils.entity.BaseCrudEntity;
-import au.com.vaadinutils.entity.BaseCrudEntity_;
 import au.com.vaadinutils.flow.dao.GenericDao;
 
-@SuppressWarnings("deprecation")
 public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     protected Class<E> entityClass;
     protected final static int MAX_PARAMETERS = 2000;
@@ -219,6 +216,25 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     @Override
     public List<E> findAll() {
         return findAll(null);
+    }
+
+    @Override
+    public List<E> findAllByIds(SingularAttribute<E, Long> idAttribute, Collection<K> idsToFind) {
+
+        final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+        final CriteriaQuery<E> criteria = builder.createQuery(entityClass);
+        final Root<E> root = criteria.from(entityClass);
+        criteria.select(root);
+
+        // TODO: This would be better is all entities extended BaseCrudEntity, then it
+        // would look like BaseCrudEntity_.id instead of "id"
+        criteria.where(root.get(idAttribute).in(idsToFind));
+
+        TypedQuery<E> query = getEntityManager().createQuery(criteria);
+        JpaSettings.setQueryHints(query);
+
+        return query.getResultList();
+
     }
 
     /**
@@ -446,6 +462,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     /**
      * @deprecated Uses JPAContainer and will be removed.
      */
+    @Deprecated
     public JPAContainer<E> createVaadinContainer() {
         JPAContainer<E> container = new JPAContainer<>(entityClass);
         container.setEntityProvider(new BatchingPerRequestEntityProvider<>(entityClass));
@@ -455,6 +472,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     /**
      * @deprecated Uses EntityContainer and will be removed.
      */
+    @Deprecated
     public EntityContainer<E> createLazyQueryContainer() {
         EntityManager em = getEntityManager();
         boolean compositeItmes = true;
@@ -482,57 +500,8 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return getIdField(entityClass);
     }
 
-    /**
-     * @deprecated Uses JPAContainer and will be removed.
-     */
-    public JPAContainer<E> createVaadinContainer(final int sizeLimit) {
-        JPAContainer<E> container = new JPAContainer<E>(entityClass) {
-            private static final long serialVersionUID = -3280358604354247501L;
-
-            @Override
-            public int size() {
-                int size = super.size();
-                return Math.min(sizeLimit, size);
-            }
-        };
-        container.setEntityProvider(new BatchingPerRequestEntityProvider<>(entityClass));
-        return container;
-
-    }
-
     public void flushCache() {
         getEntityManager().getEntityManagerFactory().getCache().evict(entityClass);
-    }
-
-    /**
-     * @deprecated Uses JPAContainer and will be removed.
-     */
-    public JPAContainer<E> createVaadinContainerAndFlushCache(final int sizeLimit) {
-        getEntityManager().getEntityManagerFactory().getCache().evict(entityClass);
-        return createVaadinContainer(sizeLimit);
-    }
-
-    /**
-     * @deprecated Uses JPAContainer and will be removed.
-     */
-    public JPAContainer<E> createVaadinContainerAndFlushCache() {
-        getEntityManager().getEntityManagerFactory().getCache().evict(entityClass);
-        return createVaadinContainer();
-    }
-
-    public int deleteAll() {
-        final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
-
-        final CriteriaDelete<E> criteria = builder.createCriteriaDelete(entityClass);
-        final Query query = getEntityManager().createQuery(criteria);
-        JpaSettings.setQueryHints(query);
-
-        int result = query.executeUpdate();
-
-        flushCache();
-
-        return result;
-
     }
 
     public <V> int deleteAllByAttribute(SingularAttribute<? super E, V> vKey, V value) {
@@ -599,10 +568,12 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
 
     }
 
+    @Override
     public void flush() {
         getEntityManager().flush();
     }
 
+    @Override
     public void refresh(E entity) {
         getEntityManager().refresh(entity);
     }
@@ -629,22 +600,6 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
 
     public JpaDslBuilder<E> jpaContainerDelegate(CriteriaQuery<E> criteria) {
         return new JpaDslBuilder<>(criteria, entityClass);
-    }
-
-    /**
-     * @deprecated Uses JPAContainer and will be removed.
-     */
-    @SuppressWarnings("unchecked")
-    public <M extends BaseCrudEntity> M findByEntityId(M entity) {
-        if (entity.getId() != null) {
-            // lookup by id
-            return (M) getEntityManager().find(entityClass, entity.getId());
-        }
-
-        // lookup by guid
-        final JpaDslBuilder<M> q = (JpaDslBuilder<M>) select();
-        return q.where(q.eq(BaseCrudEntity_.guid, entity.getGuid())).getSingleResultOrNull();
-
     }
 
     public class FindBuilder {

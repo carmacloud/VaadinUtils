@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,6 +24,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+
+import au.com.vaadinutils.flow.helper.VaadinHelper;
 
 /**
  * Plugin in methods for storing and retrieving column widths, order and
@@ -52,6 +55,7 @@ public class GridExtender<T> {
     public static final String ACTION_MENU = "_actionMenu";
     private Grid<T> grid;
     private String uniqueId;
+    private List<String> columnsHiddenOnLoad;
 
     // For the additional column that optionally contains action filter and/or
     // context menu.
@@ -67,7 +71,7 @@ public class GridExtender<T> {
     public GridExtender(final Grid<T> grid, final String uniqueId) {
         this.grid = grid;
         this.uniqueId = uniqueId;
-        actionIcon.setColor("#0066CC");
+        actionIcon.setColor(VaadinHelper.CARMA_BLUE);
         actionIcon.setSize("12px");
         grid.setColumnReorderingAllowed(true);
     }
@@ -75,16 +79,20 @@ public class GridExtender<T> {
     /**
      * Call after adding columns to the grid.
      * 
-     * @param headersMap A {@link Map} of {@link String} pairs so that column keys
-     *                   can be matched to headings.<br>
-     *                   This is an issue because V14+ doesn't have a getHeaders
-     *                   method.
+     * @param headersMap          A {@link Map} of {@link String} pairs so that
+     *                            column keys can be matched to headings.<br>
+     *                            This is an issue because V14+ doesn't have a
+     *                            getHeaders method.
+     * @param columnsHiddenOnLoad A {@link List} of {@link String} irems being the
+     *                            key for a column that is to hidden on load,
+     *                            despite any stored settings.
      */
-    public void init(final Map<String, String> headersMap) {
+    public void init(final Map<String, String> headersMap, final List<String> columnsHiddenOnLoad) {
         if (this.grid.getColumns().isEmpty()) {
             logger.warn("Columns not set for " + uniqueId
                     + ". Grid column order, width and visibility will not be stored or retreived.");
         }
+        this.columnsHiddenOnLoad = columnsHiddenOnLoad;
         setColumnsResizable();
         addActionColumn();
         addActionItems(headersMap);
@@ -92,6 +100,17 @@ public class GridExtender<T> {
         configureSaveColumnVisible();
         configureSaveColumnOrder();
         setAllColumnsSortable();
+    }
+
+    public List<String> getVisibleColumns() {
+        final List<String> columnKeys = new ArrayList<>();
+        this.grid.getColumns().forEach(column -> {
+            if (column.isVisible()) {
+                final String columnKey = column.getKey();
+                columnKeys.add(columnKey);
+            }
+        });
+        return columnKeys;
     }
 
     private void configureSaveColumnWidths() {
@@ -164,8 +183,9 @@ public class GridExtender<T> {
 
         this.grid.getColumns().forEach(column -> {
             final String key = column.getKey();
+            final boolean columnNotVisible = columnsHiddenOnLoad != null ? columnsHiddenOnLoad.contains(key) : false;
             final String setting = keyStub + "-" + key;
-            final String setVisible = savedVisible.get(setting);
+            final String setVisible = columnNotVisible ? "false" : savedVisible.get(setting);
             if (setVisible != null && !setVisible.isEmpty()) {
                 grid.getColumnByKey(key).setVisible(Boolean.parseBoolean(setVisible));
             }
@@ -179,7 +199,7 @@ public class GridExtender<T> {
     }
 
     private void configureSaveColumnOrder() {
-        logger.info("Setting up: " + uniqueId);
+        logger.debug("Setting up: " + uniqueId);
         if (grid.isColumnReorderingAllowed()) {
             final String keyStub = uniqueId + "-order";
 
@@ -191,7 +211,9 @@ public class GridExtender<T> {
                     try {
                         grid.setColumnOrder(calculateColumnOrder(availableColumns, parsedColumns));
                     } catch (IllegalArgumentException e) {
-                        logger.error(e.getMessage() + " " + uniqueId);
+                        logger.warn(e.getMessage()
+                                + "\nError caused by missing entry (or entries) in TblUserSettings for SettingKey: "
+                                + keyStub);
                     }
                 }
             }
@@ -326,11 +348,22 @@ public class GridExtender<T> {
             // If the column is setVisible(false) for initial hiding, it may have a stored
             // setting that overrides that.
             // Get the stored setting and set the context menu to show the correct status.
+            // Some columns are set to be hidden at load, despite stored settings. Find
+            // these and override if present.
             final String keyStub = uniqueId + "-visible";
-            final String storedVisibleSetting = MemberSettingsStorageFactory.getUserSettingsStorage()
-                    .get(keyStub + "-" + column.getKey());
-            menuItem.setChecked(storedVisibleSetting == null ? false
-                    : (storedVisibleSetting.equals("true") || storedVisibleSetting.isEmpty() ? true : false));
+            final boolean columnNotVisible = columnsHiddenOnLoad != null ? columnsHiddenOnLoad.contains(column.getKey())
+                    : false;
+            final String storedVisibleSetting = columnNotVisible ? "false"
+                    : MemberSettingsStorageFactory.getUserSettingsStorage().get(keyStub + "-" + column.getKey());
+            boolean showColumn = false;
+            if (StringUtils.equals(storedVisibleSetting, "true")) {
+                showColumn = true;
+            } else if ((StringUtils.equals(storedVisibleSetting, "false"))) {
+                showColumn = false;
+            } else {
+                showColumn = column.isVisible();
+            }
+            menuItem.setChecked(showColumn);
         }
     }
 
@@ -369,14 +402,14 @@ public class GridExtender<T> {
         if (resizable) {
             // Never allow Action Menu column to be resizable.
             grid.getColumns().forEach(column -> {
-                if (column.getKey() != null && !column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                if (column.getKey() != null && !ACTION_MENU.equalsIgnoreCase(column.getKey())) {
                     column.setResizable(true);
                     column.setFlexGrow(0);
                 }
             });
         } else if (!resizableColumns.isEmpty()) {
             resizableColumns.forEach(column -> {
-                if (!column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                if (!ACTION_MENU.equalsIgnoreCase(column.getKey())) {
                     column.setResizable(true);
                     column.setFlexGrow(0);
                 }
@@ -384,7 +417,7 @@ public class GridExtender<T> {
         } else {
             // Set columns resizable if they don't have setFlexGrow(0)
             grid.getColumns().forEach(column -> {
-                if (column.getKey() != null && !column.getKey().equalsIgnoreCase(ACTION_MENU)) {
+                if (column.getKey() != null && !ACTION_MENU.equalsIgnoreCase(column.getKey())) {
                     column.setResizable(column.getFlexGrow() != 0);
                 }
             });
@@ -417,7 +450,7 @@ public class GridExtender<T> {
      */
     public void setAllColumnsSortable() {
         this.grid.getColumns().forEach(column -> {
-            column.setSortable(!column.getKey().equalsIgnoreCase(ACTION_MENU));
+            column.setSortable(!ACTION_MENU.equalsIgnoreCase(column.getKey()));
         });
     }
 
@@ -429,8 +462,10 @@ public class GridExtender<T> {
      *             status.
      */
     public void setColumnsNonSortable(Set<String> keys) {
+        logger.info("Non-Sort: " + keys);
         keys.forEach(key -> {
             final Column<?> column = this.grid.getColumnByKey(key);
+
             // Check in case an key has not been set for a column
             if (column != null) {
                 column.setSortable(false);

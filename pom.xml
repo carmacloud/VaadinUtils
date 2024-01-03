@@ -104,6 +104,12 @@
 							</processors>
 							<optionMap>
 								<openjpa.metamodel>true</openjpa.metamodel>
+								<!-- set source version to 5 to prevent
+								timestamps being generated 
+									which
+								causes git to constantly need to commit
+								otherwise identical files -->
+								<openjpa.source>5</openjpa.source>
 							</optionMap>
 							<outputDirectory>${basedir}/src/generated</outputDirectory>
 						</configuration>
@@ -407,7 +413,7 @@
 			<version>1.1.0</version>
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
-			<dependency>
+		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>mpr-v7</artifactId>
 		</dependency>
@@ -421,6 +427,8 @@
 			<artifactId>popup</artifactId>
 			<version>2.2.5</version>
 		</dependency>
+
+	
 	</dependencies>
 
 	<profiles>

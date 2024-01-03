@@ -1,15 +1,15 @@
 package au.com.vaadinutils.flow.util;
 
-import com.vaadin.flow.component.UI;
+import au.com.vaadinutils.flow.ui.UIReference;
 
 public abstract class ProgressBarTask<T> {
     private ProgressTaskListener<T> listener;
 
-    protected final UI ui;
+    protected final UIReference ui;
 
-    public ProgressBarTask(ProgressTaskListener<T> listener, final UI ui) {
+    public ProgressBarTask(ProgressTaskListener<T> listener, final UIReference ui2) {
         this.listener = listener;
-        this.ui = ui;
+        this.ui = ui2;
     }
 
     abstract public void run();
@@ -38,7 +38,7 @@ public abstract class ProgressBarTask<T> {
         });
     }
 
-    public UI getUi() {
+    public UIReference getUi() {
         return this.ui;
     }
 }
