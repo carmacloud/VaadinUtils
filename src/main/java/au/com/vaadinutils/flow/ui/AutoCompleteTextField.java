@@ -13,6 +13,7 @@ import com.vaadin.flow.component.BlurNotifier.BlurEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.HasValue.ValueChangeListener;
 import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -29,7 +30,8 @@ public class AutoCompleteTextField<E> extends Div {
     private final Map<String, E> options = new LinkedHashMap<>();
     private AutoCompleteQueryListener<E> listener;
     private AutoCompleteOptionSelected<E> optionListener;
-
+    
+    private long dropDownWidth = 120;
     /**
      * <pre>
      * {@code
@@ -71,8 +73,10 @@ public class AutoCompleteTextField<E> extends Div {
 
     public AutoCompleteTextField(final String fieldCaption, final String listCaption) {
         Preconditions.checkNotNull(listCaption, "List Caption is required to link the popup to the field.");
+        Preconditions.checkArgument(listCaption.length() > 0, "List Caption is required to link the popup to the field.");
         field.setClassName(listCaption);
         field.setId(listCaption);
+        field.setLabel(fieldCaption); 
         popup.setFor(listCaption);
         
         add(field, popup);
@@ -80,9 +84,9 @@ public class AutoCompleteTextField<E> extends Div {
         // Set as Lazy and if also set, there can be a timeout value.
         field.setValueChangeMode(ValueChangeMode.LAZY);
         field.addValueChangeListener(valueChangeListener -> {
-            options.clear();
-
+            
             if (listener != null) {
+                options.clear();
                 listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
             }
 
@@ -103,7 +107,7 @@ public class AutoCompleteTextField<E> extends Div {
         popup.show();
         popup.removeAll();
         final VerticalLayout layout = new VerticalLayout();
-        layout.setWidth("120px");
+        layout.setWidth(dropDownWidth, Unit.PIXELS);
         for (String string : listItems) {
             final Span span = new Span(
                     new Html("<font color='" + VaadinHelper.CARMA_DARK_BLACK + "'>" + string + "</font>"));
@@ -118,6 +122,14 @@ public class AutoCompleteTextField<E> extends Div {
         }
         
         popup.add(layout);
+    }
+
+    public long getDropDownWidth() {
+        return dropDownWidth;
+    }
+
+    public void setDropDownWidth(long dropDownWidth) {
+        this.dropDownWidth = dropDownWidth;
     }
 
     public void setOptionSelectionListener(AutoCompleteOptionSelected<E> listener) {
