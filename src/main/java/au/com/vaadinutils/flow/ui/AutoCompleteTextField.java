@@ -30,8 +30,9 @@ public class AutoCompleteTextField<E> extends Div {
     private final Map<String, E> options = new LinkedHashMap<>();
     private AutoCompleteQueryListener<E> listener;
     private AutoCompleteOptionSelected<E> optionListener;
-    
+
     private long dropDownWidth = 120;
+
     /**
      * <pre>
      * {@code
@@ -73,27 +74,26 @@ public class AutoCompleteTextField<E> extends Div {
 
     public AutoCompleteTextField(final String fieldCaption, final String listCaption) {
         Preconditions.checkNotNull(listCaption, "List Caption is required to link the popup to the field.");
-        Preconditions.checkArgument(listCaption.length() > 0, "List Caption is required to link the popup to the field.");
+        Preconditions.checkArgument(listCaption.length() > 0,
+                "List Caption is required to link the popup to the field.");
         field.setClassName(listCaption);
         field.setId(listCaption);
-        field.setLabel(fieldCaption); 
+        field.setLabel(fieldCaption);
+        field.setClearButtonVisible(true);
         popup.setFor(listCaption);
-        
+
         add(field, popup);
 
         // Set as Lazy and if also set, there can be a timeout value.
         field.setValueChangeMode(ValueChangeMode.LAZY);
         field.addValueChangeListener(valueChangeListener -> {
-            
             if (listener != null) {
                 options.clear();
                 listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
             }
 
-            if (!options.isEmpty()) {
-                if (valueChangeListener.isFromClient()) {
-                    showOptionMenu();
-                }
+            if (valueChangeListener.isFromClient()) {
+                showOptionMenu();
             }
         });
     }
@@ -108,7 +108,7 @@ public class AutoCompleteTextField<E> extends Div {
         popup.removeAll();
         final VerticalLayout layout = new VerticalLayout();
         layout.setWidth(dropDownWidth, Unit.PIXELS);
-        for (String string : listItems) {
+        for (final String string : listItems) {
             final Span span = new Span(
                     new Html("<font color='" + VaadinHelper.CARMA_DARK_BLACK + "'>" + string + "</font>"));
             span.setId(string);
@@ -120,7 +120,7 @@ public class AutoCompleteTextField<E> extends Div {
                 popup.hide();
             });
         }
-        
+
         popup.add(layout);
     }
 
@@ -128,11 +128,11 @@ public class AutoCompleteTextField<E> extends Div {
         return dropDownWidth;
     }
 
-    public void setDropDownWidth(long dropDownWidth) {
+    public void setDropDownWidth(final long dropDownWidth) {
         this.dropDownWidth = dropDownWidth;
     }
 
-    public void setOptionSelectionListener(AutoCompleteOptionSelected<E> listener) {
+    public void setOptionSelectionListener(final AutoCompleteOptionSelected<E> listener) {
         this.optionListener = listener;
     }
 
@@ -140,7 +140,7 @@ public class AutoCompleteTextField<E> extends Div {
         optionListener = null;
     }
 
-    public void setQueryListener(AutoCompleteQueryListener<E> listener) {
+    public void setQueryListener(final AutoCompleteQueryListener<E> listener) {
         this.listener = listener;
     }
 
@@ -148,7 +148,7 @@ public class AutoCompleteTextField<E> extends Div {
         listener = null;
     }
 
-    public void addOption(E option, String optionLabel) {
+    public void addOption(final E option, final String optionLabel) {
         options.put(optionLabel, option);
     }
 
@@ -156,15 +156,15 @@ public class AutoCompleteTextField<E> extends Div {
         return this.field;
     }
 
-    public void addValueChangeListener(final
-            ValueChangeListener<? super ComponentValueChangeEvent<TextField, String>> event) {
+    public void addValueChangeListener(
+            final ValueChangeListener<? super ComponentValueChangeEvent<TextField, String>> event) {
         field.addValueChangeListener(event);
     }
-    
-    public void addBlurListener(ComponentEventListener<BlurEvent<TextField>> event) {
+
+    public void addBlurListener(final ComponentEventListener<BlurEvent<TextField>> event) {
         field.addBlurListener(event);
     }
-    
+
     public void setTextChangeTimeout(final int timeout) {
         field.setValueChangeTimeout(timeout);
     }
