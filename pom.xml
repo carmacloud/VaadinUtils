@@ -21,7 +21,7 @@
 		<!-- Testing -->
 		<junit.version>4.13.2</junit.version>
 		<!-- Vaadin 14 properties -->
-		<vaadin.version>14.11.3</vaadin.version>
+		<vaadin.version>14.11.5</vaadin.version>
 	</properties>
 
 	<repositories>
