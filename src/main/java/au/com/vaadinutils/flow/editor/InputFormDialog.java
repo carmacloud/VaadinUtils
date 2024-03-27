@@ -26,13 +26,13 @@ public class InputFormDialog extends Dialog {
 
     private static final long serialVersionUID = -7109252996175845038L;
     private final Logger logger = LogManager.getLogger();
-    private HorizontalLayout buttonLayout;
-    private Button cancelButton;
-    private Button ok;
+    private final HorizontalLayout buttonLayout;
+    private final Button cancelButton;
+    private final Button ok;
     private boolean validationError = false;
     private boolean layoutIsForm = false;
 
-    public InputFormDialog(String title, HasValidation primaryFocusField, final Component form,
+    public InputFormDialog(final String title, final HasValidation primaryFocusField, final Component form,
             final InputFormDialogRecipient recipient) {
         this.add(new Text(title));
         this.setModal(true);
@@ -82,24 +82,9 @@ public class InputFormDialog extends Dialog {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onComponentEvent(ClickEvent<Button> event) {
+            public void onComponentEvent(final ClickEvent<Button> event) {
                 validationError = false;
-                form.getChildren().forEach(child -> {
-                    if (!validationError && !layoutIsForm) {
-                        try {
-                            final boolean isInvalid = ((HasValidation) child).isInvalid();
-                            final String errorMessage = ((HasValidation) child).getErrorMessage();
-                            if (isInvalid) {
-                                logger.warn("Form errors, Input Form closing '" + errorMessage + "'");
-                                VaadinHelper.notificationDialog("Form errors, '" + errorMessage + "'",
-                                        NotificationType.WARNING);
-                                validationError = true;
-                            }
-                        } catch (Exception e) {
-                            ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
-                        }
-                    }
-                });
+                validateFormComponents(form);
                 if (!validationError) {
                     recipient.onOK();
                 }
@@ -108,12 +93,42 @@ public class InputFormDialog extends Dialog {
         });
     }
 
+    private void validateFormComponents(final Component form) {
+        if (!validationError && !layoutIsForm) {
+            try {
+                form.getChildren().forEach(child -> {
+                    // Only validate if the component has the HasValidation interface. Otherwise
+                    // it's possibly a layout.
+                    if (child instanceof HasValidation) {
+                        final boolean isInvalid = ((HasValidation) child).isInvalid();
+                        final String errorMessage = ((HasValidation) child).getErrorMessage();
+                        if (isInvalid) {
+                            logger.warn("Form errors, Input Form closing '"
+                                    + (errorMessage != null ? errorMessage : "Incorrect value") + "'");
+                            VaadinHelper.notificationDialog(
+                                    "Form errors, '" + (errorMessage != null ? errorMessage : "Incorrect value") + "'",
+                                    NotificationType.WARNING);
+                            validationError = true;
+                        }
+                    } else {
+                        // Fields possibly wrapped in a layout. Pass the component in to find the
+                        // sub-components that are to be validated.
+                        validateFormComponents(child);
+                    }
+                });
+            } catch (final Exception e) {
+                ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
+                logger.error("Cannot validate on this component.");
+            }
+        }
+    }
+
     private Button createCancelButton(final InputFormDialogRecipient recipient) {
         return new Button("Cancel", new ComponentEventListener<ClickEvent<Button>>() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onComponentEvent(ClickEvent<Button> event) {
+            public void onComponentEvent(final ClickEvent<Button> event) {
                 recipient.onCancel();
                 close();
             }
@@ -124,19 +139,19 @@ public class InputFormDialog extends Dialog {
         buttonLayout.remove(cancelButton);
     }
 
-    public void setButtonsSpacing(boolean spacing) {
+    public void setButtonsSpacing(final boolean spacing) {
         buttonLayout.setSpacing(spacing);
     }
 
-    public void setOkButtonLabel(String label) {
+    public void setOkButtonLabel(final String label) {
         ok.setText(label);
     }
 
-    public void setCancelButtonLabel(String label) {
+    public void setCancelButtonLabel(final String label) {
         cancelButton.setText(label);
     }
 
-    public void showOkButton(boolean show) {
+    public void showOkButton(final boolean show) {
         ok.setVisible(show);
     }
 
