@@ -102,6 +102,8 @@ public class GridExtender<T> {
         setAllColumnsSortable();
     }
 
+    final List<T> userSelectedRows = new ArrayList<T>();
+
     /**
      * Call this to disable the row selection from setting the check box on a
      * multi-select grid. (Should really only be needed on a multi-select and only
@@ -110,10 +112,26 @@ public class GridExtender<T> {
     public void disableCheckboxSelectionOnRowClick() {
         grid.getSelectionModel().addSelectionListener(e -> {
             if (!e.isFromClient()) {
-                final T selected = e.getFirstSelectedItem().orElse(null);
-                if (selected != null) {
-                    grid.deselect(selected);
+                if (!e.getAllSelectedItems().isEmpty()) {
+                    final List<T> selectedItems = new ArrayList<T>(e.getAllSelectedItems());
+                    // In a multi-select grid, the selected items are stored at the end, so the
+                    // most recent entry (the last) is the most current selection.
+                    final T selected = selectedItems.get(selectedItems.size() - 1);
+                    if (selected != null) {
+                        e.getAllSelectedItems().forEach(row -> {
+                            // Make sure we don't attempt to delselect any rows other than the currently
+                            // selected.
+                            if (row.equals(selected) && !userSelectedRows.contains(row)) {
+                                grid.deselect(selected);
+                            }
+                        });
+                    }
                 }
+            } else {
+                // Keep a record of rows selected by the user, we don't want to deselect any of
+                // those.
+                userSelectedRows.clear();
+                userSelectedRows.addAll(e.getAllSelectedItems());
             }
         });
     }
@@ -393,7 +411,6 @@ public class GridExtender<T> {
      *                        for each row
      */
     public void setGridContextMenu(final ComponentRenderer<Component, T> gridContextMenu) {
-        logger.info("Setting Context Menu");
         this.gridContextMenu = gridContextMenu;
     }
 
