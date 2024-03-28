@@ -53,8 +53,8 @@ public class GridExtender<T> {
 
     private final Logger logger = LogManager.getLogger();
     public static final String ACTION_MENU = "_actionMenu";
-    private Grid<T> grid;
-    private String uniqueId;
+    private final Grid<T> grid;
+    private final String uniqueId;
     private List<String> columnsHiddenOnLoad;
 
     // For the additional column that optionally contains action filter and/or
@@ -100,6 +100,22 @@ public class GridExtender<T> {
         configureSaveColumnVisible();
         configureSaveColumnOrder();
         setAllColumnsSortable();
+    }
+
+    /**
+     * Call this to disable the row selection from setting the check box on a
+     * multi-select grid. (Should really only be needed on a multi-select and only
+     * when a context menu attached.)
+     */
+    public void disableCheckboxSelectionOnRowClick() {
+        grid.getSelectionModel().addSelectionListener(e -> {
+            if (!e.isFromClient()) {
+                final T selected = e.getFirstSelectedItem().orElse(null);
+                if (selected != null) {
+                    grid.deselect(selected);
+                }
+            }
+        });
     }
 
     public List<String> getVisibleColumns() {
@@ -165,7 +181,7 @@ public class GridExtender<T> {
             // Avoid setting proposed width < 0
             final String widthToFit = colWidth >= 0 ? String.valueOf(colWidth) : "0";
             column.setWidth(widthToFit + "px");
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             logger.error(e.getMessage() + " " + column.getKey());
         }
     }
@@ -210,7 +226,7 @@ public class GridExtender<T> {
                 if (parsedColumns.length > 0) {
                     try {
                         grid.setColumnOrder(calculateColumnOrder(availableColumns, parsedColumns));
-                    } catch (IllegalArgumentException e) {
+                    } catch (final IllegalArgumentException e) {
                         logger.warn(e.getMessage()
                                 + "\nError caused by missing entry (or entries) in TblUserSettings for SettingKey: "
                                 + keyStub);
@@ -222,7 +238,7 @@ public class GridExtender<T> {
                 final List<Column<T>> reorderedColumns = event.getColumns();
                 if (reorderedColumns.size() > 0) {
                     String parsedColumns = "";
-                    for (Column<T> column : reorderedColumns) {
+                    for (final Column<T> column : reorderedColumns) {
                         parsedColumns += column.getKey() + ", ";
                     }
 
@@ -245,7 +261,7 @@ public class GridExtender<T> {
      */
     private List<Column<T>> calculateColumnOrder(final List<Column<T>> availableColumns, final String[] parsedColumns) {
         final List<String> availableList = new ArrayList<>(availableColumns.size());
-        for (Column<T> column : availableColumns) {
+        for (final Column<T> column : availableColumns) {
             if (column.getKey() != null) {
                 availableList.add(column.getKey());
             }
@@ -258,7 +274,7 @@ public class GridExtender<T> {
         // Add new columns in the same index position as they were added to the
         // grid in
         final List<String> newList = new ArrayList<>();
-        for (String column : newList) {
+        for (final String column : newList) {
             parsedList.add(availableList.indexOf(column), column);
         }
 
@@ -303,7 +319,7 @@ public class GridExtender<T> {
         // Add the the action column to first position
         newOrderedColumns.add(0, actionColumn);
         int count = 1;
-        for (Column<T> column : columns) {
+        for (final Column<T> column : columns) {
             if (column.getKey() != null) {
                 // Now add all other columns, except action column, if it exists.
                 if (!column.getKey().equals(actionColumn.getKey())) {
@@ -333,12 +349,12 @@ public class GridExtender<T> {
     private class ColumnActionContextMenu extends ContextMenu {
         private static final long serialVersionUID = 1L;
 
-        public ColumnActionContextMenu(Component target) {
+        public ColumnActionContextMenu(final Component target) {
             super(target);
             setOpenOnClick(true);
         }
 
-        void addColumnActionItem(String label, Grid.Column<T> column) {
+        void addColumnActionItem(final String label, final Grid.Column<T> column) {
             final MenuItem menuItem = this.addItem(label, e -> {
                 final boolean checked = e.getSource().isChecked();
                 column.setVisible(checked);
@@ -376,7 +392,8 @@ public class GridExtender<T> {
      * @param gridContextMenu A {@link ComponentRenderer} that will add a component
      *                        for each row
      */
-    public void setGridContextMenu(ComponentRenderer<Component, T> gridContextMenu) {
+    public void setGridContextMenu(final ComponentRenderer<Component, T> gridContextMenu) {
+        logger.info("Setting Context Menu");
         this.gridContextMenu = gridContextMenu;
     }
 
@@ -440,7 +457,7 @@ public class GridExtender<T> {
      * 
      * @param columns A {@link List} of {@link Column}s that will be set resizeable.
      */
-    public void setSelectedColumnsResizable(List<Column<T>> columns) {
+    public void setSelectedColumnsResizable(final List<Column<T>> columns) {
         this.resizableColumns.clear();
         this.resizableColumns.addAll(columns);
     }
@@ -461,7 +478,7 @@ public class GridExtender<T> {
      *             not added to the column, there is no change to column sorting
      *             status.
      */
-    public void setColumnsNonSortable(Set<String> keys) {
+    public void setColumnsNonSortable(final Set<String> keys) {
         logger.info("Non-Sort: " + keys);
         keys.forEach(key -> {
             final Column<?> column = this.grid.getColumnByKey(key);
