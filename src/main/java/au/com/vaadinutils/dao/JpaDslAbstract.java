@@ -1737,7 +1737,7 @@ public abstract class JpaDslAbstract<E, R> {
                         && (loggedNullIdClasses.putIfAbsent((Class<CrudEntity>) crudEntity.getClass(), true) == null)) {
                     final Exception ex = new Exception(
                             "Diagnostic Stack trace, Entity has Null ID " + entity.getClass().getName());
-                    logger.error(ex, ex);
+                    logger.warn(ex, ex);
 
                 }
                 return entity;
