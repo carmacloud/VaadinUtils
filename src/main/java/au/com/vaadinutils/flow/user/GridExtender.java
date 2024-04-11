@@ -103,6 +103,21 @@ public class GridExtender<T> {
     }
 
     final List<T> userSelectedRows = new ArrayList<T>();
+    boolean disabled = false;
+
+    public boolean isCheckboxSelectionOnRowDisabled() {
+        return this.disabled;
+    }
+
+    /**
+     * Call this to enable/disable the row selection from setting the check box on a
+     * multi-select grid. Set Disabled to true when selecting rows using the
+     * select() method. Set Disabled back to false after selecting.
+     */
+
+    public void setCheckboxSelectionOnRowDisabled(final boolean disabled) {
+        this.disabled = disabled;
+    }
 
     /**
      * Call this to disable the row selection from setting the check box on a
@@ -111,7 +126,7 @@ public class GridExtender<T> {
      */
     public void disableCheckboxSelectionOnRowClick() {
         grid.getSelectionModel().addSelectionListener(e -> {
-            if (!e.isFromClient()) {
+            if (!e.isFromClient() && !disabled) {
                 if (!e.getAllSelectedItems().isEmpty()) {
                     final List<T> selectedItems = new ArrayList<T>(e.getAllSelectedItems());
                     // In a multi-select grid, the selected items are stored at the end, so the
