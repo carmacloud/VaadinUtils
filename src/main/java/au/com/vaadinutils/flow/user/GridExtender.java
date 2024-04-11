@@ -103,10 +103,10 @@ public class GridExtender<T> {
     }
 
     final List<T> userSelectedRows = new ArrayList<T>();
-    boolean disabled = false;
+    boolean checkboxSelectionOnRowdisabled = false;
 
     public boolean isCheckboxSelectionOnRowDisabled() {
-        return this.disabled;
+        return this.checkboxSelectionOnRowdisabled;
     }
 
     /**
@@ -116,7 +116,7 @@ public class GridExtender<T> {
      */
 
     public void setCheckboxSelectionOnRowDisabled(final boolean disabled) {
-        this.disabled = disabled;
+        this.checkboxSelectionOnRowdisabled = disabled;
     }
 
     /**
@@ -126,7 +126,7 @@ public class GridExtender<T> {
      */
     public void disableCheckboxSelectionOnRowClick() {
         grid.getSelectionModel().addSelectionListener(e -> {
-            if (!e.isFromClient() && !disabled) {
+            if (!e.isFromClient() && !checkboxSelectionOnRowdisabled) {
                 if (!e.getAllSelectedItems().isEmpty()) {
                     final List<T> selectedItems = new ArrayList<T>(e.getAllSelectedItems());
                     // In a multi-select grid, the selected items are stored at the end, so the
