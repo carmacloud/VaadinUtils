@@ -82,7 +82,7 @@ public abstract class JpaDslAbstract<E, R> {
     public static final class TypedPath<E, V> {
         final Path<V> path;
 
-        public TypedPath(Path<V> path2) {
+        public TypedPath(final Path<V> path2) {
             this.path = path2;
         }
     }
@@ -126,7 +126,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 final List<Predicate> predicates = new ArrayList<>(conditions.length);
-                for (Condition<E> condition : conditions) {
+                for (final Condition<E> condition : conditions) {
                     predicates.add(condition.getPredicates());
                 }
 
@@ -140,7 +140,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 final List<Predicate> predicates = new ArrayList<>(conditions.size());
-                for (Condition<E> condition : conditions) {
+                for (final Condition<E> condition : conditions) {
                     predicates.add(condition.getPredicates());
                 }
 
@@ -159,35 +159,35 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
-    public <K> Expression<String> asString(final JoinBuilder<E, K> join, SingularAttribute<K, ?> field) {
+    public <K> Expression<String> asString(final JoinBuilder<E, K> join, final SingularAttribute<K, ?> field) {
         return getJoin(join).get(field).as(String.class);
     }
 
-    public Expression<Long> asLong(SingularAttribute<E, ?> field) {
+    public Expression<Long> asLong(final SingularAttribute<E, ?> field) {
         return root.get(field).as(Long.class);
     }
 
-    public <K> Expression<Long> asLong(final JoinBuilder<E, K> join, SingularAttribute<K, ?> field) {
+    public <K> Expression<Long> asLong(final JoinBuilder<E, K> join, final SingularAttribute<K, ?> field) {
         return getJoin(join).get(field).as(Long.class);
     }
 
-    public <T> Expression<T> asExpression(SingularAttribute<E, T> field) {
+    public <T> Expression<T> asExpression(final SingularAttribute<E, T> field) {
         return root.get(field).as(field.getJavaType());
     }
 
-    public <T> Expression<Integer> date(SingularAttribute<E, T> callbackdate) {
+    public <T> Expression<Integer> date(final SingularAttribute<E, T> callbackdate) {
         return builder.function("date", Integer.class, asExpression(callbackdate));
     }
 
-    public <T> Expression<Integer> hour(SingularAttribute<E, T> callbackdate) {
+    public <T> Expression<Integer> hour(final SingularAttribute<E, T> callbackdate) {
         return builder.function("hour", Integer.class, asExpression(callbackdate));
     }
 
-    public <T> Expression<Integer> minute(SingularAttribute<E, T> callbackdate) {
+    public <T> Expression<Integer> minute(final SingularAttribute<E, T> callbackdate) {
         return builder.function("minute", Integer.class, asExpression(callbackdate));
     }
 
-    public Expression<String> asString(SingularAttribute<E, ?> field) {
+    public Expression<String> asString(final SingularAttribute<E, ?> field) {
         return root.get(field).as(String.class);
     }
 
@@ -231,16 +231,16 @@ public abstract class JpaDslAbstract<E, R> {
         return builder.coalesce(root.get(attribute1), root.get(attribute2));
     }
 
-    public <T, J1, J2> Expression<T> coalesce(final JoinBuilder<E, J1> join1, SingularAttribute<J1, T> attribute1,
+    public <T, J1, J2> Expression<T> coalesce(final JoinBuilder<E, J1> join1, final SingularAttribute<J1, T> attribute1,
             final JoinBuilder<E, J2> join2, final SingularAttribute<J2, T> attribute2) {
         return builder.coalesce(getJoin(join1).get(attribute1), getJoin(join2).get(attribute2));
     }
 
-    public Expression<String> concat(Expression<String> concat, Expression<String> trim) {
+    public Expression<String> concat(final Expression<String> concat, final Expression<String> trim) {
         return builder.concat(concat, trim);
     }
 
-    public Expression<String> concat(Expression<String> trim, String string) {
+    public Expression<String> concat(final Expression<String> trim, final String string) {
         return builder.concat(trim, string);
     }
 
@@ -250,13 +250,13 @@ public abstract class JpaDslAbstract<E, R> {
      * so jpaDslAbstract.select().where(...).count();
      */
     public Long count() {
-        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        final CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
         if (predicate != null) {
             criteria.where(predicate);
         }
         criteria.select(builder.count(root));
 
-        TypedQuery<Long> query = getEntityManager().createQuery(criteria);
+        final TypedQuery<Long> query = getEntityManager().createQuery(criteria);
         JpaSettings.setQueryHints(query);
 
         return query.getSingleResult();
@@ -277,12 +277,12 @@ public abstract class JpaDslAbstract<E, R> {
      */
     public int delete() {
         Preconditions.checkArgument(orders.isEmpty(), ORDER_IS_NOT_SUPPORTED_FOR_DELETE);
-        CriteriaDelete<E> deleteCriteria = builder.createCriteriaDelete(entityClass);
+        final CriteriaDelete<E> deleteCriteria = builder.createCriteriaDelete(entityClass);
         root = deleteCriteria.getRoot();
         if (predicate != null) {
             deleteCriteria.where(predicate);
         }
-        Query query = getEntityManager().createQuery(deleteCriteria);
+        final Query query = getEntityManager().createQuery(deleteCriteria);
         JpaSettings.setQueryHints(query);
 
         if (limit != null) {
@@ -291,7 +291,7 @@ public abstract class JpaDslAbstract<E, R> {
         if (startPosition != null) {
             query.setFirstResult(startPosition);
         }
-        int result = query.executeUpdate();
+        final int result = query.executeUpdate();
         getEntityManager().getEntityManagerFactory().getCache().evict(entityClass);
 
         return result;
@@ -306,15 +306,15 @@ public abstract class JpaDslAbstract<E, R> {
         return builder.quot(path1, path2);
     }
 
-    public Expression<Number> divide(final Expression<? extends Number> path1, int number) {
+    public Expression<Number> divide(final Expression<? extends Number> path1, final int number) {
         return builder.quot(path1, number);
     }
 
-    public Expression<Integer> mod(final Expression<Integer> path1, int i) {
+    public Expression<Integer> mod(final Expression<Integer> path1, final int i) {
         return builder.mod(path1, i);
     }
 
-    public Expression<Integer> toInteger(Expression<Number> expression) {
+    public Expression<Integer> toInteger(final Expression<Number> expression) {
         return builder.toInteger(expression);
     }
 
@@ -347,11 +347,11 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
-    public <J, V> Expression<BigDecimal> round(JoinBuilder<E, J> join, SingularAttribute<J, V> number) {
+    public <J, V> Expression<BigDecimal> round(final JoinBuilder<E, J> join, final SingularAttribute<J, V> number) {
         return builder.function("round", BigDecimal.class, asString(join, number), builder.literal(2));
     }
 
-    public <T> Expression<BigDecimal> round(SingularAttribute<E, T> number) {
+    public <T> Expression<BigDecimal> round(final SingularAttribute<E, T> number) {
         return builder.function("round", BigDecimal.class, asExpression(number), builder.literal(2));
     }
 
@@ -410,7 +410,7 @@ public abstract class JpaDslAbstract<E, R> {
         return equal(joinAttribute, joinType, field, value);
     }
 
-    public <J> Condition<E> eq(ListAttribute<E, J> field, J value) {
+    public <J> Condition<E> eq(final ListAttribute<E, J> field, final J value) {
         return equal(field, value);
     }
 
@@ -419,11 +419,11 @@ public abstract class JpaDslAbstract<E, R> {
         return equal(joinAttribute, joinType, field, value);
     }
 
-    public <J> Condition<E> eq(SetAttribute<E, J> field, J value) {
+    public <J> Condition<E> eq(final SetAttribute<E, J> field, final J value) {
         return equal(field, value);
     }
 
-    public <J> Condition<E> eq(SingularAttribute<? super E, J> field, J value) {
+    public <J> Condition<E> eq(final SingularAttribute<? super E, J> field, final J value) {
         return equal(field, value);
     }
 
@@ -438,7 +438,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.equal(join.get(field), copyEntityForQuery(value));
             }
         };
@@ -461,7 +461,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.equal(join.get(field), copyEntityForQuery(value));
             }
         };
@@ -484,7 +484,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.equal(join.get(field), copyEntityForQuery(value));
             }
         };
@@ -522,12 +522,12 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
-    public <L> JpaDslAbstract<E, R> fetch(ListAttribute<E, L> field, JoinType type) {
+    public <L> JpaDslAbstract<E, R> fetch(final ListAttribute<E, L> field, final JoinType type) {
         root.fetch(field, type);
         return this;
     }
 
-    public <L> JpaDslAbstract<E, R> fetch(SetAttribute<E, L> field, JoinType type) {
+    public <L> JpaDslAbstract<E, R> fetch(final SetAttribute<E, L> field, final JoinType type) {
         root.fetch(field, type);
         return this;
     }
@@ -538,18 +538,18 @@ public abstract class JpaDslAbstract<E, R> {
      * @param field
      * @return
      */
-    public <L> JpaDslAbstract<E, R> fetch(SingularAttribute<E, L> field) {
+    public <L> JpaDslAbstract<E, R> fetch(final SingularAttribute<E, L> field) {
         root.fetch(field, JoinType.LEFT);
         return this;
     }
 
-    public <L> JpaDslAbstract<E, R> fetch(SingularAttribute<E, L> field, JoinType type) {
+    public <L> JpaDslAbstract<E, R> fetch(final SingularAttribute<E, L> field, final JoinType type) {
         root.fetch(field, type);
         return this;
     }
 
-    public <K, T> JpaDslAbstract<E, R> fetch(final JoinBuilder<E, K> join, SingularAttribute<K, T> field,
-            JoinType type) {
+    public <K, T> JpaDslAbstract<E, R> fetch(final JoinBuilder<E, K> join, final SingularAttribute<K, T> field,
+            final JoinType type) {
         getJoin(join).fetch(field, type);
         return this;
     }
@@ -561,7 +561,7 @@ public abstract class JpaDslAbstract<E, R> {
      * @param query
      * @param predicates
      */
-    public void filtersWillBeAdded(List<Predicate> predicates) {
+    public void filtersWillBeAdded(final List<Predicate> predicates) {
         Preconditions.checkArgument(isJpaContainerDelegate, "You must call isJpaContainerDelegate first!");
         // the query wouldn't be built with the vaadinContainer's query object
         // if you didn't call isJpaContainerDelegate.
@@ -604,7 +604,7 @@ public abstract class JpaDslAbstract<E, R> {
     }
 
     @SuppressWarnings("unchecked")
-    protected <K> Join<E, K> getJoin(JoinBuilder<E, K> joinBuilder) {
+    protected <K> Join<E, K> getJoin(final JoinBuilder<E, K> joinBuilder) {
         Join<E, K> join = (Join<E, K>) joins2.get(joinBuilder);
         if (join == null) {
             join = joinBuilder.getJoin(root, builder);
@@ -613,18 +613,18 @@ public abstract class JpaDslAbstract<E, R> {
         return join;
     }
 
-    private <J> Join<E, J> getJoin(ListAttribute<? super E, J> joinAttribute, JoinType joinType) {
-        JoinBuilder<E, J> jb = join(joinAttribute, joinType);
+    private <J> Join<E, J> getJoin(final ListAttribute<? super E, J> joinAttribute, final JoinType joinType) {
+        final JoinBuilder<E, J> jb = join(joinAttribute, joinType);
         return getJoin(jb);
     }
 
-    private <J> Join<E, J> getJoin(SetAttribute<? super E, J> joinAttribute, JoinType joinType) {
-        JoinBuilder<E, J> jb = join(joinAttribute, joinType);
+    private <J> Join<E, J> getJoin(final SetAttribute<? super E, J> joinAttribute, final JoinType joinType) {
+        final JoinBuilder<E, J> jb = join(joinAttribute, joinType);
         return getJoin(jb);
     }
 
-    private <J> Join<E, J> getJoin(SingularAttribute<? super E, J> joinAttribute, JoinType joinType) {
-        JoinBuilder<E, J> jb = join(joinAttribute, joinType);
+    private <J> Join<E, J> getJoin(final SingularAttribute<? super E, J> joinAttribute, final JoinType joinType) {
+        final JoinBuilder<E, J> jb = join(joinAttribute, joinType);
         return getJoin(jb);
     }
 
@@ -637,10 +637,10 @@ public abstract class JpaDslAbstract<E, R> {
         return prepareQuery().getSingleResult();
     }
 
-    public R getSingleResultOrNull(boolean dump) {
+    public R getSingleResultOrNull(final boolean dump) {
         limit(1);
-        TypedQuery<R> prepareQuery = prepareQuery();
-        List<R> resultList = prepareQuery.getResultList();
+        final TypedQuery<R> prepareQuery = prepareQuery();
+        final List<R> resultList = prepareQuery.getResultList();
         if (dump) {
             logger.warn(prepareQuery.unwrap(JpaQuery.class).getDatabaseQuery().getSQLString());
         }
@@ -767,7 +767,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.greaterThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
@@ -780,7 +780,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.greaterThan(join.get(field), root.get(value));
             }
         };
@@ -804,7 +804,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.greaterThanOrEqualTo(join.get(field), root.get(value));
             }
         };
@@ -817,7 +817,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.greaterThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
@@ -830,7 +830,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.greaterThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
@@ -872,7 +872,7 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
-    public JpaDslAbstract<E, R> groupBy(Expression<?>... expressions) {
+    public JpaDslAbstract<E, R> groupBy(final Expression<?>... expressions) {
         criteria.groupBy(expressions);
         return this;
     }
@@ -897,7 +897,7 @@ public abstract class JpaDslAbstract<E, R> {
         return greaterThanOrEqualTo(joinAttribute, joinType, field, value);
     }
 
-    public Condition<E> gtEq(SingularAttribute<E, Date> field, Date value) {
+    public Condition<E> gtEq(final SingularAttribute<E, Date> field, final Date value) {
         return greaterThanOrEqualTo(field, value);
     }
 
@@ -1089,7 +1089,7 @@ public abstract class JpaDslAbstract<E, R> {
         return new JoinBuilder<>(attribute, JoinType.INNER, false);
     }
 
-    public <K> JoinBuilder<E, K> join(final ListAttribute<? super E, K> attribute, JoinType type) {
+    public <K> JoinBuilder<E, K> join(final ListAttribute<? super E, K> attribute, final JoinType type) {
         return new JoinBuilder<>(attribute, type, false);
     }
 
@@ -1097,7 +1097,7 @@ public abstract class JpaDslAbstract<E, R> {
         return new JoinBuilder<>(attribute, JoinType.INNER, false);
     }
 
-    public <K> JoinBuilder<E, K> join(final SetAttribute<? super E, K> attribute, JoinType type) {
+    public <K> JoinBuilder<E, K> join(final SetAttribute<? super E, K> attribute, final JoinType type) {
         return new JoinBuilder<>(attribute, type, false);
     }
 
@@ -1105,19 +1105,19 @@ public abstract class JpaDslAbstract<E, R> {
         return new JoinBuilder<>(attribute, JoinType.INNER, false);
     }
 
-    public <K> JoinBuilder<E, K> join(final SingularAttribute<? super E, K> attribute, JoinType type) {
+    public <K> JoinBuilder<E, K> join(final SingularAttribute<? super E, K> attribute, final JoinType type) {
         return new JoinBuilder<>(attribute, type, false);
     }
 
-    public <K> JoinBuilder<E, K> joinFetch(final ListAttribute<? super E, K> attribute, JoinType type) {
+    public <K> JoinBuilder<E, K> joinFetch(final ListAttribute<? super E, K> attribute, final JoinType type) {
         return new JoinBuilder<>(attribute, type, true);
     }
 
-    public <K> JoinBuilder<E, K> joinFetch(final SetAttribute<? super E, K> attribute, JoinType type) {
+    public <K> JoinBuilder<E, K> joinFetch(final SetAttribute<? super E, K> attribute, final JoinType type) {
         return new JoinBuilder<>(attribute, type, true);
     }
 
-    public <K> JoinBuilder<E, K> joinFetch(final SingularAttribute<? super E, K> attribute, JoinType type) {
+    public <K> JoinBuilder<E, K> joinFetch(final SingularAttribute<? super E, K> attribute, final JoinType type) {
         return new JoinBuilder<>(attribute, type, true);
     }
 
@@ -1127,7 +1127,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.like(join.get(field), value);
             }
         };
@@ -1144,7 +1144,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.lessThan(join.get(field), copyEntityForQuery(value));
             }
         };
@@ -1179,7 +1179,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.lessThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
@@ -1192,7 +1192,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.lessThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
@@ -1205,7 +1205,7 @@ public abstract class JpaDslAbstract<E, R> {
 
             @Override
             public Predicate getPredicates() {
-                Join<E, J> join = getJoin(joinAttribute, joinType);
+                final Join<E, J> join = getJoin(joinAttribute, joinType);
                 return builder.lessThanOrEqualTo(join.get(field), copyEntityForQuery(value));
             }
         };
@@ -1279,12 +1279,12 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
-    public JpaDslAbstract<E, R> limit(int limit) {
+    public JpaDslAbstract<E, R> limit(final int limit) {
         this.limit = limit;
         return this;
     }
 
-    public Condition<E> lt(SingularAttribute<? super E, Date> field, Date value) {
+    public Condition<E> lt(final SingularAttribute<? super E, Date> field, final Date value) {
         return lessThan(field, value);
     }
 
@@ -1313,7 +1313,7 @@ public abstract class JpaDslAbstract<E, R> {
         return lessThanOrEqualTo(joinAttribute, joinType, field, value);
     }
 
-    public Condition<E> ltEq(SingularAttribute<E, Date> field, Date value) {
+    public Condition<E> ltEq(final SingularAttribute<E, Date> field, final Date value) {
         return lessThanOrEqualTo(field, value);
     }
 
@@ -1386,7 +1386,7 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 final List<Predicate> predicates = new ArrayList<>(conditions.length);
-                for (Condition<E> condition : conditions) {
+                for (final Condition<E> condition : conditions) {
                     predicates.add(condition.getPredicates());
                 }
 
@@ -1404,7 +1404,8 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
-    public <K, V> JpaDslAbstract<E, R> orderBy(JoinBuilder<E, K> join, SingularAttribute<K, V> field, boolean asc) {
+    public <K, V> JpaDslAbstract<E, R> orderBy(final JoinBuilder<E, K> join, final SingularAttribute<K, V> field,
+            final boolean asc) {
         if (asc) {
             orders.add(builder.asc(getJoin(join).get(field)));
         } else {
@@ -1414,7 +1415,7 @@ public abstract class JpaDslAbstract<E, R> {
         return this;
     }
 
-    public JpaDslAbstract<E, R> orderBy(SingularAttribute<? super E, ?> field, boolean asc) {
+    public JpaDslAbstract<E, R> orderBy(final SingularAttribute<? super E, ?> field, final boolean asc) {
         if (asc) {
             orders.add(builder.asc(root.get(field)));
         } else {
@@ -1424,7 +1425,7 @@ public abstract class JpaDslAbstract<E, R> {
         return this;
     }
 
-    public JpaDslAbstract<E, R> orderBy(Expression<?> exp, boolean asc) {
+    public JpaDslAbstract<E, R> orderBy(final Expression<?> exp, final boolean asc) {
         if (asc) {
             orders.add(builder.asc(exp));
         } else {
@@ -1434,10 +1435,10 @@ public abstract class JpaDslAbstract<E, R> {
         return this;
     }
 
-    public JpaDslAbstract<E, R> orderBy(String field, boolean asc) {
-        List<String> attributes = Arrays.asList(field.split("\\."));
+    public JpaDslAbstract<E, R> orderBy(final String field, final boolean asc) {
+        final List<String> attributes = Arrays.asList(field.split("\\."));
         Path<Object> path = null;
-        for (String attribute : attributes) {
+        for (final String attribute : attributes) {
             if (path == null) {
                 path = root.get(attribute);
             } else {
@@ -1454,7 +1455,8 @@ public abstract class JpaDslAbstract<E, R> {
         return this;
     }
 
-    public <V, J> TypedPath<E, V> path(SingularAttribute<? super E, J> partA, SingularAttribute<? super J, V> partB) {
+    public <V, J> TypedPath<E, V> path(final SingularAttribute<? super E, J> partA,
+            final SingularAttribute<? super J, V> partB) {
         return new TypedPath<>(root.get(partA).get(partB));
 
     }
@@ -1466,7 +1468,7 @@ public abstract class JpaDslAbstract<E, R> {
         if (!orders.isEmpty()) {
             criteria.orderBy(orders);
         }
-        TypedQuery<R> query = getEntityManager().createQuery(criteria);
+        final TypedQuery<R> query = getEntityManager().createQuery(criteria);
         JpaSettings.setQueryHints(query);
 
         if (limit != null) {
@@ -1487,12 +1489,12 @@ public abstract class JpaDslAbstract<E, R> {
 
     }
 
-    public JpaDslAbstract<E, R> startPosition(int startPosition) {
+    public JpaDslAbstract<E, R> startPosition(final int startPosition) {
         this.startPosition = startPosition;
         return this;
     }
 
-    public <J> JpaDslSubqueryBuilder<E, J> subQuery(Class<J> target) {
+    public <J> JpaDslSubqueryBuilder<E, J> subQuery(final Class<J> target) {
         return new JpaDslSubqueryBuilder<>(target, criteria, root);
     }
 
@@ -1514,7 +1516,7 @@ public abstract class JpaDslAbstract<E, R> {
         return builder.sum(getJoin(join).get(attribute));
     }
 
-    public <K> Expression<String> trim(JoinBuilder<E, K> join, SingularAttribute<K, String> attribute) {
+    public <K> Expression<String> trim(final JoinBuilder<E, K> join, final SingularAttribute<K, String> attribute) {
         return builder.trim(getJoin(join).get(attribute));
     }
 
@@ -1530,18 +1532,18 @@ public abstract class JpaDslAbstract<E, R> {
      * 
      * @return
      */
-    public <F extends Object> int update(Map<SingularAttribute<E, F>, F> updatemap) {
+    public <F extends Object> int update(final Map<SingularAttribute<E, F>, F> updatemap) {
         Preconditions.checkArgument(orders.isEmpty(), ORDER_IS_NOT_SUPPORTED_FOR_DELETE);
-        CriteriaUpdate<E> updateCriteria = builder.createCriteriaUpdate(entityClass);
+        final CriteriaUpdate<E> updateCriteria = builder.createCriteriaUpdate(entityClass);
         root = updateCriteria.getRoot();
         if (predicate != null) {
             updateCriteria.where(predicate);
-            for (Entry<SingularAttribute<E, F>, F> update : updatemap.entrySet()) {
+            for (final Entry<SingularAttribute<E, F>, F> update : updatemap.entrySet()) {
                 updateCriteria.set(update.getKey(), update.getValue());
             }
 
         }
-        Query query = getEntityManager().createQuery(updateCriteria);
+        final Query query = getEntityManager().createQuery(updateCriteria);
         JpaSettings.setQueryHints(query);
 
         if (limit != null) {
@@ -1550,7 +1552,7 @@ public abstract class JpaDslAbstract<E, R> {
         if (startPosition != null) {
             query.setFirstResult(startPosition);
         }
-        int result = query.executeUpdate();
+        final int result = query.executeUpdate();
         getEntityManager().getEntityManagerFactory().getCache().evict(entityClass);
 
         return result;
@@ -1564,15 +1566,15 @@ public abstract class JpaDslAbstract<E, R> {
      * 
      * @return
      */
-    public <F> int update(SingularAttribute<E, F> attribute, F value) {
+    public <F> int update(final SingularAttribute<E, F> attribute, final F value) {
         Preconditions.checkArgument(orders.isEmpty(), ORDER_IS_NOT_SUPPORTED_FOR_DELETE);
-        CriteriaUpdate<E> updateCriteria = builder.createCriteriaUpdate(entityClass);
+        final CriteriaUpdate<E> updateCriteria = builder.createCriteriaUpdate(entityClass);
         root = updateCriteria.getRoot();
         if (predicate != null) {
             updateCriteria.where(predicate);
             updateCriteria.set(attribute, value);
         }
-        Query query = getEntityManager().createQuery(updateCriteria);
+        final Query query = getEntityManager().createQuery(updateCriteria);
         JpaSettings.setQueryHints(query);
 
         if (limit != null) {
@@ -1581,13 +1583,13 @@ public abstract class JpaDslAbstract<E, R> {
         if (startPosition != null) {
             query.setFirstResult(startPosition);
         }
-        int result = query.executeUpdate();
+        final int result = query.executeUpdate();
         getEntityManager().getEntityManagerFactory().getCache().evict(entityClass);
 
         return result;
     }
 
-    public JpaDslAbstract<E, R> where(Condition<E> condition) {
+    public JpaDslAbstract<E, R> where(final Condition<E> condition) {
         predicate = condition.getPredicates();
         return this;
     }
@@ -1595,7 +1597,7 @@ public abstract class JpaDslAbstract<E, R> {
     @SuppressWarnings("unchecked")
     public JpaDslAbstract<E, R> where(final Condition<E>... conditions) {
         final List<Predicate> predicates = new ArrayList<>(conditions.length);
-        for (Condition<E> condition : conditions) {
+        for (final Condition<E> condition : conditions) {
             predicates.add(condition.getPredicates());
         }
         predicate = builder.and(predicates.toArray(new Predicate[predicates.size()]));
@@ -1604,7 +1606,7 @@ public abstract class JpaDslAbstract<E, R> {
 
     public JpaDslAbstract<E, R> where(final List<Condition<E>> conditions) {
         final List<Predicate> predicates = new ArrayList<>(conditions.size());
-        for (Condition<E> condition : conditions) {
+        for (final Condition<E> condition : conditions) {
             predicates.add(condition.getPredicates());
         }
         predicate = builder.and(predicates.toArray(new Predicate[predicates.size()]));
@@ -1657,7 +1659,7 @@ public abstract class JpaDslAbstract<E, R> {
 
     private static final AtomicBoolean copyEntityForQueryEnabled = new AtomicBoolean(true);
 
-    public static void enableCopyEntityForQuery(boolean enable) {
+    public static void enableCopyEntityForQuery(final boolean enable) {
         copyEntityForQueryEnabled.set(enable);
 
     }
@@ -1680,7 +1682,7 @@ public abstract class JpaDslAbstract<E, R> {
      * <br>
      * <b>IMPORTANT</b> <br>
      * For this to function correctly <b>CrudEntities</b> need to implement getId
-     * and setId correctly, otherwise it is not possible to create a usable copy ane
+     * and setId correctly, otherwise it is not possible to create a usable copy and
      * memory leaks will surely follow. <br>
      * <br>
      * <b>Functions and StoredProcedures</b> <br>
@@ -1717,7 +1719,7 @@ public abstract class JpaDslAbstract<E, R> {
         }
         try {
 
-            Class<? extends CrudEntity> clazz = (Class<? extends CrudEntity>) entity.getClass();
+            final Class<? extends CrudEntity> clazz = (Class<? extends CrudEntity>) entity.getClass();
 
             if (clazz.getName().contains(".function.") || clazz.getName().contains(".storedprocedure.")
                     || clazz == ChildCrudEntity.class) {
@@ -1727,21 +1729,21 @@ public abstract class JpaDslAbstract<E, R> {
                 return entity;
             }
 
-            CrudEntity crudEntity = (CrudEntity) entity;
+            final CrudEntity crudEntity = (CrudEntity) entity;
 
             if (crudEntity.getId() == null) {
                 // Entity passed in has a Null ID, this is probably nothing.
                 if (rateLimiter.tryAcquire()
                         && (loggedNullIdClasses.putIfAbsent((Class<CrudEntity>) crudEntity.getClass(), true) == null)) {
-                    Exception ex = new Exception(
+                    final Exception ex = new Exception(
                             "Diagnostic Stack trace, Entity has Null ID " + entity.getClass().getName());
-                    logger.error(ex, ex);
+                    logger.warn(ex, ex);
 
                 }
                 return entity;
             }
 
-            CrudEntity copyEntity = crudEntity.getClass().getConstructor().newInstance();
+            final CrudEntity copyEntity = crudEntity.getClass().getConstructor().newInstance();
             copyEntity.setId(crudEntity.getId());
             if (crudEntity.getId().equals(copyEntity.getId())) {
                 // Id was successfully set on the new copy - we're good return the new copy.
@@ -1753,17 +1755,17 @@ public abstract class JpaDslAbstract<E, R> {
                     // allowing memory leaks
                     logger.error("Failed to set ID, this may lead to memory leaks " + clazz.getName());
                     if (loggedFailureClasses.putIfAbsent((Class<CrudEntity>) crudEntity.getClass(), true) == null) {
-                        Exception ex = new Exception("Diagnostic Stack trace");
+                        final Exception ex = new Exception("Diagnostic Stack trace");
                         logger.error(ex, ex);
                     }
                 }
             }
 
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             if (rateLimiter.tryAcquire()) {
                 logger.error("Processing " + entity.getClass().getName() + " " + e, e);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             if (rateLimiter.tryAcquire()) {
                 logger.error(e, e);
             }
@@ -1778,13 +1780,13 @@ public abstract class JpaDslAbstract<E, R> {
 
     private static final ConcurrentHashMap<Class<CrudEntity>, Boolean> loggedNullIdClasses = new ConcurrentHashMap<>();
 
-    static <K> Collection<K> copyEntityForQueryCollection(Collection<K> values) {
+    static <K> Collection<K> copyEntityForQueryCollection(final Collection<K> values) {
 
         if (values == null) {
             return null;
         }
-        ArrayList<K> result = new ArrayList<>(values.size());
-        for (K value : values) {
+        final ArrayList<K> result = new ArrayList<>(values.size());
+        for (final K value : values) {
             result.add(copyEntityForQuery(value));
         }
         return result;

@@ -2,12 +2,13 @@ package au.com.vaadinutils.flow.jasper;
 
 public enum AttachmentType {
     PDF("application/pdf", ".pdf"), CSV("text/csv", ".csv"), HTML("text/html", ".html"), EML("application/eml", ".eml"),
-    ZIP("application/zip", ".zip"), TXT("text/plain", "txt");
+    ZIP("application/zip", ".zip"), TXT("text/plain", "txt"), GIF("image/gif", ".gif"),
+    DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".docx");
 
-    private String type;
-    private String extension;
+    private final String type;
+    private final String extension;
 
-    AttachmentType(String type, String fileExtension) {
+    AttachmentType(final String type, final String fileExtension) {
         this.type = type;
         extension = fileExtension;
     }
