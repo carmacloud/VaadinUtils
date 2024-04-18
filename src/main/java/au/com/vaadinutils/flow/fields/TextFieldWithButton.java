@@ -8,13 +8,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 
-/**
- * Retain, but update UI for Flow
- */
 public class TextFieldWithButton extends HorizontalLayout {
     private static final long serialVersionUID = -6761979395677678269L;
     private Button button;
-    private TextField field;
+    private final TextField field;
     private String label;
 
     public TextFieldWithButton(final String label) {
@@ -23,7 +20,7 @@ public class TextFieldWithButton extends HorizontalLayout {
 
     public TextFieldWithButton(final String label, final Button button) {
         this.setWidthFull();
-        setSpacing(true);
+        setSpacing(false);
         if (button != null) {
             this.setButton(button);
         } else {
@@ -48,7 +45,7 @@ public class TextFieldWithButton extends HorizontalLayout {
         return button;
     }
 
-    public void setButton(Button button) {
+    public void setButton(final Button button) {
         this.button = button;
     }
 
@@ -57,15 +54,15 @@ public class TextFieldWithButton extends HorizontalLayout {
     }
 
     public void addValueChangerListener(
-            ValueChangeListener<? super ComponentValueChangeEvent<TextField, String>> listener) {
+            final ValueChangeListener<? super ComponentValueChangeEvent<TextField, String>> listener) {
         field.addValueChangeListener(listener);
     }
 
-    public void addButtonClickListener(ComponentEventListener<ClickEvent<Button>> listener) {
+    public void addButtonClickListener(final ComponentEventListener<ClickEvent<Button>> listener) {
         button.addClickListener(listener);
     }
 
-    public void setReadOnly(boolean readOnly) {
+    public void setReadOnly(final boolean readOnly) {
         field.setReadOnly(readOnly);
         button.setEnabled(!readOnly);
         button.setVisible(!readOnly);

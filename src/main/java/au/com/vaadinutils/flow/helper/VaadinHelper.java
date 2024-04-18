@@ -47,7 +47,8 @@ public class VaadinHelper {
      */
     public static final String CARMA_DARK_BLUE = "#002C82";
     /**
-     * Standard carma colour blue. Used for formatting artwork not received.
+     * Standard carma midnight colour blue. Used for formatting artwork not
+     * received.
      */
     public static final String CARMA_BLUE_MID = "#003366";
     /**
@@ -104,9 +105,9 @@ public class VaadinHelper {
     public static byte[] getResourceBytes(final String filePath) {
         final File file = new File(filePath);
         try {
-            byte[] fileContent = Files.readAllBytes(file.toPath());
+            final byte[] fileContent = Files.readAllBytes(file.toPath());
             return fileContent;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             logger.error("File not found for file path '" + filePath + "'");
             return null;
         }
@@ -144,7 +145,7 @@ public class VaadinHelper {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-    public static Date convertFromLocalDate(LocalDate dateToConvert) {
+    public static Date convertFromLocalDate(final LocalDate dateToConvert) {
         if (dateToConvert == null) {
             return null;
         }

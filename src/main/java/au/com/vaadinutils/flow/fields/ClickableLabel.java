@@ -17,11 +17,11 @@ public class ClickableLabel extends VerticalLayout {
     public ClickableLabel() {
     }
 
-    public ClickableLabel(Component value) {
+    public ClickableLabel(final Component value) {
         setComponent(value);
     }
 
-    public void setComponent(Component value) {
+    public void setComponent(final Component value) {
         setId("ClickableLabel" + value.getId().orElse(""));
         removeAll();
         label = value;
@@ -36,7 +36,7 @@ public class ClickableLabel extends VerticalLayout {
         return label;
     }
 
-    public void setDescription(String toolTip) {
+    public void setDescription(final String toolTip) {
         getElement().setAttribute("title", toolTip);
     }
 }

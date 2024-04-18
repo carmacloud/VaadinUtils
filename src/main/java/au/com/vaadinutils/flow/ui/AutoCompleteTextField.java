@@ -4,34 +4,31 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.google.common.base.Preconditions;
 import com.vaadin.componentfactory.Popup;
-import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
-import com.vaadin.flow.component.BlurNotifier.BlurEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.HasValue.ValueChangeListener;
+import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.shared.Registration;
 
 import au.com.vaadinutils.flow.helper.VaadinHelper;
 
-public class AutoCompleteTextField<E> extends Div {
+public class AutoCompleteTextField<E> extends TextField {
 
     private static final long serialVersionUID = -6634513296678504250L;
-    private final TextField field = new TextField();
     private final Popup popup = new Popup();
-    private final Map<String, E> options = new LinkedHashMap<>();
+    private final Map<E, String> options = new LinkedHashMap<>();
     private AutoCompleteQueryListener<E> listener;
     private AutoCompleteOptionSelected<E> optionListener;
 
     private long dropDownWidth = 120;
+
+    private final List<Registration> registrations = new ArrayList<Registration>();
 
     /**
      * <pre>
@@ -71,54 +68,60 @@ public class AutoCompleteTextField<E> extends Div {
      * working if the user clicks out of the auto complete context menu without
      * selecting anything.
      */
+    public AutoCompleteTextField() {
+        addDetachListener(listener -> {
+            registrations.forEach(reg -> reg.remove());
+        });
+    }
 
-    public AutoCompleteTextField(final String fieldCaption, final String listCaption) {
+    public void init(final HasComponents component, final String fieldCaption, final String listCaption) {
         Preconditions.checkNotNull(listCaption, "List Caption is required to link the popup to the field.");
         Preconditions.checkArgument(listCaption.length() > 0,
                 "List Caption is required to link the popup to the field.");
-        field.setClassName(listCaption);
-        field.setId(listCaption);
-        field.setLabel(fieldCaption);
-        field.setClearButtonVisible(true);
+        setClassName(listCaption);
+        setId(listCaption);
+        setLabel(fieldCaption);
+        setClearButtonVisible(true);
         popup.setFor(listCaption);
 
-        add(field, popup);
+        component.add(popup);
 
         // Set as Lazy and if also set, there can be a timeout value.
-        field.setValueChangeMode(ValueChangeMode.LAZY);
-        field.addValueChangeListener(valueChangeListener -> {
+        setValueChangeMode(ValueChangeMode.LAZY);
+        final Registration reg = addValueChangeListener(valueChangeListener -> {
             if (listener != null) {
                 options.clear();
                 listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
             }
 
-            if (valueChangeListener.isFromClient()) {
-                showOptionMenu();
+            if (!options.isEmpty()) {
+                if (valueChangeListener.isFromClient()) {
+                    showOptionMenu();
+                }
             }
         });
+        registrations.add(reg);
     }
 
     private void showOptionMenu() {
-        final List<String> listItems = new ArrayList<String>();
-        for (final Entry<String, E> option : options.entrySet()) {
-            listItems.add(option.getKey());
-        }
-
-        popup.show();
         popup.removeAll();
+        popup.show();
         final VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
         layout.setWidth(dropDownWidth, Unit.PIXELS);
-        for (final String string : listItems) {
+        for (final E item : options.keySet()) {
+            final String label = options.get(item);
             final Span span = new Span(
-                    new Html("<font color='" + VaadinHelper.CARMA_DARK_BLACK + "'>" + string + "</font>"));
-            span.setId(string);
+                    new Html("<font color='" + VaadinHelper.CARMA_DARK_BLACK + "'>" + label + "</font>"));
+            span.setId(label);
             layout.add(span);
-            span.addClickListener(e -> {
-                optionListener.optionSelected(AutoCompleteTextField.this, options.get(string));
+            final Registration reg = span.addClickListener(e -> {
+                optionListener.optionSelected(AutoCompleteTextField.this, item);
                 // Clear list and hide
                 popup.removeAll();
                 popup.hide();
             });
+            registrations.add(reg);
         }
 
         popup.add(layout);
@@ -149,24 +152,7 @@ public class AutoCompleteTextField<E> extends Div {
     }
 
     public void addOption(final E option, final String optionLabel) {
-        options.put(optionLabel, option);
-    }
-
-    public TextField getField() {
-        return this.field;
-    }
-
-    public void addValueChangeListener(
-            final ValueChangeListener<? super ComponentValueChangeEvent<TextField, String>> event) {
-        field.addValueChangeListener(event);
-    }
-
-    public void addBlurListener(final ComponentEventListener<BlurEvent<TextField>> event) {
-        field.addBlurListener(event);
-    }
-
-    public void setTextChangeTimeout(final int timeout) {
-        field.setValueChangeTimeout(timeout);
+        options.put(option, optionLabel);
     }
 
     public void hideAutoComplete() {

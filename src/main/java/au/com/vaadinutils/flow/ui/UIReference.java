@@ -13,21 +13,19 @@ public class UIReference {
 
     final WeakReference<UI> uiRef;
 
-    public UIReference(UI ui) {
-
+    public UIReference(final UI ui) {
         uiRef = new WeakReference<>(ui);
     }
 
-    public void access(Command command) {
-        UI ui = uiRef.get();
+    public void access(final Command command) {
+        final UI ui = uiRef.get();
         if (ui != null) {
             ui.access(command);
         }
-
     }
 
     public Stream<Component> getChildren() {
-        UI ui = uiRef.get();
+        final UI ui = uiRef.get();
         if (ui != null) {
             return ui.getChildren();
         }
@@ -35,34 +33,31 @@ public class UIReference {
     }
 
     public Page getPage() {
-        UI ui = uiRef.get();
+        final UI ui = uiRef.get();
         if (ui != null) {
             return ui.getPage();
         }
         return null;
     }
 
-    public void setPollInterval(int intervalInMillis) {
-        UI ui = uiRef.get();
+    public void setPollInterval(final int intervalInMillis) {
+        final UI ui = uiRef.get();
         if (ui != null) {
             ui.setPollInterval(intervalInMillis);
         }
-
     }
 
-    public void remove(Component component) {
-        UI ui = uiRef.get();
+    public void remove(final Component component) {
+        final UI ui = uiRef.get();
         if (ui != null) {
             ui.remove(component);
         }
     }
 
     public void push() {
-        UI ui = uiRef.get();
+        final UI ui = uiRef.get();
         if (ui != null) {
             ui.push();
         }
-
     }
-
 }
