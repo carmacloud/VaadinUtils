@@ -28,6 +28,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.Binder.BindingBuilder;
 import com.vaadin.flow.data.binder.Validator;
 import com.vaadin.flow.data.converter.Converter;
 import com.vaadin.flow.data.converter.LocalDateToDateConverter;
@@ -53,13 +54,18 @@ import au.com.vaadinutils.flow.helper.VaadinHelper;
  */
 public class FormHelper<E extends CrudEntity> {
 
-    private Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger();
     public static final String STANDARD_COMBO_WIDTH = "220";
-    public static final int DEFAULT_PAGE_SIZE = 45;
 
     private final Class<E> entityClass;
     private final Component layout;
+
+    // Binder
     private final Binder<E> binder;
+    // For binding where we don't know the type of component being added.
+    private BindingBuilder<E, ?> bindingBuilder;
+    // For binding standard text type fields.
+    private BindingBuilder<E, String> bindingBuilderString;
 
     // Store and form items so they can be retrieved and enabled/shown etc.
     private final Map<Component, FormItem> fieldsWithFormItems = new HashMap<>(10);
@@ -147,21 +153,19 @@ public class FormHelper<E extends CrudEntity> {
             logger.error(bindingProperty + " is unbound. Type required: " + propertyAttribute.getBindableJavaType());
             return field;
         }
-
+        bindingBuilderString = binder.forField(field).withNullRepresentation("");
         if (converter != null) {
             if (validator != null) {
-                binder.forField(field).withNullRepresentation("").withValidator(validator).withConverter(converter)
-                        .bind(bindingProperty);
+                bindingBuilderString.withValidator(validator).withConverter(converter);
             } else {
-                binder.forField(field).withNullRepresentation("").withConverter(converter).bind(bindingProperty);
+                bindingBuilderString.withConverter(converter);
             }
         } else {
             if (validator != null) {
-                binder.forField(field).withNullRepresentation("").withValidator(validator).bind(bindingProperty);
-            } else {
-                binder.forField(field).withNullRepresentation("").bind(bindingProperty);
+                bindingBuilderString.withValidator(validator);
             }
         }
+        bindingBuilderString.bind(bindingProperty);
 
         addComponentIfRequired(field);
 
@@ -211,12 +215,11 @@ public class FormHelper<E extends CrudEntity> {
         final DatePicker field = new DatePicker(caption);
         field.setI18n(VaadinHelper.setCustomDateFormats(dateFormat));
         field.setWidthFull();
+        final BindingBuilder<E, LocalDate> bindingBuilderDate = binder.forField(field);
         if (validator != null) {
-            binder.forField(field).withValidator(validator).withConverter(new LocalDateToDateConverter())
-                    .bind(bindingProperty);
-        } else {
-            binder.forField(field).withConverter(new LocalDateToDateConverter()).bind(bindingProperty);
+            bindingBuilderDate.withValidator(validator);
         }
+        bindingBuilderDate.withConverter(new LocalDateToDateConverter()).bind(bindingProperty);
         field.setId(entityClass + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
 
@@ -242,11 +245,11 @@ public class FormHelper<E extends CrudEntity> {
         final TextArea field = new TextArea(caption);
         field.setWidthFull();
         field.setClearButtonVisible(true);
+        bindingBuilderString = binder.forField(field).withNullRepresentation("");
         if (validator != null) {
-            binder.forField(field).withNullRepresentation("").withValidator(validator).bind(bindingProperty);
-        } else {
-            binder.forField(field).withNullRepresentation("").bind(bindingProperty);
+            bindingBuilderString.withValidator(validator);
         }
+        bindingBuilderString.bind(bindingProperty);
         field.setId(entityClass + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
 
@@ -307,11 +310,11 @@ public class FormHelper<E extends CrudEntity> {
                 }
 
                 if (property != null) {
+                    final BindingBuilder<E, L> bindingBuilder2 = binder.forField(component);
                     if (validator != null) {
-                        binder.forField(component).withValidator(validator).bind(property);
-                    } else {
-                        binder.forField(component).bind(property);
+                        bindingBuilder2.withValidator(validator);
                     }
+                    bindingBuilder2.bind(property);
                 }
 
                 addComponentIfRequired(component);
@@ -384,11 +387,12 @@ public class FormHelper<E extends CrudEntity> {
         final TextFieldWithButton field = new TextFieldWithButton(caption, button);
         field.setFieldWidth("100%");
         field.getField().setClearButtonVisible(true);
+        bindingBuilderString = binder.forField(field.getField());
         if (validator != null) {
-            binder.forField(field.getField()).withValidator(validator).bind(bindingProperty);
-        } else {
-            binder.forField(field.getField()).bind(bindingProperty);
+            bindingBuilderString.withValidator(validator);
         }
+        bindingBuilderString.bind(bindingProperty);
+
         field.setId(entityClass + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
         return field;
@@ -453,11 +457,11 @@ public class FormHelper<E extends CrudEntity> {
                 }
 
                 if (property != null) {
+                    final BindingBuilder<E, L> bindingBuilder2 = binder.forField(component.getField());
                     if (validator != null) {
-                        binder.forField(component.getField()).withValidator(validator).bind(property);
-                    } else {
-                        binder.forField(component.getField()).bind(property);
+                        bindingBuilder2.withValidator(validator);
                     }
+                    bindingBuilder2.bind(property);
                     component.setId(entityClass + "-" + property + "-" + caption);
                 }
 
@@ -511,7 +515,7 @@ public class FormHelper<E extends CrudEntity> {
     // Common methods
     private void checkState(final String bindingProperty) {
         if (bindingProperty != null) {
-            Preconditions.checkNotNull(binder, "A Binder must be set before binding fields");
+            Preconditions.checkNotNull(binder, "A binding property must be supplied to allow binding to fields");
         }
     }
 
@@ -569,33 +573,66 @@ public class FormHelper<E extends CrudEntity> {
         }
     }
 
-    // Convenience method to use the binder to bind fields created elsewhere.
-    // It does not provide validation. If needed, you'll have to do the binding
-    // manually.
-    public Component bind(final Component field, final SingularAttribute<E, ?> propertyAttribute) {
-        return bind(field, propertyAttribute.getName());
+    /**
+     * Convenience method to use the binder to bind fields created elsewhere.<br>
+     * Useful for fields wrapped in a CustomField or where just binding only is
+     * required.
+     * 
+     * @param field             The {@link Component} to bind.
+     * @param propertyAttribute A {@link SingularAttribute} of E, ?
+     * @param validator         A {@link Validator} of Object to allow adding to
+     *                          fields other than of String type. (Even though
+     *                          realistically, we'd never need to validate a
+     *                          checkbox.). Can be null.
+     * @return The bound {@link Component} with optional validation.
+     */
+    public Component bind(final Component field, final SingularAttribute<E, ?> propertyAttribute,
+            final Validator<Object> validator) {
+        return bind(field, propertyAttribute.getName(), validator);
     }
 
+    /**
+     * Convenience method to use the binder to bind fields created elsewhere.<br>
+     * Useful for fields wrapped in a CustomField or where just binding only is
+     * required.
+     * 
+     * @param field     The {@link Component} to bind.
+     * @param property  A {@link String} property.
+     * @param validator A {@link Validator} of Object to allow adding to fields
+     *                  other than of String type. (Even though realistically, we'd
+     *                  never need to validate a checkbox.). Can be null.
+     * @returnThe bound {@link Component} with optional validation.
+     */
     @SuppressWarnings("unchecked")
-    public Component bind(final Component field, final String property) {
+    public Component bind(final Component field, final String property, final Validator<Object> validator) {
         if (binder != null && property != null) {
             if (field instanceof TextField) {
-                binder.forField((TextField) field).bind(property);
+                bindingBuilder = binder.forField((TextField) field);
             } else if (field instanceof Checkbox) {
-                binder.forField((Checkbox) field).bind(property);
+                bindingBuilder = binder.forField((Checkbox) field);
             } else if (field instanceof TextArea) {
-                binder.forField((TextArea) field).bind(property);
+                bindingBuilder = binder.forField((TextArea) field);
             } else if (field instanceof TextFieldWithButton) {
-                binder.forField(((TextFieldWithButton) field).getField()).bind(property);
+                bindingBuilder = binder.forField(((TextFieldWithButton) field).getField());
             } else if (field instanceof ComboBox) {
-                binder.forField((ComboBox<E>) field).bind(property);
+                bindingBuilder = binder.forField((ComboBox<E>) field);
             } else if (field instanceof ComboBoxWithButton) {
-                binder.forField(((ComboBoxWithButton<E>) field).getField()).bind(property);
+                bindingBuilder = binder.forField(((ComboBoxWithButton<E>) field).getField());
             }
+
+            if (validator != null) {
+                bindingBuilder.withValidator(validator);
+            }
+            bindingBuilder.bind(property);
         }
         return field;
     }
 
+    /**
+     * 
+     * @return A {@link Map} of {@link Component}/ {@link FormItem} pairs. useful if
+     *         you need to enable/disable the form item.
+     */
     public Map<Component, FormItem> getFieldsWithFormItems() {
         return this.fieldsWithFormItems;
     }
