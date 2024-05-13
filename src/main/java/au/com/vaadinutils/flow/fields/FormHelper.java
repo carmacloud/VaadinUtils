@@ -61,10 +61,6 @@ public class FormHelper<E extends CrudEntity> {
 
     // Binder
     private final Binder<E> binder;
-    // For binding where we don't know the type of component being added.
-    private BindingBuilder<E, ?> bindingBuilder;
-    // For binding standard text type fields.
-    private BindingBuilder<E, String> bindingBuilderString;
 
     // Store and form items so they can be retrieved and enabled/shown etc.
     private final Map<Component, FormItem> fieldsWithFormItems = new HashMap<>(10);
@@ -152,7 +148,7 @@ public class FormHelper<E extends CrudEntity> {
             logger.error(bindingProperty + " is unbound. Type required: " + propertyAttribute.getBindableJavaType());
             return field;
         }
-        bindingBuilderString = binder.forField(field).withNullRepresentation("");
+        final BindingBuilder<E, String> bindingBuilderString = binder.forField(field).withNullRepresentation("");
         if (converter != null) {
             if (validator != null) {
                 bindingBuilderString.withValidator(validator).withConverter(converter);
@@ -244,7 +240,7 @@ public class FormHelper<E extends CrudEntity> {
         final TextArea field = new TextArea(caption);
         field.setWidthFull();
         field.setClearButtonVisible(true);
-        bindingBuilderString = binder.forField(field).withNullRepresentation("");
+        final BindingBuilder<E, String> bindingBuilderString = binder.forField(field).withNullRepresentation("");
         if (validator != null) {
             bindingBuilderString.withValidator(validator);
         }
@@ -386,7 +382,7 @@ public class FormHelper<E extends CrudEntity> {
         final TextFieldWithButton field = new TextFieldWithButton(caption, button);
         field.setFieldWidth("100%");
         field.getField().setClearButtonVisible(true);
-        bindingBuilderString = binder.forField(field.getField());
+        final BindingBuilder<E, String> bindingBuilderString = binder.forField(field.getField());
         if (validator != null) {
             bindingBuilderString.withValidator(validator);
         }
