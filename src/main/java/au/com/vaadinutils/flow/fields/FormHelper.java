@@ -55,7 +55,6 @@ import au.com.vaadinutils.flow.helper.VaadinHelper;
 public class FormHelper<E extends CrudEntity> {
 
     private final Logger logger = LogManager.getLogger();
-    public static final String STANDARD_COMBO_WIDTH = "220";
 
     private final Class<E> entityClass;
     private final Component layout;
@@ -605,6 +604,7 @@ public class FormHelper<E extends CrudEntity> {
      */
     @SuppressWarnings("unchecked")
     public Component bind(final Component field, final String property, final Validator<Object> validator) {
+        BindingBuilder<E, ?> bindingBuilder = null;
         if (binder != null && property != null) {
             if (field instanceof TextField) {
                 bindingBuilder = binder.forField((TextField) field);
@@ -618,7 +618,12 @@ public class FormHelper<E extends CrudEntity> {
                 bindingBuilder = binder.forField((ComboBox<E>) field);
             } else if (field instanceof ComboBoxWithButton) {
                 bindingBuilder = binder.forField(((ComboBoxWithButton<E>) field).getField());
+            } else if (field instanceof DatePicker) {
+                bindingBuilder = binder.forField((DatePicker) field);
             }
+
+            Preconditions.checkState(bindingBuilder != null,
+                    "Field type not processed for binding '" + field.getClass() + "'");
 
             if (validator != null) {
                 bindingBuilder.withValidator(validator);
