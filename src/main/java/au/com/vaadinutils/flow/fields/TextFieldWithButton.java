@@ -76,4 +76,9 @@ public class TextFieldWithButton extends HorizontalLayout {
         this.label = label;
         this.field.setLabel(label);
     }
+
+    public void addTextFieldValueChangeListener(
+            final ValueChangeListener<ComponentValueChangeEvent<TextField, String>> listener) {
+        this.field.addValueChangeListener(listener);
+    }
 }
