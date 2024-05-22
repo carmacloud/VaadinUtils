@@ -56,9 +56,14 @@ public class VaadinHelper {
      */
     public static final String CARMA_ERROR = "#CC0000";
     /**
-     * Standard carma colour red
+     * Standard carma colour red. Used for formatting cancelled on Totals Sales
+     * Grid.
      */
-    public static final String CARMA_RED = "#800000";
+    public static final String CARMA_RED = "#FF0000";
+    /**
+     * Standard carma colour maroon. Used where we want red, but not the red colour.
+     */
+    public static final String CARMA_MAROON = "#800000";
     /**
      * Standard carma colour green. Used for formatting checkbox ticks.
      */
@@ -91,6 +96,11 @@ public class VaadinHelper {
      * Standard carma colour purple. Used for formatting pipeline sales.
      */
     public static final String CARMA_PURPLE = "#7A00A3";
+    /**
+     * Standard carma colour darker purple. Used for formatting pipeline sales on
+     * Total Sales Grid.
+     */
+    public static final String CARMA_DEEP_PURPLE = "#4B0082";
 
     private static final DatePickerI18n DATE_FORMAT_I18N = new DatePickerI18n();
 
