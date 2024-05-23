@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -520,5 +521,16 @@ public class GridExtender<T> {
                 column.setSortable(false);
             }
         });
+    }
+
+    /**
+     * Convenience method to set all columns non-sortable.
+     */
+    public void setAllColumnsNonSortable() {
+        final Set<String> keys = new HashSet<>();
+        grid.getColumns().forEach(col -> {
+            keys.add(col.getKey());
+        });
+        setColumnsNonSortable(keys);
     }
 }
