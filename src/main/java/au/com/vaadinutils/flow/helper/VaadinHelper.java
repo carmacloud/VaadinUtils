@@ -132,9 +132,9 @@ public class VaadinHelper {
      * @throws IOException Thrown if there are any IO errors during processing.
      */
     public static StreamResource getStreamResource(final String filePath) throws IOException {
-        final byte[] pdfBytes = getResourceBytes(filePath);
-        if (pdfBytes != null) {
-            return new StreamResource(FilenameUtils.getName(filePath), () -> new ByteArrayInputStream(pdfBytes));
+        final byte[] bytes = getResourceBytes(filePath);
+        if (bytes != null) {
+            return new StreamResource(FilenameUtils.getName(filePath), () -> new ByteArrayInputStream(bytes));
         } else {
             return null;
         }
