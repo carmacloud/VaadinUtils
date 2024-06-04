@@ -133,7 +133,7 @@ public class FormHelper<E extends CrudEntity> {
         final TextField field = new TextField(caption);
         field.setWidthFull();
         field.setClearButtonVisible(true);
-        field.setId(entityClass + "-" + bindingProperty + "-" + caption);
+        field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         final Class<?> propertyJavaType = propertyAttribute.getType().getJavaType();
         final Converter<String, ?> converter;
         if (propertyJavaType.equals(Long.class)) {
@@ -148,18 +148,19 @@ public class FormHelper<E extends CrudEntity> {
             logger.error(bindingProperty + " is unbound. Type required: " + propertyAttribute.getBindableJavaType());
             return field;
         }
-        final BindingBuilder<E, String> bindingBuilderString = binder.forField(field).withNullRepresentation("");
+        final BindingBuilder<E, String> bindingBuilderString = binder.forField(field);
         if (converter != null) {
             if (validator != null) {
-                bindingBuilderString.withValidator(validator).withConverter(converter);
+                bindingBuilderString.withValidator(validator).withNullRepresentation("").withConverter(converter);
             } else {
-                bindingBuilderString.withConverter(converter);
+                bindingBuilderString.withNullRepresentation("").withConverter(converter);
             }
+        } else if (validator != null) {
+            bindingBuilderString.withValidator(validator).withNullRepresentation("");
         } else {
-            if (validator != null) {
-                bindingBuilderString.withValidator(validator);
-            }
+            bindingBuilderString.withNullRepresentation("");
         }
+
         bindingBuilderString.bind(bindingProperty);
 
         addComponentIfRequired(field);
@@ -183,7 +184,7 @@ public class FormHelper<E extends CrudEntity> {
         final Checkbox field = new Checkbox(caption);
         field.setWidthFull();
         binder.forField(field).bind(bindingProperty);
-        field.setId(entityClass + "-" + bindingProperty + "-" + caption);
+        field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
 
         return field;
@@ -215,7 +216,7 @@ public class FormHelper<E extends CrudEntity> {
             bindingBuilderDate.withValidator(validator);
         }
         bindingBuilderDate.withConverter(new LocalDateToDateConverter()).bind(bindingProperty);
-        field.setId(entityClass + "-" + bindingProperty + "-" + caption);
+        field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
 
         return field;
@@ -245,7 +246,7 @@ public class FormHelper<E extends CrudEntity> {
             bindingBuilderString.withValidator(validator);
         }
         bindingBuilderString.bind(bindingProperty);
-        field.setId(entityClass + "-" + bindingProperty + "-" + caption);
+        field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
 
         return field;
@@ -386,9 +387,10 @@ public class FormHelper<E extends CrudEntity> {
         if (validator != null) {
             bindingBuilderString.withValidator(validator);
         }
+        bindingBuilderString.withNullRepresentation("");
         bindingBuilderString.bind(bindingProperty);
 
-        field.setId(entityClass + "-" + bindingProperty + "-" + caption);
+        field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
         return field;
     }
@@ -457,7 +459,7 @@ public class FormHelper<E extends CrudEntity> {
                         bindingBuilder2.withValidator(validator);
                     }
                     bindingBuilder2.bind(property);
-                    component.setId(entityClass + "-" + property + "-" + caption);
+                    component.setId(entityClass.getSimpleName() + "-" + property + "-" + caption);
                 }
 
                 addComponentIfRequired(component);
