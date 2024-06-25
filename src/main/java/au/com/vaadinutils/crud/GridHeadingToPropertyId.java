@@ -6,7 +6,7 @@ import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.Grid.AbstractRenderer;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class GridHeadingToPropertyId {
     private final String heading;
@@ -51,46 +51,46 @@ public class GridHeadingToPropertyId {
         private AbstractRenderer<?> renderer = null;
         private Converter<String, ?> converter = null;
 
-        Builder(String heading, String propertyId) {
+        Builder(final String heading, final String propertyId) {
             this.heading = heading;
             this.propertyId = propertyId;
         }
 
         GridHeadingToPropertyId build() {
-            GridHeadingToPropertyId tmp = new GridHeadingToPropertyId(heading, propertyId, columnGenerator,
+            final GridHeadingToPropertyId tmp = new GridHeadingToPropertyId(heading, propertyId, columnGenerator,
                     defaultVisibleState, lockedState, width);
             tmp.setRenderer(renderer);
             tmp.setConverter(converter);
             return tmp;
         }
 
-        public Builder setLockedState(boolean lockedState) {
+        public Builder setLockedState(final boolean lockedState) {
             this.lockedState = lockedState;
             return this;
         }
 
-        public Builder setDefaultVisibleState(boolean defaultVisibleState) {
+        public Builder setDefaultVisibleState(final boolean defaultVisibleState) {
             this.defaultVisibleState = defaultVisibleState;
             return this;
         }
 
-        public Builder setWidth(Integer width) {
+        public Builder setWidth(final Integer width) {
             this.width = width;
             return this;
         }
 
-        public Builder setColumnGenerator(PropertyValueGenerator<?> columnGenerator) {
+        public Builder setColumnGenerator(final PropertyValueGenerator<?> columnGenerator) {
             this.columnGenerator = columnGenerator;
             return this;
         }
 
-        public Builder setRenderer(AbstractRenderer<?> renderer) {
+        public Builder setRenderer(final AbstractRenderer<?> renderer) {
             this.renderer = renderer;
             return this;
 
         }
 
-        public Builder setConverter(Converter<String, ?> converter) {
+        public Builder setConverter(final Converter<String, ?> converter) {
             this.converter = converter;
             return this;
 
@@ -103,12 +103,12 @@ public class GridHeadingToPropertyId {
         return this;
     }
 
-    public void setConverter(Converter<String, ?> converter) {
+    public void setConverter(final Converter<String, ?> converter) {
         this.converter = converter;
 
     }
 
-    public void setRenderer(AbstractRenderer<?> renderer) {
+    public void setRenderer(final AbstractRenderer<?> renderer) {
         this.renderer = renderer;
 
     }

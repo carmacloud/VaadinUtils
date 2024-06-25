@@ -9,12 +9,12 @@ import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.dao.JpaBaseDao;
 
 /**
- * @deprecated context menus are changed for V14+
+ * Context menus are changed for V14+
  */
 public abstract class EntityContextMenu<E> extends ContextMenu {
     private static final long serialVersionUID = 1L;
 
-    private List<ContextMenuEvent> events = new ArrayList<>();
+    private final List<ContextMenuEvent> events = new ArrayList<>();
     protected E targetEntity;
 
     public E getTargetEntity() {
@@ -37,7 +37,7 @@ public abstract class EntityContextMenu<E> extends ContextMenu {
     }
 
     protected void fireEvents() {
-        for (ContextMenuEvent event : events) {
+        for (final ContextMenuEvent event : events) {
             event.preContextMenuOpen();
         }
     }

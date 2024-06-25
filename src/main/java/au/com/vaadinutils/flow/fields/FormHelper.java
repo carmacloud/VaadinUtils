@@ -140,7 +140,7 @@ public class FormHelper<E extends CrudEntity> {
         final TextField field = new TextField(caption);
         field.setWidthFull();
         field.setClearButtonVisible(true);
-        field.setId(entityClass + "-" + bindingProperty + "-" + caption);
+        field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         final Class<?> propertyJavaType = propertyAttribute.getType().getJavaType();
         final Converter<String, ?> converter;
         if (propertyJavaType.equals(Long.class)) {
@@ -155,19 +155,20 @@ public class FormHelper<E extends CrudEntity> {
             logger.error(bindingProperty + " is unbound. Type required: " + propertyAttribute.getBindableJavaType());
             return field;
         }
-        final BindingBuilder<E, String> bindingBuilder = binder.forField(field).withNullRepresentation("");
+        final BindingBuilder<E, String> bindingBuilderString = binder.forField(field);
         if (converter != null) {
             if (validator != null) {
-                bindingBuilder.withValidator(validator).withConverter(converter);
+                bindingBuilderString.withValidator(validator).withNullRepresentation("").withConverter(converter);
             } else {
-                bindingBuilder.withConverter(converter);
+                bindingBuilderString.withNullRepresentation("").withConverter(converter);
             }
+        } else if (validator != null) {
+            bindingBuilderString.withValidator(validator).withNullRepresentation("");
         } else {
-            if (validator != null) {
-                bindingBuilder.withValidator(validator);
-            }
+            bindingBuilderString.withNullRepresentation("");
         }
-        bindingBuilder.bind(bindingProperty);
+
+        bindingBuilderString.bind(bindingProperty);
 
         addComponentIfRequired(field);
 
@@ -190,7 +191,7 @@ public class FormHelper<E extends CrudEntity> {
         final Checkbox field = new Checkbox(caption);
         field.setWidthFull();
         binder.forField(field).bind(bindingProperty);
-        field.setId(entityClass + "-" + bindingProperty + "-" + caption);
+        field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
 
         return field;
@@ -217,12 +218,12 @@ public class FormHelper<E extends CrudEntity> {
         final DatePicker field = new DatePicker(caption);
         field.setI18n(VaadinHelper.setCustomDateFormats(dateFormat));
         field.setWidthFull();
-        final BindingBuilder<E, LocalDate> bindingBuilder = binder.forField(field);
+        final BindingBuilder<E, LocalDate> bindingBuilderDate = binder.forField(field);
         if (validator != null) {
-            bindingBuilder.withValidator(validator);
+            bindingBuilderDate.withValidator(validator);
         }
-        bindingBuilder.withConverter(new LocalDateToDateConverter()).bind(bindingProperty);
-        field.setId(entityClass + "-" + bindingProperty + "-" + caption);
+        bindingBuilderDate.withConverter(new LocalDateToDateConverter()).bind(bindingProperty);
+        field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
 
         return field;
@@ -247,12 +248,12 @@ public class FormHelper<E extends CrudEntity> {
         final TextArea field = new TextArea(caption);
         field.setWidthFull();
         field.setClearButtonVisible(true);
-        final BindingBuilder<E, String> bindingBuilder = binder.forField(field).withNullRepresentation("");
+        final BindingBuilder<E, String> bindingBuilderString = binder.forField(field).withNullRepresentation("");
         if (validator != null) {
-            bindingBuilder.withValidator(validator);
+            bindingBuilderString.withValidator(validator);
         }
-        bindingBuilder.bind(bindingProperty);
-        field.setId(entityClass + "-" + bindingProperty + "-" + caption);
+        bindingBuilderString.bind(bindingProperty);
+        field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
 
         return field;
@@ -389,13 +390,14 @@ public class FormHelper<E extends CrudEntity> {
         final TextFieldWithButton field = new TextFieldWithButton(caption, button);
         field.setFieldWidth("100%");
         field.getField().setClearButtonVisible(true);
-        final BindingBuilder<E, String> bindingBuilder = binder.forField(field.getField());
+        final BindingBuilder<E, String> bindingBuilderString = binder.forField(field.getField());
         if (validator != null) {
-            bindingBuilder.withValidator(validator);
+            bindingBuilderString.withValidator(validator);
         }
-        bindingBuilder.bind(bindingProperty);
+        bindingBuilderString.withNullRepresentation("");
+        bindingBuilderString.bind(bindingProperty);
 
-        field.setId(entityClass + "-" + bindingProperty + "-" + caption);
+        field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         addComponentIfRequired(field);
         return field;
     }
@@ -459,12 +461,12 @@ public class FormHelper<E extends CrudEntity> {
                 }
 
                 if (property != null) {
-                    final BindingBuilder<E, L> bindingBuilder = binder.forField(component.getField());
+                    final BindingBuilder<E, L> bindingBuilder2 = binder.forField(component.getField());
                     if (validator != null) {
-                        bindingBuilder.withValidator(validator);
+                        bindingBuilder2.withValidator(validator);
                     }
-                    bindingBuilder.bind(property);
-                    component.setId(entityClass + "-" + property + "-" + caption);
+                    bindingBuilder2.bind(property);
+                    component.setId(entityClass.getSimpleName() + "-" + property + "-" + caption);
                 }
 
                 addComponentIfRequired(component);

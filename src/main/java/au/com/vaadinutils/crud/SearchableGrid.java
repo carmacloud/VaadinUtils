@@ -43,13 +43,13 @@ import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.menu.Menus;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends CustomComponent {
     private static final long serialVersionUID = 1L;
 
     private boolean initialised;
-    private TextField searchField = new TextField();
+    private final TextField searchField = new TextField();
     private AbstractLayout advancedSearchLayout;
     private AbstractLayout searchBar;
     private Button advancedSearchButton;
@@ -70,7 +70,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
 
     }
 
-    public void init(String uniqueId, Class<E> entityClazz) {
+    public void init(final String uniqueId, final Class<E> entityClazz) {
         container = getContainer();
         grid = new Grid(new GeneratedPropertyContainer(container));
         grid.setSizeFull();
@@ -88,12 +88,12 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
 
     }
 
-    public void addComponentAsFirst(Component component) {
+    public void addComponentAsFirst(final Component component) {
         mainLayout.addComponentAsFirst(component);
 
     }
 
-    public void addComponent(Component component) {
+    public void addComponent(final Component component) {
         mainLayout.addComponent(component);
     }
 
@@ -102,8 +102,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
      * 
      * @param uniqueId
      */
-    @Deprecated
-    public SearchableGrid(String uniqueId, Class<E> entityClazz) {
+    public SearchableGrid(final String uniqueId, final Class<E> entityClazz) {
         init(uniqueId, entityClazz);
     }
 
@@ -117,7 +116,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
     }
 
     @Override
-    public void beforeClientResponse(boolean initial) {
+    public void beforeClientResponse(final boolean initial) {
         super.beforeClientResponse(initial);
         if (!initialised) {
             headingPropertySet.applySettingsToColumns();
@@ -142,7 +141,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
         return "Override getTitle() to set a custom title.";
     }
 
-    public void addGeneratedColumn(Object id, ColumnGenerator generatedColumn) {
+    public void addGeneratedColumn(final Object id, final ColumnGenerator generatedColumn) {
         // grid.addGeneratedColumn(id, generatedColumn);
     }
 
@@ -187,11 +186,11 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
         return layout;
     }
 
-    public void addComponentToBasicSearchBar(Component component) {
+    public void addComponentToBasicSearchBar(final Component component) {
         basicSearchLayout.addComponent(component);
     }
 
-    public void addComponentToBasicSearchBar(Component component, int position) {
+    public void addComponentToBasicSearchBar(final Component component, final int position) {
         basicSearchLayout.addComponent(component, position);
     }
 
@@ -203,7 +202,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void clicked(ClickEvent event) {
+            public void clicked(final ClickEvent event) {
                 searchField.setValue("");
                 clearAdvancedFilters();
                 triggerFilter();
@@ -225,7 +224,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
                 private static final long serialVersionUID = 7777043506655571664L;
 
                 @Override
-                public void buttonClick(ClickEvent event) {
+                public void buttonClick(final ClickEvent event) {
                     clearAdvancedFilters();
                     advancedSearchOn = !advancedSearchOn;
                     advancedSearchLayout.setVisible(advancedSearchOn);
@@ -238,7 +237,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
                         advancedSearchButton.setCaption(getBasicCaption());
                     }
 
-                    AdvancedSearchListener advancedSearchListener = getAdvancedSearchListener();
+                    final AdvancedSearchListener advancedSearchListener = getAdvancedSearchListener();
                     if (advancedSearchListener != null) {
                         advancedSearchListener.advancedSearchIsOpen(advancedSearchOn);
                     }
@@ -266,9 +265,9 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
         triggerFilter(searchField.getValue());
     }
 
-    protected void triggerFilter(String searchText) {
-        boolean advancedSearchActive = advancedSearchOn;
-        Filter filter = getContainerFilter(searchText, advancedSearchActive);
+    protected void triggerFilter(final String searchText) {
+        final boolean advancedSearchActive = advancedSearchOn;
+        final Filter filter = getContainerFilter(searchText, advancedSearchActive);
         if (filter == null) {
             resetFilters();
         } else {
@@ -280,7 +279,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
         container.removeAllContainerFilters();
     }
 
-    protected void applyFilter(Filter filter) {
+    protected void applyFilter(final Filter filter) {
         resetFilters();
         container.addContainerFilter(filter);
     }
@@ -294,18 +293,18 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
     protected void clearAdvancedFilters() {
     }
 
-    public void addItemClickListener(ItemClickListener listener) {
+    public void addItemClickListener(final ItemClickListener listener) {
         grid.addItemClickListener(listener);
 
     }
 
-    public void addSelectionListener(SelectionListener listener) {
+    public void addSelectionListener(final SelectionListener listener) {
         grid.addSelectionListener(listener);
 
     }
 
     @Override
-    public void addStyleName(String style) {
+    public void addStyleName(final String style) {
         grid.addStyleName(style);
     }
 
@@ -314,12 +313,12 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
 
     }
 
-    public void addContainerFilter(Filter filter) {
+    public void addContainerFilter(final Filter filter) {
         container.addContainerFilter(filter);
 
     }
 
-    public boolean select(Object itemId) {
+    public boolean select(final Object itemId) {
         return grid.select(itemId);
     }
 
@@ -331,7 +330,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
         return grid.getSelectionModel();
     }
 
-    public SelectionModel setSelectionMode(SelectionMode selectionMode) {
+    public SelectionModel setSelectionMode(final SelectionMode selectionMode) {
         return grid.setSelectionMode(selectionMode);
     }
 
@@ -343,7 +342,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
         return grid.getSelectedRows();
     }
 
-    public void setSearchFilterText(String text) {
+    public void setSearchFilterText(final String text) {
         searchField.setValue(text);
         triggerFilter(text);
     }
@@ -356,7 +355,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
         return grid;
     }
 
-    public void setColumnReorderingAllowed(boolean columnReorderingAllowed) {
+    public void setColumnReorderingAllowed(final boolean columnReorderingAllowed) {
         grid.setColumnReorderingAllowed(true);
     }
 
@@ -364,7 +363,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
         return grid.isColumnReorderingAllowed();
     }
 
-    public void setConverter(String propertyId, Converter<String, ?> converter) {
+    public void setConverter(final String propertyId, final Converter<String, ?> converter) {
         grid.getColumn(propertyId).setConverter(converter);
     }
 
@@ -374,17 +373,17 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
 
     public void refresh() {
         final GridRefresher refresher = GridRefresher.extend(grid);
-        for (Object itemId : grid.getContainerDataSource().getItemIds()) {
+        for (final Object itemId : grid.getContainerDataSource().getItemIds()) {
             refresher.refresh(itemId);
         }
     }
 
-    public void refreshRows(Object... itemIds) {
+    public void refreshRows(final Object... itemIds) {
         grid.refreshRows(itemIds);
     }
 
     @Override
-    public void addContextClickListener(ContextClickListener listener) {
+    public void addContextClickListener(final ContextClickListener listener) {
         grid.addContextClickListener(listener);
     }
 
@@ -396,15 +395,15 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
         return "Basic";
     }
 
-    public void setCellDescriptionGenerator(CellDescriptionGenerator generator) {
+    public void setCellDescriptionGenerator(final CellDescriptionGenerator generator) {
         grid.setCellDescriptionGenerator(generator);
     }
 
-    public void setCellStyleGenerator(CellStyleGenerator generator) {
+    public void setCellStyleGenerator(final CellStyleGenerator generator) {
         grid.setCellStyleGenerator(generator);
     }
 
-    public void setRowStyleGenerator(RowStyleGenerator generator) {
+    public void setRowStyleGenerator(final RowStyleGenerator generator) {
         grid.setRowStyleGenerator(generator);
     }
 
@@ -425,7 +424,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
         searchField.focus();
     }
 
-    public void showAdvancedSearch(boolean show) {
+    public void showAdvancedSearch(final boolean show) {
         clearAdvancedFilters();
         advancedSearchOn = show;
         advancedSearchLayout.setVisible(advancedSearchOn);
@@ -438,7 +437,7 @@ public abstract class SearchableGrid<E, T extends Indexed & Filterable> extends 
             advancedSearchButton.setCaption(getBasicCaption());
         }
 
-        AdvancedSearchListener advancedSearchListener = getAdvancedSearchListener();
+        final AdvancedSearchListener advancedSearchListener = getAdvancedSearchListener();
         if (advancedSearchListener != null) {
             advancedSearchListener.advancedSearchIsOpen(advancedSearchOn);
         }
