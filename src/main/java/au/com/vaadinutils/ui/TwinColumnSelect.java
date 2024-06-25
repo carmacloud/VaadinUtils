@@ -45,14 +45,14 @@ import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.NullFilter;
 
 /**
- * @deprecated Replaced in Vaadin 14 migration.
+ * Replaced in Vaadin 14 migration.
  */
 public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collection<C>> {
     private static final long serialVersionUID = -4316521010865902678L;
 
     // private boolean initialised;
-    private SingularAttribute<C, ?> itemCaptionProperty;
-    private Class<C> itemClass;
+    private final SingularAttribute<C, ?> itemCaptionProperty;
+    private final Class<C> itemClass;
     private Collection<C> sourceValue;
     @SuppressWarnings("rawtypes")
     private Class<? extends Collection> valueClass;
@@ -62,12 +62,12 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
     private BeanContainer<Long, C> selectedBeans;
     private SingularAttribute<C, Long> beanIdField;
 
-    private HorizontalLayout mainLayout = new HorizontalLayout();
-    private Button addNewButton = new Button(FontAwesome.PLUS);
-    private Button addButton = new Button(">");
-    private Button removeButton = new Button("<");
-    private Button removeAllButton = new Button("<<");
-    private Button addAllButton = new Button(">>");
+    private final HorizontalLayout mainLayout = new HorizontalLayout();
+    private final Button addNewButton = new Button(FontAwesome.PLUS);
+    private final Button addButton = new Button(">");
+    private final Button removeButton = new Button("<");
+    private final Button removeAllButton = new Button("<<");
+    private final Button addAllButton = new Button(">>");
 
     private Filter baselineFilter;
     private Filter selectedFilter;
@@ -78,7 +78,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
     private LinkedHashSet<ValueChangeListener<C>> valueChangeListeners = null;
     private CreateNewCallback<C> createNewCallback;
 
-    private boolean sortAscending = true;
+    private final boolean sortAscending = true;
     private boolean showAddRemoveAll;
 
     private static final float BUTTON_LAYOUT_WIDTH = 50;
@@ -86,7 +86,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
     private static final float DEFAULT_COLUMN_WIDTH = 200;
     private static final float DEFAULT_COLUMN_HEIGHT = 300;
 
-    public TwinColumnSelect(String caption, SingularAttribute<C, ?> itemCaptionProperty) {
+    public TwinColumnSelect(final String caption, final SingularAttribute<C, ?> itemCaptionProperty) {
         this.setCaption(caption);
         this.itemCaptionProperty = itemCaptionProperty;
         itemClass = itemCaptionProperty.getDeclaringType().getJavaType();
@@ -110,7 +110,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void itemClick(ItemClickEvent event) {
+            public void itemClick(final ItemClickEvent event) {
                 if (event.isDoubleClick()) {
                     removeButton.click();
                 }
@@ -122,7 +122,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
         // initialised = true;
     }
 
-    protected void customizeGrids(Grid selectedGrid, SearchableGrid<C, JPAContainer<C>> availableGrid2) {
+    protected void customizeGrids(final Grid selectedGrid, final SearchableGrid<C, JPAContainer<C>> availableGrid2) {
         // Overload this method a do some customization of the grids.
 
     }
@@ -165,7 +165,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
             }
 
             @Override
-            protected Filter getContainerFilter(String filterString, boolean advancedSearchActive) {
+            protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive) {
                 Filter searchFilter = null;
                 if (filterString != null && filterString.length() > 0) {
                     searchFilter = getSearchFilter(filterString);
@@ -188,7 +188,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void itemClick(ItemClickEvent event) {
+            public void itemClick(final ItemClickEvent event) {
                 if (event.isDoubleClick()) {
                     addButton.click();
                 }
@@ -254,31 +254,31 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
         return buttonLayout;
     }
 
-    public void setEnabledAddAllButton(boolean enabled) {
+    public void setEnabledAddAllButton(final boolean enabled) {
         addAllButton.setVisible(enabled);
         addAllButton.setEnabled(enabled);
     }
 
-    public void setEnabledAddButton(boolean enabled) {
+    public void setEnabledAddButton(final boolean enabled) {
         // issue encountered : even when setting visible to false, the button
         // still appears on the page but setEnabled has no issue
         addButton.setVisible(enabled);
         addButton.setEnabled(enabled);
     }
 
-    public void setShowAddRemoveAll(boolean show) {
+    public void setShowAddRemoveAll(final boolean show) {
         showAddRemoveAll = show;
         addAllButton.setVisible(show);
         removeAllButton.setVisible(show);
     }
 
-    public void setAddNewAllowed(CreateNewCallback<C> createNewCallback) {
+    public void setAddNewAllowed(final CreateNewCallback<C> createNewCallback) {
         addNewButton.setVisible(true);
         this.createNewCallback = createNewCallback;
     }
 
     @Override
-    public void setWidth(float width, Unit unit) {
+    public void setWidth(final float width, final Unit unit) {
         super.setWidth(width, unit);
         if (mainLayout != null && selectedGrid != null && availableGrid != null) {
             mainLayout.setWidth(width, unit);
@@ -289,7 +289,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
     }
 
     @Override
-    public void setHeight(String height) {
+    public void setHeight(final String height) {
         super.setHeight(height);
         selectedGrid.setHeight(height);
         availableGrid.setHeight(height);
@@ -305,7 +305,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
     }
 
     @Override
-    public void setReadOnly(boolean b) {
+    public void setReadOnly(final boolean b) {
         super.setReadOnly(b);
         selectedGrid.setReadOnly(b);
         availableGrid.setVisible(!b);
@@ -329,14 +329,14 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
         void valueChanged(Collection<C> value);
     }
 
-    public void addValueChangeListener(ValueChangeListener<C> listener) {
+    public void addValueChangeListener(final ValueChangeListener<C> listener) {
         if (valueChangeListeners == null) {
             valueChangeListeners = new LinkedHashSet<>();
         }
         valueChangeListeners.add(listener);
     }
 
-    public void setFilter(Filter filter) {
+    public void setFilter(final Filter filter) {
         baselineFilter = filter;
         availableContainer.setFireContainerItemSetChangeEvents(false);
         availableContainer.removeAllContainerFilters();
@@ -344,7 +344,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
         availableContainer.addContainerFilter(filter);
     }
 
-    public void setFilterDelegate(DefaultQueryModifierDelegate defaultQueryModifierDelegate) {
+    public void setFilterDelegate(final DefaultQueryModifierDelegate defaultQueryModifierDelegate) {
         availableContainer.setQueryModifierDelegate(defaultQueryModifierDelegate);
     }
 
@@ -359,15 +359,15 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
         }
 
         // add missing
-        for (C c : tmp) {
+        for (final C c : tmp) {
             if (!sourceValue.contains(c)) {
                 sourceValue.add(c);
             }
         }
 
         // remove unneeded
-        Set<C> toRemove = new HashSet<>();
-        for (C c : sourceValue) {
+        final Set<C> toRemove = new HashSet<>();
+        for (final C c : sourceValue) {
             if (!tmp.contains(c)) {
                 toRemove.add(c);
             }
@@ -377,7 +377,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
 
     @Override
     public boolean isModified() {
-        Collection<C> convertedValue = getConvertedValue();
+        final Collection<C> convertedValue = getConvertedValue();
         Preconditions.checkNotNull(convertedValue,
                 "If you look at getConvertedValue, you'll see convertedValue can never be null");
 
@@ -387,12 +387,12 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
         if ((sourceValue == null || sourceValue.size() == 0) && (convertedValue.size() == 0)) {
             return false;
         }
-        boolean equal = convertedValue.containsAll(sourceValue) && sourceValue.containsAll(convertedValue);
+        final boolean equal = convertedValue.containsAll(sourceValue) && sourceValue.containsAll(convertedValue);
         return !equal;
     }
 
     @Override
-    protected void setInternalValue(Collection<C> newValue) {
+    protected void setInternalValue(final Collection<C> newValue) {
         if (newValue != null) {
             valueClass = newValue.getClass();
         }
@@ -417,7 +417,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
             selected = new HashSet<>();
         }
 
-        for (Long id : selectedBeans.getItemIds()) {
+        for (final Long id : selectedBeans.getItemIds()) {
             selected.add(selectedBeans.getItem(id).getBean());
         }
 
@@ -451,7 +451,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
         }
 
         final Vector<Filter> filters = new Vector<>();
-        for (Long id : selectedIds) {
+        for (final Long id : selectedIds) {
             filters.add(new Compare.Equal(beanIdField.getName(), id));
         }
         selectedFilter = new Not(new Or(filters.toArray(new Filter[filters.size()])));
@@ -466,22 +466,22 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
         return selectedGrid;
     }
 
-    protected void addAction(Long id) {
+    protected void addAction(final Long id) {
         final C item = JpaBaseDao.getGenericDao(itemClass).findById(id);
         if (item != null) {
             selectedBeans.addBean(item);
             if (valueChangeListeners != null) {
-                for (ValueChangeListener<C> listener : valueChangeListeners) {
+                for (final ValueChangeListener<C> listener : valueChangeListeners) {
                     listener.valueChanged(getValue());
                 }
             }
         }
     }
 
-    protected void removeAction(Long id) {
+    protected void removeAction(final Long id) {
         selectedBeans.removeItem(id);
         if (valueChangeListeners != null) {
-            for (ValueChangeListener<C> listener : valueChangeListeners) {
+            for (final ValueChangeListener<C> listener : valueChangeListeners) {
                 listener.valueChanged(getValue());
             }
         }
@@ -490,7 +490,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
     protected void removeAllAction() {
         selectedBeans.removeAllItems();
         if (valueChangeListeners != null) {
-            for (ValueChangeListener<C> listener : valueChangeListeners) {
+            for (final ValueChangeListener<C> listener : valueChangeListeners) {
                 listener.valueChanged(getValue());
             }
         }
@@ -504,7 +504,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
         return availableColumnHeader;
     }
 
-    public void setAvailableColumnHeader(String availableColumnHeader) {
+    public void setAvailableColumnHeader(final String availableColumnHeader) {
         this.availableColumnHeader = availableColumnHeader;
     }
 
@@ -512,7 +512,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
         return availableGrid;
     }
 
-    public void setAvailableGrid(SearchableGrid<C, JPAContainer<C>> availableGrid) {
+    public void setAvailableGrid(final SearchableGrid<C, JPAContainer<C>> availableGrid) {
         this.availableGrid = availableGrid;
     }
 
@@ -520,7 +520,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
         return selectedColumnHeader;
     }
 
-    public void setSelectedColumnHeader(String selectedColumnHeader) {
+    public void setSelectedColumnHeader(final String selectedColumnHeader) {
         this.selectedColumnHeader = selectedColumnHeader;
     }
 
@@ -529,10 +529,10 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void buttonClick(ClickEvent event) {
+            public void buttonClick(final ClickEvent event) {
                 final Collection<Object> ids = availableGrid.getSelectedRows();
                 if (!ids.isEmpty()) {
-                    for (Object id : ids) {
+                    for (final Object id : ids) {
                         addAction((Long) id);
                     }
 
@@ -550,10 +550,10 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void buttonClick(ClickEvent event) {
+            public void buttonClick(final ClickEvent event) {
                 final Collection<Object> ids = availableContainer.getItemIds();
                 if (!ids.isEmpty()) {
-                    for (Object id : ids) {
+                    for (final Object id : ids) {
                         addAction((Long) id);
                     }
 
@@ -570,10 +570,10 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void buttonClick(ClickEvent event) {
+            public void buttonClick(final ClickEvent event) {
                 final Collection<Object> ids = selectedGrid.getSelectedRows();
                 if (!ids.isEmpty()) {
-                    for (Object id : ids) {
+                    for (final Object id : ids) {
                         removeAction((Long) id);
                     }
                     selectedGrid.select(null);
@@ -589,7 +589,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void buttonClick(ClickEvent event) {
+            public void buttonClick(final ClickEvent event) {
                 removeAllAction();
                 refreshSelected();
             }
@@ -601,7 +601,7 @@ public class TwinColumnSelect<C extends CrudEntity> extends CustomField<Collecti
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void buttonClick(ClickEvent event) {
+            public void buttonClick(final ClickEvent event) {
                 createNewCallback.createNew(new RefreshCallback() {
                     @Override
                     public void refresh() {
