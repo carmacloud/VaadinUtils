@@ -35,7 +35,7 @@ import com.vaadin.addon.jpacontainer.provider.CachingMutableLocalEntityProvider;
  * @author Petter Holmström (Vaadin Ltd)
  * @since 1.0
  * 
- * @deprecated Only used in JPAContainer implementation
+ *        Only used in JPAContainer implementation
  *
  */
 public class BatchingPerRequestEntityProvider<T> extends CachingMutableLocalEntityProvider<T>
@@ -50,13 +50,14 @@ public class BatchingPerRequestEntityProvider<T> extends CachingMutableLocalEnti
      * 
      * @param entityClass the entity class (must not be null).
      */
-    public BatchingPerRequestEntityProvider(Class<T> entityClass) {
+    public BatchingPerRequestEntityProvider(final Class<T> entityClass) {
         super(entityClass);
         setCacheEnabled(true);
     }
 
     static private ThreadLocal<Integer> updating = new ThreadLocal<Integer>();
 
+    @Override
     public void batchUpdate(final BatchUpdateCallback<T> callback) throws UnsupportedOperationException {
         assert callback != null : "callback must not be null";
         if (updating.get() == null) {
@@ -67,13 +68,14 @@ public class BatchingPerRequestEntityProvider<T> extends CachingMutableLocalEnti
         try {
             runInTransaction(new Runnable() {
 
+                @Override
                 public void run() {
                     callback.batchUpdate(BatchingPerRequestEntityProvider.this);
 
                 }
             });
         } finally {
-            int count = updating.get() - 1;
+            final int count = updating.get() - 1;
             updating.set(count);
             if (count == 0) {
                 getEntityManager().getTransaction().begin();
@@ -94,10 +96,12 @@ public class BatchingPerRequestEntityProvider<T> extends CachingMutableLocalEnti
 //		return em;
 //	}
 
+    @Override
     protected EntityManager doGetEntityManager() throws IllegalStateException {
         return EntityManagerProvider.getEntityManager();
     }
 
+    @Override
     public EntityManager getEntityManager() {
         return EntityManagerProvider.getEntityManager();
     }

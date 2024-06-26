@@ -12,7 +12,7 @@ import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.dao.JpaEntityHelper;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 @MappedSuperclass
 public abstract class BaseCrudEntity implements ChildCrudEntity, Serializable {
@@ -38,7 +38,7 @@ public abstract class BaseCrudEntity implements ChildCrudEntity, Serializable {
     }
 
     @Override
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
 
     }
@@ -67,7 +67,7 @@ public abstract class BaseCrudEntity implements ChildCrudEntity, Serializable {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -77,7 +77,7 @@ public abstract class BaseCrudEntity implements ChildCrudEntity, Serializable {
         if (!(obj instanceof BaseCrudEntity)) {
             return false;
         }
-        BaseCrudEntity other = (BaseCrudEntity) obj;
+        final BaseCrudEntity other = (BaseCrudEntity) obj;
         if (guid == null) {
             if (other.guid != null) {
                 return false;

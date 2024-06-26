@@ -9,23 +9,22 @@ import com.vaadin.ui.MenuBar.MenuItem;
 /**
  * because MenuBar and MenuItem have no common ancestor with the addItem method
  * 
- * @author rsutton
- * @deprecated Will be removed once dependent classes are removed.
+ * @author rsutton Will be removed once dependent classes are removed.
  */
 public class MenuWrapper {
     Logger logger = org.apache.logging.log4j.LogManager.getLogger();
     Object innerMenuObject;
 
-    MenuWrapper(MenuBar bar) {
+    MenuWrapper(final MenuBar bar) {
         innerMenuObject = bar;
 
     }
 
-    MenuWrapper(MenuItem item) {
+    MenuWrapper(final MenuItem item) {
         innerMenuObject = item;
     }
 
-    public void addItem(String displayName, boolean addAtTop, Command command) {
+    public void addItem(final String displayName, final boolean addAtTop, final Command command) {
         if (innerMenuObject instanceof MenuBar) {
 
             final MenuBar menuBar = (MenuBar) innerMenuObject;
@@ -39,7 +38,7 @@ public class MenuWrapper {
                     menuItem.addItemBefore(displayName, null, command, menuItem.getChildren().get(0));
                     done = true;
                 } else {
-                    for (MenuItem item : menuItem.getChildren()) {
+                    for (final MenuItem item : menuItem.getChildren()) {
                         if (item.getText().compareToIgnoreCase(displayName) > 0) {
                             logger.debug("for menu " + menuItem.getText() + " Inserting " + displayName + " before "
                                     + item.getText());

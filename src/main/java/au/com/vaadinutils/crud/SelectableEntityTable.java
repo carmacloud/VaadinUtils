@@ -7,18 +7,17 @@ import com.vaadin.data.Container;
 import au.com.vaadinutils.fields.TableCheckBoxSelect;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class SelectableEntityTable<E> extends TableCheckBoxSelect {
     // private static transient Logger logger =
     // LogManager.getLogger(SelectableEntityTable.class);
 
     private static final long serialVersionUID = 1L;
-    private String uniqueId;
+    private final String uniqueId;
 
-    public SelectableEntityTable(Container.Filterable childContainer, HeadingPropertySet headingPropertySet,
-            String uniqueId) {
-        super();
+    public SelectableEntityTable(final Container.Filterable childContainer, final HeadingPropertySet headingPropertySet,
+            final String uniqueId) {
         this.uniqueId = uniqueId;
         setContainerDataSource(childContainer);
         buildSelectableContainer(headingPropertySet);
@@ -33,7 +32,7 @@ public class SelectableEntityTable<E> extends TableCheckBoxSelect {
      * @param headingPropertySet2
      * @return
      */
-    private void buildSelectableContainer(HeadingPropertySet visibleColumns) {
+    private void buildSelectableContainer(final HeadingPropertySet visibleColumns) {
         visibleColumns.applyToTable(this, uniqueId);
 
         setColumnHeader(TableCheckBoxSelect.TABLE_CHECK_BOX_SELECT, "");

@@ -30,12 +30,12 @@ import au.com.vaadinutils.dao.Path;
 import au.com.vaadinutils.user.UserSettingsStorageFactory;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class HeadingPropertySet {
     private List<HeadingToPropertyId> cols = new LinkedList<>();
 
-    private Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+    private final Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 
     public boolean autoExpandColumns = false;
 
@@ -45,32 +45,32 @@ public class HeadingPropertySet {
         // use the builder!
     }
 
-    public static <E> Builder<E> getBuilder(Class<E> Class) {
+    public static <E> Builder<E> getBuilder(final Class<E> Class) {
         return new Builder<>();
     }
 
     interface Start<E> {
-        public AddingColumn<E> createColumn(String heading, String propertyId);
+        AddingColumn<E> createColumn(String heading, String propertyId);
 
-        public <T> AddingColumn<E> createColumn(String heading, SingularAttribute<E, T> headingPropertyId);
+        <T> AddingColumn<E> createColumn(String heading, SingularAttribute<E, T> headingPropertyId);
 
-        public HeadingPropertySet build();
+        HeadingPropertySet build();
     }
 
     public interface AddingColumn<E> {
 
-        public AddingColumn<E> setLockedState(boolean lockedState);
+        AddingColumn<E> setLockedState(boolean lockedState);
 
-        public AddingColumn<E> setDefaultVisibleState(boolean defaultVisibleState);
+        AddingColumn<E> setDefaultVisibleState(boolean defaultVisibleState);
 
-        public AddingColumn<E> setWidth(Integer width);
+        AddingColumn<E> setWidth(Integer width);
 
-        public AddingColumn<E> setColumnGenerator(ColumnGenerator columnGenerator);
+        AddingColumn<E> setColumnGenerator(ColumnGenerator columnGenerator);
 
     }
 
     public static class Builder<E> implements AddingColumn<E>, Start<E> {
-        private List<HeadingToPropertyId> cols = new LinkedList<>();
+        private final List<HeadingToPropertyId> cols = new LinkedList<>();
         private boolean autoExpandColumns = false;
         private boolean eraseSavedConfig = false;
 
@@ -107,7 +107,7 @@ public class HeadingPropertySet {
         HeadingToPropertyId.Builder columnBuilder = null;
 
         @Override
-        public AddingColumn<E> createColumn(String heading, String propertyId) {
+        public AddingColumn<E> createColumn(final String heading, final String propertyId) {
 
             addColumn();
 
@@ -116,7 +116,7 @@ public class HeadingPropertySet {
         }
 
         @Override
-        public <T> AddingColumn<E> createColumn(String heading, SingularAttribute<E, T> headingPropertyId) {
+        public <T> AddingColumn<E> createColumn(final String heading, final SingularAttribute<E, T> headingPropertyId) {
 
             addColumn();
 
@@ -135,32 +135,32 @@ public class HeadingPropertySet {
         }
 
         @Override
-        public AddingColumn<E> setLockedState(boolean lockedState) {
+        public AddingColumn<E> setLockedState(final boolean lockedState) {
             columnBuilder.setLockedState(lockedState);
             return this;
         }
 
         @Override
-        public AddingColumn<E> setDefaultVisibleState(boolean defaultVisibleState) {
+        public AddingColumn<E> setDefaultVisibleState(final boolean defaultVisibleState) {
             columnBuilder.setDefaultVisibleState(defaultVisibleState);
             return this;
         }
 
         @Override
-        public AddingColumn<E> setWidth(Integer width) {
+        public AddingColumn<E> setWidth(final Integer width) {
             columnBuilder.setWidth(width);
             return this;
         }
 
         @Override
-        public AddingColumn<E> setColumnGenerator(ColumnGenerator columnGenerator) {
+        public AddingColumn<E> setColumnGenerator(final ColumnGenerator columnGenerator) {
             columnBuilder.setColumnGenerator(columnGenerator);
             return this;
         }
 
         public <T extends Object> Builder<E> addColumn(final String heading,
                 final SingularAttribute<? super E, T> headingPropertyId, final boolean defaultVisibleState,
-                final boolean lockedState, int width) {
+                final boolean lockedState, final int width) {
             return addColumn(heading, headingPropertyId.getName(), defaultVisibleState, lockedState, width);
         }
 
@@ -199,7 +199,7 @@ public class HeadingPropertySet {
 
         public <T extends Object> Builder<E> addGeneratedColumn(final String heading,
                 final SingularAttribute<E, T> headingPropertyId, final ColumnGenerator columnGenerator,
-                final boolean defaultVisibleState, final boolean lockedState, int width) {
+                final boolean defaultVisibleState, final boolean lockedState, final int width) {
             return addGeneratedColumn(heading, headingPropertyId.getName(), columnGenerator, defaultVisibleState,
                     lockedState, width);
         }
@@ -219,7 +219,7 @@ public class HeadingPropertySet {
         }
 
         public Builder<E> addGeneratedColumn(final String heading, final ColumnGenerator columnGenerator,
-                final boolean defaultVisibleState, final boolean lockedState, int width) {
+                final boolean defaultVisibleState, final boolean lockedState, final int width) {
             return addGeneratedColumn(heading, heading + "-generated", columnGenerator, defaultVisibleState,
                     lockedState, width);
         }
@@ -251,7 +251,7 @@ public class HeadingPropertySet {
             return addColumn(heading, headingPropertyId, true, false);
         }
 
-        public <T extends Object> Builder<E> addColumn(String heading, Path pathToHeadingPropertyId) {
+        public <T extends Object> Builder<E> addColumn(final String heading, final Path pathToHeadingPropertyId) {
             return addColumn(heading, pathToHeadingPropertyId.getName());
         }
 
@@ -347,8 +347,8 @@ public class HeadingPropertySet {
          * @param format  - the format for the Date. format is passed to a
          *                SimpleDateFormat
          */
-        public Builder<E> addColumn(String headingLabel, SingularAttribute<? super E, Date> column, String dateFormat,
-                int width) {
+        public Builder<E> addColumn(final String headingLabel, final SingularAttribute<? super E, Date> column,
+                final String dateFormat, final int width) {
             return addGeneratedColumn(headingLabel, column.getName(),
                     new DateColumnGenerator<E>(column.getName(), dateFormat), true, false, width);
         }
@@ -361,7 +361,8 @@ public class HeadingPropertySet {
          * @param format  - the format for the Date. format is passed to a
          *                SimpleDateFormat
          */
-        public Builder<E> addColumn(String headingLabel, String headingPropertyId, String dateFormat, int width) {
+        public Builder<E> addColumn(final String headingLabel, final String headingPropertyId, final String dateFormat,
+                final int width) {
             // We make the alias the same as the underlying property so that we
             // can sort this column.
             // Generated columns are not normally sortable however by mapping
@@ -381,16 +382,18 @@ public class HeadingPropertySet {
             eraseSavedConfig = true;
         }
 
-        public Builder<E> addGeneratedBooleanIconColumn(String heading, final SingularAttribute<E, Boolean> attribute,
-                final FontAwesome trueIcon, final FontAwesome falseIcon) {
+        public Builder<E> addGeneratedBooleanIconColumn(final String heading,
+                final SingularAttribute<E, Boolean> attribute, final FontAwesome trueIcon,
+                final FontAwesome falseIcon) {
 
-            ColumnGenerator generator = new ColumnGenerator() {
+            final ColumnGenerator generator = new ColumnGenerator() {
 
                 private static final long serialVersionUID = -7730752061513328598L;
 
                 @Override
-                public Object generateCell(Table source, Object itemId, Object columnId) {
-                    Boolean checked = (Boolean) source.getItem(itemId).getItemProperty(attribute.getName()).getValue();
+                public Object generateCell(final Table source, final Object itemId, final Object columnId) {
+                    final Boolean checked = (Boolean) source.getItem(itemId).getItemProperty(attribute.getName())
+                            .getValue();
 
                     final Label label = new Label();
                     if (checked != null) {
@@ -429,32 +432,32 @@ public class HeadingPropertySet {
 
     static class DateColumnGenerator<E> implements ColumnGenerator {
         private static final long serialVersionUID = 1;
-        private Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+        private final Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 
         final private SimpleDateFormat sdf;
         final private SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd");
         final private String headingPropertyId;
 
-        DateColumnGenerator(String headingPropertyId, String format) {
+        DateColumnGenerator(final String headingPropertyId, final String format) {
             this.headingPropertyId = headingPropertyId;
             this.sdf = new SimpleDateFormat(format);
         }
 
         @Override
-        public Object generateCell(Table source, Object itemId, Object columnId) {
-            Item item = source.getItem(itemId);
+        public Object generateCell(final Table source, final Object itemId, final Object columnId) {
+            final Item item = source.getItem(itemId);
 
-            Object objDate = item.getItemProperty(headingPropertyId).getValue();
+            final Object objDate = item.getItemProperty(headingPropertyId).getValue();
 
             String formattedDate = "";
 
             if (objDate instanceof Date) {
                 formattedDate = sdf.format((Date) objDate);
             } else if (objDate != null) {
-                String strDate = objDate.toString();
+                final String strDate = objDate.toString();
                 try {
                     formattedDate = sdf.format(sdfParse.parse(strDate));
-                } catch (ParseException e) {
+                } catch (final ParseException e) {
                     // just so we have a value.
                     formattedDate = "Invalid";
                     logger.error(
@@ -463,7 +466,7 @@ public class HeadingPropertySet {
                 }
             }
 
-            Label label = new Label(formattedDate);
+            final Label label = new Label(formattedDate);
 
             return label;
         }
@@ -474,9 +477,9 @@ public class HeadingPropertySet {
         return cols;
     }
 
-    public void applyToTable(Table table) {
+    public void applyToTable(final Table table) {
         final StackTraceElement[] trace = new Exception().getStackTrace();
-        for (StackTraceElement call : trace) {
+        for (final StackTraceElement call : trace) {
             if (!call.getClassName().contains("au.com.vaadinutils")) {
                 if (call.getClassName().contains(".")) {
                     applyToTable(table, call.getClassName().substring(call.getClassName().lastIndexOf(".")));
@@ -501,7 +504,7 @@ public class HeadingPropertySet {
     public void applyToTable(final Table table, final String uniqueTableId) {
         try {
             final List<String> colsToShow = new LinkedList<>();
-            for (HeadingToPropertyId column : getColumns()) {
+            for (final HeadingToPropertyId column : getColumns()) {
                 colsToShow.add(column.getPropertyId());
                 table.setColumnHeader(column.getPropertyId(), column.getHeader());
 
@@ -539,7 +542,7 @@ public class HeadingPropertySet {
             configureSaveColumnWidths(table, uniqueTableId);
             configureSaveColumnOrder(table, uniqueTableId);
             configureSaveColumnVisible(table, uniqueTableId);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error(e, e);
         }
     }
@@ -551,13 +554,13 @@ public class HeadingPropertySet {
     private void configureSaveColumnWidths(final Table table, final String uniqueTableId) {
         final String keyStub = uniqueTableId + "-width";
 
-        for (HeadingToPropertyId id : getColumns()) {
+        for (final HeadingToPropertyId id : getColumns()) {
             final String setWidth = UserSettingsStorageFactory.getUserSettingsStorage()
                     .get(keyStub + "-" + id.getPropertyId());
             if (setWidth != null && setWidth.length() > 0) {
                 try {
                     table.setColumnWidth(id.getPropertyId(), Integer.parseInt(setWidth));
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     logger.warn(e);
                 }
             }
@@ -567,7 +570,7 @@ public class HeadingPropertySet {
             private static final long serialVersionUID = 4034036880290943146L;
 
             @Override
-            public void columnResize(ColumnResizeEvent event) {
+            public void columnResize(final ColumnResizeEvent event) {
                 final String propertyId = (String) event.getPropertyId();
                 final int width = event.getCurrentWidth();
                 UserSettingsStorageFactory.getUserSettingsStorage().store(keyStub + "-" + propertyId, "" + width);
@@ -591,7 +594,7 @@ public class HeadingPropertySet {
             private static final long serialVersionUID = -2810298692555333890L;
 
             @Override
-            public void columnReorder(ColumnReorderEvent event) {
+            public void columnReorder(final ColumnReorderEvent event) {
                 final Object[] columns = ((Table) event.getSource()).getVisibleColumns();
                 UserSettingsStorageFactory.getUserSettingsStorage().store(keyStub, "" + Arrays.toString(columns));
             }
@@ -619,7 +622,7 @@ public class HeadingPropertySet {
         // table in
         final List<Object> newList = new ArrayList<>(availableList);
         newList.removeAll(parsedList);
-        for (Object column : newList) {
+        for (final Object column : newList) {
             parsedList.add(availableList.indexOf(column), column);
         }
 
@@ -629,7 +632,7 @@ public class HeadingPropertySet {
     private void configureSaveColumnVisible(final Table table, final String uniqueTableId) {
         final String keyStub = uniqueTableId + "-visible";
 
-        for (HeadingToPropertyId id : getColumns()) {
+        for (final HeadingToPropertyId id : getColumns()) {
             final String setVisible = UserSettingsStorageFactory.getUserSettingsStorage()
                     .get(keyStub + "-" + id.getPropertyId());
             if (setVisible != null && !setVisible.isEmpty()) {
@@ -641,7 +644,7 @@ public class HeadingPropertySet {
             private static final long serialVersionUID = 8903793320816698902L;
 
             @Override
-            public void columnCollapseStateChange(ColumnCollapseEvent event) {
+            public void columnCollapseStateChange(final ColumnCollapseEvent event) {
                 final String propertyId = (String) event.getPropertyId();
                 final boolean isVisible = !table.isColumnCollapsed(propertyId);
                 UserSettingsStorageFactory.getUserSettingsStorage().store(keyStub + "-" + propertyId, "" + isVisible);

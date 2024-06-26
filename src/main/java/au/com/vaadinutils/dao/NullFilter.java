@@ -11,13 +11,13 @@ import com.vaadin.data.util.filter.Or;
  * Allows one or more filters to be passed in and the null filters are removed
  * while the valid ones are added to the query
  * 
- * @deprecated Used in VaadinUtils.TwinColumnSelect, which will be replaced
- *             during migration.
+ * Used in VaadinUtils.TwinColumnSelect, which will be replaced during
+ * migration.
  */
 public class NullFilter {
     public static Filter and(final Filter... filters) {
         final List<Filter> validFilters = new ArrayList<Filter>();
-        for (Filter filter : filters) {
+        for (final Filter filter : filters) {
             if (filter != null)
                 validFilters.add(filter);
         }
@@ -30,7 +30,7 @@ public class NullFilter {
 
     public static Filter or(final Filter... filters) {
         final List<Filter> validFilters = new ArrayList<Filter>();
-        for (Filter filter : filters) {
+        for (final Filter filter : filters) {
             if (filter != null)
                 validFilters.add(filter);
         }

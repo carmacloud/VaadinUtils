@@ -3,7 +3,7 @@ package au.com.vaadinutils.crud;
 import com.vaadin.ui.Grid;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public interface GridHeadingPropertySetIfc<E> {
 

@@ -36,7 +36,7 @@ import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.menu.Menus;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout {
     private static final long serialVersionUID = 1L;
@@ -51,11 +51,11 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
     public boolean advancedSearchOn = false;
     protected SelectableEntityTable<E> selectableTable;
     protected Container.Filterable container;
-    private String uniqueId;
+    private final String uniqueId;
 
     private String filterString = "";
 
-    public SearchableSelectableEntityTable(String uniqueId) {
+    public SearchableSelectableEntityTable(final String uniqueId) {
         this.uniqueId = uniqueId;
         container = getContainer();
         selectableTable = new SelectableEntityTable<E>(container, getHeadingPropertySet(), uniqueId);
@@ -66,7 +66,7 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
 
         final String titleText = getTitle();
         if (titleText != null && !titleText.isEmpty()) {
-            Label title = new Label(getTitle());
+            final Label title = new Label(getTitle());
             title.setStyleName(Reindeer.LABEL_H1);
             this.addComponent(title);
         }
@@ -94,7 +94,7 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void itemClick(ItemClickEvent event) {
+            public void itemClick(final ItemClickEvent event) {
                 if (event.getButton() == MouseButton.RIGHT) {
                     selectableTable.setValue(event.getItemId());
                 }
@@ -120,21 +120,21 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         return "Override getTitle() to set a custom title.";
     }
 
-    public void addGeneratedColumn(Object id, ColumnGenerator generatedColumn) {
+    public void addGeneratedColumn(final Object id, final ColumnGenerator generatedColumn) {
         selectableTable.addGeneratedColumn(id, generatedColumn);
     }
 
     protected AbstractLayout buildSearchBar() {
-        VerticalLayout layout = new VerticalLayout();
+        final VerticalLayout layout = new VerticalLayout();
         layout.setWidth(100, Unit.PERCENTAGE);
         searchField.setWidth(100, Unit.PERCENTAGE);
         searchBar = layout;
 
-        HorizontalLayout basicSearchLayout = new HorizontalLayout();
+        final HorizontalLayout basicSearchLayout = new HorizontalLayout();
         basicSearchLayout.setWidth(100, Unit.PERCENTAGE);
         layout.addComponent(basicSearchLayout);
 
-        AbstractLayout advancedSearch = buildAdvancedSearch();
+        final AbstractLayout advancedSearch = buildAdvancedSearch();
         if (advancedSearch != null) {
             basicSearchLayout.addComponent(advancedSearchCheckbox);
         }
@@ -155,7 +155,7 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         });
 
         // clear button
-        Button clear = createClearButton();
+        final Button clear = createClearButton();
         basicSearchLayout.addComponent(clear);
         basicSearchLayout.setComponentAlignment(clear, Alignment.MIDDLE_CENTER);
 
@@ -178,14 +178,14 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
      */
     private Button createClearButton() {
 
-        Button clear = new Button("X");
+        final Button clear = new Button("X");
         // clear.setStyleName(ValoTheme.BUTTON_SMALL);
         clear.setImmediate(true);
         clear.addClickListener(new ClickEventLogged.ClickListener() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void clicked(ClickEvent event) {
+            public void clicked(final ClickEvent event) {
                 searchField.setValue("");
                 clearAdvancedFilters();
                 completeInit();
@@ -208,7 +208,7 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
                 private static final long serialVersionUID = 7777043506655571664L;
 
                 @Override
-                public void buttonClick(ClickEvent event) {
+                public void buttonClick(final ClickEvent event) {
                     clearAdvancedFilters();
                     advancedSearchOn = !advancedSearchOn;
                     advancedSearchLayout.setVisible(advancedSearchOn);
@@ -241,11 +241,11 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         triggerFilter(searchField.getValue());
     }
 
-    protected void triggerFilter(String searchText) {
+    protected void triggerFilter(final String searchText) {
         // boolean advancedSearchActive = advancedSearchCheckbox != null &&
         // advancedSearchCheckbox.getValue();
-        boolean advancedSearchActive = advancedSearchOn;
-        Filter filter = getContainerFilter(searchText, advancedSearchActive);
+        final boolean advancedSearchActive = advancedSearchOn;
+        final Filter filter = getContainerFilter(searchText, advancedSearchActive);
         if (filter == null) {
             resetFilters();
         } else {
@@ -258,7 +258,7 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         container.removeAllContainerFilters();
     }
 
-    protected void applyFilter(Filter filter) { /* Reset the filter for the Entity Container. */
+    protected void applyFilter(final Filter filter) { /* Reset the filter for the Entity Container. */
         resetFilters();
         container.addContainerFilter(filter);
 
@@ -288,12 +288,12 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         return selectableTable.getSelectedIds();
     }
 
-    public void addSelectionListener(SelectionListener listener) {
+    public void addSelectionListener(final SelectionListener listener) {
         selectableTable.addSelectionListener(listener);
 
     }
 
-    public void addItemClickListener(ItemClickListener object) {
+    public void addItemClickListener(final ItemClickListener object) {
         selectableTable.addItemClickListener(object);
 
     }
@@ -303,31 +303,31 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
 
     }
 
-    public void addContainerFilter(Filter filter) {
+    public void addContainerFilter(final Filter filter) {
         container.addContainerFilter(filter);
 
     }
 
-    public void setConverter(String propertyId, Converter<String, ?> converter) {
+    public void setConverter(final String propertyId, final Converter<String, ?> converter) {
         selectableTable.setConverter(propertyId, converter);
 
     }
 
-    public void setSelected(Collection<Long> ids) {
+    public void setSelected(final Collection<Long> ids) {
         selectableTable.setSelectedValue(ids);
 
     }
 
-    public void setMultiSelect(boolean b) {
+    public void setMultiSelect(final boolean b) {
         selectableTable.setMultiSelect(true);
 
     }
 
-    public void setDragMode(TableDragMode mode) {
+    public void setDragMode(final TableDragMode mode) {
         selectableTable.setDragMode(mode);
     }
 
-    public void setDropHandler(DropHandler dropHandler) {
+    public void setDropHandler(final DropHandler dropHandler) {
         selectableTable.setDropHandler(dropHandler);
 
     }
@@ -341,7 +341,7 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         return selectableTable.getSelectedItems();
     }
 
-    public void setSearchFilterText(String text) {
+    public void setSearchFilterText(final String text) {
         searchField.setValue(text);
         triggerFilter(text);
     }
@@ -362,7 +362,7 @@ public abstract class SearchableSelectableEntityTable<E> extends VerticalLayout 
         selectableTable.selectAll();
     }
 
-    public void setColumnReorderingAllowed(boolean columnReorderingAllowed) {
+    public void setColumnReorderingAllowed(final boolean columnReorderingAllowed) {
         selectableTable.setColumnReorderingAllowed(true);
     }
 

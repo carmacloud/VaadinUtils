@@ -8,12 +8,12 @@ import com.vaadin.data.Container;
 import au.com.vaadinutils.crud.CrudEntity;
 
 /**
- * @deprecated Will be removed once dependent classes are removed.
+ * Will be removed once dependent classes are removed.
  */
 public class ContainerAdaptorFactory<T extends CrudEntity> {
 
     @SuppressWarnings("unchecked")
-    public static <T extends CrudEntity> ContainerAdaptor<T> getAdaptor(Container container) {
+    public static <T extends CrudEntity> ContainerAdaptor<T> getAdaptor(final Container container) {
         if (container instanceof JPAContainer) {
             return new ContainerAdaptorJPA<T>((JPAContainer<T>) container);
         }

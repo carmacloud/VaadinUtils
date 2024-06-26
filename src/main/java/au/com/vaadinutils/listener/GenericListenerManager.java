@@ -11,10 +11,10 @@ import java.util.Map.Entry;
 import org.apache.logging.log4j.Logger;
 
 /**
- * @deprecated Replaced in Vaadin 14 migration.
+ * Replaced in Vaadin 14 migration.
  */
 class GenericListenerManager<K> implements ListenerManager<K> {
-    private Map<K, Date> listeners = createSet();
+    private final Map<K, Date> listeners = createSet();
 
     /**
      * I considered weak references, but if you pass in an anonoumous listener it
@@ -27,29 +27,29 @@ class GenericListenerManager<K> implements ListenerManager<K> {
         return new LinkedHashMap<>();
     }
 
-    private long maxSize;
+    private final long maxSize;
     private long highWaterMark = 0;
     Logger logger = org.apache.logging.log4j.LogManager.getLogger();
-    private String name;
+    private final String name;
 
-    public GenericListenerManager(String name, long maxSize) {
+    public GenericListenerManager(final String name, final long maxSize) {
         this.maxSize = maxSize;
         this.name = name;
     }
 
     @Override
-    public void addListener(K listener) {
+    public void addListener(final K listener) {
 
         listeners.put(listener, new Date());
-        int size = listeners.size();
+        final int size = listeners.size();
         if (size > (maxSize * 0.8) && highWaterMark < size) {
             highWaterMark = size;
             logger.warn("Listeners for '{}' have exceeded 50% of limit {}/{}", name, size, maxSize);
         }
         if (size > maxSize) {
-            Iterator<Entry<K, Date>> itr = listeners.entrySet().iterator();
-            Entry<K, Date> removed = itr.next();
-            Exception ex = new Exception("Removing listener " + removed.getKey() + " " + removed.getValue());
+            final Iterator<Entry<K, Date>> itr = listeners.entrySet().iterator();
+            final Entry<K, Date> removed = itr.next();
+            final Exception ex = new Exception("Removing listener " + removed.getKey() + " " + removed.getValue());
             logger.error(ex, ex);
             itr.remove();
         }
@@ -57,7 +57,7 @@ class GenericListenerManager<K> implements ListenerManager<K> {
     }
 
     @Override
-    public void removeListener(K listener) {
+    public void removeListener(final K listener) {
         listeners.remove(listener);
     }
 
@@ -71,10 +71,10 @@ class GenericListenerManager<K> implements ListenerManager<K> {
      * @param callback
      */
     @Override
-    public void notifyListeners(ListenerCallback<K> callback) {
-        List<K> temp = new LinkedList<>();
+    public void notifyListeners(final ListenerCallback<K> callback) {
+        final List<K> temp = new LinkedList<>();
         temp.addAll(listeners.keySet());
-        for (K listener : temp) {
+        for (final K listener : temp) {
             callback.invoke(listener);
         }
 
@@ -85,6 +85,7 @@ class GenericListenerManager<K> implements ListenerManager<K> {
         return !listeners.isEmpty();
     }
 
+    @Override
     public void destroy() {
         listeners.clear();
     }

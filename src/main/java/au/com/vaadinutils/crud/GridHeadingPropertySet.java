@@ -37,10 +37,10 @@ import au.com.vaadinutils.user.UserSettingsStorageFactory;
 import de.datenhahn.vaadin.componentrenderer.ComponentRenderer;
 
 /**
- * @deprecated Replaced in V14 migration, use carma version.
+ * Replaced in V14 migration, use carma version.
  */
 public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
-    private Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+    private final Logger logger = org.apache.logging.log4j.LogManager.getLogger();
     private List<GridHeadingToPropertyId> cols = new LinkedList<>();
     private boolean eraseSavedConfig = false;
     private Grid grid;
@@ -55,40 +55,40 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
         this.cols = cols;
     }
 
-    public static <E> Builder<E> getBuilder(Class<E> Class) {
+    public static <E> Builder<E> getBuilder(final Class<E> Class) {
         return new Builder<>();
     }
 
     interface Start<E> {
-        public AddingColumn<E> createColumn(String heading, String propertyId);
+        AddingColumn<E> createColumn(String heading, String propertyId);
 
-        public <T> AddingColumn<E> createColumn(String heading, SingularAttribute<E, T> headingPropertyId);
+        <T> AddingColumn<E> createColumn(String heading, SingularAttribute<E, T> headingPropertyId);
 
-        public GridHeadingPropertySet<E> build();
+        GridHeadingPropertySet<E> build();
     }
 
     public interface AddingColumn<E> {
 
-        public AddingColumn<E> setLockedState(boolean lockedState);
+        AddingColumn<E> setLockedState(boolean lockedState);
 
-        public AddingColumn<E> setDefaultVisibleState(boolean defaultVisibleState);
+        AddingColumn<E> setDefaultVisibleState(boolean defaultVisibleState);
 
-        public AddingColumn<E> setWidth(Integer width);
+        AddingColumn<E> setWidth(Integer width);
 
-        public AddingColumn<E> setColumnGenerator(PropertyValueGenerator<?> columnGenerator);
+        AddingColumn<E> setColumnGenerator(PropertyValueGenerator<?> columnGenerator);
 
-        public AddingColumn<E> setRenderer(AbstractRenderer<?> renderer);
+        AddingColumn<E> setRenderer(AbstractRenderer<?> renderer);
 
-        public GridHeadingPropertySet<E> build();
+        GridHeadingPropertySet<E> build();
 
-        public AddingColumn<E> setConverter(Converter<String, ?> converter);
+        AddingColumn<E> setConverter(Converter<String, ?> converter);
 
-        public Builder<E> addColumn();
+        Builder<E> addColumn();
 
     }
 
     public static class Builder<E> implements AddingColumn<E>, Start<E> {
-        private List<GridHeadingToPropertyId> cols = new LinkedList<>();
+        private final List<GridHeadingToPropertyId> cols = new LinkedList<>();
 
         private boolean eraseSavedConfig = false;
         private boolean dynamicColumnWidth = false;
@@ -104,13 +104,13 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
         }
 
         @Override
-        public AddingColumn<E> setRenderer(AbstractRenderer<?> renderer) {
+        public AddingColumn<E> setRenderer(final AbstractRenderer<?> renderer) {
             columnBuilder.setRenderer(renderer);
             return this;
         }
 
         @Override
-        public AddingColumn<E> setConverter(Converter<String, ?> converter) {
+        public AddingColumn<E> setConverter(final Converter<String, ?> converter) {
             columnBuilder.setConverter(converter);
             return this;
         }
@@ -155,7 +155,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
         GridHeadingToPropertyId.Builder columnBuilder = null;
 
         @Override
-        public AddingColumn<E> createColumn(String heading, String propertyId) {
+        public AddingColumn<E> createColumn(final String heading, final String propertyId) {
 
             addColumn();
 
@@ -164,7 +164,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
         }
 
         @Override
-        public <T> AddingColumn<E> createColumn(String heading, SingularAttribute<E, T> headingPropertyId) {
+        public <T> AddingColumn<E> createColumn(final String heading, final SingularAttribute<E, T> headingPropertyId) {
 
             addColumn();
 
@@ -184,32 +184,32 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
         }
 
         @Override
-        public AddingColumn<E> setLockedState(boolean lockedState) {
+        public AddingColumn<E> setLockedState(final boolean lockedState) {
             columnBuilder.setLockedState(lockedState);
             return this;
         }
 
         @Override
-        public AddingColumn<E> setDefaultVisibleState(boolean defaultVisibleState) {
+        public AddingColumn<E> setDefaultVisibleState(final boolean defaultVisibleState) {
             columnBuilder.setDefaultVisibleState(defaultVisibleState);
             return this;
         }
 
         @Override
-        public AddingColumn<E> setWidth(Integer width) {
+        public AddingColumn<E> setWidth(final Integer width) {
             columnBuilder.setWidth(width);
             return this;
         }
 
         @Override
-        public AddingColumn<E> setColumnGenerator(PropertyValueGenerator<?> columnGenerator) {
+        public AddingColumn<E> setColumnGenerator(final PropertyValueGenerator<?> columnGenerator) {
             columnBuilder.setColumnGenerator(columnGenerator);
             return this;
         }
 
         public <T extends Object> Builder<E> addColumn(final String heading,
                 final SingularAttribute<E, T> headingPropertyId, final boolean defaultVisibleState,
-                final boolean lockedState, int width) {
+                final boolean lockedState, final int width) {
             createColumn(heading, headingPropertyId.getName()).setDefaultVisibleState(defaultVisibleState)
                     .setLockedState(lockedState).setWidth(width);
             this.addColumn();
@@ -252,7 +252,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
 
         public <T extends Object> Builder<E> addGeneratedColumn(final String heading,
                 final SingularAttribute<E, T> headingPropertyId, final PropertyValueGenerator<?> columnGenerator,
-                final boolean defaultVisibleState, final boolean lockedState, int width) {
+                final boolean defaultVisibleState, final boolean lockedState, final int width) {
             return addGeneratedColumn(heading, headingPropertyId.getName(), columnGenerator, defaultVisibleState,
                     lockedState, width);
         }
@@ -273,7 +273,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
         }
 
         public Builder<E> addGeneratedColumn(final String heading, final PropertyValueGenerator<?> columnGenerator,
-                final boolean defaultVisibleState, final boolean lockedState, int width) {
+                final boolean defaultVisibleState, final boolean lockedState, final int width) {
             return addGeneratedColumn(heading, heading + "-generated", columnGenerator, defaultVisibleState,
                     lockedState, width);
         }
@@ -305,7 +305,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
             return addColumn(heading, headingPropertyId, true, false);
         }
 
-        public <T extends Object> Builder<E> addColumn(String heading, Path pathToHeadingPropertyId) {
+        public <T extends Object> Builder<E> addColumn(final String heading, final Path pathToHeadingPropertyId) {
             return addColumn(heading, pathToHeadingPropertyId.getName());
         }
 
@@ -399,9 +399,9 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
         return cols;
     }
 
-    public void applyToGrid(Grid grid) {
+    public void applyToGrid(final Grid grid) {
         final StackTraceElement[] trace = new Exception().getStackTrace();
-        for (StackTraceElement call : trace) {
+        for (final StackTraceElement call : trace) {
             if (!call.getClassName().contains("au.com.vaadinutils")) {
                 if (call.getClassName().contains(".")) {
                     applyToGrid(grid, call.getClassName().substring(call.getClassName().lastIndexOf(".")));
@@ -432,7 +432,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
             // Changing the bound container at this point can cause issues
             // elsewhere, so we avoid it if possible
             Indexed gridContainer = grid.getContainerDataSource();
-            for (GridHeadingToPropertyId column : getColumns()) {
+            for (final GridHeadingToPropertyId column : getColumns()) {
                 if (column.isGenerated()) {
                     gridContainer = wrapGridContainer(grid);
                     break;
@@ -440,7 +440,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
             }
 
             final List<String> colsToShow = new LinkedList<>();
-            for (GridHeadingToPropertyId column : getColumns()) {
+            for (final GridHeadingToPropertyId column : getColumns()) {
                 final String propertyId = column.getPropertyId();
                 if (column.isGenerated()) {
                     final PropertyValueGenerator<?> columnGenerator = column.getColumnGenerator();
@@ -499,7 +499,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
                 configureSaveColumnOrder(grid, uniqueId);
                 configureSaveColumnVisible(grid, uniqueId);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error(e, e);
         }
     }
@@ -536,7 +536,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
     private void configureSaveColumnWidths(final Grid grid, final String uniqueId) {
         final String keyStub = uniqueId + "-width";
 
-        for (GridHeadingToPropertyId column : getColumns()) {
+        for (final GridHeadingToPropertyId column : getColumns()) {
             final String columnId = column.getPropertyId();
             final String setting = keyStub + "-" + columnId;
             final String columnWidth = UserSettingsStorageFactory.getUserSettingsStorage().get(setting);
@@ -546,7 +546,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
                     if (width > 0) {
                         grid.getColumn(columnId).setWidth(Double.parseDouble(columnWidth));
                     }
-                } catch (NumberFormatException e) {
+                } catch (final NumberFormatException e) {
                     logger.error("Invalid width setting for " + setting);
                 }
             }
@@ -556,7 +556,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
             private static final long serialVersionUID = 4034036880290943146L;
 
             @Override
-            public void columnResize(ColumnResizeEvent event) {
+            public void columnResize(final ColumnResizeEvent event) {
                 final String propertyId = (String) event.getColumn().getPropertyId();
                 final double width = event.getColumn().getWidth();
                 UserSettingsStorageFactory.getUserSettingsStorage().store(keyStub + "-" + propertyId, "" + width);
@@ -578,7 +578,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void sizeChanged(ComponentResizeEvent event) {
+            public void sizeChanged(final ComponentResizeEvent event) {
                 final int newGridWidth = event.getWidth();
                 gridWidth.set(newGridWidth);
 
@@ -586,7 +586,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
                     final List<Column> gridColumns = grid.getColumns();
 
                     double columnsTotalWidth = 0;
-                    for (Column column : gridColumns) {
+                    for (final Column column : gridColumns) {
                         columnsTotalWidth += column.getWidth();
                     }
 
@@ -595,7 +595,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
                     if (widthDiscrepancy != 0) {
                         final double perColumnChange = widthDiscrepancy / gridColumns.size();
 
-                        for (Column column : gridColumns) {
+                        for (final Column column : gridColumns) {
                             resizing.set(true);
                             column.setWidth(column.getWidth() + perColumnChange);
                             resizing.set(false);
@@ -610,7 +610,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void columnResize(ColumnResizeEvent event) {
+            public void columnResize(final ColumnResizeEvent event) {
                 if (gridWidth.get() > 0 && !resizing.get()) {
                     resizing.set(true);
 
@@ -658,11 +658,11 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
             private static final long serialVersionUID = -2810298692555333890L;
 
             @Override
-            public void columnReorder(ColumnReorderEvent event) {
+            public void columnReorder(final ColumnReorderEvent event) {
                 final List<Column> columns = ((Grid) event.getSource()).getColumns();
                 if (columns.size() > 0) {
                     String parsedColumns = "";
-                    for (Column column : columns) {
+                    for (final Column column : columns) {
                         parsedColumns += column.getPropertyId() + ", ";
                     }
 
@@ -685,7 +685,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
      */
     private Object[] calculateColumnOrder(final List<Column> availableColumns, final Object[] parsedColumns) {
         final List<Object> availableList = new ArrayList<>(availableColumns.size());
-        for (Column column : availableColumns) {
+        for (final Column column : availableColumns) {
             availableList.add(column.getPropertyId());
         }
         final List<Object> parsedList = new ArrayList<>(Arrays.asList(parsedColumns));
@@ -697,7 +697,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
         // table in
         final List<Object> newList = new ArrayList<>(availableList);
         newList.removeAll(parsedList);
-        for (Object column : newList) {
+        for (final Object column : newList) {
             parsedList.add(availableList.indexOf(column), column);
         }
 
@@ -707,7 +707,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
     private void configureSaveColumnVisible(final Grid grid, final String uniqueId) {
         final String keyStub = uniqueId + "-visible";
 
-        for (GridHeadingToPropertyId id : getColumns()) {
+        for (final GridHeadingToPropertyId id : getColumns()) {
             final String setVisible = UserSettingsStorageFactory.getUserSettingsStorage()
                     .get(keyStub + "-" + id.getPropertyId());
             if (setVisible != null && !setVisible.isEmpty()) {
@@ -718,7 +718,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
             private static final long serialVersionUID = -9082974567948595049L;
 
             @Override
-            public void columnVisibilityChanged(ColumnVisibilityChangeEvent event) {
+            public void columnVisibilityChanged(final ColumnVisibilityChangeEvent event) {
                 final Column column = event.getColumn();
                 final boolean isVisible = !column.isHidden();
                 UserSettingsStorageFactory.getUserSettingsStorage().store(keyStub + "-" + column.getPropertyId(),
@@ -733,7 +733,7 @@ public class GridHeadingPropertySet<E> implements GridHeadingPropertySetIfc<E> {
     }
 
     @Override
-    public void applyToGrid(Class<E> entityClazz, Grid grid, String uniqueId) {
+    public void applyToGrid(final Class<E> entityClazz, final Grid grid, final String uniqueId) {
         applyToGrid(grid, uniqueId);
     }
 }

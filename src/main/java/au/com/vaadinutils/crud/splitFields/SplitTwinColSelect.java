@@ -4,14 +4,14 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TwinColSelect;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class SplitTwinColSelect extends TwinColSelect implements SplitField {
     private static final long serialVersionUID = -7088825671520977496L;
 
-    private Label label;
+    private final Label label;
 
-    public SplitTwinColSelect(String label) {
+    public SplitTwinColSelect(final String label) {
         this.label = new Label(label);
         setCaption(label);
     }

@@ -10,30 +10,30 @@ import com.vaadin.ui.Label;
 import au.com.vaadinutils.crud.splitFields.SplitField;
 
 /**
- * @deprecated Will be removed once dependent classes are removed.
+ * Will be removed once dependent classes are removed.
  */
 public class LegacySplitComboBox extends LegacyComboBox implements SplitField {
 
     private static final long serialVersionUID = -3156478731788878472L;
-    private Label label;
+    private final Label label;
 
-    public LegacySplitComboBox(String label) {
+    public LegacySplitComboBox(final String label) {
         this.label = new Label(label);
         setCaption(label);
     }
 
-    public LegacySplitComboBox(String fieldLabel, Container createContainerFromEnumClass) {
+    public LegacySplitComboBox(final String fieldLabel, final Container createContainerFromEnumClass) {
         super(fieldLabel, createContainerFromEnumClass);
         this.label = new Label(fieldLabel);
     }
 
-    public LegacySplitComboBox(String fieldLabel, Collection<?> options) {
+    public LegacySplitComboBox(final String fieldLabel, final Collection<?> options) {
         super(fieldLabel, options);
         this.label = new Label(fieldLabel);
     }
 
     @Override
-    public void setVisible(boolean visible) {
+    public void setVisible(final boolean visible) {
         label.setVisible(visible);
         super.setVisible(visible);
     }

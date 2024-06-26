@@ -80,20 +80,20 @@ import au.com.vaadinutils.flow.helper.VaadinHelper;
 import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class FormHelper<E> implements Serializable {
     private static final long serialVersionUID = 1L;
     public static final String STANDARD_COMBO_WIDTH = "220";
 
     ArrayList<AbstractComponent> fieldList = new ArrayList<>();
-    private AbstractLayout form;
-    private ValidatingFieldGroup<E> group;
-    private Set<ValueChangeListener> valueChangeListeners = new LinkedHashSet<>();
+    private final AbstractLayout form;
+    private final ValidatingFieldGroup<E> group;
+    private final Set<ValueChangeListener> valueChangeListeners = new LinkedHashSet<>();
 
     static transient Logger logger = LogManager.getLogger(FormHelper.class);
 
-    public FormHelper(AbstractLayout form, ValidatingFieldGroup<E> group) {
+    public FormHelper(final AbstractLayout form, final ValidatingFieldGroup<E> group) {
         // I'm actually using this without a field group.
         // need to makes some modifications so that we formally support
         // non-group usage.
@@ -109,46 +109,47 @@ public class FormHelper<E> implements Serializable {
      *
      * @param listener the value change listener
      */
-    public void addValueChangeListener(ValueChangeListener listener) {
+    public void addValueChangeListener(final ValueChangeListener listener) {
         valueChangeListeners.add(listener);
     }
 
     @SuppressWarnings("rawtypes")
-    private void addValueChangeListeners(AbstractField c) {
-        for (ValueChangeListener listener : valueChangeListeners) {
+    private void addValueChangeListeners(final AbstractField c) {
+        for (final ValueChangeListener listener : valueChangeListeners) {
             c.addValueChangeListener(listener);
         }
     }
 
-    public <M> TextField bindTextField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            SingularAttribute<E, M> member) {
-        TextField field = bindTextField(form, group, fieldLabel, member.getName());
+    public <M> TextField bindTextField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final SingularAttribute<E, M> member) {
+        final TextField field = bindTextField(form, group, fieldLabel, member.getName());
         this.fieldList.add(field);
         return field;
     }
 
-    public <M> TextField bindTextField(String fieldLabel, SingularAttribute<E, M> member) {
-        TextField field = bindTextField(form, group, fieldLabel, member.getName());
+    public <M> TextField bindTextField(final String fieldLabel, final SingularAttribute<E, M> member) {
+        final TextField field = bindTextField(form, group, fieldLabel, member.getName());
         this.fieldList.add(field);
         return field;
     }
 
-    public <M> TextField bindTextFieldWithButton(String fieldLabel, SingularAttribute<E, M> member, Button button) {
+    public <M> TextField bindTextFieldWithButton(final String fieldLabel, final SingularAttribute<E, M> member,
+            final Button button) {
 
-        TextField field = bindTextFieldWithButton(form, group, fieldLabel, member.getName(), button);
+        final TextField field = bindTextFieldWithButton(form, group, fieldLabel, member.getName(), button);
 
         this.fieldList.add(field);
 
         return field;
     }
 
-    public TextField bindTextField(String fieldLabel, String fieldName) {
-        TextField field = bindTextField(form, group, fieldLabel, fieldName);
+    public TextField bindTextField(final String fieldLabel, final String fieldName) {
+        final TextField field = bindTextField(form, group, fieldLabel, fieldName);
         this.fieldList.add(field);
         return field;
     }
 
-    public <T extends CustomField<?>> T doBinding(SingularAttribute<?, ?> field, T customField) {
+    public <T extends CustomField<?>> T doBinding(final SingularAttribute<?, ?> field, final T customField) {
 
         doBinding(group, field.getName(), customField);
         this.fieldList.add(customField);
@@ -157,7 +158,7 @@ public class FormHelper<E> implements Serializable {
 
     }
 
-    public <T extends CustomField<?>> T doBinding(SetAttribute<?, ?> field, T customField) {
+    public <T extends CustomField<?>> T doBinding(final SetAttribute<?, ?> field, final T customField) {
 
         doBinding(group, field.getName(), customField);
         this.fieldList.add(customField);
@@ -166,7 +167,7 @@ public class FormHelper<E> implements Serializable {
 
     }
 
-    public <T extends CustomField<?>> T doBinding(ListAttribute<?, ?> field, T customField) {
+    public <T extends CustomField<?>> T doBinding(final ListAttribute<?, ?> field, final T customField) {
 
         doBinding(group, field.getName(), customField);
         this.fieldList.add(customField);
@@ -175,9 +176,9 @@ public class FormHelper<E> implements Serializable {
 
     }
 
-    public TextField bindTextField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            String fieldName) {
-        TextField field = new SplitTextField(fieldLabel);
+    public TextField bindTextField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final String fieldName) {
+        final TextField field = new SplitTextField(fieldLabel);
         field.setWidth("100%");
         field.setImmediate(true);
         field.setNullRepresentation("");
@@ -189,13 +190,13 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public TextField bindTextFieldWithButton(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            String fieldName, Button button) {
+    public TextField bindTextFieldWithButton(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final String fieldName, final Button button) {
 
-        HorizontalLayout layout = new HorizontalLayout();
+        final HorizontalLayout layout = new HorizontalLayout();
         layout.setSizeFull();
 
-        TextField field = new SplitTextField(fieldLabel);
+        final TextField field = new SplitTextField(fieldLabel);
         field.setWidth("100%");
         field.setImmediate(true);
         field.setNullRepresentation("");
@@ -214,7 +215,8 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public void doBinding(FieldGroup group, String fieldName, @SuppressWarnings("rawtypes") Field field) {
+    public void doBinding(final FieldGroup group, final String fieldName,
+            @SuppressWarnings("rawtypes") final Field field) {
         if (group != null) {
             group.bind(field, fieldName);
         } else
@@ -224,21 +226,24 @@ public class FormHelper<E> implements Serializable {
         }
     }
 
-    public <M> PasswordField bindPasswordField(AbstractLayout form, FieldGroup group, String fieldLabel,
-            SingularAttribute<E, M> member) {
-        PasswordField field = bindPasswordField(form, group, fieldLabel, (member != null ? member.getName() : null));
+    public <M> PasswordField bindPasswordField(final AbstractLayout form, final FieldGroup group,
+            final String fieldLabel, final SingularAttribute<E, M> member) {
+        final PasswordField field = bindPasswordField(form, group, fieldLabel,
+                (member != null ? member.getName() : null));
         this.fieldList.add(field);
         return field;
     }
 
-    public <M> PasswordField bindPasswordField(String fieldLabel, SingularAttribute<E, M> member) {
-        PasswordField field = bindPasswordField(form, group, fieldLabel, (member != null ? member.getName() : null));
+    public <M> PasswordField bindPasswordField(final String fieldLabel, final SingularAttribute<E, M> member) {
+        final PasswordField field = bindPasswordField(form, group, fieldLabel,
+                (member != null ? member.getName() : null));
         this.fieldList.add(field);
         return field;
     }
 
-    public PasswordField bindPasswordField(AbstractLayout form, FieldGroup group, String fieldLabel, String fieldName) {
-        PasswordField field = new SplitPasswordField(fieldLabel);
+    public PasswordField bindPasswordField(final AbstractLayout form, final FieldGroup group, final String fieldLabel,
+            final String fieldName) {
+        final PasswordField field = new SplitPasswordField(fieldLabel);
         field.setWidth("100%");
         field.setImmediate(true);
         field.setNullRepresentation("");
@@ -250,35 +255,37 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public <M> TextArea bindTextAreaField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            SingularAttribute<E, M> member, int rows) {
-        TextArea field = bindTextAreaField(form, group, fieldLabel, member.getName(), rows);
+    public <M> TextArea bindTextAreaField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final SingularAttribute<E, M> member, final int rows) {
+        final TextArea field = bindTextAreaField(form, group, fieldLabel, member.getName(), rows);
         this.fieldList.add(field);
         return field;
     }
 
-    public TextArea bindTextAreaField(String fieldLabel, SingularAttribute<? super E, String> attribute, int rows) {
-        TextArea field = bindTextAreaField(form, group, fieldLabel, attribute.getName(), rows);
+    public TextArea bindTextAreaField(final String fieldLabel, final SingularAttribute<? super E, String> attribute,
+            final int rows) {
+        final TextArea field = bindTextAreaField(form, group, fieldLabel, attribute.getName(), rows);
         this.fieldList.add(field);
         return field;
     }
 
-    public TextArea bindTextAreaField(String fieldLabel, String fieldName, int rows) {
-        TextArea field = bindTextAreaField(form, group, fieldLabel, fieldName, rows);
+    public TextArea bindTextAreaField(final String fieldLabel, final String fieldName, final int rows) {
+        final TextArea field = bindTextAreaField(form, group, fieldLabel, fieldName, rows);
         this.fieldList.add(field);
         return field;
     }
 
-    public TextArea bindTextAreaField(String fieldLabel, String fieldName, int rows, int maxlength) {
-        TextArea field = bindTextAreaField(form, group, fieldLabel, fieldName, rows);
+    public TextArea bindTextAreaField(final String fieldLabel, final String fieldName, final int rows,
+            final int maxlength) {
+        final TextArea field = bindTextAreaField(form, group, fieldLabel, fieldName, rows);
         field.setMaxLength(maxlength);
         this.fieldList.add(field);
         return field;
     }
 
-    public TextArea bindTextAreaField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            String fieldName, int rows) {
-        TextArea field = new SplitTextArea(fieldLabel);
+    public TextArea bindTextAreaField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final String fieldName, final int rows) {
+        final TextArea field = new SplitTextArea(fieldLabel);
         field.setRows(rows);
         field.setWidth("100%");
         field.setImmediate(true);
@@ -289,37 +296,39 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public DateField bindDateField(String fieldLabel, String fieldName) {
-        DateField field = bindDateField(form, group, fieldLabel, fieldName);
+    public DateField bindDateField(final String fieldLabel, final String fieldName) {
+        final DateField field = bindDateField(form, group, fieldLabel, fieldName);
         this.fieldList.add(field);
         return field;
     }
 
-    public DateField bindDateField(String label, String member, String dateFormat, Resolution resolution) {
-        DateField field = bindDateField(form, group, label, member, dateFormat, resolution);
+    public DateField bindDateField(final String label, final String member, final String dateFormat,
+            final Resolution resolution) {
+        final DateField field = bindDateField(form, group, label, member, dateFormat, resolution);
         field.setWidth(STANDARD_COMBO_WIDTH);
         this.fieldList.add(field);
         return field;
     }
 
-    public DateField bindDateField(String label, SingularAttribute<? super E, Date> member, String dateFormat,
-            Resolution resolution) {
-        DateField field = bindDateField(form, group, label, member.getName(), dateFormat, resolution);
+    public DateField bindDateField(final String label, final SingularAttribute<? super E, Date> member,
+            final String dateFormat, final Resolution resolution) {
+        final DateField field = bindDateField(form, group, label, member.getName(), dateFormat, resolution);
         field.setWidth(STANDARD_COMBO_WIDTH);
         this.fieldList.add(field);
         return field;
     }
 
-    public <M> DateField bindDateField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            SingularAttribute<E, M> member, String dateFormat, Resolution resolution) {
-        DateField field = bindDateField(form, group, fieldLabel, member.getName(), dateFormat, resolution);
+    public <M> DateField bindDateField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final SingularAttribute<E, M> member, final String dateFormat,
+            final Resolution resolution) {
+        final DateField field = bindDateField(form, group, fieldLabel, member.getName(), dateFormat, resolution);
         this.fieldList.add(field);
         return field;
     }
 
-    public DateField bindDateField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            String fieldName, String dateFormat, Resolution resolution) {
-        DateField field = new SplitDateField(fieldLabel);
+    public DateField bindDateField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final String fieldName, final String dateFormat, final Resolution resolution) {
+        final DateField field = new SplitDateField(fieldLabel);
         field.setDateFormat(dateFormat);
         field.setResolution(resolution);
 
@@ -331,32 +340,33 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public DateField bindDateField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            String fieldName) {
+    public DateField bindDateField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final String fieldName) {
         return bindDateField(form, group, fieldLabel, fieldName, "yyyy-MM-dd", Resolution.DAY);
     }
 
-    public <M> ComboBox bindEnumField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            SingularAttribute<E, M> member, Class<?> clazz) {
-        ComboBox field = bindEnumField(form, group, fieldLabel, member.getName(), clazz);
+    public <M> ComboBox bindEnumField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final SingularAttribute<E, M> member, final Class<?> clazz) {
+        final ComboBox field = bindEnumField(form, group, fieldLabel, member.getName(), clazz);
         this.fieldList.add(field);
         return field;
     }
 
-    public ComboBox bindEnumField(String fieldLabel, String fieldName, Class<?> clazz) {
-        ComboBox field = bindEnumField(form, group, fieldLabel, fieldName, clazz);
+    public ComboBox bindEnumField(final String fieldLabel, final String fieldName, final Class<?> clazz) {
+        final ComboBox field = bindEnumField(form, group, fieldLabel, fieldName, clazz);
         this.fieldList.add(field);
         return field;
     }
 
-    public ComboBox bindEnumField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            String fieldName, Class<?> clazz) {
+    public ComboBox bindEnumField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final String fieldName, final Class<?> clazz) {
         return bindEnumField(new SplitComboBox(fieldLabel), form, group, fieldLabel, fieldName, clazz);
     }
 
-    public ComboBox bindEnumField(ComboBox comboBox, AbstractLayout form, ValidatingFieldGroup<E> group,
-            String fieldLabel, String fieldName, Class<?> clazz) {
-        ComboBox field = comboBox;
+    public ComboBox bindEnumField(final ComboBox comboBox, final AbstractLayout form,
+            final ValidatingFieldGroup<E> group, final String fieldLabel, final String fieldName,
+            final Class<?> clazz) {
+        final ComboBox field = comboBox;
         field.setCaption(fieldLabel);
         field.setContainerDataSource(createContainerFromEnumClass(fieldName, clazz));
         field.setItemCaptionPropertyId(fieldName);
@@ -376,29 +386,29 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public <M> CheckBox bindBooleanField(String fieldLabel, SingularAttribute<E, M> member) {
-        CheckBox field = bindBooleanField(form, group, fieldLabel, member.getName());
+    public <M> CheckBox bindBooleanField(final String fieldLabel, final SingularAttribute<E, M> member) {
+        final CheckBox field = bindBooleanField(form, group, fieldLabel, member.getName());
         this.fieldList.add(field);
         return field;
     }
 
-    public CheckBox bindBooleanField(String fieldLabel, String fieldName) {
-        CheckBox field = bindBooleanField(form, group, fieldLabel, fieldName);
+    public CheckBox bindBooleanField(final String fieldLabel, final String fieldName) {
+        final CheckBox field = bindBooleanField(form, group, fieldLabel, fieldName);
         this.fieldList.add(field);
         return field;
     }
 
-    public CheckBox bindBooleanField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            SingularAttribute<E, Boolean> member) {
-        CheckBox field = bindBooleanField(form, group, fieldLabel, member.getName());
+    public CheckBox bindBooleanField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final SingularAttribute<E, Boolean> member) {
+        final CheckBox field = bindBooleanField(form, group, fieldLabel, member.getName());
         this.fieldList.add(field);
         return field;
 
     }
 
-    public CheckBox bindBooleanField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            String fieldName) {
-        CheckBox field = new SplitCheckBox(fieldLabel);
+    public CheckBox bindBooleanField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final String fieldName) {
+        final CheckBox field = new SplitCheckBox(fieldLabel);
         field.setWidth("100%");
         field.setImmediate(true);
         addValueChangeListeners(field);
@@ -407,17 +417,17 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public ColorPickerField bindColorPickerField(AbstractLayout form, ValidatingFieldGroup<E> group,
-            iColorFactory factory, String fieldLabel, SingularAttribute<E, iColor> member) {
-        ColorPickerField field = bindColorPickerField(form, group, factory, fieldLabel, member.getName());
+    public ColorPickerField bindColorPickerField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final iColorFactory factory, final String fieldLabel, final SingularAttribute<E, iColor> member) {
+        final ColorPickerField field = bindColorPickerField(form, group, factory, fieldLabel, member.getName());
         this.fieldList.add(field);
         return field;
 
     }
 
-    public ColorPickerField bindColorPickerField(AbstractLayout form, ValidatingFieldGroup<E> group,
-            iColorFactory factory, String fieldLabel, String fieldName) {
-        ColorPickerField field = new SplitColorPicker(factory, fieldLabel);
+    public ColorPickerField bindColorPickerField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final iColorFactory factory, final String fieldLabel, final String fieldName) {
+        final ColorPickerField field = new SplitColorPicker(factory, fieldLabel);
         field.setWidth("100%");
         field.setImmediate(true);
 
@@ -427,8 +437,9 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public <L> ComboBox bindComboBox(AbstractLayout form, String fieldName, String fieldLabel, Collection<?> options) {
-        ComboBox field = new SplitComboBox(fieldLabel, options);
+    public <L> ComboBox bindComboBox(final AbstractLayout form, final String fieldName, final String fieldLabel,
+            final Collection<?> options) {
+        final ComboBox field = new SplitComboBox(fieldLabel, options);
         field.setNewItemsAllowed(false);
         field.setNullSelectionAllowed(false);
         field.setTextInputAllowed(true);
@@ -441,8 +452,9 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public <L> ComboBox bindComboBox(AbstractLayout form, String fieldName, String fieldLabel, Container options) {
-        ComboBox field = new SplitComboBox(fieldLabel, options);
+    public <L> ComboBox bindComboBox(final AbstractLayout form, final String fieldName, final String fieldLabel,
+            final Container options) {
+        final ComboBox field = new SplitComboBox(fieldLabel, options);
         field.setNewItemsAllowed(false);
         field.setNullSelectionAllowed(false);
         field.setTextInputAllowed(true);
@@ -455,9 +467,9 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public <L> LegacyComboBox bindLegacyComboBox(AbstractLayout form, String fieldName, String fieldLabel,
-            Collection<?> options) {
-        LegacyComboBox field = new LegacySplitComboBox(fieldLabel, options);
+    public <L> LegacyComboBox bindLegacyComboBox(final AbstractLayout form, final String fieldName,
+            final String fieldLabel, final Collection<?> options) {
+        final LegacyComboBox field = new LegacySplitComboBox(fieldLabel, options);
         field.setNewItemsAllowed(false);
         field.setNullSelectionAllowed(false);
         field.setTextInputAllowed(true);
@@ -469,16 +481,16 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-    public <L extends CrudEntity, K> ComboBox bindEntityField(String fieldLabel, SingularAttribute<E, L> fieldName,
-            SingularAttribute<? super L, K> listFieldName) {
+    public <L extends CrudEntity, K> ComboBox bindEntityField(final String fieldLabel,
+            final SingularAttribute<E, L> fieldName, final SingularAttribute<? super L, K> listFieldName) {
         return new EntityFieldBuilder<L>().setLabel(fieldLabel).setField(fieldName).setListFieldName(listFieldName)
                 .build();
 
     }
 
     @Deprecated
-    public <L extends CrudEntity> ComboBox bindEntityField(String fieldLabel, String fieldName, Class<L> listClazz,
-            String listFieldName) {
+    public <L extends CrudEntity> ComboBox bindEntityField(final String fieldLabel, final String fieldName,
+            final Class<L> listClazz, final String listFieldName) {
         return new EntityFieldBuilder<L>().setLabel(fieldLabel).setField(fieldName).setListClass(listClazz)
                 .setListFieldName(listFieldName).build();
 
@@ -516,9 +528,9 @@ public class FormHelper<E> implements Serializable {
      * @return
      */
     @Deprecated
-    public <L extends CrudEntity> ComboBox bindEntityField(AbstractLayout form, ValidatingFieldGroup<E> fieldGroup,
-            String fieldLabel, SingularAttribute<E, L> field, Class<L> listClazz,
-            SingularAttribute<L, ?> listFieldName) {
+    public <L extends CrudEntity> ComboBox bindEntityField(final AbstractLayout form,
+            final ValidatingFieldGroup<E> fieldGroup, final String fieldLabel, final SingularAttribute<E, L> field,
+            final Class<L> listClazz, final SingularAttribute<L, ?> listFieldName) {
         return new EntityFieldBuilder<L>().setForm(form).setLabel(fieldLabel).setField(field)
                 .setListFieldName(listFieldName).build();
 
@@ -536,8 +548,9 @@ public class FormHelper<E> implements Serializable {
      * @return
      */
     @Deprecated
-    public <L extends CrudEntity> ComboBox bindEntityField(AbstractLayout form, ValidatingFieldGroup<E> fieldGroup,
-            String fieldLabel, String fieldName, Class<L> listClazz, String listFieldName) {
+    public <L extends CrudEntity> ComboBox bindEntityField(final AbstractLayout form,
+            final ValidatingFieldGroup<E> fieldGroup, final String fieldLabel, final String fieldName,
+            final Class<L> listClazz, final String listFieldName) {
         return new EntityFieldBuilder<L>().setForm(form).setLabel(fieldLabel).setField(fieldName)
                 .setListClass(listClazz).setListFieldName(listFieldName).build();
 
@@ -556,9 +569,9 @@ public class FormHelper<E> implements Serializable {
      * @return
      */
     @Deprecated
-    public <L extends CrudEntity> ComboBox bindEntityField(ComboBox field, AbstractLayout form,
-            ValidatingFieldGroup<E> fieldGroup, String fieldLabel, String fieldName, Class<L> listClazz,
-            String listFieldName) {
+    public <L extends CrudEntity> ComboBox bindEntityField(final ComboBox field, final AbstractLayout form,
+            final ValidatingFieldGroup<E> fieldGroup, final String fieldLabel, final String fieldName,
+            final Class<L> listClazz, final String listFieldName) {
         return new EntityFieldBuilder<L>().setComponent(field).setForm(form).setLabel(fieldLabel).setField(fieldName)
                 .setListClass(listClazz).setListFieldName(listFieldName).build();
 
@@ -592,8 +605,8 @@ public class FormHelper<E> implements Serializable {
         private Class<? extends L> listClazz;
         private String field;
         private AbstractLayout builderForm;
-        private Builder<L> headingBuilder = new GridHeadingPropertySet.Builder<>();
-        private List<String> sortColumns = new LinkedList<>();
+        private final Builder<L> headingBuilder = new GridHeadingPropertySet.Builder<>();
+        private final List<String> sortColumns = new LinkedList<>();
         private AdvancedSearchContentProvider advancedSearchProvider = null;
 
         private AdvancedSearchListener advancedSearchListener = null;
@@ -634,34 +647,34 @@ public class FormHelper<E> implements Serializable {
         }
 
         public EntityFieldBuilderV2<L, C> setAdvancedSearchProvider(
-                AdvancedSearchContentProvider advancedSearchProvider) {
+                final AdvancedSearchContentProvider advancedSearchProvider) {
             this.advancedSearchProvider = advancedSearchProvider;
             return this;
         }
 
-        public EntityFieldBuilderV2<L, C> setContainer(C container) {
+        public EntityFieldBuilderV2<L, C> setContainer(final C container) {
             this.container = container;
             return this;
         }
 
-        public EntityFieldBuilderV2<L, C> setForm(AbstractLayout form) {
+        public EntityFieldBuilderV2<L, C> setForm(final AbstractLayout form) {
             this.builderForm = form;
             return this;
         }
 
-        public EntityFieldBuilderV2<L, C> setLabel(String label) {
+        public EntityFieldBuilderV2<L, C> setLabel(final String label) {
             this.label = label;
             return this;
         }
 
-        public EntityFieldBuilderV2<L, C> setField(SingularAttribute<? super E, ? extends L> field) {
+        public EntityFieldBuilderV2<L, C> setField(final SingularAttribute<? super E, ? extends L> field) {
             this.field = field.getName();
             listClazz = field.getJavaType();
             return this;
         }
 
-        public <K> EntityFieldBuilderV2<L, C> addDisplayField(SingularAttribute<? super L, K> listField,
-                String caption) {
+        public <K> EntityFieldBuilderV2<L, C> addDisplayField(final SingularAttribute<? super L, K> listField,
+                final String caption) {
 
             headingBuilder.createColumn(StringUtils.defaultString(caption, listField.getName()), listField.getName())
                     .setLockedState(true).addColumn();
@@ -671,8 +684,8 @@ public class FormHelper<E> implements Serializable {
             return this;
         }
 
-        public <K> EntityFieldBuilderV2<L, C> addDisplayFieldExtends(SingularAttribute<? extends L, K> listField,
-                String caption) {
+        public <K> EntityFieldBuilderV2<L, C> addDisplayFieldExtends(final SingularAttribute<? extends L, K> listField,
+                final String caption) {
 
             headingBuilder.createColumn(StringUtils.defaultString(caption, listField.getName()), listField.getName())
                     .setLockedState(true).addColumn();
@@ -683,7 +696,7 @@ public class FormHelper<E> implements Serializable {
         }
 
         @SuppressWarnings("unchecked")
-        public EntityFieldBuilderV2<L, C> addDisplayField(Path listField, String caption) {
+        public EntityFieldBuilderV2<L, C> addDisplayField(final Path listField, final String caption) {
 
             if (container instanceof JPAContainer) {
                 ((JPAContainer<L>) container).addNestedContainerProperty(listField.getName());
@@ -695,12 +708,12 @@ public class FormHelper<E> implements Serializable {
             return this;
         }
 
-        public EntityFieldBuilderV2<L, C> setField(String field) {
+        public EntityFieldBuilderV2<L, C> setField(final String field) {
             this.field = field;
             return this;
         }
 
-        public EntityFieldBuilderV2<L, C> setListClass(Class<L> listClazz) {
+        public EntityFieldBuilderV2<L, C> setListClass(final Class<L> listClazz) {
             Preconditions.checkState(this.listClazz == null,
                     "As you have set the field as a singularAttribute, the listClass is set automatically so there is no need to call setListClass.");
             this.listClazz = listClazz;
@@ -711,29 +724,31 @@ public class FormHelper<E> implements Serializable {
             return container;
         }
 
-        public EntityFieldBuilderV2<L, C> setAdvancedSearchListener(AdvancedSearchListener advancedSearchListener) {
+        public EntityFieldBuilderV2<L, C> setAdvancedSearchListener(
+                final AdvancedSearchListener advancedSearchListener) {
             this.advancedSearchListener = advancedSearchListener;
             return this;
         }
 
     }
 
-    public <L extends CrudEntity> ComboBoxWithSearchField<L, JPAContainer<L>> bindEntityFieldV2(String fieldLabel,
-            SingularAttribute<? super E, L> fieldName) {
+    public <L extends CrudEntity> ComboBoxWithSearchField<L, JPAContainer<L>> bindEntityFieldV2(final String fieldLabel,
+            final SingularAttribute<? super E, L> fieldName) {
 
         return new EntityFieldBuilderV2<L, JPAContainer<L>>().setLabel(fieldLabel).setField(fieldName).build();
     }
 
-    public <L extends CrudEntity, K> ComboBoxWithSearchField<L, JPAContainer<L>> bindEntityFieldV2(String fieldLabel,
-            SingularAttribute<E, L> fieldName, SingularAttribute<? super L, K> listField) {
+    public <L extends CrudEntity, K> ComboBoxWithSearchField<L, JPAContainer<L>> bindEntityFieldV2(
+            final String fieldLabel, final SingularAttribute<E, L> fieldName,
+            final SingularAttribute<? super L, K> listField) {
 
         return new EntityFieldBuilderV2<L, JPAContainer<L>>().setLabel(fieldLabel).setField(fieldName)
                 .addDisplayField(listField, listField.getName()).build();
     }
 
     public <L extends CrudEntity, K> ComboBoxWithSearchField<L, BeanItemContainer<L>> bindEntityFieldV2(
-            String fieldLabel, SingularAttribute<E, L> fieldName, SingularAttribute<? super L, K> listField,
-            BeanItemContainer<L> container) {
+            final String fieldLabel, final SingularAttribute<E, L> fieldName,
+            final SingularAttribute<? super L, K> listField, final BeanItemContainer<L> container) {
 
         return new EntityFieldBuilderV2<L, BeanItemContainer<L>>().setLabel(fieldLabel).setField(fieldName)
                 .addDisplayField(listField, listField.getName()).setContainer(container).build();
@@ -798,14 +813,14 @@ public class FormHelper<E> implements Serializable {
             // + " is not valid, valid listFieldNames are " +
             // container.getContainerPropertyIds().toString());
 
-            ContainerAdaptor<L> adaptor = ContainerAdaptorFactory.getAdaptor(container);
+            final ContainerAdaptor<L> adaptor = ContainerAdaptorFactory.getAdaptor(container);
             if (adaptor.getSortableContainerPropertyIds().contains(listField)) {
                 adaptor.sort(new String[] { listField }, new boolean[] { true });
             }
 
             component.setItemCaptionPropertyId(listField);
             component.setContainerDataSource(container);
-            SingleSelectConverter<L> converter = new SingleSelectConverter<>(component);
+            final SingleSelectConverter<L> converter = new SingleSelectConverter<>(component);
             component.setConverter(converter);
             component.setNewItemsAllowed(false);
             component.setNullSelectionAllowed(false);
@@ -839,59 +854,59 @@ public class FormHelper<E> implements Serializable {
             return this;
         }
 
-        public EntityFieldBuilder<L> setContainer(JPAContainer<L> container) {
+        public EntityFieldBuilder<L> setContainer(final JPAContainer<L> container) {
             this.container = container;
             return this;
         }
 
-        public EntityFieldBuilder<L> setContainer(EntityContainer<L> container) {
+        public EntityFieldBuilder<L> setContainer(final EntityContainer<L> container) {
             this.container = container;
             return this;
         }
 
-        public EntityFieldBuilder<L> setForm(AbstractLayout form) {
+        public EntityFieldBuilder<L> setForm(final AbstractLayout form) {
             this.builderForm = form;
             return this;
         }
 
-        public EntityFieldBuilder<L> setLabel(String label) {
+        public EntityFieldBuilder<L> setLabel(final String label) {
             this.label = label;
             return this;
         }
 
-        public EntityFieldBuilder<L> setComponent(ComboBox component) {
+        public EntityFieldBuilder<L> setComponent(final ComboBox component) {
             this.component = component;
             return this;
         }
 
-        public EntityFieldBuilder<L> setField(SingularAttribute<? super E, L> field) {
+        public EntityFieldBuilder<L> setField(final SingularAttribute<? super E, L> field) {
             this.field = field.getName();
             listClazz = field.getJavaType();
             return this;
         }
 
-        public EntityFieldBuilder<L> setField(String field, Class<L> listClazz) {
+        public EntityFieldBuilder<L> setField(final String field, final Class<L> listClazz) {
             this.field = field;
             this.listClazz = listClazz;
             return this;
         }
 
-        public EntityFieldBuilder<L> setListFieldName(SingularAttribute<? super L, ?> listField) {
+        public EntityFieldBuilder<L> setListFieldName(final SingularAttribute<? super L, ?> listField) {
             this.listField = listField.getName();
             return this;
         }
 
-        public EntityFieldBuilder<L> setField(String field) {
+        public EntityFieldBuilder<L> setField(final String field) {
             this.field = field;
             return this;
         }
 
-        public EntityFieldBuilder<L> setListFieldName(String listField) {
+        public EntityFieldBuilder<L> setListFieldName(final String listField) {
             this.listField = listField;
             return this;
         }
 
-        public EntityFieldBuilder<L> setListClass(Class<L> listClazz) {
+        public EntityFieldBuilder<L> setListClass(final Class<L> listClazz) {
             Preconditions.checkState(this.listClazz == null,
                     "As you have set the field as a singularAttribute, the listClass is set automatically so there is no need to call setListClass.");
             this.listClazz = listClazz;
@@ -971,7 +986,7 @@ public class FormHelper<E> implements Serializable {
                 component.setConverter(new MultiSelectConverter(component, Set.class));
                 component.setMultiSelect(true);
             } else {
-                SingleSelectConverter<L> converter = new SingleSelectConverter<>(component);
+                final SingleSelectConverter<L> converter = new SingleSelectConverter<>(component);
                 component.setConverter(converter);
             }
 
@@ -992,23 +1007,23 @@ public class FormHelper<E> implements Serializable {
             return component;
         }
 
-        public ListSelectBuilder<L> setMultiSelect(boolean multiSelect) {
+        public ListSelectBuilder<L> setMultiSelect(final boolean multiSelect) {
             this.multiSelect = multiSelect;
             return this;
         }
 
-        public ListSelectBuilder<L> setLabel(String label) {
+        public ListSelectBuilder<L> setLabel(final String label) {
             this.label = label;
             return this;
         }
 
-        public ListSelectBuilder<L> setField(SingularAttribute<E, L> field) {
+        public ListSelectBuilder<L> setField(final SingularAttribute<E, L> field) {
             this.field = field.getName();
             listClazz = field.getBindableJavaType();
             return this;
         }
 
-        public ListSelectBuilder<L> setField(SetAttribute<E, L> field) {
+        public ListSelectBuilder<L> setField(final SetAttribute<E, L> field) {
             this.field = field.getName();
             listClazz = field.getBindableJavaType();
             return this;
@@ -1020,32 +1035,32 @@ public class FormHelper<E> implements Serializable {
          * @param colField
          * @return
          */
-        public ListSelectBuilder<L> setListFieldName(SingularAttribute<L, ?> colField) {
+        public ListSelectBuilder<L> setListFieldName(final SingularAttribute<L, ?> colField) {
             this.listField = colField.getName();
             return this;
         }
 
-        public ListSelectBuilder<L> setListFieldName(String colField) {
+        public ListSelectBuilder<L> setListFieldName(final String colField) {
             this.listField = colField;
             return this;
         }
 
-        public ListSelectBuilder<L> setContainer(JPAContainer<L> container) {
+        public ListSelectBuilder<L> setContainer(final JPAContainer<L> container) {
             this.container = container;
             return this;
         }
 
-        public ListSelectBuilder<L> setForm(AbstractLayout form) {
+        public ListSelectBuilder<L> setForm(final AbstractLayout form) {
             this.builderForm = form;
             return this;
         }
 
-        public ListSelectBuilder<L> setComponent(SplitListSelect component) {
+        public ListSelectBuilder<L> setComponent(final SplitListSelect component) {
             this.component = component;
             return this;
         }
 
-        public ListSelectBuilder<L> setListClass(Class<L> listClazz) {
+        public ListSelectBuilder<L> setListClass(final Class<L> listClazz) {
             Preconditions.checkState(this.listClazz == null,
                     "If you set the field as a singularAttribute, the listClass is set automatically.");
             this.listClazz = listClazz;
@@ -1121,7 +1136,7 @@ public class FormHelper<E> implements Serializable {
             Preconditions.checkState(container.getContainerPropertyIds().contains(listField), listField
                     + " is not valid, valid listFields are " + container.getContainerPropertyIds().toString());
 
-            ContainerAdaptor<L> adaptor = ContainerAdaptorFactory.getAdaptor(container);
+            final ContainerAdaptor<L> adaptor = ContainerAdaptorFactory.getAdaptor(container);
             if (adaptor.getSortableContainerPropertyIds().contains(listField)) {
                 adaptor.sort(new String[] { listField }, new boolean[] { true });
             }
@@ -1154,17 +1169,17 @@ public class FormHelper<E> implements Serializable {
          * @param label
          * @return
          */
-        public TwinColSelectBuilder<L> setLabel(String label) {
+        public TwinColSelectBuilder<L> setLabel(final String label) {
             this.label = label;
             return this;
         }
 
-        public TwinColSelectBuilder<L> setLeftColumnCaption(String leftColumnCaption) {
+        public TwinColSelectBuilder<L> setLeftColumnCaption(final String leftColumnCaption) {
             this.leftColumnCaption = leftColumnCaption;
             return this;
         }
 
-        public TwinColSelectBuilder<L> setRightColumnCaption(String rightColumnCaption) {
+        public TwinColSelectBuilder<L> setRightColumnCaption(final String rightColumnCaption) {
             this.rightColumnCaption = rightColumnCaption;
             return this;
         }
@@ -1175,24 +1190,24 @@ public class FormHelper<E> implements Serializable {
          * @param field
          * @return
          */
-        public TwinColSelectBuilder<L> setField(SetAttribute<E, L> field) {
+        public TwinColSelectBuilder<L> setField(final SetAttribute<E, L> field) {
             this.field = field.getName();
             listClazz = field.getBindableJavaType();
             return this;
         }
 
-        public TwinColSelectBuilder<L> setField(ListAttribute<E, L> field) {
+        public TwinColSelectBuilder<L> setField(final ListAttribute<E, L> field) {
             this.field = field.getName();
             listClazz = field.getBindableJavaType();
             return this;
         }
 
-        public TwinColSelectBuilder<L> setListFieldName(SingularAttribute<L, ?> colField) {
+        public TwinColSelectBuilder<L> setListFieldName(final SingularAttribute<L, ?> colField) {
             this.listField = colField.getName();
             return this;
         }
 
-        public TwinColSelectBuilder<L> setListFieldName(String colField) {
+        public TwinColSelectBuilder<L> setListFieldName(final String colField) {
             this.listField = colField;
             return this;
         }
@@ -1206,27 +1221,27 @@ public class FormHelper<E> implements Serializable {
          * @param container
          * @return
          */
-        public TwinColSelectBuilder<L> setContainer(JPAContainer<L> container) {
+        public TwinColSelectBuilder<L> setContainer(final JPAContainer<L> container) {
             this.container = container;
             return this;
         }
 
-        public TwinColSelectBuilder<L> setContainer(EntityContainer<L> container) {
+        public TwinColSelectBuilder<L> setContainer(final EntityContainer<L> container) {
             this.container = container;
             return this;
         }
 
-        public TwinColSelectBuilder<L> setForm(AbstractLayout form) {
+        public TwinColSelectBuilder<L> setForm(final AbstractLayout form) {
             this.builderForm = form;
             return this;
         }
 
-        public TwinColSelectBuilder<L> setComponent(SplitTwinColSelect component) {
+        public TwinColSelectBuilder<L> setComponent(final SplitTwinColSelect component) {
             this.component = component;
             return this;
         }
 
-        public TwinColSelectBuilder<L> setListClass(Class<L> listClazz) {
+        public TwinColSelectBuilder<L> setListClass(final Class<L> listClazz) {
             Preconditions.checkState(this.listClazz == null,
                     "If you set the field as a singularAttribute, the listClass is set automatically.");
             this.listClazz = listClazz;
@@ -1239,10 +1254,10 @@ public class FormHelper<E> implements Serializable {
         }
     }
 
-    public static Container createContainerFromEnumClass(String fieldName, Class<?> clazz) {
-        LinkedHashMap<Enum<?>, String> enumMap = new LinkedHashMap<>();
-        for (Object enumConstant : clazz.getEnumConstants()) {
-            String label = StringUtils.capitalize(enumConstant.toString().toLowerCase().replace("_", " "));
+    public static Container createContainerFromEnumClass(final String fieldName, final Class<?> clazz) {
+        final LinkedHashMap<Enum<?>, String> enumMap = new LinkedHashMap<>();
+        for (final Object enumConstant : clazz.getEnumConstants()) {
+            final String label = StringUtils.capitalize(enumConstant.toString().toLowerCase().replace("_", " "));
             enumMap.put((Enum<?>) enumConstant, label);
         }
 
@@ -1250,13 +1265,13 @@ public class FormHelper<E> implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    static public IndexedContainer createContainerFromMap(String fieldName, Map<?, String> hashMap) {
-        IndexedContainer container = new IndexedContainer();
+    static public IndexedContainer createContainerFromMap(final String fieldName, final Map<?, String> hashMap) {
+        final IndexedContainer container = new IndexedContainer();
         container.addContainerProperty(fieldName, String.class, "");
 
-        Iterator<?> iter = hashMap.keySet().iterator();
+        final Iterator<?> iter = hashMap.keySet().iterator();
         while (iter.hasNext()) {
-            Object itemId = iter.next();
+            final Object itemId = iter.next();
             container.addItem(itemId);
             container.getItem(itemId).getItemProperty(fieldName).setValue(hashMap.get(itemId));
         }
@@ -1264,19 +1279,20 @@ public class FormHelper<E> implements Serializable {
         return container;
     }
 
-    static public <Q extends CrudEntity> Container createContainerFromEntities(String fieldName, Collection<Q> list) {
-        LinkedHashMap<Q, String> enumMap = new LinkedHashMap<>();
+    static public <Q extends CrudEntity> Container createContainerFromEntities(final String fieldName,
+            final Collection<Q> list) {
+        final LinkedHashMap<Q, String> enumMap = new LinkedHashMap<>();
 
-        List<Q> sortedList = new LinkedList<>();
+        final List<Q> sortedList = new LinkedList<>();
         sortedList.addAll(list);
         Collections.sort(sortedList, new Comparator<Q>() {
             @Override
-            public int compare(Q arg0, Q arg1) {
+            public int compare(final Q arg0, final Q arg1) {
                 return arg0.getName().compareToIgnoreCase(arg1.getName());
             }
         });
 
-        for (Q value : sortedList) {
+        for (final Q value : sortedList) {
             enumMap.put(value, value.getName());
         }
 
@@ -1287,10 +1303,10 @@ public class FormHelper<E> implements Serializable {
         return this.fieldList;
     }
 
-    public static void showConstraintViolation(ConstraintViolationException e) {
+    public static void showConstraintViolation(final ConstraintViolationException e) {
         // build constraint error
-        StringBuilder sb = new StringBuilder();
-        for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
+        final StringBuilder sb = new StringBuilder();
+        for (final ConstraintViolation<?> violation : e.getConstraintViolations()) {
             sb.append("Error: " + violation.getPropertyPath() + " : " + violation.getMessage() + "\n");
 
         }
@@ -1306,21 +1322,22 @@ public class FormHelper<E> implements Serializable {
         return this.group;
     }
 
-    public <M> DataBoundButton<M> bindButtonField(String fieldLabel, SingularAttribute<E, M> enterScript,
-            Class<M> type) {
+    public <M> DataBoundButton<M> bindButtonField(final String fieldLabel, final SingularAttribute<E, M> enterScript,
+            final Class<M> type) {
         return bindButtonField(fieldLabel, enterScript.getName(), type);
 
     }
 
-    public <M> DataBoundButton<M> bindButtonField(String fieldLabel, String fieldName, Class<M> type) {
-        DataBoundButton<M> field = bindButtonField(form, group, fieldLabel, fieldName, type);
+    public <M> DataBoundButton<M> bindButtonField(final String fieldLabel, final String fieldName,
+            final Class<M> type) {
+        final DataBoundButton<M> field = bindButtonField(form, group, fieldLabel, fieldName, type);
         this.fieldList.add(field);
         return field;
     }
 
-    public <M> DataBoundButton<M> bindButtonField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldLabel,
-            String fieldName, Class<M> type) {
-        DataBoundButton<M> field = new DataBoundButton<>(fieldLabel, type);
+    public <M> DataBoundButton<M> bindButtonField(final AbstractLayout form, final ValidatingFieldGroup<E> group,
+            final String fieldLabel, final String fieldName, final Class<M> type) {
+        final DataBoundButton<M> field = new DataBoundButton<>(fieldLabel, type);
 
         field.setImmediate(true);
 
@@ -1340,20 +1357,21 @@ public class FormHelper<E> implements Serializable {
 //        return field;
 //    }
 
-    public <EN extends Enum<EN>> ComboBox bindEnumField(String fieldLabel, SingularAttribute<E, EN> fieldName) {
+    public <EN extends Enum<EN>> ComboBox bindEnumField(final String fieldLabel,
+            final SingularAttribute<E, EN> fieldName) {
         return bindEnumField(fieldLabel, fieldName.getName(), fieldName.getBindableJavaType());
 
     }
 
-    public <J extends CrudEntity> FormHelper<E>.EntityFieldBuilder<J> getEntityFieldBuilder(Class<J> j) {
+    public <J extends CrudEntity> FormHelper<E>.EntityFieldBuilder<J> getEntityFieldBuilder(final Class<J> j) {
         return new EntityFieldBuilder<>();
 
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    static public <J extends CrudEntity> FormHelper<?>.ListSelectBuilder<J> getListSelectBuilder(AbstractLayout form,
-            Class<J> j) {
-        FormHelper<?> helper = new FormHelper(form, null);
+    static public <J extends CrudEntity> FormHelper<?>.ListSelectBuilder<J> getListSelectBuilder(
+            final AbstractLayout form, final Class<J> j) {
+        final FormHelper<?> helper = new FormHelper(form, null);
         return helper.new ListSelectBuilder<J>().setListClass(j);
 
     }
@@ -1362,25 +1380,25 @@ public class FormHelper<E> implements Serializable {
      * prefer to use the non static method getEntityFieldBuilder(Class<J> j)
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    static public <J extends CrudEntity> FormHelper<?>.EntityFieldBuilder<J> getEntityFieldBuilder(AbstractLayout form,
-            Class<J> j) {
-        FormHelper<?> helper = new FormHelper(form, null);
+    static public <J extends CrudEntity> FormHelper<?>.EntityFieldBuilder<J> getEntityFieldBuilder(
+            final AbstractLayout form, final Class<J> j) {
+        final FormHelper<?> helper = new FormHelper(form, null);
         return helper.new EntityFieldBuilder<J>().setListClass(j);
 
     }
 
-    public <J extends CrudEntity> FormHelper<E>.TwinColSelectBuilder<J> getTwinColSelectBuilder(Class<J> j) {
+    public <J extends CrudEntity> FormHelper<E>.TwinColSelectBuilder<J> getTwinColSelectBuilder(final Class<J> j) {
         return new TwinColSelectBuilder<>();
     }
 
-    public void addComponent(Component component) {
+    public void addComponent(final Component component) {
         form.addComponent(component);
 
     }
 
-    public Slider bindSliderField(String fieldLabel, SingularAttribute<E, ? extends Number> fieldName, int min,
-            int max) {
-        Slider field = new Slider(fieldLabel, min, max);
+    public Slider bindSliderField(final String fieldLabel, final SingularAttribute<E, ? extends Number> fieldName,
+            final int min, final int max) {
+        final Slider field = new Slider(fieldLabel, min, max);
         field.setWidth("100%");
         field.setImmediate(true);
 

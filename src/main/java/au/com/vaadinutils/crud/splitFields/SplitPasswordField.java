@@ -4,19 +4,19 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class SplitPasswordField extends PasswordField implements SplitField {
     private static final long serialVersionUID = 7753660388792217050L;
-    private Label label;
+    private final Label label;
 
-    public SplitPasswordField(String label) {
+    public SplitPasswordField(final String label) {
         this.label = new Label(label);
         setCaption(label);
     }
 
     @Override
-    public void setVisible(boolean visible) {
+    public void setVisible(final boolean visible) {
         label.setVisible(visible);
         super.setVisible(visible);
     }

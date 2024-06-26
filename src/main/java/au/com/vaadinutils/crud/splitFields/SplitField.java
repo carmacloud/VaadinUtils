@@ -4,12 +4,13 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public interface SplitField extends Component {
 
     Label getLabel();
 
+    @Override
     String getCaption();
 
     void hideLabel();

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.vaadin.data.Property;
@@ -12,13 +13,11 @@ import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Field;
 
-import org.apache.logging.log4j.LogManager;
-
 import au.com.vaadinutils.listener.ListenerManager;
 import au.com.vaadinutils.listener.ListenerManagerFactory;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class DataBoundButton<T> extends Button implements Field<T> {
     private static final long serialVersionUID = 2137449474336770169L;
@@ -39,12 +38,11 @@ public class DataBoundButton<T> extends Button implements Field<T> {
     ListenerManager<ValueChangeListener> listeners = ListenerManagerFactory.createListenerManager("DataBoundButton",
             10);
 
-    DataBoundButton(Class<T> type) {
-        super();
+    DataBoundButton(final Class<T> type) {
         this.type = type;
     }
 
-    public DataBoundButton(String fieldLabel, Class<T> type2) {
+    public DataBoundButton(final String fieldLabel, final Class<T> type2) {
         super(fieldLabel);
         type = type2;
     }
@@ -55,7 +53,7 @@ public class DataBoundButton<T> extends Button implements Field<T> {
     }
 
     @Override
-    public void setInvalidCommitted(boolean isCommitted) {
+    public void setInvalidCommitted(final boolean isCommitted) {
         invalidCommitted = isCommitted;
 
     }
@@ -74,7 +72,7 @@ public class DataBoundButton<T> extends Button implements Field<T> {
     }
 
     @Override
-    public void setBuffered(boolean buffered) {
+    public void setBuffered(final boolean buffered) {
         this.buffered = buffered;
 
     }
@@ -91,13 +89,13 @@ public class DataBoundButton<T> extends Button implements Field<T> {
     }
 
     @Override
-    public void addValidator(Validator validator) {
+    public void addValidator(final Validator validator) {
         validators.add(validator);
 
     }
 
     @Override
-    public void removeValidator(Validator validator) {
+    public void removeValidator(final Validator validator) {
         validators.remove(validator);
 
     }
@@ -129,7 +127,7 @@ public class DataBoundButton<T> extends Button implements Field<T> {
     }
 
     @Override
-    public void setInvalidAllowed(boolean invalidValueAllowed) throws UnsupportedOperationException {
+    public void setInvalidAllowed(final boolean invalidValueAllowed) throws UnsupportedOperationException {
         invalidAllowed = invalidValueAllowed;
     }
 
@@ -140,7 +138,7 @@ public class DataBoundButton<T> extends Button implements Field<T> {
     }
 
     @Override
-    public void setValue(T newValue) throws ReadOnlyException {
+    public void setValue(final T newValue) throws ReadOnlyException {
         logger.info(value);
         value = newValue;
 
@@ -152,38 +150,38 @@ public class DataBoundButton<T> extends Button implements Field<T> {
     }
 
     @Override
-    public void addValueChangeListener(ValueChangeListener listener) {
+    public void addValueChangeListener(final ValueChangeListener listener) {
         listeners.addListener(listener);
 
     }
 
     @Override
-    public void addListener(ValueChangeListener listener) {
+    public void addListener(final ValueChangeListener listener) {
         listeners.addListener(listener);
 
     }
 
     @Override
-    public void removeValueChangeListener(ValueChangeListener listener) {
+    public void removeValueChangeListener(final ValueChangeListener listener) {
         listeners.removeListener(listener);
 
     }
 
     @Override
-    public void removeListener(ValueChangeListener listener) {
+    public void removeListener(final ValueChangeListener listener) {
         listeners.removeListener(listener);
 
     }
 
     @Override
-    public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+    public void valueChange(final com.vaadin.data.Property.ValueChangeEvent event) {
         logger.info("Value changed");
 
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public void setPropertyDataSource(Property newDataSource) {
+    public void setPropertyDataSource(final Property newDataSource) {
         logger.info("data source set");
         this.dataSource = newDataSource;
         value = dataSource.getValue();
@@ -201,13 +199,13 @@ public class DataBoundButton<T> extends Button implements Field<T> {
     }
 
     @Override
-    public void setRequired(boolean required) {
+    public void setRequired(final boolean required) {
         this.required = required;
 
     }
 
     @Override
-    public void setRequiredError(String requiredMessage) {
+    public void setRequiredError(final String requiredMessage) {
         this.requiredMessage = requiredMessage;
 
     }

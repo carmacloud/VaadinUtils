@@ -6,7 +6,7 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.GridContextClickEvent;
 
 /**
- * @deprecated context menus are changed for V14+
+ * Context menus are changed for V14+
  */
 public class GridContextMenu<E> extends EntityContextMenu<E> {
     private static final long serialVersionUID = 1L;
@@ -26,7 +26,7 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
      * @param table
      */
     public void setAsGridContextMenu(final Grid grid, final boolean onRow, final boolean onHeader,
-            final boolean onFooter, boolean loadCrud) {
+            final boolean onFooter, final boolean loadCrud) {
         this.grid = grid;
         this.loadCrud = loadCrud;
         extend(grid);
@@ -36,7 +36,7 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
             private static final long serialVersionUID = -2197393292360426242L;
 
             @Override
-            public void contextClick(ContextClickEvent event) {
+            public void contextClick(final ContextClickEvent event) {
                 if (!(event instanceof GridContextClickEvent)) {
                     return;
                 }
@@ -88,7 +88,7 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
 
             fireEvents();
             open(event.getClientX(), event.getClientY());
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             // This usually means we have tried to select something that doesn't
             // exist in the grid. This can happen when trying to open a context
             // menu on old items while the grid is still refreshing with new

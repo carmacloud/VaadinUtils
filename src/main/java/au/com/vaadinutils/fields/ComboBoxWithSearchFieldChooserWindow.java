@@ -36,7 +36,7 @@ import au.com.vaadinutils.crud.SearchableGrid;
 import au.com.vaadinutils.dao.JpaBaseDao;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class ComboBoxWithSearchFieldChooserWindow<T extends CrudEntity, C extends Indexed & Filterable> {
     private String caption;
@@ -69,8 +69,8 @@ public class ComboBoxWithSearchFieldChooserWindow<T extends CrudEntity, C extend
      * @param headingBuilder
      * @param sortColumns    - also used as the search columns
      */
-    public ComboBoxWithSearchFieldChooserWindow(final ChooserListener listener, Class<? extends T> type,
-            final String caption, C container, Builder<T> headingBuilder, String[] sortColumns) {
+    public ComboBoxWithSearchFieldChooserWindow(final ChooserListener listener, final Class<? extends T> type,
+            final String caption, final C container, final Builder<T> headingBuilder, final String[] sortColumns) {
         this(listener, type, caption, container, headingBuilder, sortColumns, null, null);
     }
 
@@ -86,9 +86,10 @@ public class ComboBoxWithSearchFieldChooserWindow<T extends CrudEntity, C extend
      * @param advancedSearchListener
      */
     @SuppressWarnings("unchecked")
-    public ComboBoxWithSearchFieldChooserWindow(final ChooserListener listener, Class<? extends T> type,
-            final String caption, C container, Builder<T> headingBuilder, String[] sortColumns,
-            AdvancedSearchContentProvider advancedSearchProvider, AdvancedSearchListener advancedSearchListener) {
+    public ComboBoxWithSearchFieldChooserWindow(final ChooserListener listener, final Class<? extends T> type,
+            final String caption, final C container, final Builder<T> headingBuilder, final String[] sortColumns,
+            final AdvancedSearchContentProvider advancedSearchProvider,
+            final AdvancedSearchListener advancedSearchListener) {
 
         this.caption = caption;
         this.listener = listener;
@@ -134,17 +135,17 @@ public class ComboBoxWithSearchFieldChooserWindow<T extends CrudEntity, C extend
             }
 
             @Override
-            protected Filter getContainerFilter(String filterString, boolean advancedSearchActive) {
-                List<Filter> filters = new ArrayList<>();
+            protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive) {
+                final List<Filter> filters = new ArrayList<>();
 
                 if (baseFilters != null) {
                     filters.add(baseFilters);
                 }
 
                 if (filterString.length() > 0) {
-                    List<Filter> orFilters = new LinkedList<>();
+                    final List<Filter> orFilters = new LinkedList<>();
 
-                    for (String search : sortColumns) {
+                    for (final String search : sortColumns) {
                         // protect against empty filters or fields
                         if (StringUtils.isNotBlank(search) && StringUtils.isNotBlank(filterString)) {
                             if (localContainer.getType(search).isAssignableFrom(String.class)) {
@@ -195,19 +196,19 @@ public class ComboBoxWithSearchFieldChooserWindow<T extends CrudEntity, C extend
         grid.init(caption, (Class<T>) type);
         // grid.getGrid().removeHeaderRow(0);
 
-        ItemClickListener itemClickListener = new ItemClickListener() {
+        final ItemClickListener itemClickListener = new ItemClickListener() {
 
             private static final long serialVersionUID = -4659382639878762429L;
 
             @Override
-            public void itemClick(ItemClickEvent event) {
+            public void itemClick(final ItemClickEvent event) {
                 listener.selected(event.getItemId());
 
             }
 
         };
 
-        Sort sort = Sort.by(sortColumns[0]);
+        final Sort sort = Sort.by(sortColumns[0]);
         for (int i = 1; i < sortColumns.length; i++) {
 
             sort.then(sortColumns[i]);
@@ -230,7 +231,7 @@ public class ComboBoxWithSearchFieldChooserWindow<T extends CrudEntity, C extend
         return holder;
     }
 
-    void select(T currentValue) {
+    void select(final T currentValue) {
         grid.setSearchFilterText("");
         if (currentValue != null) {
             Object id = currentValue;
@@ -250,7 +251,7 @@ public class ComboBoxWithSearchFieldChooserWindow<T extends CrudEntity, C extend
 
     }
 
-    public void setContainerFilters(Filter filter) {
+    public void setContainerFilters(final Filter filter) {
         baseFilters = filter;
 
         localContainer.removeAllContainerFilters();
@@ -258,7 +259,7 @@ public class ComboBoxWithSearchFieldChooserWindow<T extends CrudEntity, C extend
 
     }
 
-    public void setNullSelectionAllowed(boolean b, String prompt) {
+    public void setNullSelectionAllowed(final boolean b, final String prompt) {
         if (b) {
             if (noneButton == null) {
                 noneButton = new Button(StringUtils.defaultString(prompt, "Select None"));
@@ -268,7 +269,7 @@ public class ComboBoxWithSearchFieldChooserWindow<T extends CrudEntity, C extend
                     private static final long serialVersionUID = 1L;
 
                     @Override
-                    public void buttonClick(ClickEvent event) {
+                    public void buttonClick(final ClickEvent event) {
                         listener.selected(null);
                         grid.select(null);
 
@@ -279,12 +280,12 @@ public class ComboBoxWithSearchFieldChooserWindow<T extends CrudEntity, C extend
         }
     }
 
-    public boolean containerContains(Object id) {
+    public boolean containerContains(final Object id) {
 
         return grid.getContainerDataSource().containsId(id);
     }
 
-    public void showAdvancedSearch(boolean show) {
+    public void showAdvancedSearch(final boolean show) {
         grid.showAdvancedSearch(show);
 
     }

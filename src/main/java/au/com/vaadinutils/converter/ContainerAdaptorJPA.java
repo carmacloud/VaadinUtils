@@ -11,41 +11,41 @@ import com.vaadin.data.Property;
 import au.com.vaadinutils.crud.CrudEntity;
 
 /**
- * @deprecated Will be removed once dependent classes are removed.
+ * Will be removed once dependent classes are removed.
  */
 public class ContainerAdaptorJPA<E extends CrudEntity> implements ContainerAdaptor<E> {
 
-    private JPAContainer<E> container;
+    private final JPAContainer<E> container;
 
-    public ContainerAdaptorJPA(JPAContainer<E> containerDataSource) {
+    public ContainerAdaptorJPA(final JPAContainer<E> containerDataSource) {
         container = containerDataSource;
     }
 
     @Override
-    public Item getItem(Object id) {
+    public Item getItem(final Object id) {
         return container.getItem(id);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public Property getProperty(E item, Object propertyId) {
+    public Property getProperty(final E item, final Object propertyId) {
         return container.getContainerProperty(item.getId(), propertyId);
     }
 
     @Override
-    public E getEntity(Object id) {
+    public E getEntity(final Object id) {
         return container.getItem(id).getEntity();
     }
 
     @Override
     public Collection<Object> getSortableContainerPropertyIds() {
-        Collection<Object> ids = new HashSet<>();
+        final Collection<Object> ids = new HashSet<>();
         ids.addAll(container.getSortableContainerPropertyIds());
         return ids;
     }
 
     @Override
-    public void sort(String[] propertyId, boolean[] ascending) {
+    public void sort(final String[] propertyId, final boolean[] ascending) {
         container.sort(propertyId, ascending);
 
     }
@@ -57,7 +57,7 @@ public class ContainerAdaptorJPA<E extends CrudEntity> implements ContainerAdapt
     }
 
     @Override
-    public void addContainerFilter(Filter filter) {
+    public void addContainerFilter(final Filter filter) {
         container.addContainerFilter(filter);
 
     }
