@@ -52,7 +52,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         Condition<E> or(Condition<E> c1);
     }
 
-    static public <E> JpaBaseDao<E, Long> getGenericDao(Class<E> class1) {
+    static public <E> JpaBaseDao<E, Long> getGenericDao(final Class<E> class1) {
         return new JpaBaseDao<>(class1);
     }
 
@@ -88,26 +88,26 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
 
     }
 
-    public JpaBaseDao(Class<E> class1) {
+    public JpaBaseDao(final Class<E> class1) {
         entityClass = class1;
     }
 
     @Override
-    public void persist(E entity) {
+    public void persist(final E entity) {
         getEntityManager().persist(entity);
     }
 
     @Override
-    public E merge(E entity) {
+    public E merge(final E entity) {
         return getEntityManager().merge(entity);
     }
 
     @Override
-    public void remove(E entity) {
+    public void remove(final E entity) {
         getEntityManager().remove(entity);
     }
 
-    public E findById(Integer id) {
+    public E findById(final Integer id) {
         if (id == null) {
             // moved the logger to here, so it isn't needlessly constructed for
             // every JpaBaseDao Object
@@ -122,18 +122,18 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return getEntityManager().find(entityClass, new Long(id));
     }
 
-    public <T> JpaDslSelectAttributeBuilder<E, T> select(SingularAttribute<? super E, T> attribute) {
+    public <T> JpaDslSelectAttributeBuilder<E, T> select(final SingularAttribute<? super E, T> attribute) {
         return new JpaDslSelectAttributeBuilder<>(entityClass, attribute);
     }
 
-    public Collection<E> findByIds(Collection<Long> ids) {
+    public Collection<E> findByIds(final Collection<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             // moved the logger to here, so it isn't needlessly constructed for
             // every JpaBaseDao Object
             final Logger logger = LogManager.getLogger();
             logger.warn("No keys provided for findById on entity " + entityClass);
             if (logger.isDebugEnabled()) {
-                Exception e = new Exception("No keys Provided for entity " + entityClass);
+                final Exception e = new Exception("No keys Provided for entity " + entityClass);
                 logger.debug(e, e);
             }
             return null;
@@ -146,14 +146,14 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     }
 
     @Override
-    public E findById(K id) {
+    public E findById(final K id) {
         if (id == null) {
             // moved the logger to here, so it isn't needlessly constructed for
             // every JpaBaseDao Object
             final Logger logger = LogManager.getLogger();
             logger.warn("Null key provided for findById on entity " + entityClass);
             if (logger.isDebugEnabled()) {
-                Exception e = new Exception("Null Key Provided for entity " + entityClass);
+                final Exception e = new Exception("Null Key Provided for entity " + entityClass);
                 logger.debug(e, e);
             }
             return null;
@@ -161,8 +161,8 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return getEntityManager().find(entityClass, id);
     }
 
-    protected E findSingleBySingleParameter(String queryName, SingularAttribute<E, String> paramName,
-            String paramValue) {
+    protected E findSingleBySingleParameter(final String queryName, final SingularAttribute<E, String> paramName,
+            final String paramValue) {
         E entity = null;
         final Query query = getEntityManager().createNamedQuery(queryName);
         JpaSettings.setQueryHints(query);
@@ -176,7 +176,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return entity;
     }
 
-    protected E findSingleBySingleParameter(String queryName, String paramName, String paramValue) {
+    protected E findSingleBySingleParameter(final String queryName, final String paramName, final String paramValue) {
         E entity = null;
         final Query query = getEntityManager().createNamedQuery(queryName);
         JpaSettings.setQueryHints(query);
@@ -190,7 +190,8 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return entity;
     }
 
-    protected List<E> findListBySingleParameter(String queryName, String paramName, Object paramValue) {
+    protected List<E> findListBySingleParameter(final String queryName, final String paramName,
+            final Object paramValue) {
         final Query query = getEntityManager().createNamedQuery(queryName);
         JpaSettings.setQueryHints(query);
         query.setParameter(paramName, paramValue);
@@ -205,7 +206,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
      * @param queryName
      * @return
      */
-    protected List<E> findList(String queryName) {
+    protected List<E> findList(final String queryName) {
         final Query query = getEntityManager().createNamedQuery(queryName);
         JpaSettings.setQueryHints(query);
         @SuppressWarnings("unchecked")
@@ -219,7 +220,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     }
 
     @Override
-    public List<E> findAllByIds(SingularAttribute<E, Long> idAttribute, Collection<K> idsToFind) {
+    public List<E> findAllByIds(final SingularAttribute<E, Long> idAttribute, final Collection<K> idsToFind) {
 
         final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         final CriteriaQuery<E> criteria = builder.createQuery(entityClass);
@@ -230,7 +231,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         // would look like BaseCrudEntity_.id instead of "id"
         criteria.where(root.get(idAttribute).in(idsToFind));
 
-        TypedQuery<E> query = getEntityManager().createQuery(criteria);
+        final TypedQuery<E> query = getEntityManager().createQuery(criteria);
         JpaSettings.setQueryHints(query);
 
         return query.getResultList();
@@ -244,14 +245,14 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
      * for each attribute in turn e.g. order by order[0], order[1] ....
      */
     @Override
-    public List<E> findAll(SingularAttribute<E, ?> order[]) {
+    public List<E> findAll(final SingularAttribute<E, ?> order[]) {
         final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         final CriteriaQuery<E> criteria = builder.createQuery(entityClass);
         final Root<E> root = criteria.from(entityClass);
         criteria.select(root);
         if (order != null) {
             final List<Order> ordering = new LinkedList<>();
-            for (SingularAttribute<E, ?> field : order) {
+            for (final SingularAttribute<E, ?> field : order) {
                 ordering.add(builder.asc(root.get(field)));
 
             }
@@ -276,7 +277,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
      *                      will be sorted ascending or descending.
      *
      */
-    public List<E> findAll(SingularAttribute<E, ?> order[], boolean sortAscending[]) {
+    public List<E> findAll(final SingularAttribute<E, ?> order[], final boolean sortAscending[]) {
         Preconditions.checkArgument(order.length == sortAscending.length,
                 "Both arguments must have the same no. of array elements.");
         final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
@@ -285,7 +286,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         criteria.select(root);
 
         final List<Order> ordering = new LinkedList<>();
-        for (SingularAttribute<E, ?> field : order) {
+        for (final SingularAttribute<E, ?> field : order) {
             if (sortAscending[ordering.size()] == true) {
                 ordering.add(builder.asc(root.get(field)));
             } else {
@@ -301,17 +302,18 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return query.getResultList();
     }
 
-    public <V> E findOneByAttribute(SingularAttribute<? super E, V> vKey, V value) {
+    public <V> E findOneByAttribute(final SingularAttribute<? super E, V> vKey, final V value) {
         final JpaDslBuilder<E> q = select();
         return q.where(q.eq(vKey, value)).getSingleResultOrNull();
     }
 
-    public <V, SK> List<E> findAllByAttribute(SingularAttribute<E, V> vKey, V value, SingularAttribute<E, SK> order) {
+    public <V, SK> List<E> findAllByAttribute(final SingularAttribute<E, V> vKey, final V value,
+            final SingularAttribute<E, SK> order) {
         return findAllByAttribute(vKey, value, order, null);
     }
 
-    public <V, SK> List<E> findAllByAttribute(SingularAttribute<E, V> vKey, V value, SingularAttribute<E, SK> order,
-            Integer limit) {
+    public <V, SK> List<E> findAllByAttribute(final SingularAttribute<E, V> vKey, final V value,
+            final SingularAttribute<E, SK> order, final Integer limit) {
         final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         final CriteriaQuery<E> criteria = builder.createQuery(entityClass);
         final Root<E> root = criteria.from(entityClass);
@@ -330,8 +332,8 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
 
     }
 
-    public <SK> List<E> findAllByAttributeLike(SingularAttribute<E, String> vKey, String value,
-            SingularAttribute<E, SK> order) {
+    public <SK> List<E> findAllByAttributeLike(final SingularAttribute<E, String> vKey, final String value,
+            final SingularAttribute<E, SK> order) {
         final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         final CriteriaQuery<E> criteria = builder.createQuery(entityClass);
         final Root<E> root = criteria.from(entityClass);
@@ -353,7 +355,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
      * @param attributes AttributeHashMap of SingularAttributes and values
      * @return first matching entity
      */
-    public E findOneByAttributes(AttributesHashMap<E> attributes) {
+    public E findOneByAttributes(final AttributesHashMap<E> attributes) {
         E ret = null;
         final List<E> results = findAllByAttributes(attributes, null);
         if (results.size() > 0) {
@@ -371,14 +373,15 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
      * @param order      SingularAttribute to order by
      * @return a list of matching entities
      */
-    public <SK> List<E> findAllByAttributes(AttributesHashMap<E> attributes, SingularAttribute<E, SK> order) {
+    public <SK> List<E> findAllByAttributes(final AttributesHashMap<E> attributes,
+            final SingularAttribute<E, SK> order) {
         final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         final CriteriaQuery<E> criteria = builder.createQuery(entityClass);
         final Root<E> root = criteria.from(entityClass);
         criteria.select(root);
 
         Predicate where = builder.conjunction();
-        for (Entry<SingularAttribute<E, Object>, Object> attr : attributes.entrySet()) {
+        for (final Entry<SingularAttribute<E, Object>, Object> attr : attributes.entrySet()) {
             where = builder.and(where, builder.equal(root.get(attr.getKey()), attr.getValue()));
         }
         criteria.where(where);
@@ -399,7 +402,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
      * @param attributes AttributeHashMap of SingularAttributes and values
      * @return first matching entity
      */
-    public E findOneByAnyAttributes(AttributesHashMap<E> attributes) {
+    public E findOneByAnyAttributes(final AttributesHashMap<E> attributes) {
         E ret = null;
         final List<E> results = findAllByAnyAttributes(attributes, null);
         if (results.size() > 0) {
@@ -417,14 +420,15 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
      * @param order      SingularAttribute to order by
      * @return a list of matching entities
      */
-    public <SK> List<E> findAllByAnyAttributes(AttributesHashMap<E> attributes, SingularAttribute<E, SK> order) {
+    public <SK> List<E> findAllByAnyAttributes(final AttributesHashMap<E> attributes,
+            final SingularAttribute<E, SK> order) {
         final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         final CriteriaQuery<E> criteria = builder.createQuery(entityClass);
         final Root<E> root = criteria.from(entityClass);
         criteria.select(root);
 
         Predicate where = builder.conjunction();
-        for (Entry<SingularAttribute<E, Object>, Object> attr : attributes.entrySet()) {
+        for (final Entry<SingularAttribute<E, Object>, Object> attr : attributes.entrySet()) {
             where = builder.or(where, builder.equal(root.get(attr.getKey()), attr.getValue()));
         }
         criteria.where(where);
@@ -446,7 +450,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
      * @param value
      * @return
      */
-    public <V> Long getCount(SingularAttribute<E, V> vKey, V value) {
+    public <V> Long getCount(final SingularAttribute<E, V> vKey, final V value) {
         final CriteriaBuilder qb = getEntityManager().getCriteriaBuilder();
         final CriteriaQuery<Long> cq = qb.createQuery(Long.class);
         final Root<E> root = cq.from(entityClass);
@@ -460,37 +464,33 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     }
 
     /**
-     * @deprecated Uses JPAContainer and will be removed.
      */
-    @Deprecated
     public JPAContainer<E> createVaadinContainer() {
-        JPAContainer<E> container = new JPAContainer<>(entityClass);
+        final JPAContainer<E> container = new JPAContainer<>(entityClass);
         container.setEntityProvider(new BatchingPerRequestEntityProvider<>(entityClass));
         return container;
     }
 
     /**
-     * @deprecated Uses EntityContainer and will be removed.
      */
-    @Deprecated
     public EntityContainer<E> createLazyQueryContainer() {
-        EntityManager em = getEntityManager();
-        boolean compositeItmes = true;
+        final EntityManager em = getEntityManager();
+        final boolean compositeItmes = true;
 
-        boolean detachedEntities = true;
-        String propertyId = getIdField().getName();
-        boolean applicationManagedTransactions = true;
-        EntityContainer<E> entityContainer = new EntityContainer<>(em, entityClass, propertyId, Integer.MAX_VALUE,
+        final boolean detachedEntities = true;
+        final String propertyId = getIdField().getName();
+        final boolean applicationManagedTransactions = true;
+        final EntityContainer<E> entityContainer = new EntityContainer<>(em, entityClass, propertyId, Integer.MAX_VALUE,
                 applicationManagedTransactions, detachedEntities, compositeItmes);
 
-        for (Attribute<? super E, ?> attrib : getIdField().getDeclaringType().getAttributes()) {
+        for (final Attribute<? super E, ?> attrib : getIdField().getDeclaringType().getAttributes()) {
             entityContainer.addContainerProperty(attrib.getName(), attrib.getJavaType(), null, true, true);
         }
 
         return entityContainer;
     }
 
-    static public <T> SingularAttribute<T, Long> getIdField(Class<T> type) {
+    static public <T> SingularAttribute<T, Long> getIdField(final Class<T> type) {
         final Metamodel metaModel = getEntityManager().getMetamodel();
         final EntityType<T> entityType = metaModel.entity(type);
         return entityType.getDeclaredId(Long.class);
@@ -504,7 +504,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         getEntityManager().getEntityManagerFactory().getCache().evict(entityClass);
     }
 
-    public <V> int deleteAllByAttribute(SingularAttribute<? super E, V> vKey, V value) {
+    public <V> int deleteAllByAttribute(final SingularAttribute<? super E, V> vKey, final V value) {
         final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         final CriteriaDelete<E> criteria = builder.createCriteriaDelete(entityClass);
         final Root<E> root = criteria.from(entityClass);
@@ -516,8 +516,8 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return query.executeUpdate();
     }
 
-    public <V, J> List<E> findAllByAttributeJoin(SingularAttribute<E, J> joinAttr, SingularAttribute<J, V> vKey,
-            V value, JoinType joinType) {
+    public <V, J> List<E> findAllByAttributeJoin(final SingularAttribute<E, J> joinAttr,
+            final SingularAttribute<J, V> vKey, final V value, final JoinType joinType) {
         final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         final CriteriaQuery<E> criteria = builder.createQuery(entityClass);
         final Root<E> root = criteria.from(entityClass);
@@ -530,8 +530,8 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return query.getResultList();
     }
 
-    public <V, J> int deleteAllByAttributeJoin(SingularAttribute<J, V> vKey, V value,
-            SingularAttribute<E, J> joinAttr) {
+    public <V, J> int deleteAllByAttributeJoin(final SingularAttribute<J, V> vKey, final V value,
+            final SingularAttribute<E, J> joinAttr) {
         final CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
         final CriteriaDelete<E> criteria = builder.createCriteriaDelete(entityClass);
         final Root<E> root = criteria.from(entityClass);
@@ -574,11 +574,11 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     }
 
     @Override
-    public void refresh(E entity) {
+    public void refresh(final E entity) {
         getEntityManager().refresh(entity);
     }
 
-    public void detach(E entity) {
+    public void detach(final E entity) {
         getEntityManager().detach(entity);
     }
 
@@ -598,7 +598,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return new JpaDslTupleBuilder<>(entityClass);
     }
 
-    public JpaDslBuilder<E> jpaContainerDelegate(CriteriaQuery<E> criteria) {
+    public JpaDslBuilder<E> jpaContainerDelegate(final CriteriaQuery<E> criteria) {
         return new JpaDslBuilder<>(criteria, entityClass);
     }
 
@@ -617,48 +617,50 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
          * @param field
          * @return
          */
-        public <L> FindBuilder fetch(SingularAttribute<E, L> field) {
+        public <L> FindBuilder fetch(final SingularAttribute<E, L> field) {
             root.fetch(field, JoinType.LEFT);
             return this;
         }
 
-        public <L> FindBuilder whereEqual(SingularAttribute<E, L> field, L value) {
+        public <L> FindBuilder whereEqual(final SingularAttribute<E, L> field, final L value) {
             predicates.add(builder.equal(root.get(field), value));
             return this;
         }
 
-        public <J, L> FindBuilder joinWhereEqual(Join<E, J> join, SingularAttribute<J, L> field, L value) {
+        public <J, L> FindBuilder joinWhereEqual(final Join<E, J> join, final SingularAttribute<J, L> field,
+                final L value) {
             predicates.add(builder.equal(join.get(field), value));
             return this;
         }
 
-        public FindBuilder whereLike(SingularAttribute<E, String> field, String value) {
+        public FindBuilder whereLike(final SingularAttribute<E, String> field, final String value) {
             predicates.add(builder.like(root.get(field), value));
             return this;
         }
 
-        public <L extends Comparable<? super L>> FindBuilder whereGreaterThan(SingularAttribute<E, L> field, L value) {
+        public <L extends Comparable<? super L>> FindBuilder whereGreaterThan(final SingularAttribute<E, L> field,
+                final L value) {
             predicates.add(builder.greaterThan(root.get(field), value));
             return this;
         }
 
-        public <L extends Comparable<? super L>> FindBuilder whereGreaterThanOrEqualTo(SingularAttribute<E, L> field,
-                L value) {
+        public <L extends Comparable<? super L>> FindBuilder whereGreaterThanOrEqualTo(
+                final SingularAttribute<E, L> field, final L value) {
             predicates.add(builder.greaterThanOrEqualTo(root.get(field), value));
             return this;
         }
 
-        public FindBuilder limit(int limit) {
+        public FindBuilder limit(final int limit) {
             this.limit = limit;
             return this;
         }
 
-        public FindBuilder startPosition(int startPosition) {
+        public FindBuilder startPosition(final int startPosition) {
             this.startPosition = startPosition;
             return this;
         }
 
-        public FindBuilder orderBy(SingularAttribute<E, ?> field, boolean asc) {
+        public FindBuilder orderBy(final SingularAttribute<E, ?> field, final boolean asc) {
             if (asc) {
                 criteria.orderBy(builder.asc(root.get(field)));
             } else {
@@ -667,7 +669,8 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
             return this;
         }
 
-        public <J> FindBuilder joinOrderBy(Join<E, J> join, SingularAttribute<J, ?> field, boolean asc) {
+        public <J> FindBuilder joinOrderBy(final Join<E, J> join, final SingularAttribute<J, ?> field,
+                final boolean asc) {
             if (asc) {
                 criteria.orderBy(builder.asc(join.get(field)));
             } else {
@@ -693,7 +696,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
 
         private TypedQuery<E> prepareQuery() {
             Predicate filter = null;
-            for (Predicate predicate : predicates) {
+            for (final Predicate predicate : predicates) {
                 if (filter == null) {
                     filter = predicate;
                 } else {
@@ -715,42 +718,43 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
             return query;
         }
 
-        public <L> FindBuilder whereNotEqueal(SingularAttribute<E, L> field, L value) {
+        public <L> FindBuilder whereNotEqueal(final SingularAttribute<E, L> field, final L value) {
             predicates.add(builder.notEqual(root.get(field), value));
             return this;
         }
 
-        public <L> FindBuilder whereNotNull(SingularAttribute<E, L> field) {
+        public <L> FindBuilder whereNotNull(final SingularAttribute<E, L> field) {
             predicates.add(builder.isNotNull(root.get(field)));
             return this;
         }
 
-        public <L> FindBuilder whereNull(SingularAttribute<E, L> field) {
+        public <L> FindBuilder whereNull(final SingularAttribute<E, L> field) {
             predicates.add(builder.isNull(root.get(field)));
             return this;
 
         }
 
-        public Predicate like(SingularAttribute<E, String> field, String value) {
+        public Predicate like(final SingularAttribute<E, String> field, final String value) {
             return builder.like(root.get(field), value);
         }
 
-        public <J> Join<E, J> join(SingularAttribute<E, J> joinAttribute, JoinType joinType) {
+        public <J> Join<E, J> join(final SingularAttribute<E, J> joinAttribute, final JoinType joinType) {
             return root.join(joinAttribute, joinType);
         }
 
-        public <J> Predicate joinLike(Join<E, J> join, SingularAttribute<J, String> field, String value) {
+        public <J> Predicate joinLike(final Join<E, J> join, final SingularAttribute<J, String> field,
+                final String value) {
             return builder.like(join.get(field), value);
         }
 
-        public FindBuilder whereAnd(Predicate pred) {
+        public FindBuilder whereAnd(final Predicate pred) {
             predicates.add(pred);
             return this;
         }
 
-        public FindBuilder whereOr(List<Predicate> orPredicates) {
+        public FindBuilder whereOr(final List<Predicate> orPredicates) {
             Predicate or = null;
-            for (Predicate pred : orPredicates) {
+            for (final Predicate pred : orPredicates) {
                 if (or == null) {
                     or = pred;
                 } else {
@@ -763,18 +767,18 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
             return this;
         }
 
-        public <L extends Comparable<? super L>> FindBuilder whereLessThanOrEqualTo(SingularAttribute<E, L> field,
-                L value) {
+        public <L extends Comparable<? super L>> FindBuilder whereLessThanOrEqualTo(final SingularAttribute<E, L> field,
+                final L value) {
             predicates.add(builder.lessThanOrEqualTo(root.get(field), value));
             return this;
         }
 
-        public <L extends Comparable<? super L>> Predicate greaterThanOrEqualTo(SingularAttribute<E, L> field,
-                L value) {
+        public <L extends Comparable<? super L>> Predicate greaterThanOrEqualTo(final SingularAttribute<E, L> field,
+                final L value) {
             return builder.greaterThanOrEqualTo(root.get(field), value);
         }
 
-        public <L> Predicate isNull(SingularAttribute<E, L> field) {
+        public <L> Predicate isNull(final SingularAttribute<E, L> field) {
             return builder.isNull(root.get(field));
         }
     }
@@ -787,9 +791,9 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return getGenericDao(entityClass).select().count().intValue();
     }
 
-    public Collection<Long> getIds(Collection<? extends CrudEntity> entities) {
-        Set<Long> ids = new HashSet<>();
-        for (CrudEntity entity : entities) {
+    public Collection<Long> getIds(final Collection<? extends CrudEntity> entities) {
+        final Set<Long> ids = new HashSet<>();
+        for (final CrudEntity entity : entities) {
             ids.add(entity.getId());
         }
 

@@ -7,19 +7,17 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.UI;
 
-/**
- * @deprecated Will be removed once dependent classes are removed.
- */
 public enum ActionType {
     NAVIGATE {
         @Override
-        public void createLeafItem(MenuWrapper menubar, Menu menu, String displayName, final ViewMapping viewmap,
-                boolean addAtTop) {
+        public void createLeafItem(final MenuWrapper menubar, final Menu menu, final String displayName,
+                final ViewMapping viewmap, final boolean addAtTop) {
 
             menubar.addItem(displayName, addAtTop, new MenuBar.Command() {
                 private static final long serialVersionUID = 1L;
 
-                public void menuSelected(MenuItem selectedItem) {
+                @Override
+                public void menuSelected(final MenuItem selectedItem) {
                     UI.getCurrent().getNavigator().navigateTo(viewmap.getViewName());
                 }
             });
@@ -27,12 +25,13 @@ public enum ActionType {
     },
     URL {
         @Override
-        public void createLeafItem(MenuWrapper menubar, final Menu menu, String displayName, ViewMapping viewmap,
-                boolean addAtTop) {
+        public void createLeafItem(final MenuWrapper menubar, final Menu menu, final String displayName,
+                final ViewMapping viewmap, final boolean addAtTop) {
             menubar.addItem(displayName, addAtTop, new MenuBar.Command() {
                 private static final long serialVersionUID = 1L;
 
-                public void menuSelected(MenuItem selectedItem) {
+                @Override
+                public void menuSelected(final MenuItem selectedItem) {
                     UI.getCurrent().getPage().open(menu.url(), "");
                 }
             });
@@ -41,16 +40,17 @@ public enum ActionType {
     },
     URL_NEW_WINDOW {
         @Override
-        public void createLeafItem(MenuWrapper menubar, final Menu menu, String displayName, ViewMapping viewmap,
-                boolean addAtTop) {
+        public void createLeafItem(final MenuWrapper menubar, final Menu menu, final String displayName,
+                final ViewMapping viewmap, final boolean addAtTop) {
             menubar.addItem(displayName, addAtTop, new MenuBar.Command() {
                 private static final long serialVersionUID = 1L;
 
-                public void menuSelected(MenuItem selectedItem) {
+                @Override
+                public void menuSelected(final MenuItem selectedItem) {
                     if (menu.windowSizer() != WindowSizerNull.class) {
                         // dynamically sized window!
                         try {
-                            WindowSizer sizer = menu.windowSizer().newInstance();
+                            final WindowSizer sizer = menu.windowSizer().newInstance();
                             UI.getCurrent().getPage().open(menu.url(), menu.windowName(), sizer.width(), sizer.height(),
                                     BorderStyle.DEFAULT);
                         } catch (InstantiationException | IllegalAccessException e) {

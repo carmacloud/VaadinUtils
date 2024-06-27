@@ -26,7 +26,7 @@ import au.com.vaadinutils.crud.GridHeadingPropertySet.Builder;
 import au.com.vaadinutils.dao.JpaBaseDao;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & Filterable> extends CustomField<T> {
     private static final String NOT_SELECTED = "None Selected";
@@ -47,14 +47,15 @@ public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & F
     private String nullLabel = NOT_SELECTED;
     private Button clear;
 
-    public ComboBoxWithSearchField(String caption, Class<? extends T> type, C container, Builder<T> headingBuilder,
-            String[] sortColumns) {
+    public ComboBoxWithSearchField(final String caption, final Class<? extends T> type, final C container,
+            final Builder<T> headingBuilder, final String[] sortColumns) {
         this(caption, type, container, headingBuilder, sortColumns, null, null);
     }
 
-    public ComboBoxWithSearchField(String caption, Class<? extends T> type, C container, Builder<T> headingBuilder,
-            String[] sortColumns, AdvancedSearchContentProvider advancedSearchProvider,
-            AdvancedSearchListener advancedSearchListener) {
+    public ComboBoxWithSearchField(final String caption, final Class<? extends T> type, final C container,
+            final Builder<T> headingBuilder, final String[] sortColumns,
+            final AdvancedSearchContentProvider advancedSearchProvider,
+            final AdvancedSearchListener advancedSearchListener) {
         this.type = type;
         setImmediate(true);
         setCaption(caption);
@@ -77,7 +78,7 @@ public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & F
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void buttonClick(ClickEvent event) {
+            public void buttonClick(final ClickEvent event) {
                 getSelectionListener().selected(null);
 
             }
@@ -95,7 +96,7 @@ public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & F
         select.setPopupVisible(true);
     }
 
-    public void setPopupWidth(String width) {
+    public void setPopupWidth(final String width) {
         select.getContent().setWidth(width);
     }
 
@@ -108,13 +109,13 @@ public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & F
          * @param caption
          * @param alignto
          */
-        PopupButtonCustom(String caption, Component alignto) {
+        PopupButtonCustom(final String caption, final Component alignto) {
             super(caption);
             setPopupPositionComponent(alignto);
         }
 
         @Override
-        protected void setPopupPositionComponent(Component component) {
+        protected void setPopupPositionComponent(final Component component) {
             super.setPopupPositionComponent(component);
         }
     }
@@ -125,7 +126,7 @@ public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & F
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void validate(Object value) throws InvalidValueException {
+            public void validate(final Object value) throws InvalidValueException {
                 if (currentValue == null && allowNull == false) {
                     throw new InvalidValueException("You must select a " + caption);
                 }
@@ -148,7 +149,7 @@ public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & F
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void buttonClick(ClickEvent event) {
+            public void buttonClick(final ClickEvent event) {
                 popup.select(currentValue);
             }
 
@@ -168,7 +169,7 @@ public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & F
 
             @SuppressWarnings("unchecked")
             @Override
-            public void selected(Object id) {
+            public void selected(final Object id) {
                 if (id == null) {
                     currentValue = null;
 
@@ -187,7 +188,7 @@ public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & F
         };
     }
 
-    private void setValueLabel(T value) {
+    private void setValueLabel(final T value) {
         valueLabel.setReadOnly(false);
         if (value == null) {
             valueLabel.setStyleName(ValoTheme.LABEL_FAILURE);
@@ -220,14 +221,14 @@ public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & F
     }
 
     @Override
-    public void setReadOnly(boolean b) {
+    public void setReadOnly(final boolean b) {
         select.setReadOnly(b);
         super.setReadOnly(b);
         select.setVisible(!b);
     }
 
     @Override
-    protected void setInternalValue(T newValue) {
+    protected void setInternalValue(final T newValue) {
         super.setInternalValue(newValue);
 
         setValueLabel(newValue);
@@ -260,7 +261,7 @@ public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & F
         return (Class<T>) type;
     }
 
-    public void setAllowNull(boolean b) {
+    public void setAllowNull(final boolean b) {
         allowNull = b;
         clear.setVisible(b);
 
@@ -271,27 +272,27 @@ public class ComboBoxWithSearchField<T extends CrudEntity, C extends Indexed & F
         super.validate();
     }
 
-    public void setInputPrompt(String string) {
+    public void setInputPrompt(final String string) {
         valueLabel.setInputPrompt(string);
         nullLabel = string;
 
     }
 
-    public void setNullSelectionAllowed(boolean b, String prompt) {
+    public void setNullSelectionAllowed(final boolean b, final String prompt) {
         popup.setNullSelectionAllowed(b, prompt);
 
     }
 
-    public void setContainerFilters(Filter filter) {
+    public void setContainerFilters(final Filter filter) {
         popup.setContainerFilters(filter);
 
     }
 
-    public boolean containerContains(Object id) {
+    public boolean containerContains(final Object id) {
         return popup.containerContains(id);
     }
 
-    public void showAdvancedSearch(boolean show) {
+    public void showAdvancedSearch(final boolean show) {
         popup.showAdvancedSearch(show);
 
     }

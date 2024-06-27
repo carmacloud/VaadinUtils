@@ -42,7 +42,7 @@ import com.vaadin.ui.AbstractSelect;
 import au.com.vaadinutils.crud.CrudEntity;
 
 /**
- * @deprecated Will be removed once dependent classes are removed.
+ * Will be removed once dependent classes are removed.
  */
 public class MultiSelectConverter<T extends CrudEntity> implements Converter<Collection<Object>, Collection<T>> {
 
@@ -51,10 +51,10 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
     private Boolean owningSide;
     private String mappedBy;
     @SuppressWarnings("rawtypes")
-    private Class type;
+    private final Class type;
     Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 
-    public MultiSelectConverter(AbstractSelect select, @SuppressWarnings("rawtypes") Class type) {
+    public MultiSelectConverter(final AbstractSelect select, @SuppressWarnings("rawtypes") final Class type) {
         this.select = select;
         this.type = type;
     }
@@ -65,8 +65,9 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
 
     @SuppressWarnings("unchecked")
     @Override
-    public Collection<Object> convertToPresentation(Collection<T> value, Class<? extends Collection<Object>> targetType,
-            Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
+    public Collection<Object> convertToPresentation(final Collection<T> value,
+            final Class<? extends Collection<Object>> targetType, final Locale locale)
+            throws com.vaadin.data.util.converter.Converter.ConversionException {
         // Value here is a collection of entities, should be transformed to a
         // collection (set) of identifier
         // TODO, consider creating a cached value
@@ -76,13 +77,13 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
                 // return
                 // createNewCollectionForType(getPropertyDataSource().getType());
                 return createNewCollectionForType(type);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new ConversionException(e);
             }
         }
 
-        HashSet<Object> identifiers = new HashSet<Object>();
-        for (T entity : value) {
+        final HashSet<Object> identifiers = new HashSet<Object>();
+        for (final T entity : value) {
             identifiers.add(entity.getId());
         }
         return identifiers;
@@ -90,8 +91,8 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
 
     @SuppressWarnings("unchecked")
     @Override
-    public Collection<T> convertToModel(Collection<Object> value, Class<? extends Collection<T>> targetType,
-            Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
+    public Collection<T> convertToModel(final Collection<Object> value, final Class<? extends Collection<T>> targetType,
+            final Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
 
         // NOTE, this currently works properly only if equals and hashcode
         // methods have been implemented correctly (both depending on identifier
@@ -102,7 +103,7 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
         // formattedValue here is a set of identifiers.
         // We will modify the existing collection of entities to contain
         // corresponding entities
-        Collection<Object> idset = value;
+        final Collection<Object> idset = value;
 
         Collection<T> modelValue = null;
         if (getPropertyDataSource() != null) {
@@ -112,7 +113,7 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
         if (modelValue == null) {
             try {
                 modelValue = createNewCollectionForType(type);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new ConversionException(e);
             }
         }
@@ -122,14 +123,14 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
             return modelValue;
         }
 
-        HashSet<T> orphaned = new HashSet<T>(modelValue);
+        final HashSet<T> orphaned = new HashSet<T>(modelValue);
 
         // Add those that did not exist do not exist already + remove them from
         // orphaned collection
-        for (Object id : idset) {
-            EntityItem<T> item = (EntityItem<T>) getContainer().getItem(id);
+        for (final Object id : idset) {
+            final EntityItem<T> item = (EntityItem<T>) getContainer().getItem(id);
             if (item != null) {
-                T entity = item.getEntity();
+                final T entity = item.getEntity();
                 if (!modelValue.contains(entity)) {
                     modelValue.add(entity);
                     addBackReference(entity);
@@ -142,7 +143,7 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
         }
 
         // remove orphanded
-        for (T entity : orphaned) {
+        for (final T entity : orphaned) {
             modelValue.remove(entity);
             removeBackReference(entity);
         }
@@ -172,14 +173,14 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
 
     }
 
-    private void removeBackReference(T entity) {
+    private void removeBackReference(final T entity) {
         if (!isOwningSide()) {
-            Property<Object> itemProperty = getBackReferenceItemProperty(entity);
-            Object property = itemProperty.getValue();
+            final Property<Object> itemProperty = getBackReferenceItemProperty(entity);
+            final Object property = itemProperty.getValue();
             if (property instanceof Collection) {
                 // many to many
                 @SuppressWarnings("rawtypes")
-                Collection c = (Collection) property;
+                final Collection c = (Collection) property;
                 c.remove(getPropertyDataSource().getItem().getEntity());
                 itemProperty.setValue(c);
             } else {
@@ -189,15 +190,15 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
         }
     }
 
-    private Property<Object> getBackReferenceItemProperty(T entity) {
+    private Property<Object> getBackReferenceItemProperty(final T entity) {
         return getContainer().getProperty(entity, mappedBy);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private void addBackReference(T entity) {
+    private void addBackReference(final T entity) {
         if (!isOwningSide()) {
-            Property itemProperty = getBackReferenceItemProperty(entity);
-            Object property = itemProperty.getValue();
+            final Property itemProperty = getBackReferenceItemProperty(entity);
+            final Object property = itemProperty.getValue();
             if (property == null || !(property instanceof Collection)) {
                 itemProperty.setValue(getPropertyDataSource().getItem().getEntity());
                 // one to many
@@ -205,7 +206,7 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
                 // many to many
                 Preconditions.checkArgument(property instanceof Collection, "Expected a Collection got "
                         + itemProperty.getType() + " " + property.getClass().getCanonicalName());
-                Collection c = (Collection) property;
+                final Collection c = (Collection) property;
                 c.add(getPropertyDataSource().getItem().getEntity());
                 itemProperty.setValue(c);
             }
@@ -223,11 +224,11 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
      */
     private boolean isOwningSide() {
         if (owningSide == null) {
-            Class<?> entityClass = getPropertyDataSource().getItem().getContainer().getEntityClass();
-            EntityClassMetadata<?> entityClassMetadata = MetadataFactory.getInstance()
+            final Class<?> entityClass = getPropertyDataSource().getItem().getContainer().getEntityClass();
+            final EntityClassMetadata<?> entityClassMetadata = MetadataFactory.getInstance()
                     .getEntityClassMetadata(entityClass);
-            PropertyMetadata property = entityClassMetadata.getProperty(getPropertyDataSource().getPropertyId());
-            ManyToMany annotation = property.getAnnotation(ManyToMany.class);
+            final PropertyMetadata property = entityClassMetadata.getProperty(getPropertyDataSource().getPropertyId());
+            final ManyToMany annotation = property.getAnnotation(ManyToMany.class);
             if (annotation != null) {
                 if (annotation.mappedBy() != null && !annotation.mappedBy().isEmpty()) {
                     owningSide = Boolean.FALSE;
@@ -235,7 +236,7 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
                     return owningSide;
                 }
             } else {
-                OneToMany annotation2 = property.getAnnotation(OneToMany.class);
+                final OneToMany annotation2 = property.getAnnotation(OneToMany.class);
                 if (annotation2 != null) {
                     if (annotation2.mappedBy() != null && !annotation2.mappedBy().isEmpty()) {
                         owningSide = Boolean.FALSE;
@@ -250,7 +251,8 @@ public class MultiSelectConverter<T extends CrudEntity> implements Converter<Col
     }
 
     @SuppressWarnings("rawtypes")
-    static Collection createNewCollectionForType(Class<?> type) throws InstantiationException, IllegalAccessException {
+    static Collection createNewCollectionForType(final Class<?> type)
+            throws InstantiationException, IllegalAccessException {
         if (type.isInterface()) {
             if (type == Set.class) {
                 return new HashSet();

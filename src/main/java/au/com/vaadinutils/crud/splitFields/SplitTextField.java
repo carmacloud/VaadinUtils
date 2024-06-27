@@ -4,13 +4,13 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class SplitTextField extends TextField implements SplitField {
     private static final long serialVersionUID = 7753660388792217050L;
-    private Label label;
+    private final Label label;
 
-    public SplitTextField(String label) {
+    public SplitTextField(final String label) {
         this.label = new Label(label);
         setCaption(label);
 
@@ -29,7 +29,7 @@ public class SplitTextField extends TextField implements SplitField {
     }
 
     @Override
-    public void setVisible(boolean visible) {
+    public void setVisible(final boolean visible) {
         label.setVisible(visible);
         super.setVisible(visible);
     }

@@ -1,13 +1,12 @@
 package au.com.vaadinutils.listener;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
 
-import org.apache.logging.log4j.LogManager;
-
 /**
- * @deprecated Not used.
+ * Not used.
  */
 public class ClickEventLogged {
     static public abstract class ClickListener implements com.vaadin.ui.Button.ClickListener {
@@ -18,10 +17,10 @@ public class ClickEventLogged {
         abstract public void clicked(com.vaadin.ui.Button.ClickEvent event);
 
         @Override
-        public void buttonClick(com.vaadin.ui.Button.ClickEvent event) {
+        public void buttonClick(final com.vaadin.ui.Button.ClickEvent event) {
             try {
                 clicked(event);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 ErrorWindow.showErrorWindow(e, null);
             }
         }
@@ -34,14 +33,15 @@ public class ClickEventLogged {
 
         private com.vaadin.ui.Button.ClickListener listener = null;
 
-        public ClickAdaptor(com.vaadin.ui.Button.ClickListener listener) {
+        public ClickAdaptor(final com.vaadin.ui.Button.ClickListener listener) {
             this.listener = listener;
         }
 
-        public void buttonClick(com.vaadin.ui.Button.ClickEvent event) {
+        @Override
+        public void buttonClick(final com.vaadin.ui.Button.ClickEvent event) {
             try {
                 listener.buttonClick(event);
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 logger.error(e, e);
                 throw new RuntimeException(e);
             }

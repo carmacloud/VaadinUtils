@@ -1,7 +1,7 @@
 package au.com.vaadinutils.menu;
 
 /**
- * @deprecated Will be removed once dependent classes are removed.
+ * Will be removed once dependent classes are removed.
  */
 public interface WindowSizer {
 

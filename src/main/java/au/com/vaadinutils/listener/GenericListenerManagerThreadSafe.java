@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @deprecated Replaced in Vaadin 14 migration.
+ * Replaced in Vaadin 14 migration.
  */
 class GenericListenerManagerThreadSafe<K> extends GenericListenerManager<K> {
-    public GenericListenerManagerThreadSafe(String name, long maxSize) {
+    public GenericListenerManagerThreadSafe(final String name, final long maxSize) {
         super(name, maxSize);
     }
 

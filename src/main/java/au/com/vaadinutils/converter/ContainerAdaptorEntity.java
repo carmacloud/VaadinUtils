@@ -11,29 +11,29 @@ import com.vaadin.data.Property;
 import au.com.vaadinutils.crud.CrudEntity;
 
 /**
- * @deprecated Will be removed once dependent classes are removed.
+ * Will be removed once dependent classes are removed.
  */
 public class ContainerAdaptorEntity<E extends CrudEntity> implements ContainerAdaptor<E> {
 
-    private EntityContainer<E> container;
+    private final EntityContainer<E> container;
 
-    public ContainerAdaptorEntity(EntityContainer<E> container) {
+    public ContainerAdaptorEntity(final EntityContainer<E> container) {
         this.container = container;
     }
 
     @Override
-    public Item getItem(Object id) {
+    public Item getItem(final Object id) {
         return container.getItem(id);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public Property getProperty(E entity, Object id) {
+    public Property getProperty(final E entity, final Object id) {
         return container.getContainerProperty(entity.getId(), id);
     }
 
     @Override
-    public E getEntity(Object id) {
+    public E getEntity(final Object id) {
         if (container.getItemIds().contains(id)) {
             return container.getEntity(id);
         }
@@ -47,7 +47,7 @@ public class ContainerAdaptorEntity<E extends CrudEntity> implements ContainerAd
     }
 
     @Override
-    public void sort(String[] propertyId, boolean[] ascending) {
+    public void sort(final String[] propertyId, final boolean[] ascending) {
         container.sort(propertyId, ascending);
 
     }
@@ -59,7 +59,7 @@ public class ContainerAdaptorEntity<E extends CrudEntity> implements ContainerAd
     }
 
     @Override
-    public void addContainerFilter(Filter filter) {
+    public void addContainerFilter(final Filter filter) {
         container.addContainerFilter(filter);
 
     }

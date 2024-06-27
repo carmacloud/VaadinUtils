@@ -18,14 +18,14 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Table;
 
 /**
- * @deprecated Use Vaadin's Grid component instead
+ * Use Vaadin's Grid component instead
  */
 public class TableCheckBoxSelect extends Table {
     public static final String TABLE_CHECK_BOX_SELECT = "TableCheckBoxSelect";
     private static final long serialVersionUID = -7559267854874304189L;
     protected MarkedIds markedIds = new MarkedIds();
     private boolean selectable = true;
-    private Set<ValueChangeListener> valueChangeListeners = new HashSet<ValueChangeListener>();
+    private final Set<ValueChangeListener> valueChangeListeners = new HashSet<ValueChangeListener>();
     protected int containerSize = 0;
 
     Logger logger = org.apache.logging.log4j.LogManager.getLogger();
@@ -49,7 +49,8 @@ public class TableCheckBoxSelect extends Table {
 
     }
 
-    public void setMultiSelect(boolean multi) {
+    @Override
+    public void setMultiSelect(final boolean multi) {
         if (!multi) {
             throw new RuntimeException(
                     "This class is broken in single select mode, actually the single select code has been removed.\n\n Use TableCheckBoxSingleSelect instead!!!!\n\n");
@@ -77,7 +78,7 @@ public class TableCheckBoxSelect extends Table {
     }
 
     private Property.ValueChangeEvent getValueChangeEvent() {
-        Property.ValueChangeEvent event = new Property.ValueChangeEvent() {
+        final Property.ValueChangeEvent event = new Property.ValueChangeEvent() {
 
             /**
              * 
@@ -97,7 +98,7 @@ public class TableCheckBoxSelect extends Table {
                     }
 
                     @Override
-                    public void setValue(Object newValue) throws ReadOnlyException {
+                    public void setValue(final Object newValue) throws ReadOnlyException {
                         throw new RuntimeException("Not implemented");
                     }
 
@@ -112,7 +113,7 @@ public class TableCheckBoxSelect extends Table {
                     }
 
                     @Override
-                    public void setReadOnly(boolean newStatus) {
+                    public void setReadOnly(final boolean newStatus) {
                         throw new RuntimeException("Not implemented");
                     }
                 };
@@ -121,9 +122,10 @@ public class TableCheckBoxSelect extends Table {
         return event;
     }
 
-    public void setColumnHeaders(String... columnHeaders) {
-        Set<String> cols = new LinkedHashSet<String>();
-        for (String col : columnHeaders) {
+    @Override
+    public void setColumnHeaders(final String... columnHeaders) {
+        final Set<String> cols = new LinkedHashSet<String>();
+        for (final String col : columnHeaders) {
             cols.add(col);
         }
         if (selectable) {
@@ -134,16 +136,16 @@ public class TableCheckBoxSelect extends Table {
     }
 
     @Override
-    public void setVisibleColumns(Object... visibleColumns) {
+    public void setVisibleColumns(final Object... visibleColumns) {
         if (visibleColumns.length > 0) {
-            List<Object> cols = new LinkedList<Object>();
-            for (Object col : visibleColumns) {
+            final List<Object> cols = new LinkedList<Object>();
+            for (final Object col : visibleColumns) {
                 cols.add(col);
             }
             if (selectable) {
                 cols.add(0, TABLE_CHECK_BOX_SELECT);
             }
-            Set<Object> uniqueCols = new LinkedHashSet<>();
+            final Set<Object> uniqueCols = new LinkedHashSet<>();
             uniqueCols.addAll(cols);
             super.setVisibleColumns(uniqueCols.toArray());
             setColumnWidth(TABLE_CHECK_BOX_SELECT, 50);
@@ -158,8 +160,8 @@ public class TableCheckBoxSelect extends Table {
     /**
      * use setSelectedValue instead, this method gets called before initialization
      */
-    @Deprecated
-    public void setValue(Object value) {
+    @Override
+    public void setValue(final Object value) {
         final ArrayList<Object> v = new ArrayList<>(1);
         if (value != null)
             v.add(value);
@@ -167,7 +169,7 @@ public class TableCheckBoxSelect extends Table {
     }
 
     @SuppressWarnings("unchecked")
-    public void setSelectedValue(Object value) {
+    public void setSelectedValue(final Object value) {
         // If table is selectable with checkboxes then update the selected ids,
         // otherwise update the selected checkboxes
         if (selectable) {
@@ -189,7 +191,7 @@ public class TableCheckBoxSelect extends Table {
      */
     @Deprecated
     @Override
-    public void setSelectable(boolean s) {
+    public void setSelectable(final boolean s) {
         throw new RuntimeException("Use disableSelectable instead");
     }
 
@@ -214,14 +216,14 @@ public class TableCheckBoxSelect extends Table {
             return markedIds.getIds();
         }
 
-        TreeSet<Object> result = new TreeSet<Object>();
+        final TreeSet<Object> result = new TreeSet<Object>();
         result.addAll(getContainerDataSource().getItemIds());
         result.removeAll(markedIds.getIds());
         return result;
     }
 
     @Override
-    public void addValueChangeListener(ValueChangeListener listener) {
+    public void addValueChangeListener(final ValueChangeListener listener) {
         valueChangeListeners.add(listener);
     }
 
@@ -241,7 +243,7 @@ public class TableCheckBoxSelect extends Table {
             private static final long serialVersionUID = -6659059346271729122L;
 
             @Override
-            public Object generateCell(final Table source, final Object itemId, Object columnId) {
+            public Object generateCell(final Table source, final Object itemId, final Object columnId) {
 
                 final CheckBox checkbox = new CheckBox();
                 checkbox.setWidth("25");
@@ -249,7 +251,7 @@ public class TableCheckBoxSelect extends Table {
 
                 // important that the following code is executed before the
                 // value change listener is added
-                boolean inList = markedIds.contains(itemId);
+                final boolean inList = markedIds.contains(itemId);
                 checkbox.setValue(inList);
                 checkbox.setId("checkboxSelect");
                 if (!markedIds.isTrackingSelected()) {
@@ -261,7 +263,7 @@ public class TableCheckBoxSelect extends Table {
                     private static final long serialVersionUID = 9170497247408214336L;
 
                     @Override
-                    public void valueChange(Property.ValueChangeEvent event) {
+                    public void valueChange(final Property.ValueChangeEvent event) {
 
                         if ((Boolean) event.getProperty().getValue() == markedIds.isTrackingSelected()) {
                             markedIds.add(itemId);
@@ -283,7 +285,7 @@ public class TableCheckBoxSelect extends Table {
     }
 
     protected void notifyValueChange() {
-        for (ValueChangeListener listener : valueChangeListeners) {
+        for (final ValueChangeListener listener : valueChangeListeners) {
             listener.valueChange(getValueChangeEvent());
         }
         this.validateField();
@@ -316,7 +318,7 @@ public class TableCheckBoxSelect extends Table {
 
     }
 
-    public void addSelectionListener(SelectionListener listener) {
+    public void addSelectionListener(final SelectionListener listener) {
         markedIds.addSelectionListener(listener);
 
     }

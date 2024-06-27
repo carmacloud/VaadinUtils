@@ -4,23 +4,23 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @deprecated Replaced in Vaadin 14 migration.
+ * Replaced in Vaadin 14 migration.
  */
 public class UserSettingsStorageNoOpImpl implements UserSettingsStorage {
     Map<String, String> map = new ConcurrentHashMap<>();
 
     @Override
-    public void store(String key, String value) {
+    public void store(final String key, final String value) {
         map.put(key, value);
     }
 
     @Override
-    public String get(String key) {
+    public String get(final String key) {
         return map.get(key);
     }
 
     @Override
-    public void erase(String partialKey) {
+    public void erase(final String partialKey) {
         // TODO Auto-generated method stub
     }
 }

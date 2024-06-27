@@ -10,23 +10,23 @@ import au.com.vaadinutils.domain.iColor;
 import au.com.vaadinutils.domain.iColorFactory;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class ColorPickerField extends CustomField<iColor> {
     private static final long serialVersionUID = -1573292123807845727L;
 
-    private ColorPicker colorPicker;
+    private final ColorPicker colorPicker;
 
-    private iColorFactory colorFactory;
+    private final iColorFactory colorFactory;
 
-    public ColorPickerField(iColorFactory colorFactory) {
+    public ColorPickerField(final iColorFactory colorFactory) {
         this.colorFactory = colorFactory;
         this.colorPicker = new ColorPicker();
         this.colorPicker.addColorChangeListener(new ColorChangeListener() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void colorChanged(ColorChangeEvent event) {
+            public void colorChanged(final ColorChangeEvent event) {
                 setValue(ColorPickerField.this.colorFactory.createColor(event.getColor()));
             }
         });
@@ -34,7 +34,7 @@ public class ColorPickerField extends CustomField<iColor> {
     }
 
     @Override
-    public void setReadOnly(boolean readOnly) {
+    public void setReadOnly(final boolean readOnly) {
         colorPicker.setReadOnly(readOnly);
         super.setReadOnly(readOnly);
     }
@@ -55,7 +55,7 @@ public class ColorPickerField extends CustomField<iColor> {
     }
 
     @Override
-    public void setInternalValue(iColor newFieldValue) {
+    public void setInternalValue(final iColor newFieldValue) {
         if (newFieldValue != null)
             this.colorPicker.setColor(new com.vaadin.shared.ui.colorpicker.Color(newFieldValue.getRed(),
                     newFieldValue.getGreen(), newFieldValue.getBlue(), newFieldValue.getAlpha()));

@@ -15,7 +15,7 @@ import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.ui.Field;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class ValidatingFieldGroup<E> extends FieldGroup {
     private static final long serialVersionUID = 1L;
@@ -24,18 +24,18 @@ public class ValidatingFieldGroup<E> extends FieldGroup {
 
     Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 
-    public ValidatingFieldGroup(JPAContainer<E> container, Class<E> entityClass) {
+    public ValidatingFieldGroup(final JPAContainer<E> container, final Class<E> entityClass) {
         this.entityClass = entityClass;
         this.container = container;
     }
 
-    public ValidatingFieldGroup(Item item, Class<E> entityClass) {
+    public ValidatingFieldGroup(final Item item, final Class<E> entityClass) {
         super(item);
         this.entityClass = entityClass;
 
     }
 
-    public ValidatingFieldGroup(Class<E> entityClass) {
+    public ValidatingFieldGroup(final Class<E> entityClass) {
         this.entityClass = entityClass;
 
     }
@@ -47,7 +47,7 @@ public class ValidatingFieldGroup<E> extends FieldGroup {
         return dirtyListener;
     }
 
-    public void setDirtyListener(DirtyListener listener) {
+    public void setDirtyListener(final DirtyListener listener) {
         dirtyListener = listener;
     }
 
@@ -55,22 +55,22 @@ public class ValidatingFieldGroup<E> extends FieldGroup {
         return groupIsDirty;
     }
 
-    public void setGroupIsDirty(boolean groupIsDirty) {
+    public void setGroupIsDirty(final boolean groupIsDirty) {
         this.groupIsDirty = groupIsDirty;
     }
 
-    private Set<Field<?>> knownFields = new HashSet<>();
+    private final Set<Field<?>> knownFields = new HashSet<>();
 
     /*
      * Override configureField to add a bean validator to each field.
      */
     @Override
-    protected void configureField(Field<?> field) {
+    protected void configureField(final Field<?> field) {
 
         // Vaadin applies the readonly status from the underlying entity
         // which doesn't allow us to make a single field readonly
         // hence we track it ourselves.
-        boolean readOnly = field.isReadOnly();
+        final boolean readOnly = field.isReadOnly();
         super.configureField(field);
 
         // If the field was originally readonly then force it back to readonly.
@@ -83,18 +83,18 @@ public class ValidatingFieldGroup<E> extends FieldGroup {
             // Add Bean validators if there are annotations
             // Note that this requires a bean validation implementation to
             // be available.
-            BeanValidator validator = new BeanValidator(entityClass, getPropertyId(field).toString());
+            final BeanValidator validator = new BeanValidator(entityClass, getPropertyId(field).toString());
 
             field.addValidator(validator);
             if (field.getLocale() != null) {
                 validator.setLocale(field.getLocale());
             }
 
-            ValueChangeListener changeListener = new ValueChangeListener() {
+            final ValueChangeListener changeListener = new ValueChangeListener() {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                public void valueChange(ValueChangeEvent event) {
+                public void valueChange(final ValueChangeEvent event) {
                     if (groupIsDirty == false) {
                         groupIsDirty = true;
 
@@ -123,7 +123,7 @@ public class ValidatingFieldGroup<E> extends FieldGroup {
     }
 
     @Override
-    public void setItemDataSource(Item itemDataSource) {
+    public void setItemDataSource(final Item itemDataSource) {
         groupIsDirty = false;
         if (dirtyListener != null) {
             dirtyListener.fieldGroupIsDirty(false);
@@ -139,7 +139,7 @@ public class ValidatingFieldGroup<E> extends FieldGroup {
     // when finished testing delete this method, it's in the super type anyway
     @Override
     public boolean isModified() {
-        for (Field<?> field : getFields()) {
+        for (final Field<?> field : getFields()) {
             if (field.isModified()) {
                 logger.warn("Dirty: {} {}", field.getCaption(), field.getClass().getSimpleName());
                 String value = null;
@@ -155,7 +155,7 @@ public class ValidatingFieldGroup<E> extends FieldGroup {
     }
 
     @Override
-    public void bind(Field<?> field, Object propertyId) throws BindException {
+    public void bind(final Field<?> field, final Object propertyId) throws BindException {
 
         boolean isReadonly = false;
         try {

@@ -4,13 +4,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Table;
-
-import org.apache.logging.log4j.LogManager;
 
 /**
  * A simple class designed to display a PoJo in a table
@@ -22,7 +21,7 @@ import org.apache.logging.log4j.LogManager;
  * 
  * @author bsutton
  * 
- * @deprecated Replaced in Vaadin 14 migration.
+ *         Replaced in Vaadin 14 migration.
  *
  */
 public class PoJoTable<T> extends Table {
@@ -45,24 +44,24 @@ public class PoJoTable<T> extends Table {
      * @param visibleColumns the list of columns from the pojo (getters) that are to
      *                       be displayed.
      */
-    public PoJoTable(Class<T> clazz, String[] visibleColumns) {
+    public PoJoTable(final Class<T> clazz, final String[] visibleColumns) {
         this.pojoClass = clazz;
         this.visibleColumns = visibleColumns;
         initColumns();
     }
 
-    public void addRow(T pojo) {
+    public void addRow(final T pojo) {
         Item item = this.getItem(pojo);
         // If the same item is sent again we just update it.
         if (item == null)
             item = this.addItem(pojo);
 
-        for (Column column : columns) {
+        for (final Column column : columns) {
             try {
                 @SuppressWarnings("unchecked")
-                Property<Object> property = item.getItemProperty(column.name);
+                final Property<Object> property = item.getItemProperty(column.name);
                 property.setValue(column.getValue(pojo));
-            } catch (RuntimeException e) {
+            } catch (final RuntimeException e) {
                 logger.error(e, e);
                 throw e;
             }
@@ -70,15 +69,15 @@ public class PoJoTable<T> extends Table {
     }
 
     private void initColumns() {
-        Class<T> objClass = this.pojoClass;
+        final Class<T> objClass = this.pojoClass;
         columns = new ArrayList<Column>();
 
         // Get the public methods associated with this class.
-        Method[] methods = objClass.getMethods();
-        for (Method method : methods) {
-            String name = method.getName();
+        final Method[] methods = objClass.getMethods();
+        for (final Method method : methods) {
+            final String name = method.getName();
             if (name.startsWith("get") || name.startsWith("is")) {
-                Column column = new Column(method);
+                final Column column = new Column(method);
                 if (this.visibleColumns == null || isVisible(column)) {
                     columns.add(column);
                     this.addContainerProperty(column.name, column.type, null);
@@ -90,9 +89,9 @@ public class PoJoTable<T> extends Table {
 
         // check all of the visible columsn are available.
         if (columns.size() != visibleColumns.length) {
-            for (String visible : visibleColumns) {
+            for (final String visible : visibleColumns) {
                 boolean found = false;
-                for (Column column : columns) {
+                for (final Column column : columns) {
                     if (column.name.equals(visible)) {
                         found = true;
                         break;
@@ -107,9 +106,9 @@ public class PoJoTable<T> extends Table {
 
     }
 
-    private boolean isVisible(Column column) {
+    private boolean isVisible(final Column column) {
         boolean isVisible = false;
-        for (String name : visibleColumns) {
+        for (final String name : visibleColumns) {
             if (column.getName().equals(name))
                 isVisible = true;
         }
@@ -118,12 +117,12 @@ public class PoJoTable<T> extends Table {
 
     class Column {
         private String name;
-        private Method method;
-        private Class<?> type;
+        private final Method method;
+        private final Class<?> type;
 
-        public Column(Method method) {
+        public Column(final Method method) {
             this.method = method;
-            String getterName = method.getName();
+            final String getterName = method.getName();
             if (getterName.startsWith("get")) {
                 this.name = getterName.substring(3);
             } else {
@@ -137,15 +136,15 @@ public class PoJoTable<T> extends Table {
             return name;
         }
 
-        public Object getValue(T pojo) {
+        public Object getValue(final T pojo) {
             Object ret = null;
             try {
                 ret = method.invoke(pojo);
-            } catch (IllegalAccessException e) {
+            } catch (final IllegalAccessException e) {
                 logger.error(e, e);
-            } catch (InvocationTargetException e) {
+            } catch (final InvocationTargetException e) {
                 logger.error(e, e);
-            } catch (IllegalArgumentException e) {
+            } catch (final IllegalArgumentException e) {
                 logger.error(e, e);
             }
 

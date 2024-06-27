@@ -9,7 +9,7 @@ import com.vaadin.data.Property;
 import au.com.vaadinutils.crud.CrudEntity;
 
 /**
- * @deprecated Will be removed once dependent classes are removed.
+ * Will be removed once dependent classes are removed.
  */
 public interface ContainerAdaptor<T extends CrudEntity> {
 

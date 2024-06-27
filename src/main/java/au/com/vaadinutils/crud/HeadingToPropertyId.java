@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.vaadin.ui.Table.ColumnGenerator;
 
 /**
- * @deprecated Replaced in V14 migration.
+ * Replaced in V14 migration.
  */
 public class HeadingToPropertyId {
     private final String heading;
@@ -43,7 +43,7 @@ public class HeadingToPropertyId {
         private boolean defaultVisibleState = true;
         private boolean lockedState = false;
 
-        Builder(String heading, String propertyId) {
+        Builder(final String heading, final String propertyId) {
             this.heading = heading;
             this.propertyId = propertyId;
         }
@@ -53,22 +53,22 @@ public class HeadingToPropertyId {
                     width);
         }
 
-        public Builder setLockedState(boolean lockedState) {
+        public Builder setLockedState(final boolean lockedState) {
             this.lockedState = lockedState;
             return this;
         }
 
-        public Builder setDefaultVisibleState(boolean defaultVisibleState) {
+        public Builder setDefaultVisibleState(final boolean defaultVisibleState) {
             this.defaultVisibleState = defaultVisibleState;
             return this;
         }
 
-        public Builder setWidth(Integer width) {
+        public Builder setWidth(final Integer width) {
             this.width = width;
             return this;
         }
 
-        public Builder setColumnGenerator(ColumnGenerator columnGenerator) {
+        public Builder setColumnGenerator(final ColumnGenerator columnGenerator) {
             this.columnGenerator = columnGenerator;
             return this;
         }
