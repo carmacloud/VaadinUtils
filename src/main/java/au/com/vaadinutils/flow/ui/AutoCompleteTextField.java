@@ -74,13 +74,26 @@ public class AutoCompleteTextField<E> extends TextField {
         });
     }
 
+    /**
+     * Need to call this to have the popup list initialised and to tie the popup to
+     * the field.
+     * 
+     * @param component    A layout that extends {@link HasComponents} for linking
+     *                     the popup.
+     * @param fieldCaption A {@link String} that can be empty or null if not
+     *                     required.
+     * @param listCaption  A {@link String} that the popup uses to link to the
+     *                     field.
+     */
     public void init(final HasComponents component, final String fieldCaption, final String listCaption) {
         Preconditions.checkNotNull(listCaption, "List Caption is required to link the popup to the field.");
         Preconditions.checkArgument(listCaption.length() > 0,
                 "List Caption is required to link the popup to the field.");
         setClassName(listCaption);
         setId(listCaption);
-        setLabel(fieldCaption);
+        if (listCaption != null) {
+            setLabel(fieldCaption);
+        }
         setClearButtonVisible(true);
         popup.setFor(listCaption);
 
