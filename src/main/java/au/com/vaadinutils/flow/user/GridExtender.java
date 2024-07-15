@@ -262,7 +262,7 @@ public class GridExtender<T> {
                         grid.setColumnOrder(calculateColumnOrder(availableColumns, parsedColumns));
                     } catch (final IllegalArgumentException e) {
                         logger.warn(e.getMessage()
-                                + "\nError caused by missing entry (or entries) in TblUserSettings for SettingKey: "
+                                + "\nWarning Only: Missing entry (or entries) in TblUserSettings for SettingKey: "
                                 + keyStub);
                     }
                 }
