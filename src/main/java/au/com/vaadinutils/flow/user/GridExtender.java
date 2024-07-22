@@ -70,6 +70,7 @@ public class GridExtender<T> {
     private final List<Column<T>> resizableColumns = new ArrayList<>();
 
     public GridExtender(final Grid<T> grid, final String uniqueId) {
+
         this.grid = grid;
         this.uniqueId = uniqueId;
         actionIcon.setColor(VaadinHelper.CARMA_BLUE);
@@ -495,12 +496,16 @@ public class GridExtender<T> {
         this.resizableColumns.addAll(columns);
     }
 
+    private Set<String> nonSortKeys = new HashSet<String>();
+
     /**
-     * Sets all columns sortable, except the action menu (if included).
+     * Sets all columns sortable, except the action menu (if included) or any
+     * columns flagged as non-sort.
      */
     public void setAllColumnsSortable() {
         this.grid.getColumns().forEach(column -> {
-            column.setSortable(!ACTION_MENU.equalsIgnoreCase(column.getKey()));
+            column.setSortable(!ACTION_MENU.equalsIgnoreCase(column.getKey())
+                    && (nonSortKeys.isEmpty() || !nonSortKeys.contains(column.getKey())));
         });
     }
 
@@ -512,11 +517,11 @@ public class GridExtender<T> {
      *             status.
      */
     public void setColumnsNonSortable(final Set<String> keys) {
-        logger.info("Non-Sort: " + keys);
+        nonSortKeys = keys;
         keys.forEach(key -> {
             final Column<?> column = this.grid.getColumnByKey(key);
 
-            // Check in case an key has not been set for a column
+            // Check in case a key has not been set for a column
             if (column != null) {
                 column.setSortable(false);
             }
@@ -524,13 +529,15 @@ public class GridExtender<T> {
     }
 
     /**
-     * Convenience method to set all columns non-sortable.
+     * Convenience method to set all columns non-sortable.<br. This overrides any
+     * settings that allowed a partial sort.
      */
     public void setAllColumnsNonSortable() {
         final Set<String> keys = new HashSet<>();
         grid.getColumns().forEach(col -> {
             keys.add(col.getKey());
         });
+        nonSortKeys = new HashSet<String>();
         setColumnsNonSortable(keys);
     }
 }
