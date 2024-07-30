@@ -35,6 +35,7 @@ import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 import com.vaadin.flow.data.converter.StringToBigDecimalConverter;
 import com.vaadin.flow.data.converter.StringToDoubleConverter;
 import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.value.ValueChangeMode;
 
 import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.flow.converter.LongNoGroupingConverter;
@@ -152,11 +153,13 @@ public class FormHelper<E extends CrudEntity> {
         if (converter != null) {
             if (validator != null) {
                 bindingBuilderString.withValidator(validator).withNullRepresentation("").withConverter(converter);
+                field.setValueChangeMode(ValueChangeMode.EAGER);
             } else {
                 bindingBuilderString.withNullRepresentation("").withConverter(converter);
             }
         } else if (validator != null) {
             bindingBuilderString.withValidator(validator).withNullRepresentation("");
+            field.setValueChangeMode(ValueChangeMode.EAGER);
         } else {
             bindingBuilderString.withNullRepresentation("");
         }
@@ -244,6 +247,7 @@ public class FormHelper<E extends CrudEntity> {
         final BindingBuilder<E, String> bindingBuilderString = binder.forField(field).withNullRepresentation("");
         if (validator != null) {
             bindingBuilderString.withValidator(validator);
+            field.setValueChangeMode(ValueChangeMode.EAGER);
         }
         bindingBuilderString.bind(bindingProperty);
         field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
@@ -353,7 +357,6 @@ public class FormHelper<E extends CrudEntity> {
             this.validator = validator;
             return this;
         }
-
     }
 
     // Composite Fields
@@ -386,6 +389,7 @@ public class FormHelper<E extends CrudEntity> {
         final BindingBuilder<E, String> bindingBuilderString = binder.forField(field.getField());
         if (validator != null) {
             bindingBuilderString.withValidator(validator);
+            field.getField().setValueChangeMode(ValueChangeMode.EAGER);
         }
         bindingBuilderString.withNullRepresentation("");
         bindingBuilderString.bind(bindingProperty);
