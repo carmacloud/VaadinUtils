@@ -361,7 +361,8 @@ public class GridExtender<T> {
                     newOrderedColumns.add(column);
                 }
             } else {
-                logger.error("Column #" + count + " is missing it's key. Make sure all columns have keys set.");
+                logger.error("Column #" + count + " is missing it's key. Make sure all columns have keys set. "
+                        + this.uniqueId);
                 return;
             }
             count++;
