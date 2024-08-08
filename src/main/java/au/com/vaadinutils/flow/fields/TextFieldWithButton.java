@@ -12,7 +12,6 @@ public class TextFieldWithButton extends HorizontalLayout {
     private static final long serialVersionUID = -6761979395677678269L;
     private Button button;
     private final TextField field;
-    private String label;
 
     public TextFieldWithButton(final String label) {
         this(label, null);
@@ -33,7 +32,6 @@ public class TextFieldWithButton extends HorizontalLayout {
     }
 
     private TextField createField(final String label) {
-        this.label = label;
         return new TextField(label);
     }
 
@@ -69,16 +67,23 @@ public class TextFieldWithButton extends HorizontalLayout {
     }
 
     public String getLabel() {
-        return this.label;
+        return this.field.getLabel();
     }
 
     public void setLabel(final String label) {
-        this.label = label;
         this.field.setLabel(label);
     }
 
     public void addTextFieldValueChangeListener(
             final ValueChangeListener<ComponentValueChangeEvent<TextField, String>> listener) {
         this.field.addValueChangeListener(listener);
+    }
+
+    public void setValue(final String value) {
+        this.field.setValue(value);
+    }
+
+    public String getValue() {
+        return this.field.getValue();
     }
 }
