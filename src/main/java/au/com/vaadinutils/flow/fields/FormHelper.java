@@ -56,6 +56,7 @@ import au.com.vaadinutils.flow.helper.VaadinHelper;
 public class FormHelper<E extends CrudEntity> {
 
     private final Logger logger = LogManager.getLogger();
+    public static final String STANDARD_COMBO_WIDTH = "220";
 
     private final Class<E> entityClass;
     private final Component layout;
@@ -579,17 +580,19 @@ public class FormHelper<E extends CrudEntity> {
      * Useful for fields wrapped in a CustomField or where just binding only is
      * required.
      * 
-     * @param field             The {@link Component} to bind.
-     * @param propertyAttribute A {@link SingularAttribute} of E, ?
-     * @param validator         A {@link Validator} of Object to allow adding to
-     *                          fields other than of String type. (Even though
-     *                          realistically, we'd never need to validate a
-     *                          checkbox.). Can be null.
+     * @param field                    The {@link Component} to bind.
+     * @param propertyAttribute        A {@link SingularAttribute} of E, ?
+     * @param validator                A {@link Validator} of Object to allow adding
+     *                                 to fields other than of String type. (Even
+     *                                 though realistically, we'd never need to
+     *                                 validate a checkbox.). Can be null.
+     * @param localDateToDateConverter A {@link Converter} purely for
+     *                                 {@link DatePicker} implementation.
      * @return The bound {@link Component} with optional validation.
      */
     public Component bind(final Component field, final SingularAttribute<E, ?> propertyAttribute,
-            final Validator<Object> validator) {
-        return bind(field, propertyAttribute.getName(), validator);
+            final Validator<Object> validator, final Converter<LocalDate, Date> localDateToDateConverter) {
+        return bind(field, propertyAttribute.getName(), validator, localDateToDateConverter);
     }
 
     /**
@@ -597,15 +600,19 @@ public class FormHelper<E extends CrudEntity> {
      * Useful for fields wrapped in a CustomField or where just binding only is
      * required.
      * 
-     * @param field     The {@link Component} to bind.
-     * @param property  A {@link String} property.
-     * @param validator A {@link Validator} of Object to allow adding to fields
-     *                  other than of String type. (Even though realistically, we'd
-     *                  never need to validate a checkbox.). Can be null.
-     * @returnThe bound {@link Component} with optional validation.
+     * @param field                    The {@link Component} to bind.
+     * @param property                 A {@link String} property.
+     * @param validator                A {@link Validator} of Object to allow adding
+     *                                 to fields other than of String type. (Even
+     *                                 though realistically, we'd never need to
+     *                                 validate a checkbox.). Can be null.
+     * @param localDateToDateConverter A {@link Converter} purely for
+     *                                 {@link DatePicker} implementation.
+     * @return The bound {@link Component} with optional validation.
      */
     @SuppressWarnings("unchecked")
-    public Component bind(final Component field, final String property, final Validator<Object> validator) {
+    public Component bind(final Component field, final String property, final Validator<Object> validator,
+            final Converter<LocalDate, Date> localDateToDateConverter) {
         BindingBuilder<E, ?> bindingBuilder = null;
         if (binder != null && property != null) {
             if (field instanceof TextField) {
@@ -621,7 +628,11 @@ public class FormHelper<E extends CrudEntity> {
             } else if (field instanceof ComboBoxWithButton) {
                 bindingBuilder = binder.forField(((ComboBoxWithButton<E>) field).getField());
             } else if (field instanceof DatePicker) {
-                bindingBuilder = binder.forField((DatePicker) field);
+                if (localDateToDateConverter != null) {
+                    bindingBuilder = binder.forField((DatePicker) field).withConverter(localDateToDateConverter);
+                } else {
+                    bindingBuilder = binder.forField((DatePicker) field);
+                }
             }
 
             Preconditions.checkState(bindingBuilder != null,
