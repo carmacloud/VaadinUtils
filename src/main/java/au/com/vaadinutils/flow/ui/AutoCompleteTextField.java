@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 import com.vaadin.componentfactory.Popup;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -75,6 +76,31 @@ public class AutoCompleteTextField<E> extends TextField {
     }
 
     /**
+     * 
+     * @param enterListener The {@link EnterListener} to allow the value in the
+     *                      {@link TextField} to be passed back to the calling
+     *                      class.<br>
+     *                      Note: Added to allow Search Text field on SearchView to
+     *                      initiate a search using the current contents of the
+     *                      field.<br>
+     *                      It may have unintended consequences if used in another
+     *                      screen.
+     */
+    public void addEnterKeyListener(final EnterListener enterListener) {
+        registrations.add(addKeyDownListener(Key.ENTER, e -> {
+            // Clear list and hide
+            popup.removeAll();
+            popup.hide();
+            // Pass back value that is in the text field.
+            enterListener.value(getValue());
+        }));
+    }
+
+    public interface EnterListener {
+        void value(String value);
+    }
+
+    /**
      * Need to call this to have the popup list initialised and to tie the popup to
      * the field.
      * 
@@ -91,9 +117,7 @@ public class AutoCompleteTextField<E> extends TextField {
                 "List Caption is required to link the popup to the field.");
         setClassName(listCaption);
         setId(listCaption);
-        if (listCaption != null) {
-            setLabel(fieldCaption);
-        }
+        setLabel(fieldCaption);
         setClearButtonVisible(true);
         popup.setFor(listCaption);
 
