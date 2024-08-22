@@ -8,16 +8,13 @@ import java.util.Map;
 import com.google.common.base.Preconditions;
 import com.vaadin.componentfactory.Popup;
 import com.vaadin.flow.component.HasComponents;
-import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.shared.Registration;
-
-import au.com.vaadinutils.flow.helper.VaadinHelper;
 
 public class AutoCompleteTextField<E> extends TextField {
 
@@ -145,14 +142,14 @@ public class AutoCompleteTextField<E> extends TextField {
         popup.show();
         final VerticalLayout layout = new VerticalLayout();
         layout.setMargin(false);
+        layout.setSpacing(false);
         layout.setWidth(dropDownWidth, Unit.PIXELS);
         for (final E item : options.keySet()) {
             final String label = options.get(item);
-            final Span span = new Span(
-                    new Html("<font color='" + VaadinHelper.CARMA_DARK_BLACK + "'>" + label + "</font>"));
-            span.setId(label);
-            layout.add(span);
-            final Registration reg = span.addClickListener(e -> {
+            final Label labelHeader = new Label(label);
+            labelHeader.setId(label);
+            layout.add(labelHeader);
+            final Registration reg = layout.addClickListener(e -> {
                 optionListener.optionSelected(AutoCompleteTextField.this, item);
                 // Clear list and hide
                 popup.removeAll();
