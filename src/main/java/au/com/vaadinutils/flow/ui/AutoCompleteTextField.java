@@ -67,9 +67,7 @@ public class AutoCompleteTextField<E> extends TextField {
      * selecting anything.
      */
     public AutoCompleteTextField() {
-        addDetachListener(listener -> {
-            registrations.forEach(reg -> reg.remove());
-        });
+        addDetachListener(listener -> registrations.forEach(reg -> reg.remove()));
     }
 
     /**

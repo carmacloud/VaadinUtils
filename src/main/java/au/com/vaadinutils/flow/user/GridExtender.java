@@ -26,6 +26,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.shared.Registration;
 
 import au.com.vaadinutils.flow.helper.VaadinHelper;
 
@@ -71,10 +72,12 @@ public class GridExtender<T> {
     private boolean resizable = false;
     private final List<Column<T>> resizableColumns = new ArrayList<>();
 
-    public GridExtender(final Grid<T> grid, final String uniqueId) {
+    private List<Registration> registrations;
 
+    public GridExtender(final Grid<T> grid, final String uniqueId, final List<Registration> registrations) {
         this.grid = grid;
         this.uniqueId = uniqueId;
+        this.registrations = registrations;
         actionIcon.setColor(VaadinHelper.CARMA_BLUE);
         actionIcon.setSize("12px");
         actionIcon.setId(uniqueId);
@@ -130,7 +133,7 @@ public class GridExtender<T> {
      * when a context menu attached.)
      */
     public void disableCheckboxSelectionOnRowClick() {
-        grid.getSelectionModel().addSelectionListener(e -> {
+        this.registrations.add(grid.getSelectionModel().addSelectionListener(e -> {
             if (!e.isFromClient() && !checkboxSelectionOnRowdisabled) {
                 if (!e.getAllSelectedItems().isEmpty()) {
                     final List<T> selectedItems = new ArrayList<T>(e.getAllSelectedItems());
@@ -153,7 +156,7 @@ public class GridExtender<T> {
                 userSelectedRows.clear();
                 userSelectedRows.addAll(e.getAllSelectedItems());
             }
-        });
+        }));
     }
 
     public List<String> getVisibleColumns() {
@@ -188,12 +191,12 @@ public class GridExtender<T> {
             }
         });
 
-        this.grid.addColumnResizeListener(e -> {
+        this.registrations.add(this.grid.addColumnResizeListener(e -> {
             final String key = e.getResizedColumn().getKey();
             // Strip any char so we only store a virtual number.
             final String width = e.getResizedColumn().getWidth().replaceAll("[a-z]", "");
             MemberSettingsStorageFactory.getUserSettingsStorage().store(keyStub + "-" + key, width);
-        });
+        }));
     }
 
     private Map<String, String> getSavedWidths(final List<String> columnKeys) {
@@ -273,7 +276,7 @@ public class GridExtender<T> {
                 }
             }
 
-            grid.addColumnReorderListener(event -> {
+            this.registrations.add(grid.addColumnReorderListener(event -> {
                 reorderedColumns = event.getColumns();
                 if (reorderedColumns.size() > 0) {
                     String parsedColumns = "";
@@ -284,7 +287,7 @@ public class GridExtender<T> {
                     parsedColumns = parsedColumns.substring(0, parsedColumns.length() - 2);
                     MemberSettingsStorageFactory.getUserSettingsStorage().store(keyStub, "" + parsedColumns);
                 }
-            });
+            }));
         }
     }
 
@@ -422,7 +425,7 @@ public class GridExtender<T> {
                         recordLayout.setPadding(false);
                         recordLayout.setAlignItems(Alignment.BASELINE);
 
-                        recordLayout.addClickListener(listener -> {
+                        this.registrations.add(recordLayout.addClickListener(listener -> {
                             if (column.isVisible()) {
                                 show.setColor(VaadinHelper.CARMA_WHITE);
                                 column.setVisible(false);
@@ -431,7 +434,7 @@ public class GridExtender<T> {
                                 column.setVisible(true);
                             }
                             storeVisibiltyUpdate(column);
-                        });
+                        }));
                         layout.add(recordLayout);
                     }
                 }
