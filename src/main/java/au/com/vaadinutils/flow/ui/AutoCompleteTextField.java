@@ -10,6 +10,7 @@ import com.vaadin.componentfactory.Popup;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Unit;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -146,8 +147,9 @@ public class AutoCompleteTextField<E> extends TextField {
             final String label = options.get(item);
             final Label labelHeader = new Label(label);
             labelHeader.setId(label);
-            layout.add(labelHeader);
-            final Registration reg = layout.addClickListener(e -> {
+            final Div div = new Div(labelHeader);
+            layout.add(div);
+            final Registration reg = div.addClickListener(e -> {
                 optionListener.optionSelected(AutoCompleteTextField.this, item);
                 // Clear list and hide
                 popup.removeAll();
