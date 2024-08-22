@@ -14,16 +14,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.componentfactory.Popup;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.contextmenu.ContextMenu;
-import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 
 import au.com.vaadinutils.flow.helper.VaadinHelper;
@@ -64,6 +65,7 @@ public class GridExtender<T> {
     private Column<T> actionColumn = null;
     private boolean setActionIcon = false;
     private ComponentRenderer<Component, T> gridContextMenu;
+    private List<Column<T>> reorderedColumns;
 
     // Common method to set columns resizable.
     private boolean resizable = false;
@@ -75,6 +77,8 @@ public class GridExtender<T> {
         this.uniqueId = uniqueId;
         actionIcon.setColor(VaadinHelper.CARMA_BLUE);
         actionIcon.setSize("12px");
+        actionIcon.setId(uniqueId);
+        actionIcon.setClassName(uniqueId);
         grid.setColumnReorderingAllowed(true);
     }
 
@@ -96,8 +100,7 @@ public class GridExtender<T> {
         }
         this.columnsHiddenOnLoad = columnsHiddenOnLoad;
         setColumnsResizable();
-        addActionColumn();
-        addActionItems(headersMap);
+        addActionColumn(headersMap);
         configureSaveColumnWidths();
         configureSaveColumnVisible();
         configureSaveColumnOrder();
@@ -255,6 +258,7 @@ public class GridExtender<T> {
             final String keyStub = uniqueId + "-order";
 
             final List<Column<T>> availableColumns = grid.getColumns();
+            reorderedColumns = grid.getColumns();
             final String columns = MemberSettingsStorageFactory.getUserSettingsStorage().get(keyStub);
             if (availableColumns.size() > 0 && columns != null && !columns.isEmpty()) {
                 final String[] parsedColumns = columns.split(", ?");
@@ -270,7 +274,7 @@ public class GridExtender<T> {
             }
 
             grid.addColumnReorderListener(event -> {
-                final List<Column<T>> reorderedColumns = event.getColumns();
+                reorderedColumns = event.getColumns();
                 if (reorderedColumns.size() > 0) {
                     String parsedColumns = "";
                     for (final Column<T> column : reorderedColumns) {
@@ -321,10 +325,10 @@ public class GridExtender<T> {
         return orderedColumns;
     }
 
-    private void addActionColumn() {
+    private void addActionColumn(final Map<String, String> headersMap) {
         // Only add the action icon in the header if it's been set.
         final HorizontalLayout header = new HorizontalLayout(setActionIcon ? actionIcon : new Span());
-        header.setJustifyContentMode(JustifyContentMode.END);
+        header.setSpacing(false);
 
         // Take a copy of the columns so we can reorder with the action column as first
         // column.
@@ -368,55 +372,75 @@ public class GridExtender<T> {
             count++;
         }
         grid.setColumnOrder(newOrderedColumns);
+        addActionItems(headersMap, header);
     }
 
-    private void addActionItems(final Map<String, String> headersMap) {
-        final ColumnActionContextMenu columnActionContextMenu = new ColumnActionContextMenu(actionIcon);
-        grid.getColumns().forEach(column -> {
-            if (column.getKey() != null) {
-                final String header = Optional.ofNullable(headersMap).map(e -> e.get(column.getKey())).orElse(null);
-                if (!column.isFrozen() && header != null) {
-                    columnActionContextMenu.addColumnActionItem(header, column);
+    private void addActionItems(final Map<String, String> headersMap, final HorizontalLayout gridHeader) {
+        final Popup popup = new Popup();
+        popup.setFor(uniqueId);
+        actionIcon.addClickListener(e -> {
+            final VerticalLayout layout = new VerticalLayout();
+            layout.setWidthFull();
+            layout.setSpacing(false);
+            layout.setMargin(false);
+            layout.setMaxHeight("75vh");
+
+            reorderedColumns.forEach(column -> {
+                if (column.getKey() != null) {
+                    final String header = Optional.ofNullable(headersMap)
+                            .map(headerMap -> headerMap.get(column.getKey())).orElse(null);
+                    if (!column.isFrozen() && header != null) {
+                        final Icon show = VaadinIcon.CHECK.create();
+                        show.setSize("10px");
+
+                        // If the column is setVisible(false) for initial hiding, it may have a stored
+                        // setting that overrides that.
+                        // Get the stored setting and set the context menu to show the correct status.
+                        // Some columns are set to be hidden at load, despite stored settings. Find
+                        // these and override if present.
+                        final String keyStub = uniqueId + "-visible";
+                        final boolean columnNotVisible = columnsHiddenOnLoad != null
+                                ? columnsHiddenOnLoad.contains(column.getKey())
+                                : false;
+                        final String storedVisibleSetting = columnNotVisible ? "false"
+                                : MemberSettingsStorageFactory.getUserSettingsStorage()
+                                        .get(keyStub + "-" + column.getKey());
+
+                        if (StringUtils.equals(storedVisibleSetting, "false")) {
+                            column.setVisible(false);
+                        } else {
+                            column.setVisible(true);
+                        }
+
+                        if (column.isVisible()) {
+                            show.setColor(VaadinHelper.CARMA_DARK_BLACK);
+                        } else {
+                            show.setColor(VaadinHelper.CARMA_WHITE);
+                        }
+
+                        final HorizontalLayout recordLayout = new HorizontalLayout(show, new Label(header));
+                        recordLayout.setPadding(false);
+                        recordLayout.setAlignItems(Alignment.BASELINE);
+
+                        recordLayout.addClickListener(listener -> {
+                            if (column.isVisible()) {
+                                show.setColor(VaadinHelper.CARMA_WHITE);
+                                column.setVisible(false);
+                            } else {
+                                show.setColor(VaadinHelper.CARMA_DARK_BLACK);
+                                column.setVisible(true);
+                            }
+                            storeVisibiltyUpdate(column);
+                        });
+                        layout.add(recordLayout);
+                    }
                 }
-            }
-        });
-    }
-
-    private class ColumnActionContextMenu extends ContextMenu {
-        private static final long serialVersionUID = 1L;
-
-        public ColumnActionContextMenu(final Component target) {
-            super(target);
-            setOpenOnClick(true);
-        }
-
-        void addColumnActionItem(final String label, final Grid.Column<T> column) {
-            final MenuItem menuItem = this.addItem(label, e -> {
-                final boolean checked = e.getSource().isChecked();
-                column.setVisible(checked);
-                storeVisibiltyUpdate(column);
             });
-            menuItem.setCheckable(true);
-            // If the column is setVisible(false) for initial hiding, it may have a stored
-            // setting that overrides that.
-            // Get the stored setting and set the context menu to show the correct status.
-            // Some columns are set to be hidden at load, despite stored settings. Find
-            // these and override if present.
-            final String keyStub = uniqueId + "-visible";
-            final boolean columnNotVisible = columnsHiddenOnLoad != null ? columnsHiddenOnLoad.contains(column.getKey())
-                    : false;
-            final String storedVisibleSetting = columnNotVisible ? "false"
-                    : MemberSettingsStorageFactory.getUserSettingsStorage().get(keyStub + "-" + column.getKey());
-            boolean showColumn = false;
-            if (StringUtils.equals(storedVisibleSetting, "true")) {
-                showColumn = true;
-            } else if ((StringUtils.equals(storedVisibleSetting, "false"))) {
-                showColumn = false;
-            } else {
-                showColumn = column.isVisible();
-            }
-            menuItem.setChecked(showColumn);
-        }
+            popup.removeAll();
+            popup.add(layout);
+            popup.show();
+        });
+        gridHeader.add(popup);
     }
 
     /**

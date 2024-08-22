@@ -101,6 +101,12 @@ public class VaadinHelper {
      * Total Sales Grid.
      */
     public static final String CARMA_DEEP_PURPLE = "#4B0082";
+	/**
+     * Standard colour white that can be used to 'hide' an icon by setting it to the
+     * standard background colour, rather than setting the icon as not visible
+     * (which affects render).
+     */
+    public static final String CARMA_WHITE = "#FFFFFF";
 
     private static final DatePickerI18n DATE_FORMAT_I18N = new DatePickerI18n();
 
