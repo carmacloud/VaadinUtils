@@ -1,8 +1,8 @@
 package au.com.vaadinutils.crud;
 
 /**
- * This is so a crud can select the same record after saving one or more
- * new records.<br>
+ * This is so a crud can select the same record after saving one or more new
+ * records.<br>
  * 
  * As the id doesn't exist before the entity is persisted and the child crud has
  * possibly multiple records uncommitted it needs a "GUID" that is created when
@@ -14,7 +14,7 @@ package au.com.vaadinutils.crud;
  * <pre>
  * <code>
  * 
-* @Override
+* &#64;Override
 * public String getGuid() {
 *     return guid;
 * }
@@ -26,6 +26,6 @@ package au.com.vaadinutils.crud;
  * 
  */
 public interface ChildCrudEntity extends CrudEntity {
-   
+
     String getGuid();
 }
