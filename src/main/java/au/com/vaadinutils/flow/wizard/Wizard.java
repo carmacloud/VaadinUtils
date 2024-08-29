@@ -63,7 +63,7 @@ public class Wizard extends VerticalLayout {
         footer.setWidthFull();
         footer.add(cancelButton, backButton, nextButton, finishButton);
         footer.setJustifyContentMode(JustifyContentMode.END);
-    
+
         this.addAndExpand(contentPanel);
 
         add(footer);
@@ -374,8 +374,8 @@ public class Wizard extends VerticalLayout {
             }
             // Note: using component.replace(old component, new component) does not work.
             contentPanel.removeAll();
-        } 
-        
+        }
+
         final Scroller scroller = new Scroller(step.getContent(), Scroller.ScrollDirection.VERTICAL);
         scroller.setSizeFull();
         contentPanel.add(scroller);

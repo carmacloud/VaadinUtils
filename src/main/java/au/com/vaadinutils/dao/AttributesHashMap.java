@@ -13,15 +13,15 @@ import javax.persistence.metamodel.SingularAttribute;
  */
 @SuppressWarnings("serial")
 public class AttributesHashMap<T> extends HashMap<SingularAttribute<T, Object>, Object> {
-    
+
     public AttributesHashMap() {
         this(5);
     }
-    
+
     public AttributesHashMap(final int initialSize) {
         super(initialSize);
     }
-    
+
     @SuppressWarnings("unchecked")
     public <K> void safePut(SingularAttribute<T, K> key, K value) {
         super.put((SingularAttribute<T, Object>) key, value);

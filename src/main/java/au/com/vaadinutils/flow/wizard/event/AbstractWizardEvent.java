@@ -11,7 +11,7 @@ public class AbstractWizardEvent extends ComponentEvent<Wizard> {
     public AbstractWizardEvent(Wizard source, boolean fromClient) {
         super(source, fromClient);
     }
-    
+
     /**
      * Returns the {@link Wizard} component that was the source of this event.
      * 
