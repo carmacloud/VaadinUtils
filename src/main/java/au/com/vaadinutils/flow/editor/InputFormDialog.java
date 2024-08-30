@@ -12,6 +12,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
@@ -55,6 +56,7 @@ public class InputFormDialog extends Dialog {
         cancelButton = createCancelButton(recipient);
 
         ok = createOkButton(form, recipient);
+        ok.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         ok.setId("Ok");
         ok.addClickShortcut(Key.ENTER, KeyModifier.ALT);
         ok.addThemeName("default");
