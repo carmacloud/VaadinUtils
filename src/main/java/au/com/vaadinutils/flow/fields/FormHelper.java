@@ -37,8 +37,8 @@ import com.vaadin.flow.data.converter.StringToDoubleConverter;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
-import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.flow.converter.LongNoGroupingConverter;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 import au.com.vaadinutils.flow.helper.VaadinHelper;
 
 /**

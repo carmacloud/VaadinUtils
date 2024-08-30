@@ -39,7 +39,7 @@ import com.vaadin.data.util.TransactionalPropertyWrapper;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.AbstractSelect;
 
-import au.com.vaadinutils.crud.CrudEntity;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 
 /**
  * Will be removed once dependent classes are removed.

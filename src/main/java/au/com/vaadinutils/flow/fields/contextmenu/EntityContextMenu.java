@@ -2,8 +2,8 @@ package au.com.vaadinutils.flow.fields.contextmenu;
 
 import com.vaadin.flow.component.contextmenu.ContextMenu;
 
-import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 
 public abstract class EntityContextMenu<E> extends ContextMenu {
     private static final long serialVersionUID = 1L;

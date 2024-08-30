@@ -28,12 +28,12 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
 import au.com.vaadinutils.crud.AdvancedSearchListener;
-import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.crud.GridHeadingPropertySet;
 import au.com.vaadinutils.crud.GridHeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.GridHeadingPropertySetIfc;
 import au.com.vaadinutils.crud.SearchableGrid;
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 
 /**
  * Replaced in V14 migration.

@@ -5,10 +5,11 @@ import java.util.HashSet;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
+
+import au.com.vaadinutils.flow.dao.CrudEntity;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
-
-import au.com.vaadinutils.crud.CrudEntity;
 
 /**
  * Will be removed once dependent classes are removed.
