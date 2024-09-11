@@ -398,16 +398,21 @@ public class GridExtender<T> {
                         // these and override if present.
                         final String keyStub = uniqueId + "-visible";
                         final boolean columnNotVisible = columnsHiddenOnLoad != null
-                                ? columnsHiddenOnLoad.contains(column.getKey())
+                                ? (columnsHiddenOnLoad.contains(column.getKey()) || !column.isVisible())
                                 : false;
+
                         final String storedVisibleSetting = columnNotVisible ? "false"
                                 : MemberSettingsStorageFactory.getUserSettingsStorage()
                                         .get(keyStub + "-" + column.getKey());
 
-                        if (StringUtils.equals(storedVisibleSetting, "false")) {
-                            column.setVisible(false);
-                        } else {
-                            column.setVisible(true);
+                        // If there are no stored settings, bypass this section and assume the current
+                        // settings are the ones to use.
+                        if (!storedVisibleSetting.isEmpty()) {
+                            if (StringUtils.equals(storedVisibleSetting, "false")) {
+                                column.setVisible(false);
+                            } else {
+                                column.setVisible(true);
+                            }
                         }
 
                         if (column.isVisible()) {
