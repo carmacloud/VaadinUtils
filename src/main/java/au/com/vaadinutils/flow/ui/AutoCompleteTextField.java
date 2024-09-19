@@ -58,14 +58,6 @@ public class AutoCompleteTextField<E> extends TextField {
      * }
      * </pre>
      * 
-     * The ContextMenu is removed from the parent after each interaction to allow
-     * the default context menu to still work for copy/paste. However there is an
-     * issue with the ContextMenuClosedEvent firing before the
-     * ContextMenuItemClickEvent. This means that the ContextMenu can't be removed
-     * from the parent in onContextMenuClosed, otherwise contextMenuItemClicked is
-     * never entered. The effect of this is that the default context menu stops
-     * working if the user clicks out of the auto complete context menu without
-     * selecting anything.
      */
     public AutoCompleteTextField() {
         addDetachListener(listener -> registrations.forEach(reg -> reg.remove()));
