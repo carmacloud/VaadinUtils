@@ -1,5 +1,8 @@
 package au.com.vaadinutils.ui;
 
+/**
+ * Migrated
+ */
 public interface AutoCompleteOptionSelected<E> {
-    public void optionSelected(AutoCompleteTextField<E> field, E option);
+    void optionSelected(AutoCompleteTextField<E> field, E option);
 }

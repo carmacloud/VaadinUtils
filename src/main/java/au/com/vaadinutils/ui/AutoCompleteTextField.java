@@ -16,7 +16,7 @@ import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.ui.TextField;
 
 /**
- * Retain, but need to convert UI to Flow
+ * Migrated
  */
 public class AutoCompleteTextField<E> extends TextField {
     private static final long serialVersionUID = 1L;
@@ -108,7 +108,7 @@ public class AutoCompleteTextField<E> extends TextField {
         contextMenu.addContextMenuCloseListener(new ContextMenuClosedListener() {
 
             @Override
-            public void onContextMenuClosed(ContextMenuClosedEvent event) {
+            public void onContextMenuClosed(final ContextMenuClosedEvent event) {
                 isContextMenuOpen = false;
             }
         });
@@ -120,11 +120,11 @@ public class AutoCompleteTextField<E> extends TextField {
         isContextMenuOpen = true;
 
         for (final Entry<E, String> option : options.entrySet()) {
-            ContextMenuItem menuItem = contextMenu.addItem(option.getValue());
+            final ContextMenuItem menuItem = contextMenu.addItem(option.getValue());
             menuItem.addItemClickListener(new ContextMenuItemClickListener() {
 
                 @Override
-                public void contextMenuItemClicked(ContextMenuItemClickEvent event) {
+                public void contextMenuItemClicked(final ContextMenuItemClickEvent event) {
                     optionListener.optionSelected(AutoCompleteTextField.this, option.getKey());
 
                     // Remove the context menu when it gets closed to allow the
@@ -135,7 +135,7 @@ public class AutoCompleteTextField<E> extends TextField {
         }
     }
 
-    public void setOptionSelectionListener(AutoCompleteOptionSelected<E> listener) {
+    public void setOptionSelectionListener(final AutoCompleteOptionSelected<E> listener) {
         this.optionListener = listener;
     }
 
@@ -143,7 +143,7 @@ public class AutoCompleteTextField<E> extends TextField {
         optionListener = null;
     }
 
-    public void setQueryListener(AutoCompeleteQueryListener<E> listener) {
+    public void setQueryListener(final AutoCompeleteQueryListener<E> listener) {
         this.listener = listener;
     }
 
@@ -151,7 +151,7 @@ public class AutoCompleteTextField<E> extends TextField {
         listener = null;
     }
 
-    public void addOption(E option, String optionLabel) {
+    public void addOption(final E option, final String optionLabel) {
         options.put(option, optionLabel);
     }
 
