@@ -9,44 +9,42 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Not needed for migration. Icons or buttons would be a better solution. A
- * Vaadin label that allows actions to be run by adding a LayoutClickListener
- * Retain, needs updating to Flow for UI.
+ * Migrated
  */
 @SuppressWarnings("serial")
 public class ClickableLabel extends VerticalLayout {
-    private Label label;
+    private final Label label;
 
     public ClickableLabel() {
         this(null);
         setImmediate(true);
     }
 
-    public ClickableLabel(String value) {
+    public ClickableLabel(final String value) {
         this(value, ContentMode.HTML);
     }
 
-    public ClickableLabel(String value, ContentMode contentMode) {
+    public ClickableLabel(final String value, final ContentMode contentMode) {
         label = new Label(value, contentMode);
         addComponent(label);
         setImmediate(true);
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         label.setValue(value);
     }
 
     @Override
-    public void setStyleName(String style) {
+    public void setStyleName(final String style) {
         label.setStyleName(style);
     }
 
     @Override
-    public void addStyleName(String style) {
+    public void addStyleName(final String style) {
         label.addStyleName(style);
     }
 
-    public void setContentMode(ContentMode contentMode) {
+    public void setContentMode(final ContentMode contentMode) {
         label.setContentMode(contentMode);
 
     }
@@ -64,7 +62,7 @@ public class ClickableLabel extends VerticalLayout {
         addLayoutClickListener(new LayoutClickListener() {
 
             @Override
-            public void layoutClick(LayoutClickEvent event) {
+            public void layoutClick(final LayoutClickEvent event) {
                 clickListener.buttonClick(new ClickEvent(event.getComponent()));
 
             }

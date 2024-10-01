@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.vaadin.peter.contextmenu.ContextMenu;
 
-import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 
 /**
  * Context menus are changed for V14+

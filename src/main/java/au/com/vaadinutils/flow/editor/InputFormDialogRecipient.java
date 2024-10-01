@@ -1,7 +1,7 @@
 package au.com.vaadinutils.flow.editor;
 
 public interface InputFormDialogRecipient {
-    public boolean onOK();
+    boolean onOK();
 
-    public boolean onCancel();
+    boolean onCancel();
 }

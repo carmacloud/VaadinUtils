@@ -4,34 +4,30 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.google.common.base.Preconditions;
 import com.vaadin.componentfactory.Popup;
-import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
-import com.vaadin.flow.component.BlurNotifier.BlurEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.HasValue.ValueChangeListener;
-import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.shared.Registration;
 
-import au.com.vaadinutils.flow.helper.VaadinHelper;
-
-public class AutoCompleteTextField<E> extends Div {
+public class AutoCompleteTextField<E> extends TextField {
 
     private static final long serialVersionUID = -6634513296678504250L;
-    private final TextField field = new TextField();
     private final Popup popup = new Popup();
-    private final Map<String, E> options = new LinkedHashMap<>();
+    private final Map<E, String> options = new LinkedHashMap<>();
     private AutoCompleteQueryListener<E> listener;
     private AutoCompleteOptionSelected<E> optionListener;
 
     private long dropDownWidth = 120;
+
+    private final List<Registration> registrations = new ArrayList<Registration>();
 
     /**
      * <pre>
@@ -62,63 +58,96 @@ public class AutoCompleteTextField<E> extends Div {
      * }
      * </pre>
      * 
-     * The ContextMenu is removed from the parent after each interaction to allow
-     * the default context menu to still work for copy/paste. However there is an
-     * issue with the ContextMenuClosedEvent firing before the
-     * ContextMenuItemClickEvent. This means that the ContextMenu can't be removed
-     * from the parent in onContextMenuClosed, otherwise contextMenuItemClicked is
-     * never entered. The effect of this is that the default context menu stops
-     * working if the user clicks out of the auto complete context menu without
-     * selecting anything.
      */
+    public AutoCompleteTextField() {
+        addDetachListener(listener -> registrations.forEach(reg -> reg.remove()));
+    }
 
-    public AutoCompleteTextField(final String fieldCaption, final String listCaption) {
+    /**
+     * 
+     * @param enterListener The {@link EnterListener} to allow the value in the
+     *                      {@link TextField} to be passed back to the calling
+     *                      class.<br>
+     *                      Note: Added to allow Search Text field on SearchView to
+     *                      initiate a search using the current contents of the
+     *                      field.<br>
+     *                      It may have unintended consequences if used in another
+     *                      screen.
+     */
+    public void addEnterKeyListener(final EnterListener enterListener) {
+        registrations.add(addKeyDownListener(Key.ENTER, e -> {
+            // Clear list and hide
+            popup.removeAll();
+            popup.hide();
+            // Pass back value that is in the text field.
+            enterListener.value(getValue());
+        }));
+    }
+
+    public interface EnterListener {
+        void value(String value);
+    }
+
+    /**
+     * Need to call this to have the popup list initialised and to tie the popup to
+     * the field.
+     * 
+     * @param component    A layout that extends {@link HasComponents} for linking
+     *                     the popup.
+     * @param fieldCaption A {@link String} that can be empty or null if not
+     *                     required.
+     * @param listCaption  A {@link String} that the popup uses to link to the
+     *                     field.
+     */
+    public void init(final HasComponents component, final String fieldCaption, final String listCaption) {
         Preconditions.checkNotNull(listCaption, "List Caption is required to link the popup to the field.");
         Preconditions.checkArgument(listCaption.length() > 0,
                 "List Caption is required to link the popup to the field.");
-        field.setClassName(listCaption);
-        field.setId(listCaption);
-        field.setLabel(fieldCaption);
-        field.setClearButtonVisible(true);
+        setClassName(listCaption);
+        setId(listCaption);
+        setLabel(fieldCaption);
+        setClearButtonVisible(true);
         popup.setFor(listCaption);
 
-        add(field, popup);
+        component.add(popup);
 
         // Set as Lazy and if also set, there can be a timeout value.
-        field.setValueChangeMode(ValueChangeMode.LAZY);
-        field.addValueChangeListener(valueChangeListener -> {
+        setValueChangeMode(ValueChangeMode.LAZY);
+        final Registration reg = addValueChangeListener(valueChangeListener -> {
             if (listener != null) {
                 options.clear();
                 listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
             }
 
-            if (valueChangeListener.isFromClient()) {
-                showOptionMenu();
+            if (!options.isEmpty()) {
+                if (valueChangeListener.isFromClient()) {
+                    showOptionMenu();
+                }
             }
         });
+        registrations.add(reg);
     }
 
     private void showOptionMenu() {
-        final List<String> listItems = new ArrayList<String>();
-        for (final Entry<String, E> option : options.entrySet()) {
-            listItems.add(option.getKey());
-        }
-
-        popup.show();
         popup.removeAll();
+        popup.show();
         final VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setSpacing(false);
         layout.setWidth(dropDownWidth, Unit.PIXELS);
-        for (final String string : listItems) {
-            final Span span = new Span(
-                    new Html("<font color='" + VaadinHelper.CARMA_DARK_BLACK + "'>" + string + "</font>"));
-            span.setId(string);
-            layout.add(span);
-            span.addClickListener(e -> {
-                optionListener.optionSelected(AutoCompleteTextField.this, options.get(string));
+        for (final E item : options.keySet()) {
+            final String label = options.get(item);
+            final Label labelHeader = new Label(label);
+            labelHeader.setId(label);
+            final Div div = new Div(labelHeader);
+            layout.add(div);
+            final Registration reg = div.addClickListener(e -> {
+                optionListener.optionSelected(AutoCompleteTextField.this, item);
                 // Clear list and hide
                 popup.removeAll();
                 popup.hide();
             });
+            registrations.add(reg);
         }
 
         popup.add(layout);
@@ -149,24 +178,7 @@ public class AutoCompleteTextField<E> extends Div {
     }
 
     public void addOption(final E option, final String optionLabel) {
-        options.put(optionLabel, option);
-    }
-
-    public TextField getField() {
-        return this.field;
-    }
-
-    public void addValueChangeListener(
-            final ValueChangeListener<? super ComponentValueChangeEvent<TextField, String>> event) {
-        field.addValueChangeListener(event);
-    }
-
-    public void addBlurListener(final ComponentEventListener<BlurEvent<TextField>> event) {
-        field.addBlurListener(event);
-    }
-
-    public void setTextChangeTimeout(final int timeout) {
-        field.setValueChangeTimeout(timeout);
+        options.put(option, optionLabel);
     }
 
     public void hideAutoComplete() {

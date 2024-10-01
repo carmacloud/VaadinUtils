@@ -37,9 +37,9 @@ import org.eclipse.persistence.jpa.JpaQuery;
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.RateLimiter;
 
-import au.com.vaadinutils.crud.ChildCrudEntity;
-import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.dao.JpaBaseDao.Condition;
+import au.com.vaadinutils.flow.dao.ChildCrudEntity;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 
 /**
  * 

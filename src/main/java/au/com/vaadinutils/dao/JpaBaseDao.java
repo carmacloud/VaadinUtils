@@ -35,7 +35,7 @@ import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 import com.google.common.base.Preconditions;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
-import au.com.vaadinutils.crud.CrudEntity;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 import au.com.vaadinutils.flow.dao.GenericDao;
 
 public class JpaBaseDao<E, K> implements GenericDao<E, K> {

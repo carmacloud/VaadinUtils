@@ -1,4 +1,4 @@
-package au.com.vaadinutils.crud;
+package au.com.vaadinutils.flow.dao;
 
 /**
  * This is so a crud can select the same record after saving one or more new
@@ -26,6 +26,5 @@ package au.com.vaadinutils.crud;
  * 
  */
 public interface ChildCrudEntity extends CrudEntity {
-
     String getGuid();
 }

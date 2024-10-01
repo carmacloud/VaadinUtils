@@ -76,6 +76,7 @@ import au.com.vaadinutils.fields.AdvancedSearchContentProvider;
 import au.com.vaadinutils.fields.ColorPickerField;
 import au.com.vaadinutils.fields.ComboBoxWithSearchField;
 import au.com.vaadinutils.fields.DataBoundButton;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 import au.com.vaadinutils.flow.helper.VaadinHelper;
 import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
 

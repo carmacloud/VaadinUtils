@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,6 +26,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
+import com.vaadin.flow.shared.Registration;
 
 import au.com.vaadinutils.flow.helper.VaadinHelper;
 
@@ -70,9 +72,12 @@ public class GridExtender<T> {
     private boolean resizable = false;
     private final List<Column<T>> resizableColumns = new ArrayList<>();
 
-    public GridExtender(final Grid<T> grid, final String uniqueId) {
+    private List<Registration> registrations;
+
+    public GridExtender(final Grid<T> grid, final String uniqueId, final List<Registration> registrations) {
         this.grid = grid;
         this.uniqueId = uniqueId;
+        this.registrations = registrations;
         actionIcon.setColor(VaadinHelper.CARMA_BLUE);
         actionIcon.setSize("12px");
         actionIcon.setId(uniqueId);
@@ -128,7 +133,7 @@ public class GridExtender<T> {
      * when a context menu attached.)
      */
     public void disableCheckboxSelectionOnRowClick() {
-        grid.getSelectionModel().addSelectionListener(e -> {
+        this.registrations.add(grid.getSelectionModel().addSelectionListener(e -> {
             if (!e.isFromClient() && !checkboxSelectionOnRowdisabled) {
                 if (!e.getAllSelectedItems().isEmpty()) {
                     final List<T> selectedItems = new ArrayList<T>(e.getAllSelectedItems());
@@ -151,7 +156,7 @@ public class GridExtender<T> {
                 userSelectedRows.clear();
                 userSelectedRows.addAll(e.getAllSelectedItems());
             }
-        });
+        }));
     }
 
     public List<String> getVisibleColumns() {
@@ -186,12 +191,12 @@ public class GridExtender<T> {
             }
         });
 
-        this.grid.addColumnResizeListener(e -> {
+        this.registrations.add(this.grid.addColumnResizeListener(e -> {
             final String key = e.getResizedColumn().getKey();
             // Strip any char so we only store a virtual number.
             final String width = e.getResizedColumn().getWidth().replaceAll("[a-z]", "");
             MemberSettingsStorageFactory.getUserSettingsStorage().store(keyStub + "-" + key, width);
-        });
+        }));
     }
 
     private Map<String, String> getSavedWidths(final List<String> columnKeys) {
@@ -265,13 +270,13 @@ public class GridExtender<T> {
                         grid.setColumnOrder(calculateColumnOrder(availableColumns, parsedColumns));
                     } catch (final IllegalArgumentException e) {
                         logger.warn(e.getMessage()
-                                + "\nError caused by missing entry (or entries) in TblUserSettings for SettingKey: "
+                                + "\nWarning Only: Missing entry (or entries) in TblUserSettings for SettingKey: "
                                 + keyStub);
                     }
                 }
             }
 
-            grid.addColumnReorderListener(event -> {
+            this.registrations.add(grid.addColumnReorderListener(event -> {
                 reorderedColumns = event.getColumns();
                 if (reorderedColumns.size() > 0) {
                     String parsedColumns = "";
@@ -282,7 +287,7 @@ public class GridExtender<T> {
                     parsedColumns = parsedColumns.substring(0, parsedColumns.length() - 2);
                     MemberSettingsStorageFactory.getUserSettingsStorage().store(keyStub, "" + parsedColumns);
                 }
-            });
+            }));
         }
     }
 
@@ -425,7 +430,7 @@ public class GridExtender<T> {
                         recordLayout.setPadding(false);
                         recordLayout.setAlignItems(Alignment.BASELINE);
 
-                        recordLayout.addClickListener(listener -> {
+                        this.registrations.add(recordLayout.addClickListener(listener -> {
                             if (column.isVisible()) {
                                 show.setColor(VaadinHelper.CARMA_WHITE);
                                 column.setVisible(false);
@@ -434,7 +439,7 @@ public class GridExtender<T> {
                                 column.setVisible(true);
                             }
                             storeVisibiltyUpdate(column);
-                        });
+                        }));
                         layout.add(recordLayout);
                     }
                 }
@@ -524,12 +529,16 @@ public class GridExtender<T> {
         this.resizableColumns.addAll(columns);
     }
 
+    private Set<String> nonSortKeys = new HashSet<String>();
+
     /**
-     * Sets all columns sortable, except the action menu (if included).
+     * Sets all columns sortable, except the action menu (if included) or any
+     * columns flagged as non-sort.
      */
     public void setAllColumnsSortable() {
         this.grid.getColumns().forEach(column -> {
-            column.setSortable(!ACTION_MENU.equalsIgnoreCase(column.getKey()));
+            column.setSortable(!ACTION_MENU.equalsIgnoreCase(column.getKey())
+                    && (nonSortKeys.isEmpty() || !nonSortKeys.contains(column.getKey())));
         });
     }
 
@@ -541,14 +550,27 @@ public class GridExtender<T> {
      *             status.
      */
     public void setColumnsNonSortable(final Set<String> keys) {
-        logger.info("Non-Sort: " + keys);
+        nonSortKeys = keys;
         keys.forEach(key -> {
             final Column<?> column = this.grid.getColumnByKey(key);
 
-            // Check in case an key has not been set for a column
+            // Check in case a key has not been set for a column
             if (column != null) {
                 column.setSortable(false);
             }
         });
+    }
+
+    /**
+     * Convenience method to set all columns non-sortable.<br. This overrides any
+     * settings that allowed a partial sort.
+     */
+    public void setAllColumnsNonSortable() {
+        final Set<String> keys = new HashSet<>();
+        grid.getColumns().forEach(col -> {
+            keys.add(col.getKey());
+        });
+        nonSortKeys = new HashSet<String>();
+        setColumnsNonSortable(keys);
     }
 }

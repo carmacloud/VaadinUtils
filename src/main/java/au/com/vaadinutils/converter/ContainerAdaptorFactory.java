@@ -5,7 +5,7 @@ import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container;
 
-import au.com.vaadinutils.crud.CrudEntity;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 
 /**
  * Will be removed once dependent classes are removed.

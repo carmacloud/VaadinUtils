@@ -45,7 +45,6 @@ public class UIReference {
         if (ui != null) {
             ui.setPollInterval(intervalInMillis);
         }
-
     }
 
     public void remove(final Component component) {

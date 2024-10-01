@@ -37,12 +37,12 @@ import com.vaadin.ui.Grid.RowDescriptionGenerator;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 
-import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.crud.GridHeadingPropertySet;
 import au.com.vaadinutils.crud.SearchableGrid;
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.NullFilter;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 
 /**
  * Replaced in Vaadin 14 migration.

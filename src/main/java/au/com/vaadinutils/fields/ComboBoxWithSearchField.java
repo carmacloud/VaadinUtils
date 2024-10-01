@@ -20,10 +20,10 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.themes.ValoTheme;
 
 import au.com.vaadinutils.crud.AdvancedSearchListener;
-import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.GridHeadingPropertySet.Builder;
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 
 /**
  * Replaced in V14 migration.

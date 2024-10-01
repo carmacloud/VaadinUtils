@@ -37,8 +37,8 @@ import com.vaadin.flow.data.converter.StringToDoubleConverter;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
-import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.flow.converter.LongNoGroupingConverter;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 import au.com.vaadinutils.flow.helper.VaadinHelper;
 
 /**
@@ -64,6 +64,8 @@ public class FormHelper<E extends CrudEntity> {
     // Binder
     private final Binder<E> binder;
 
+    private boolean ignoreFormLayout = false;
+
     // Store and form items so they can be retrieved and enabled/shown etc.
     private final Map<Component, FormItem> fieldsWithFormItems = new HashMap<>(10);
 
@@ -72,7 +74,7 @@ public class FormHelper<E extends CrudEntity> {
      * yourself.
      */
     public FormHelper() {
-        this(null, null, null);
+        this(null, null, null, false);
     }
 
     /**
@@ -81,8 +83,8 @@ public class FormHelper<E extends CrudEntity> {
      * 
      * @param layout The layout to add components to.
      */
-    public FormHelper(final Component layout) {
-        this(null, layout, null);
+    public FormHelper(final Component layout, final boolean ignoreFormLayout) {
+        this(null, layout, null, ignoreFormLayout);
     }
 
     /**
@@ -92,21 +94,25 @@ public class FormHelper<E extends CrudEntity> {
      * @param binder      The binder to bind to.
      */
     public FormHelper(final Class<E> entityClass, final Binder<E> binder) {
-        this(entityClass, null, binder);
+        this(entityClass, null, binder, false);
     }
 
     /**
      * Use this if you require binding and also require components to be added to a
      * layout
      * 
-     * @param entityClass The class of the entity being bound to.
-     * @param layout      the layout to add components to.
-     * @param binder      The binder to bind to.
+     * @param entityClass      The class of the entity being bound to.
+     * @param layout           the layout to add components to.
+     * @param binder           The binder to bind to.
+     * @param ignoreFormLayout A <code>boolean</code>. If true, just add the fields
+     *                         to the form rather than as a form item.
      */
-    public FormHelper(final Class<E> entityClass, final Component layout, final Binder<E> binder) {
+    public FormHelper(final Class<E> entityClass, final Component layout, final Binder<E> binder,
+            final boolean ignoreFormLayout) {
         this.entityClass = entityClass;
         this.layout = layout;
         this.binder = binder;
+        this.ignoreFormLayout = ignoreFormLayout;
     }
 
     // Single components
@@ -311,11 +317,11 @@ public class FormHelper<E extends CrudEntity> {
                 }
 
                 if (property != null) {
-                    final BindingBuilder<E, L> bindingBuilder2 = binder.forField(component);
+                    final BindingBuilder<E, L> bindingBuilder = binder.forField(component);
                     if (validator != null) {
-                        bindingBuilder2.withValidator(validator);
+                        bindingBuilder.withValidator(validator);
                     }
-                    bindingBuilder2.bind(property);
+                    bindingBuilder.bind(property);
                 }
 
                 addComponentIfRequired(component);
@@ -544,7 +550,7 @@ public class FormHelper<E extends CrudEntity> {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private void addComponentIfRequired(final Component field) {
         if (layout != null) {
-            if (layout instanceof FormLayout) {
+            if (layout instanceof FormLayout && !ignoreFormLayout) {
                 final String caption;
                 if (field instanceof HasLabel) {
                     final HasLabel field2 = (HasLabel) field;
