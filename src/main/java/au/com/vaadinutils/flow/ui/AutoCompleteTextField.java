@@ -116,6 +116,7 @@ public class AutoCompleteTextField<E> extends TextField {
         final Registration reg = addValueChangeListener(valueChangeListener -> {
             if (listener != null) {
                 options.clear();
+                popup.removeAll();
                 listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
             }
 
@@ -123,6 +124,8 @@ public class AutoCompleteTextField<E> extends TextField {
                 if (valueChangeListener.isFromClient()) {
                     showOptionMenu();
                 }
+            } else {
+                popup.removeAll();
             }
         });
         registrations.add(reg);
