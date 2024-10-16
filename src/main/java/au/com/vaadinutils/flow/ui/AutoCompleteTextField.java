@@ -1,8 +1,6 @@
 package au.com.vaadinutils.flow.ui;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Preconditions;
@@ -15,7 +13,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.flow.shared.Registration;
 
 public class AutoCompleteTextField<E> extends TextField {
 
@@ -26,8 +23,6 @@ public class AutoCompleteTextField<E> extends TextField {
     private AutoCompleteOptionSelected<E> optionListener;
 
     private long dropDownWidth = 120;
-
-    private final List<Registration> registrations = new ArrayList<Registration>();
 
     /**
      * <pre>
@@ -60,7 +55,6 @@ public class AutoCompleteTextField<E> extends TextField {
      * 
      */
     public AutoCompleteTextField() {
-        addDetachListener(listener -> registrations.forEach(reg -> reg.remove()));
     }
 
     /**
@@ -75,13 +69,13 @@ public class AutoCompleteTextField<E> extends TextField {
      *                      screen.
      */
     public void addEnterKeyListener(final EnterListener enterListener) {
-        registrations.add(addKeyDownListener(Key.ENTER, e -> {
+        addKeyDownListener(Key.ENTER, e -> {
             // Clear list and hide
             popup.removeAll();
             popup.hide();
             // Pass back value that is in the text field.
             enterListener.value(getValue());
-        }));
+        });
     }
 
     public interface EnterListener {
@@ -113,7 +107,7 @@ public class AutoCompleteTextField<E> extends TextField {
 
         // Set as Lazy and if also set, there can be a timeout value.
         setValueChangeMode(ValueChangeMode.LAZY);
-        final Registration reg = addValueChangeListener(valueChangeListener -> {
+        addValueChangeListener(valueChangeListener -> {
             if (listener != null) {
                 options.clear();
                 popup.removeAll();
@@ -128,7 +122,6 @@ public class AutoCompleteTextField<E> extends TextField {
                 popup.removeAll();
             }
         });
-        registrations.add(reg);
     }
 
     private void showOptionMenu() {
@@ -144,13 +137,12 @@ public class AutoCompleteTextField<E> extends TextField {
             labelHeader.setId(label);
             final Div div = new Div(labelHeader);
             layout.add(div);
-            final Registration reg = div.addClickListener(e -> {
+            div.addClickListener(e -> {
                 optionListener.optionSelected(AutoCompleteTextField.this, item);
                 // Clear list and hide
                 popup.removeAll();
                 popup.hide();
             });
-            registrations.add(reg);
         }
 
         popup.add(layout);
