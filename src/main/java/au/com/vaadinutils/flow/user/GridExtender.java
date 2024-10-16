@@ -482,7 +482,7 @@ public class GridExtender<T> {
         setActionIcon = true;
     }
 
-    private void setColumnsResizable() {
+    public void setColumnsResizable() {
         if (resizable) {
             // Never allow Action Menu column to be resizable.
             grid.getColumns().forEach(column -> {
