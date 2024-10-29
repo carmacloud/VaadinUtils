@@ -221,7 +221,9 @@ public class GridExtender<T> {
             final Float colWidth = Float.valueOf(width.replace("px", ""));
             // Avoid setting proposed width < 0
             final String widthToFit = colWidth >= 0 ? String.valueOf(colWidth) : "0";
-            column.setWidth(widthToFit + "px");
+            if (!column.isAutoWidth()) {
+                column.setWidth(widthToFit + "px");
+            }
         } catch (final NumberFormatException e) {
             logger.error(e.getMessage() + " " + column.getKey());
         }
@@ -499,10 +501,11 @@ public class GridExtender<T> {
                 }
             });
         } else {
-            // Set columns resizable if they don't have setFlexGrow(0)
+            // Set columns non-resizable. They will expand with window resizing.
             grid.getColumns().forEach(column -> {
                 if (column.getKey() != null && !ACTION_MENU.equalsIgnoreCase(column.getKey())) {
-                    column.setResizable(column.getFlexGrow() != 0);
+                    column.setResizable(false);
+                    column.setFlexGrow(1);
                 }
             });
         }
