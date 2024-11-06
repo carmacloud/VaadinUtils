@@ -50,12 +50,14 @@ public class Wizard extends VerticalLayout {
     private WizardProgressBar header;
 
     public Wizard() {
-        setSizeFull();
+        setId(this.getClass().getSimpleName());
         setPadding(true);
         setMargin(false);
+        setSpacing(false);
         contentPanel = new VerticalLayout();
         contentPanel.getStyle().set("border", "1px solid #E1E3E6");
-        contentPanel.setSizeFull();
+        contentPanel.setPadding(false);
+        contentPanel.setId(this.getClass().getSimpleName() + "-ContentPanel");
 
         initControlButtons();
 
@@ -148,8 +150,8 @@ public class Wizard extends VerticalLayout {
      * step currently at that position (if any) and any subsequent steps to the
      * right (adds one to their indices).
      */
-    public void addStep(WizardStep step, int index) {
-        String id = "wizard-step-" + step.hashCode();
+    public void addStep(final WizardStep step, final int index) {
+        final String id = "wizard-step-" + step.hashCode();
         addStep(step, id, index);
     }
 
@@ -158,7 +160,7 @@ public class Wizard extends VerticalLayout {
      * step currently at that position (if any) and any subsequent steps to the
      * right (adds one to their indices).
      */
-    public void addStep(WizardStep step, String id, int index) {
+    public void addStep(final WizardStep step, final String id, final int index) {
         if (idMap.containsKey(id)) {
             throw new IllegalArgumentException(String.format(
                     "A step with given id %s already exists. You must use unique identifiers for the steps.", id));
@@ -186,8 +188,8 @@ public class Wizard extends VerticalLayout {
      * @param newId        - id for the new step
      * @param existingStep - an existing step after which the step will be inserted
      */
-    public void addStepAfterStep(WizardStep newStep, String newId, WizardStep existingStep) {
-        int idx = steps.indexOf(existingStep) + 1;
+    public void addStepAfterStep(final WizardStep newStep, final String newId, final WizardStep existingStep) {
+        final int idx = steps.indexOf(existingStep) + 1;
         if (idx < 0) {
             throw new IllegalArgumentException("Can not insert " + newStep + " after the step " + existingStep + " as "
                     + existingStep + " is not currently a step in the wizard");
@@ -202,8 +204,8 @@ public class Wizard extends VerticalLayout {
      * @param newId        - id for the new step
      * @param existingStep - an existing step after which the step will be inserted
      */
-    public void addStepAfterStep(WizardStep newStep, WizardStep existingStep) {
-        String id = "wizard-step-" + "-" + (stepIndex++);
+    public void addStepAfterStep(final WizardStep newStep, final WizardStep existingStep) {
+        final String id = "wizard-step-" + "-" + (stepIndex++);
         addStepAfterStep(newStep, id, existingStep);
     }
 
@@ -217,7 +219,7 @@ public class Wizard extends VerticalLayout {
      * @param id
      * @throws IllegalStateException if the given {@code id} already exists.
      */
-    public void addStep(WizardStep step, String id) {
+    public void addStep(final WizardStep step, final String id) {
         addStep(step, id, steps.size());
     }
 
@@ -229,7 +231,7 @@ public class Wizard extends VerticalLayout {
      * 
      * @param step
      */
-    public void addStep(WizardStep step) {
+    public void addStep(final WizardStep step) {
         addStep(step, "wizard-step-" + stepIndex++);
     }
 
@@ -244,7 +246,7 @@ public class Wizard extends VerticalLayout {
      *                 {@link WizardStepSetChangedEvent}
      * @return A {@link Registration} so that it can be removed if needed.
      */
-    public Registration addStepChangeListener(ComponentEventListener<WizardStepSetChangedEvent> listener) {
+    public Registration addStepChangeListener(final ComponentEventListener<WizardStepSetChangedEvent> listener) {
         return addListener(WizardStepSetChangedEvent.class, listener);
     }
 
@@ -256,7 +258,7 @@ public class Wizard extends VerticalLayout {
      *                 {@link WizardStepActivationEvent}
      * @return A {@link Registration} so that it can be removed if needed.
      */
-    public Registration addStepActivationListener(ComponentEventListener<WizardStepActivationEvent> listener) {
+    public Registration addStepActivationListener(final ComponentEventListener<WizardStepActivationEvent> listener) {
         return addListener(WizardStepActivationEvent.class, listener);
     }
 
@@ -268,7 +270,7 @@ public class Wizard extends VerticalLayout {
      *                 {@link WizardCompletedEvent}
      * @return A {@link Registration} so that it can be removed if needed.
      */
-    public Registration addCompletedChangeListener(ComponentEventListener<WizardCompletedEvent> listener) {
+    public Registration addCompletedChangeListener(final ComponentEventListener<WizardCompletedEvent> listener) {
         return addListener(WizardCompletedEvent.class, listener);
     }
 
@@ -280,7 +282,7 @@ public class Wizard extends VerticalLayout {
      *                 {@link WizardCancelledEvent}
      * @return A {@link Registration} so that it can be removed if needed.
      */
-    public Registration addCancelledChangeListener(ComponentEventListener<WizardCancelledEvent> listener) {
+    public Registration addCancelledChangeListener(final ComponentEventListener<WizardCancelledEvent> listener) {
         return addListener(WizardCancelledEvent.class, listener);
     }
 
@@ -290,7 +292,7 @@ public class Wizard extends VerticalLayout {
      * @param step step to check for completion.
      * @return {@code true} if the given step is already completed.
      */
-    public boolean isCompleted(WizardStep step) {
+    public boolean isCompleted(final WizardStep step) {
         return steps.indexOf(step) < steps.indexOf(currentStep);
     }
 
@@ -300,7 +302,7 @@ public class Wizard extends VerticalLayout {
      * @param step step to check for.
      * @return {@code true} if the given step is the currently active step.
      */
-    public boolean isActive(WizardStep step) {
+    public boolean isActive(final WizardStep step) {
         return (step == currentStep);
     }
 
@@ -342,7 +344,7 @@ public class Wizard extends VerticalLayout {
         return cancelButton;
     }
 
-    protected void activateStep(WizardStep step) {
+    protected void activateStep(final WizardStep step) {
         if (step == null) {
             return;
         }
@@ -354,7 +356,7 @@ public class Wizard extends VerticalLayout {
             }
 
             // ask if we're allowed to move
-            boolean advancing = steps.indexOf(step) > steps.indexOf(currentStep);
+            final boolean advancing = steps.indexOf(step) > steps.indexOf(currentStep);
             if (advancing) {
                 if (!currentStep.onAdvance()) {
                     // not allowed to advance
@@ -368,7 +370,7 @@ public class Wizard extends VerticalLayout {
             }
 
             // Keep track of the last step that was completed
-            int currentIndex = steps.indexOf(currentStep);
+            final int currentIndex = steps.indexOf(currentStep);
             if (lastCompletedStep == null || steps.indexOf(lastCompletedStep) < currentIndex) {
                 lastCompletedStep = currentStep;
             }
@@ -386,12 +388,12 @@ public class Wizard extends VerticalLayout {
         fireEvent(new WizardStepActivationEvent(this, false, step));
     }
 
-    protected void activateStep(String id) {
+    protected void activateStep(final String id) {
         final WizardStep step = idMap.get(id);
         if (step != null) {
             // check that we don't go past the lastCompletedStep by using the id
-            int lastCompletedIndex = lastCompletedStep == null ? -1 : steps.indexOf(lastCompletedStep);
-            int stepIndex = steps.indexOf(step);
+            final int lastCompletedIndex = lastCompletedStep == null ? -1 : steps.indexOf(lastCompletedStep);
+            final int stepIndex = steps.indexOf(step);
 
             if (lastCompletedIndex < stepIndex) {
                 activateStep(lastCompletedStep);
@@ -401,8 +403,8 @@ public class Wizard extends VerticalLayout {
         }
     }
 
-    protected String getId(WizardStep step) {
-        for (Map.Entry<String, WizardStep> entry : idMap.entrySet()) {
+    protected String getId(final WizardStep step) {
+        for (final Map.Entry<String, WizardStep> entry : idMap.entrySet()) {
             if (entry.getValue().equals(step)) {
                 return entry.getKey();
             }
@@ -410,14 +412,14 @@ public class Wizard extends VerticalLayout {
         return null;
     }
 
-    protected boolean isFirstStep(WizardStep step) {
+    protected boolean isFirstStep(final WizardStep step) {
         if (step != null) {
             return steps.indexOf(step) == 0;
         }
         return false;
     }
 
-    protected boolean isLastStep(WizardStep step) {
+    protected boolean isLastStep(final WizardStep step) {
         if (step != null && !steps.isEmpty()) {
             return steps.indexOf(step) == (steps.size() - 1);
         }
@@ -454,7 +456,7 @@ public class Wizard extends VerticalLayout {
         if (isLastStep(currentStep)) {
             finish();
         } else {
-            int currentIndex = steps.indexOf(currentStep);
+            final int currentIndex = steps.indexOf(currentStep);
             activateStep(steps.get(currentIndex + 1));
         }
     }
@@ -465,7 +467,7 @@ public class Wizard extends VerticalLayout {
      * step. This method is called when user clicks the back button.
      */
     public void back() {
-        int currentIndex = steps.indexOf(currentStep);
+        final int currentIndex = steps.indexOf(currentStep);
         if (currentIndex > 0) {
             activateStep(steps.get(currentIndex - 1));
         }
@@ -477,9 +479,9 @@ public class Wizard extends VerticalLayout {
      * 
      * @param stepToRemove The {@link WizardStep} to be removed.
      */
-    public void removeStep(WizardStep stepToRemove) {
+    public void removeStep(final WizardStep stepToRemove) {
         if (idMap.containsValue(stepToRemove)) {
-            for (Map.Entry<String, WizardStep> entry : idMap.entrySet()) {
+            for (final Map.Entry<String, WizardStep> entry : idMap.entrySet()) {
                 if (entry.getValue().equals(stepToRemove)) {
                     // delegate the actual removal to the overloaded method
                     removeStep(entry.getKey());
@@ -498,9 +500,9 @@ public class Wizard extends VerticalLayout {
      * @see #isCompleted(WizardStep)
      * @see #isActive(WizardStep)
      */
-    public void removeStep(String id) {
+    public void removeStep(final String id) {
         if (idMap.containsKey(id)) {
-            WizardStep stepToRemove = idMap.get(id);
+            final WizardStep stepToRemove = idMap.get(id);
             if (isCompleted(stepToRemove)) {
                 throw new IllegalStateException("Already completed step cannot be removed.");
             }

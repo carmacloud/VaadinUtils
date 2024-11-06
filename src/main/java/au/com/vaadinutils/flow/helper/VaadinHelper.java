@@ -101,7 +101,7 @@ public class VaadinHelper {
      * Total Sales Grid.
      */
     public static final String CARMA_DEEP_PURPLE = "#4B0082";
-	/**
+    /**
      * Standard colour white that can be used to 'hide' an icon by setting it to the
      * standard background colour, rather than setting the icon as not visible
      * (which affects render).
@@ -285,6 +285,7 @@ public class VaadinHelper {
         }
 
         final VerticalLayout layout = new VerticalLayout(header, contents);
+        layout.setId("NotificationType-Layout");
         layout.addClickListener(e -> {
             notification.close();
         });

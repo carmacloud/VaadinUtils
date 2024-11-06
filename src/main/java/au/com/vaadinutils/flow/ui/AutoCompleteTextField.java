@@ -131,6 +131,7 @@ public class AutoCompleteTextField<E> extends TextField {
         layout.setMargin(false);
         layout.setSpacing(false);
         layout.setWidth(dropDownWidth, Unit.PIXELS);
+        layout.setId(this.getClass().getSimpleName() + "-Layout");
         for (final E item : options.keySet()) {
             final String label = options.get(item);
             final Label labelHeader = new Label(label);

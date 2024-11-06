@@ -25,17 +25,19 @@ public class WizardProgressBar extends VerticalLayout implements WizardProgressL
     private final HorizontalLayout captionLayout = new HorizontalLayout();
     private int activeStepIndex;
 
-    public WizardProgressBar(Wizard wizard) {
+    public WizardProgressBar(final Wizard wizard) {
+        setId(this.getClass().getSimpleName());
         this.wizard = wizard;
         setPadding(false);
         setMargin(false);
-        progressBar.setWidth("100%");
+        setSpacing(false);
+        progressBar.setWidthFull();
         progressBar.setHeight("10px");
         progressBar.addClassName("WizardProgressBar");
         progressBar.addThemeName("transparent");
         captionLayout.setJustifyContentMode(JustifyContentMode.EVENLY);
         captionLayout.setSpacing(false);
-        captionLayout.setWidth("100%");
+        captionLayout.setWidthFull();
 
         this.wizard.addStepChangeListener(e -> stepSetChanged(e));
         this.wizard.addCompletedChangeListener(e -> wizardCompleted(e));
@@ -46,22 +48,22 @@ public class WizardProgressBar extends VerticalLayout implements WizardProgressL
     }
 
     private void updateProgressBar() {
-        int stepCount = captionLayout.getComponentCount();
-        float progressValue = activeStepIndex / ((float) stepCount + 1);
+        final int stepCount = captionLayout.getComponentCount();
+        final float progressValue = activeStepIndex / ((float) stepCount + 1);
         progressBar.setValue(progressValue);
     }
 
     private void updateStepCaptions() {
         captionLayout.removeAll();
         int index = 1;
-        for (WizardStep step : wizard.getSteps()) {
+        for (final WizardStep step : wizard.getSteps()) {
             final Html label = createCaptionLabel(index, step);
             captionLayout.add(label);
             index++;
         }
     }
 
-    private Html createCaptionLabel(int index, WizardStep step) {
+    private Html createCaptionLabel(final int index, final WizardStep step) {
         String labelCaption = index + ". " + step.getCaption();
         final String fontColour;
         if (wizard.isActive(step)) {
@@ -81,25 +83,25 @@ public class WizardProgressBar extends VerticalLayout implements WizardProgressL
     }
 
     @Override
-    public void activeStepChanged(WizardStepActivationEvent event) {
+    public void activeStepChanged(final WizardStepActivationEvent event) {
         final List<WizardStep> allSteps = wizard.getSteps();
         activeStepIndex = allSteps.indexOf(event.getActivatedStep()) + 1;
         updateProgressAndCaptions();
     }
 
     @Override
-    public void stepSetChanged(WizardStepSetChangedEvent event) {
+    public void stepSetChanged(final WizardStepSetChangedEvent event) {
         updateProgressAndCaptions();
     }
 
     @Override
-    public void wizardCompleted(WizardCompletedEvent event) {
+    public void wizardCompleted(final WizardCompletedEvent event) {
         progressBar.setValue(1.0f);
         updateStepCaptions();
     }
 
     @Override
-    public void wizardCancelled(WizardCancelledEvent event) {
+    public void wizardCancelled(final WizardCancelledEvent event) {
         // Not used.
     }
 }
