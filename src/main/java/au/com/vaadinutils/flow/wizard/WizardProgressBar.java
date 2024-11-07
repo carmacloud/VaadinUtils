@@ -72,7 +72,7 @@ public class WizardProgressBar extends VerticalLayout implements WizardProgressL
         } else if (wizard.isCompleted(step)) {
             fontColour = VaadinHelper.CARMA_DARK_BLACK;
         } else {
-            fontColour = VaadinHelper.CARMA_LIGHT_GREY;
+            fontColour = VaadinHelper.CARMA_GREY;
         }
         return new Html("<span><font color='" + fontColour + "'>" + labelCaption + "</font></span>");
     }

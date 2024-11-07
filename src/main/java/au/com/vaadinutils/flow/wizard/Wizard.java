@@ -15,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 
+import au.com.vaadinutils.flow.helper.VaadinHelper;
 import au.com.vaadinutils.flow.wizard.event.WizardCancelledEvent;
 import au.com.vaadinutils.flow.wizard.event.WizardCompletedEvent;
 import au.com.vaadinutils.flow.wizard.event.WizardProgressListener;
@@ -55,7 +56,7 @@ public class Wizard extends VerticalLayout {
         setMargin(false);
         setSpacing(false);
         contentPanel = new VerticalLayout();
-        contentPanel.getStyle().set("border", "1px solid #E1E3E6");
+        contentPanel.getStyle().set("border", "1px solid " + VaadinHelper.CARMA_LIGHT_GREY);
         contentPanel.setPadding(false);
         contentPanel.setId(this.getClass().getSimpleName() + "-ContentPanel");
 

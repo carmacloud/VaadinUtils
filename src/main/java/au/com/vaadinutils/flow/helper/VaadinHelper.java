@@ -61,7 +61,8 @@ public class VaadinHelper {
      */
     public static final String CARMA_RED = "#FF0000";
     /**
-     * Standard carma colour maroon. Used where we want red, but not the red colour.
+     * Standard carma colour maroon. Used where we want a red, but not the error
+     * colour.
      */
     public static final String CARMA_MAROON = "#800000";
     /**
@@ -83,7 +84,11 @@ public class VaadinHelper {
     /**
      * Standard carma colour light grey
      */
-    public static final String CARMA_LIGHT_GREY = "#6C6D6F";
+    public static final String CARMA_GREY = "#6C6D6F";
+    /**
+     * Standard colour light grey that is used on the border of the Wizard.
+     */
+    public static final String CARMA_LIGHT_GREY = "#AAACAF";
     /**
      * Standard carma colour black. Should match the primary text colour.
      */
