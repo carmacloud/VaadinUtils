@@ -20,7 +20,7 @@ public class EntityManagerInjectorFilter implements Filter {
     private final Logger logger = LogManager.getLogger();
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(final FilterConfig filterConfig) throws ServletException {
     }
 
     @Override
@@ -35,8 +35,15 @@ public class EntityManagerInjectorFilter implements Filter {
                     return null;
                 }
             });
-        } catch (Exception e1) {
-            logger.error(e1, e1);
+        } catch (final Exception e1) {
+            // CAR-5548: temporary fix to suppress this error from clogging up the log
+            // files.
+            if ("Unregistered node was not found based on its id. The tree is most likely corrupted."
+                    .equalsIgnoreCase(e1.getMessage())) {
+                logger.error("Error: " + e1.getMessage());
+            } else {
+                logger.error(e1, e1);
+            }
         }
     }
 

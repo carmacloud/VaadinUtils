@@ -65,7 +65,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
      * @param caption
      * @param message
      */
-    public WorkingDialog(String caption, String message) {
+    public WorkingDialog(final String caption, final String message) {
         this(caption, message, null);
     }
 
@@ -77,7 +77,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
      * @param message
      * @param listener
      */
-    public WorkingDialog(String caption, String message, CancelListener listener) {
+    public WorkingDialog(final String caption, final String message, final CancelListener listener) {
         this.caption = caption;
         logger.debug("Process started for " + caption + " -> " + message);
         this.ui = UI.getCurrent();
@@ -88,6 +88,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
         content.setSizeFull();
         content.setMargin(true);
         content.setSpacing(true);
+        content.setId(this.getClass().getSimpleName() + "-Content");
 
         this.cancelListener = listener;
 
@@ -135,7 +136,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
     }
 
     @Override
-    public void progress(int count, int max, final String message) {
+    public void progress(final int count, final int max, final String message) {
         logger.debug("Process progress " + this.caption + " -> " + message);
         ui.access(() -> {
             messageLabel.setText(message);
@@ -143,23 +144,23 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
     }
 
     @Override
-    public void complete(int sent) {
+    public void complete(final int sent) {
         logger.debug("Process completed (" + sent + ") " + this.caption);
         WorkingDialog.this.close();
     }
 
     @Override
-    public void itemError(Exception e, String status) {
+    public void itemError(final Exception e, final String status) {
         // Ignored.
     }
 
     @Override
-    public void exception(Exception e) {
+    public void exception(final Exception e) {
         logger.error("Process failed " + e.getMessage());
         WorkingDialog.this.close();
     }
 
-    public void removeUserComponent(Component component) {
+    public void removeUserComponent(final Component component) {
         ui.access(() -> {
             layout.remove(component);
         });

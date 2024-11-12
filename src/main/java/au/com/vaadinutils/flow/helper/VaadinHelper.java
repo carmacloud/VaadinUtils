@@ -61,7 +61,8 @@ public class VaadinHelper {
      */
     public static final String CARMA_RED = "#FF0000";
     /**
-     * Standard carma colour maroon. Used where we want red, but not the red colour.
+     * Standard carma colour maroon. Used where we want a red, but not the error
+     * colour.
      */
     public static final String CARMA_MAROON = "#800000";
     /**
@@ -83,7 +84,11 @@ public class VaadinHelper {
     /**
      * Standard carma colour light grey
      */
-    public static final String CARMA_LIGHT_GREY = "#6C6D6F";
+    public static final String CARMA_GREY = "#6C6D6F";
+    /**
+     * Standard colour light grey that is used on the border of the Wizard.
+     */
+    public static final String CARMA_LIGHT_GREY = "#AAACAF";
     /**
      * Standard carma colour black. Should match the primary text colour.
      */
@@ -101,7 +106,7 @@ public class VaadinHelper {
      * Total Sales Grid.
      */
     public static final String CARMA_DEEP_PURPLE = "#4B0082";
-	/**
+    /**
      * Standard colour white that can be used to 'hide' an icon by setting it to the
      * standard background colour, rather than setting the icon as not visible
      * (which affects render).
@@ -285,6 +290,7 @@ public class VaadinHelper {
         }
 
         final VerticalLayout layout = new VerticalLayout(header, contents);
+        layout.setId("NotificationType-Layout");
         layout.addClickListener(e -> {
             notification.close();
         });

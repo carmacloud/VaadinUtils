@@ -389,6 +389,7 @@ public class GridExtender<T> {
             layout.setSpacing(false);
             layout.setMargin(false);
             layout.setMaxHeight("75vh");
+            layout.setId(this.getClass().getSimpleName() + "-Layout");
 
             reorderedColumns.forEach(column -> {
                 if (column.getKey() != null) {

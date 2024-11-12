@@ -46,6 +46,7 @@ public class InputFormDialog extends Dialog {
         layout.setMargin(false);
         layout.setWidthFull();
         layout.addAndExpand(form);
+        layout.setId(this.getClass().getSimpleName() + "-Layout");
 
         buttonLayout = new HorizontalLayout();
         buttonLayout.setMargin(false);
