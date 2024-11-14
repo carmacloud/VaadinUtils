@@ -50,10 +50,10 @@ public class ErrorWindow {
     public ErrorWindow() {
     }
 
-    ErrorWindow(boolean noUI) {
+    ErrorWindow(final boolean noUI) {
     }
 
-    public static void showErrorWindow(Throwable e, String name) {
+    public static void showErrorWindow(final Throwable e, final String name) {
         viewName = name;
         new ErrorWindow(true).internalShowErrorWindow(e);
     }
@@ -64,7 +64,7 @@ public class ErrorWindow {
 
         try {
             ViolationConstraintHandler.expandException(error);
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             error = e;
         }
 
@@ -91,7 +91,7 @@ public class ErrorWindow {
                 id += getBuildVersion();
 
                 // prevent hashcode being negative
-                Long hashId = new Long(id.hashCode()) + new Long(Integer.MAX_VALUE);
+                final long hashId = new Long(id.hashCode()) + new Long(Integer.MAX_VALUE);
                 id = "" + hashId;
 
                 // add the message after the hash id is calculated
@@ -122,7 +122,7 @@ public class ErrorWindow {
         if (!isExempted(cause)) {
             if (UI.getCurrent() != null) {
                 UI.getCurrent().access(() -> {
-                    Stopwatch lastTime = (Stopwatch) UI.getCurrent().getSession()
+                    final Stopwatch lastTime = (Stopwatch) UI.getCurrent().getSession()
                             .getAttribute("Last Time Error Window Shown");
 
                     // don't display the error window more than once every 2
@@ -145,18 +145,18 @@ public class ErrorWindow {
         }
     }
 
-    private String getCustomHashString(String fullTrace) {
+    private String getCustomHashString(final String fullTrace) {
         try {
             return ErrorSettingsFactory.getErrorSettings().getCustomHashString(fullTrace);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error(e, e);
             return fullTrace;
         }
     }
 
-    private String extractTrace(Throwable t) {
+    private String extractTrace(final Throwable t) {
         String fullTrace = t.getClass().getCanonicalName() + "\n";
-        for (StackTraceElement trace : t.getStackTrace()) {
+        for (final StackTraceElement trace : t.getStackTrace()) {
             fullTrace += "at " + trace.getClassName() + "." + trace.getMethodName() + "(" + trace.getFileName() + ":"
                     + trace.getLineNumber() + ")\n";
         }
@@ -174,7 +174,7 @@ public class ErrorWindow {
 
                 generateEmail(time, finalId, finalTrace, reference, "Error not displayed to user", supportEmail, "", "",
                         "", null);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 logger.error(e, e);
             }
         } else {
@@ -182,7 +182,7 @@ public class ErrorWindow {
         }
     }
 
-    boolean isExempted(Throwable cause) {
+    boolean isExempted(final Throwable cause) {
         final Map<String, Set<String>> exemptedExceptions = new HashMap<>(8);
         exemptedExceptions.put("ClientAbortException", new HashSet<String>());
         exemptedExceptions.put("SocketException", new HashSet<String>());
@@ -200,7 +200,7 @@ public class ErrorWindow {
         final Set<String> expectedMessage = exemptedExceptions.get(cause.getClass().getSimpleName());
         if (expectedMessage != null) {
             if (!expectedMessage.isEmpty()) {
-                for (String message : expectedMessage) {
+                for (final String message : expectedMessage) {
                     if (cause.getMessage().equalsIgnoreCase(message)) {
                         return true;
                     }
@@ -236,13 +236,14 @@ public class ErrorWindow {
 //        screenshot.takeScreenshot();
     }
 
-    private void showWindow(String causeClass, String id, final Date time, final String finalId,
+    private void showWindow(final String causeClass, final String id, final Date time, final String finalId,
             final String finalTrace, final String reference, final byte[] imageData) {
         final ConfirmDialog window = new ConfirmDialog();
         window.setWidth("600px");
         window.setHeader("Error: " + id);
 
         final VerticalLayout layout = new VerticalLayout();
+        layout.setId(this.getClass().getSimpleName() + "-Layout");
         final Html message = new Html(
                 "<p>" + "<b>An error has occurred (" + causeClass + ").<br>Reference: </b>" + reference + "</p> ");
 
@@ -260,7 +261,7 @@ public class ErrorWindow {
                 logger.info(getViewName());
                 generateEmail(time, finalId, finalTrace, reference, notes.getValue(), supportEmail, getViewName(),
                         getUserName(), getUserEmail(), imageData);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 VaadinHelper.notificationDialog("Error sending error report", NotificationType.ERROR);
                 logger.error(e, e);
             } finally {
@@ -284,7 +285,7 @@ public class ErrorWindow {
         logger.error("Reference: " + reference + " " + notes);
         final String buildVersion = getBuildVersion();
         final String companyName = getSystemName();
-        Runnable runner = new Runnable() {
+        final Runnable runner = new Runnable() {
 
             @Override
             public void run() {
@@ -293,7 +294,7 @@ public class ErrorWindow {
 
                 ByteArrayOutputStream stream = null;
                 String filename = null;
-                String MIMEType = AttachmentType.TXT.getMIMETypeString();
+                final String MIMEType = AttachmentType.TXT.getMIMETypeString();
                 if (imageData != null) {
                     stream = new ByteArrayOutputStream();
                     try {
@@ -301,7 +302,7 @@ public class ErrorWindow {
                         filename = "screen.png";
                         // TODO LC: Removed until Screenshot addon replacement is found.
 //                        MIMEType = ScreenshotMimeType.PNG.getMimeType();
-                    } catch (IOException e) {
+                    } catch (final IOException e) {
                         logger.error(e, e);
                     }
                 }
@@ -326,7 +327,7 @@ public class ErrorWindow {
     private String getSupportCompanyName() {
         try {
             return ErrorSettingsFactory.getErrorSettings().getSupportCompanyName();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error(e, e);
         }
         return "Error getting Support Company Name";
@@ -335,7 +336,7 @@ public class ErrorWindow {
     private String getTargetEmailAddress() {
         try {
             return ErrorSettingsFactory.getErrorSettings().getTargetEmailAddress();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error(e, e);
         }
         return "Error getting Target Email Address";
@@ -344,7 +345,7 @@ public class ErrorWindow {
     private String getUserEmail() {
         try {
             return ErrorSettingsFactory.getErrorSettings().getUserEmail();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error(e, e);
         }
         return "Error getting user email";
@@ -353,7 +354,7 @@ public class ErrorWindow {
     private String getBuildVersion() {
         try {
             return ErrorSettingsFactory.getErrorSettings().getBuildVersion();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error(e, e);
         }
         return "Error getting build Version";
@@ -362,7 +363,7 @@ public class ErrorWindow {
     private String getUserName() {
         try {
             return ErrorSettingsFactory.getErrorSettings().getUserName();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error(e, e);
         }
         return "Error getting user name";
@@ -371,7 +372,7 @@ public class ErrorWindow {
     private String getSystemName() {
         try {
             return ErrorSettingsFactory.getErrorSettings().getSystemName();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.error(e, e);
         }
         return "Error getting System name";
