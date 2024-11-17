@@ -491,22 +491,23 @@ public class GridExtender<T> {
             grid.getColumns().forEach(column -> {
                 if (column.getKey() != null && !ACTION_MENU.equalsIgnoreCase(column.getKey())) {
                     column.setResizable(true);
-                    column.setFlexGrow(0);
-                }
-            });
-        } else if (!resizableColumns.isEmpty()) {
-            resizableColumns.forEach(column -> {
-                if (!ACTION_MENU.equalsIgnoreCase(column.getKey())) {
-                    column.setResizable(true);
-                    column.setFlexGrow(0);
+                    column.setFlexGrow(1);
                 }
             });
         } else {
             // Set columns non-resizable. They will expand with window resizing.
             grid.getColumns().forEach(column -> {
-                if (column.getKey() != null && !ACTION_MENU.equalsIgnoreCase(column.getKey())) {
+                if (column.getKey() != null) {
                     column.setResizable(false);
-                    column.setFlexGrow(1);
+                    column.setFlexGrow(0);
+                }
+            });
+        }
+        if (!resizableColumns.isEmpty()) {
+            resizableColumns.forEach(column -> {
+                if (!ACTION_MENU.equalsIgnoreCase(column.getKey())) {
+                    column.setResizable(true);
+                    column.setFlexGrow(0);
                 }
             });
         }
