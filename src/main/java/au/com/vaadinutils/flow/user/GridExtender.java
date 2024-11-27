@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.common.base.Preconditions;
 import com.vaadin.componentfactory.Popup;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
@@ -59,6 +60,7 @@ public class GridExtender<T> {
     private final Grid<T> grid;
     private final String uniqueId;
     private List<String> columnsHiddenOnLoad;
+    private boolean initComplete = false;
 
     // For the additional column that optionally contains action filter and/or
     // context menu.
@@ -108,6 +110,7 @@ public class GridExtender<T> {
         configureSaveColumnVisible();
         configureSaveColumnOrder();
         setAllColumnsSortable();
+        initComplete = true;
     }
 
     final List<T> userSelectedRows = new ArrayList<T>();
@@ -485,29 +488,20 @@ public class GridExtender<T> {
         setActionIcon = true;
     }
 
-    public void setColumnsResizable() {
+    private void setColumnsResizable() {
         if (resizable) {
-            // Never allow Action Menu column to be resizable.
+            // Never allow Action Menu column to be resizable, or where flex grow is 0.
             grid.getColumns().forEach(column -> {
-                if (column.getKey() != null && !ACTION_MENU.equalsIgnoreCase(column.getKey())) {
+                if (column.getKey() != null && column.getFlexGrow() != 0
+                        && !ACTION_MENU.equalsIgnoreCase(column.getKey())) {
                     column.setResizable(true);
-                    column.setFlexGrow(1);
                 }
             });
-        } else {
-            // Set columns non-resizable. They will expand with window resizing.
-            grid.getColumns().forEach(column -> {
-                if (column.getKey() != null) {
-                    column.setResizable(false);
-                    column.setFlexGrow(0);
-                }
-            });
-        }
-        if (!resizableColumns.isEmpty()) {
+        } else if (!resizableColumns.isEmpty()) {
             resizableColumns.forEach(column -> {
+                // Never allow Action Menu column to be resizable.
                 if (!ACTION_MENU.equalsIgnoreCase(column.getKey())) {
                     column.setResizable(true);
-                    column.setFlexGrow(0);
                 }
             });
         }
@@ -515,17 +509,19 @@ public class GridExtender<T> {
 
     /**
      * Convenience method to set all columns (except the action column) to be
-     * resizeable.
+     * resizeable. Call before calling init().
      * 
      * @param resizable A <code>boolean</code>. True to set all columns resizeable,
      *                  false to leave them locked to the user.
      */
     public void setAllColumnsResizable(final boolean resizable) {
+        Preconditions.checkArgument(!initComplete, "Call 'setAllColumnsResizable' before calling init()");
         this.resizable = resizable;
     }
 
     /**
-     * Method to set columns resizeable, but only the ones contained in the List
+     * TODO LC: Check this is used in latest upgrade_local branch. Method to set
+     * columns resizeable, but only the ones contained in the List
      * 
      * @param columns A {@link List} of {@link Column}s that will be set resizeable.
      */
