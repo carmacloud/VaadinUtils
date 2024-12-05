@@ -61,18 +61,6 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
         addOpenedChangeListener(event -> {
             grid.select(getTargetEntity());
         });
-
-        grid.addCellFocusListener(listener -> {
-            final E item = listener.getItem().orElse(null);
-            if (item == null) {
-                return;
-            }
-            if (loadCrud) {
-                setTargetEntity(loadEntity(item));
-            } else {
-                setTargetEntity(item);
-            }
-        });
     }
 
     public SerializablePredicate<E> getDynamicContentHandler() {
@@ -92,7 +80,19 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
 
             if (getDynamicContentHandler() != null) {
                 final E item = grid.getDataCommunicator().getKeyMapper().get(key);
-                return getDynamicContentHandler().test(item);
+                if (getDynamicContentHandler().test(item)) {
+                    if (item == null) {
+                        return true;
+                    }
+                    if (loadCrud) {
+                        setTargetEntity(loadEntity(item));
+                    } else {
+                        setTargetEntity(item);
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
 
