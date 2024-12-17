@@ -72,7 +72,7 @@ public class GridExtender<T> {
 
     // Common method to set columns resizable.
     private boolean resizable = false;
-    private final List<Column<T>> resizableColumns = new ArrayList<>();
+    private final List<String> resizableColumns = new ArrayList<>();
 
     private List<Registration> registrations;
 
@@ -498,10 +498,10 @@ public class GridExtender<T> {
                 }
             });
         } else if (!resizableColumns.isEmpty()) {
-            resizableColumns.forEach(column -> {
+            resizableColumns.forEach(key -> {
                 // Never allow Action Menu column to be resizable.
-                if (!ACTION_MENU.equalsIgnoreCase(column.getKey())) {
-                    column.setResizable(true);
+                if (!ACTION_MENU.equalsIgnoreCase(key)) {
+                    grid.getColumnByKey(key).setResizable(true);
                 }
             });
         }
@@ -520,12 +520,12 @@ public class GridExtender<T> {
     }
 
     /**
-     * TODO LC: Check this is used in latest upgrade_local branch. Method to set
-     * columns resizeable, but only the ones contained in the List
+     * Method to set columns resizeable, but only the ones contained in the List
      * 
-     * @param columns A {@link List} of {@link Column}s that will be set resizeable.
+     * @param columns A {@link List} of {@link String}s that are the column key to
+     *                be set resizeable.
      */
-    public void setSelectedColumnsResizable(final List<Column<T>> columns) {
+    public void setSelectedColumnsResizable(final List<String> columns) {
         this.resizableColumns.clear();
         this.resizableColumns.addAll(columns);
     }
