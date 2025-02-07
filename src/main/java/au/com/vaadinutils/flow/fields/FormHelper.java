@@ -120,7 +120,8 @@ public class FormHelper<E extends CrudEntity> {
      * Creates and binds a {@link TextField} for {@link String}, {@link Long},
      * {@link Double} and {@link BigDecimal} attribute types only.<br>
      * The {@link SingularAttribute} parameter is used to determine if converting is
-     * needed, and which {@link Converter} is required.<br>
+     * needed, and which {@link Converter} is required (if no converter
+     * supplied.<br>
      * 
      * If an attribute type is not matched, the field is created unbound.
      * 
@@ -131,11 +132,15 @@ public class FormHelper<E extends CrudEntity> {
      * @param validator         A {@link Validator} of type {@link String} to add
      *                          validation to the field. if null, validation is not
      *                          set.
+     * @param converter         A {@link Converter} of type {@link String} and ?
+     *                          that should match the binding required. If no
+     *                          converter supplied (parameter is null) a default
+     *                          converter is supplied.
      * @return A {@link TextField}, bound to the {@link Binder} if attribute matches
      *         the correct type.
      */
     public TextField bindTextField(final String caption, final SingularAttribute<E, ?> propertyAttribute,
-            final Validator<String> validator) {
+            final Validator<String> validator, final Converter<String, ?> converter) {
         final String bindingProperty = propertyAttribute.getName();
         checkState(bindingProperty);
         final TextField field = new TextField(caption);
@@ -143,26 +148,31 @@ public class FormHelper<E extends CrudEntity> {
         field.setClearButtonVisible(true);
         field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         final Class<?> propertyJavaType = propertyAttribute.getType().getJavaType();
-        final Converter<String, ?> converter;
-        if (propertyJavaType.equals(Long.class)) {
-            converter = new LongNoGroupingConverter("Error, number must be a whole number.");
-        } else if (propertyJavaType.equals(Double.class)) {
-            converter = new StringToDoubleConverter("Error, number format is incorrect.");
-        } else if (propertyJavaType.equals(BigDecimal.class)) {
-            converter = new StringToBigDecimalConverter("Error, number format is incorrect.");
-        } else if (propertyJavaType.equals(String.class)) {
-            converter = null;
-        } else {
-            logger.error(bindingProperty + " is unbound. Type required: " + propertyAttribute.getBindableJavaType());
-            return field;
+        Converter<String, ?> defaultConverter = converter;
+        if (defaultConverter == null) {
+            if (propertyJavaType.equals(Long.class)) {
+                defaultConverter = new LongNoGroupingConverter("Error, number must be a whole number.");
+            } else if (propertyJavaType.equals(Double.class)) {
+                defaultConverter = new StringToDoubleConverter("Error, number format is incorrect.");
+            } else if (propertyJavaType.equals(BigDecimal.class)) {
+                defaultConverter = new StringToBigDecimalConverter("Error, number format is incorrect.");
+            } else if (propertyJavaType.equals(String.class)) {
+                defaultConverter = null;
+            } else {
+                logger.error(
+                        bindingProperty + " is unbound. Type required: " + propertyAttribute.getBindableJavaType());
+                return field;
+            }
         }
+
         final BindingBuilder<E, String> bindingBuilderString = binder.forField(field);
-        if (converter != null) {
+        if (defaultConverter != null) {
             if (validator != null) {
-                bindingBuilderString.withValidator(validator).withNullRepresentation("").withConverter(converter);
+                bindingBuilderString.withValidator(validator).withNullRepresentation("")
+                        .withConverter(defaultConverter);
                 field.setValueChangeMode(ValueChangeMode.EAGER);
             } else {
-                bindingBuilderString.withNullRepresentation("").withConverter(converter);
+                bindingBuilderString.withNullRepresentation("").withConverter(defaultConverter);
             }
         } else if (validator != null) {
             bindingBuilderString.withValidator(validator).withNullRepresentation("");
