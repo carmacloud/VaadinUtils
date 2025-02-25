@@ -6,7 +6,9 @@ import com.vaadin.flow.data.binder.Binder;
 
 /**
  * For using in a simple {@link Binder} implementations when a {@link List} of
- * objects is needed.
+ * objects is needed.<br>
+ * TODO LC: CAR-5635. This could be removed and a more direct use of methods in
+ * the components using this class.
  *
  * @param <E>
  */
@@ -18,7 +20,7 @@ public class BeanList<E> {
         return beanList;
     }
 
-    public void setBeanList(List<E> beanList) {
+    public void setBeanList(final List<E> beanList) {
         this.beanList = beanList;
     }
 }
