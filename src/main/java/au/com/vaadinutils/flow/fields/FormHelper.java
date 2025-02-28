@@ -49,7 +49,9 @@ import au.com.vaadinutils.flow.helper.VaadinHelper;
  * refresh the {@link DataProvider}s supplied to the combos.<br>
  * They won't refresh on a bean read or write, and the state change listener on
  * {@link Binder} fires every time each field here is validated, which makes for
- * a messy and over the top refresh.
+ * a messy and over the top refresh.<br>
+ * TODO LC: CAR-5635. Check that the binder is working correctly, e.g with
+ * validation.
  *
  * @param <E> Extends {@link CrudEntity}.
  */
