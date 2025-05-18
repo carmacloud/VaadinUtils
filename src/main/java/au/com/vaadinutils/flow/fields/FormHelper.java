@@ -249,6 +249,19 @@ public class FormHelper<E extends CrudEntity> {
     public TextArea bindTextArea(final String caption, final SingularAttribute<E, String> propertyAttribute,
             final Validator<String> validator) {
         final String bindingProperty = propertyAttribute.getName();
+
+        return bindTextArea(caption, bindingProperty, validator);
+    }
+
+    /**
+     * 
+     * @param caption
+     * @param bindingProperty
+     * @param validator
+     * @return
+     */
+    public TextArea bindTextArea(final String caption, final String bindingProperty,
+            final Validator<String> validator) {
         checkState(bindingProperty);
         final TextArea field = new TextArea(caption);
         field.setWidthFull();
@@ -391,6 +404,20 @@ public class FormHelper<E extends CrudEntity> {
     public TextFieldWithButton bindTextFieldWithButton(final String caption, final Button button,
             final SingularAttribute<E, String> propertyAttribute, final Validator<String> validator) {
         final String bindingProperty = propertyAttribute.getName();
+
+        return bindTextFieldWithButton(caption, button, bindingProperty, validator);
+    }
+
+    /**
+     * 
+     * @param caption
+     * @param button
+     * @param bindingProperty
+     * @param validator
+     * @return
+     */
+    public TextFieldWithButton bindTextFieldWithButton(final String caption, final Button button,
+            final String bindingProperty, final Validator<String> validator) {
         checkState(bindingProperty);
         final TextFieldWithButton field = new TextFieldWithButton(caption, button);
         field.setFieldWidth("100%");
