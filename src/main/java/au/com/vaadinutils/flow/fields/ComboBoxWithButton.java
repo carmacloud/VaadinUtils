@@ -54,6 +54,7 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
     }
 
     public void setButton(final Button button) {
+        replace(this.button, button);
         this.button = button;
     }
 
