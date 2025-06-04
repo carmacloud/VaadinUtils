@@ -716,6 +716,17 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
+    public <J, V extends Comparable<? super V>> Condition<E> lessThan(final JoinBuilder<E, J> join,
+            final SingularAttribute<J, V> field, final V value) {
+        return new AbstractCondition<E>() {
+
+            @Override
+            public Predicate getPredicates() {
+                return builder.lessThan(getJoin(join).get(field), copyEntityForQuery(value));
+            }
+        };
+    }
+
     public <J> Condition<E> lessThan(final JoinBuilder<E, J> join, final SingularAttribute<J, Date> field,
             final Date value) {
         return new AbstractCondition<E>() {
