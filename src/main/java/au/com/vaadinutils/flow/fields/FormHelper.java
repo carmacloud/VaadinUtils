@@ -59,6 +59,8 @@ public class FormHelper<E extends CrudEntity> {
 
     private final Logger logger = LogManager.getLogger();
     public static final String STANDARD_COMBO_WIDTH = "220";
+    // Default width for form label.
+    private String labelWidth = "12em";
 
     private final Class<E> entityClass;
     private final Component layout;
@@ -133,11 +135,13 @@ public class FormHelper<E extends CrudEntity> {
      * @param validator         A {@link Validator} of type {@link String} to add
      *                          validation to the field. if null, validation is not
      *                          set.
+     * @param customConvertor   A custom {@link Converter} if specific formatting is
+     *                          required.
      * @return A {@link TextField}, bound to the {@link Binder} if attribute matches
      *         the correct type.
      */
     public TextField bindTextField(final String caption, final SingularAttribute<E, ?> propertyAttribute,
-            final Validator<String> validator) {
+            final Validator<String> validator, final Converter<String, ?> customConvertor) {
         final String bindingProperty = propertyAttribute.getName();
         checkState(bindingProperty);
         final TextField field = new TextField(caption);
@@ -145,19 +149,26 @@ public class FormHelper<E extends CrudEntity> {
         field.setClearButtonVisible(true);
         field.setId(entityClass.getSimpleName() + "-" + bindingProperty + "-" + caption);
         final Class<?> propertyJavaType = propertyAttribute.getType().getJavaType();
+
         final Converter<String, ?> converter;
-        if (propertyJavaType.equals(Long.class)) {
-            converter = new LongNoGroupingConverter("Error, number must be a whole number.");
-        } else if (propertyJavaType.equals(Double.class)) {
-            converter = new StringToDoubleConverter("Error, number format is incorrect.");
-        } else if (propertyJavaType.equals(BigDecimal.class)) {
-            converter = new StringToBigDecimalConverter("Error, number format is incorrect.");
-        } else if (propertyJavaType.equals(String.class)) {
-            converter = null;
+        if (customConvertor != null) {
+            converter = customConvertor;
         } else {
-            logger.error(bindingProperty + " is unbound. Type required: " + propertyAttribute.getBindableJavaType());
-            return field;
+            if (propertyJavaType.equals(Long.class)) {
+                converter = new LongNoGroupingConverter("Error, number must be a whole number.");
+            } else if (propertyJavaType.equals(Double.class)) {
+                converter = new StringToDoubleConverter("Error, number format is incorrect.");
+            } else if (propertyJavaType.equals(BigDecimal.class)) {
+                converter = new StringToBigDecimalConverter("Error, number format is incorrect.");
+            } else if (propertyJavaType.equals(String.class)) {
+                converter = null;
+            } else {
+                logger.error(
+                        bindingProperty + " is unbound. Type required: " + propertyAttribute.getBindableJavaType());
+                return field;
+            }
         }
+
         final BindingBuilder<E, String> bindingBuilderString = binder.forField(field);
         if (converter != null) {
             if (validator != null) {
@@ -574,6 +585,7 @@ public class FormHelper<E extends CrudEntity> {
                     }
                 }
                 final FormItem formItem = ((FormLayout) layout).addFormItem(field, caption);
+                formItem.getStyle().set("--vaadin-form-item-label-width", labelWidth);
                 fieldsWithFormItems.put(field, formItem);
             } else if (layout instanceof GridLayout) {
                 ((GridLayout) layout).addComponent(field);
@@ -661,5 +673,9 @@ public class FormHelper<E extends CrudEntity> {
      */
     public Map<Component, FormItem> getFieldsWithFormItems() {
         return this.fieldsWithFormItems;
+    }
+
+    public void setFormLabelWidth(final int size) {
+        labelWidth = size + "em";
     }
 }
