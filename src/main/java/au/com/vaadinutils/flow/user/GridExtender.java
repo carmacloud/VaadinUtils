@@ -563,7 +563,7 @@ public class GridExtender<T> {
     }
 
     /**
-     * Convenience method to set all columns non-sortable.<br. This overrides any
+     * Convenience method to set all columns non-sortable.<br> This overrides any
      * settings that allowed a partial sort.
      */
     public void setAllColumnsNonSortable() {
