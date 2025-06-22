@@ -51,13 +51,13 @@ public class TextFieldWithButton extends HorizontalLayout {
         field.setWidth(width);
     }
 
-    public void addValueChangerListener(
-            final ValueChangeListener<? super ComponentValueChangeEvent<TextField, String>> listener) {
-        field.addValueChangeListener(listener);
-    }
-
     public void addButtonClickListener(final ComponentEventListener<ClickEvent<Button>> listener) {
         button.addClickListener(listener);
+    }
+
+    public void addTextFieldValueChangeListener(
+            final ValueChangeListener<ComponentValueChangeEvent<TextField, String>> listener) {
+        this.field.addValueChangeListener(listener);
     }
 
     public void setReadOnly(final boolean readOnly) {
@@ -72,11 +72,6 @@ public class TextFieldWithButton extends HorizontalLayout {
 
     public void setLabel(final String label) {
         this.field.setLabel(label);
-    }
-
-    public void addTextFieldValueChangeListener(
-            final ValueChangeListener<ComponentValueChangeEvent<TextField, String>> listener) {
-        this.field.addValueChangeListener(listener);
     }
 
     public void setValue(final String value) {

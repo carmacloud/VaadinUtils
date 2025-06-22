@@ -15,7 +15,7 @@ import com.vaadin.flow.component.textfield.TextField;
  */
 public class TextFieldWithIcon extends HorizontalLayout {
     private static final long serialVersionUID = -6761979395677678269L;
-    private Icon button;
+    private Icon icon;
     private final TextField field;
     private String label;
 
@@ -27,7 +27,7 @@ public class TextFieldWithIcon extends HorizontalLayout {
         field = createField(label);
 
         setAlignItems(Alignment.END);
-        add(field, this.button);
+        add(field, this.icon);
     }
 
     private TextField createField(final String label) {
@@ -40,15 +40,19 @@ public class TextFieldWithIcon extends HorizontalLayout {
     }
 
     public Icon getIcon() {
-        return button;
+        return icon;
     }
 
     public void setIcon(final Icon button) {
-        this.button = button;
+        this.icon = button;
     }
 
     public void setFieldWidth(final String width) {
         field.setWidth(width);
+    }
+
+    public void addIconClickListener(final ComponentEventListener<ClickEvent<Icon>> listener) {
+        icon.addClickListener(listener);
     }
 
     public void addValueChangerListener(
@@ -56,13 +60,9 @@ public class TextFieldWithIcon extends HorizontalLayout {
         field.addValueChangeListener(listener);
     }
 
-    public void addButtonClickListener(final ComponentEventListener<ClickEvent<Icon>> listener) {
-        button.addClickListener(listener);
-    }
-
     public void setReadOnly(final boolean readOnly) {
         field.setReadOnly(readOnly);
-        button.setVisible(!readOnly);
+        icon.setVisible(!readOnly);
     }
 
     public String getLabel() {
