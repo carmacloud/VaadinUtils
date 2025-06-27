@@ -1,16 +1,29 @@
 package au.com.vaadinutils.flow.fields.contextmenu;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.function.SerializablePredicate;
+import com.vaadin.flow.shared.Registration;
 
 import elemental.json.JsonObject;
 
 public class GridContextMenu<E> extends EntityContextMenu<E> {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -5882295471669681116L;
+    private final Logger logger = LogManager.getLogger();
     private boolean loadCrud = false;
     private SerializablePredicate<E> dynamicContentHandler;
+
+    // Menu clean-up
+    protected Registration reg;
+    protected final List<Registration> registrations = new ArrayList<>();
+    private int count = 0;
 
     public GridContextMenu() {
     }
@@ -33,11 +46,12 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
             setTargetEntity(source);
         }
 
-        addOpenedChangeListener(event -> {
+        reg = addOpenedChangeListener(event -> {
             if (grid != null) {
                 grid.select(getTargetEntity());
             }
         });
+        registrations.add(reg);
     }
 
     /**
@@ -48,7 +62,7 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
      *                 (Meant for grids backed by a Stored Procedure)
      * @param grid     The {@link Grid} the menu is to be attached to.
      */
-    public void setAsGridContextMenu(final Grid<E> grid, boolean loadCrud) {
+    public void setAsGridContextMenu(final Grid<E> grid, final boolean loadCrud) {
         super.setTarget(grid);
 
         // Only allow context on the rows, not headers or footers.
@@ -58,25 +72,26 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
 
         this.loadCrud = loadCrud;
 
-        addOpenedChangeListener(event -> {
+        reg = addOpenedChangeListener(event -> {
             grid.select(getTargetEntity());
         });
+        registrations.add(reg);
     }
 
     public SerializablePredicate<E> getDynamicContentHandler() {
         return dynamicContentHandler;
     }
 
-    public void setDynamicContentHandler(SerializablePredicate<E> dynamicContentHandler) {
+    public void setDynamicContentHandler(final SerializablePredicate<E> dynamicContentHandler) {
         this.dynamicContentHandler = dynamicContentHandler;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    protected boolean onBeforeOpenMenu(JsonObject eventDetail) {
+    protected boolean onBeforeOpenMenu(final JsonObject eventDetail) {
         if (getTarget() instanceof Grid) {
-            Grid<E> grid = (Grid<E>) getTarget();
-            String key = eventDetail.getString("key");
+            final Grid<E> grid = (Grid<E>) getTarget();
+            final String key = eventDetail.getString("key");
 
             if (getDynamicContentHandler() != null) {
                 final E item = grid.getDataCommunicator().getKeyMapper().get(key);
@@ -97,5 +112,19 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
         }
 
         return super.onBeforeOpenMenu(eventDetail);
+    }
+
+    @Override
+    public void removeRegistrations() {
+        count = 0;
+        registrations.forEach(reg -> {
+            reg.remove();
+            count++;
+        });
+        if (count <= 2) {
+            logger.warn("No Registrations removed for: " + this.getClass().getSimpleName());
+        } else {
+            logger.warn(count + " registrations removed for: " + this.getClass().getSimpleName());
+        }
     }
 }
