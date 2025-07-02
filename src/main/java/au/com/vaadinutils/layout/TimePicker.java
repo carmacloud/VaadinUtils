@@ -31,11 +31,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
-/**
- * {@link TimePicker} is the new component in Vaadin 14.<br>
- * This might still be used if this type of functionality is required. Retain
- * until decision made.
- */
+// Migrated
 @SuppressWarnings("rawtypes")
 public class TimePicker extends HorizontalLayout implements Field<Date> {
 
