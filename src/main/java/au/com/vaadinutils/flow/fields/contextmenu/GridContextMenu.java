@@ -8,11 +8,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.shared.Registration;
 
+import au.com.vaadinutils.flow.user.GridExtender;
 import elemental.json.JsonObject;
 
 public class GridContextMenu<E> extends EntityContextMenu<E> {
@@ -54,22 +54,23 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
             }
         });
         registrations.add(reg);
-        logger.debug("Adding Registration: " + this.getClass().getSimpleName());
+        logger.warn("Adding Registration: " + this.getClass().getSimpleName() + " Warning: these should be removed.");
     }
 
-    public void setAsIconContextMenu(final Column<E> actionColumn, final Grid<E> grid, final Div invisibleTarget) {
+    public void setAsIconContextMenu(final Grid<E> grid, final Div invisibleTarget) {
         super.setTarget(invisibleTarget);
         setOpenOnClick(true);
 
-        grid.addItemClickListener(e -> {
-            final E selectedItem = grid.getSelectionModel().getFirstSelectedItem().orElse(null);
-            logger.info(selectedItem);
+        reg = grid.addItemClickListener(e -> {
+            final E selectedItem = e.getItem();
             if (loadCrud) {
                 setTargetEntity(loadEntity(selectedItem));
             } else {
                 setTargetEntity(selectedItem);
             }
-            if (e.getButton() == 0 && e.getColumn().equals(actionColumn)) {
+            grid.select(getTargetEntity());
+
+            if (e.getButton() == 0 && GridExtender.ACTION_MENU.equals(e.getColumn().getKey())) {
                 final int x = e.getClientX();
                 final int y = e.getClientY();
                 // Move the invisible target to the mouse position
@@ -77,12 +78,6 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
                         y);
                 // Simulate a click to open the context menu
                 invisibleTarget.getElement().executeJs("this.click();");
-            }
-        });
-
-        reg = addOpenedChangeListener(event -> {
-            if (grid != null) {
-                grid.select(getTargetEntity());
             }
         });
         registrations.add(reg);
@@ -111,7 +106,7 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
             grid.select(getTargetEntity());
         });
         registrations.add(reg);
-        logger.warn("Adding Registration: " + this.getClass().getSimpleName());
+        logger.debug("Adding Registration: " + this.getClass().getSimpleName());
     }
 
     public SerializablePredicate<E> getDynamicContentHandler() {
@@ -158,9 +153,9 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
             count++;
         });
         if (count <= 1) {
-            logger.warn("No Registrations removed for: " + this.getClass().getSimpleName());
+            logger.debug("No Registrations removed for: " + this.getClass().getSimpleName());
         } else {
-            logger.warn(count + " registrations removed for: " + this.getClass().getSimpleName());
+            logger.debug(count + " registrations removed for: " + this.getClass().getSimpleName());
         }
     }
 }
