@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.function.SerializablePredicate;
@@ -28,33 +27,6 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
     private int count = 0;
 
     public GridContextMenu() {
-    }
-
-    /**
-     * 
-     * @param target A {@link Component} that will open the context menu on a left
-     *               click.
-     * @param grid   The {@link Grid} that the context menu is attached to. Used to
-     *               have the row selected from an event.
-     * @param source The bean on the underlying row of the grid.
-     */
-    public void setAsComponentContextMenu(final Component target, final Grid<E> grid, final E source) {
-        super.setTarget(target);
-        setOpenOnClick(true);
-
-        if (loadCrud) {
-            setTargetEntity(loadEntity(source));
-        } else {
-            setTargetEntity(source);
-        }
-
-        reg = addOpenedChangeListener(event -> {
-            if (grid != null) {
-                grid.select(getTargetEntity());
-            }
-        });
-        registrations.add(reg);
-        logger.warn("Adding Registration: " + this.getClass().getSimpleName() + " Warning: these should be removed.");
     }
 
     /**
@@ -84,6 +56,7 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
             if (e.getButton() == 0 && GridExtender.ACTION_MENU.equals(e.getColumn().getKey())) {
                 final int x = e.getClientX();
                 final int y = e.getClientY();
+                logger.info(x + " - " + y);
                 // Move the invisible target to the mouse position
                 invisibleTarget.getElement().executeJs("this.style.left = $0 + 'px'; this.style.top = $1 + 'px';", x,
                         y);
