@@ -57,6 +57,17 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
         logger.warn("Adding Registration: " + this.getClass().getSimpleName() + " Warning: these should be removed.");
     }
 
+    /**
+     * A replacement for the component context menu which loaded a menu item for
+     * each row, and would thus consume excessive resources if not cleaned up.<br>
+     * This version needs only 1 menu to be added, the click listener and Javascript
+     * to the rest.
+     * 
+     * @param grid            A Grid to use the item click listener to find the
+     *                        record that is to be used.
+     * @param invisibleTarget A {@link Div} component hidden on the screen that acts
+     *                        as the anchor target for popping up the context menu.
+     */
     public void setAsIconContextMenu(final Grid<E> grid, final Div invisibleTarget) {
         super.setTarget(invisibleTarget);
         setOpenOnClick(true);
@@ -81,7 +92,7 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
             }
         });
         registrations.add(reg);
-        logger.warn("Adding Registration: " + this.getClass().getSimpleName());
+        logger.debug("Adding Registration: " + this.getClass().getSimpleName());
     }
 
     /**
@@ -155,7 +166,7 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
         if (count <= 1) {
             logger.debug("No Registrations removed for: " + this.getClass().getSimpleName());
         } else {
-            logger.debug(count + " registrations removed for: " + this.getClass().getSimpleName());
+            logger.warn(count + " registrations removed for: " + this.getClass().getSimpleName());
         }
     }
 }
