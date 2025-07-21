@@ -6,7 +6,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,6 +51,7 @@ public class TimePicker extends CustomField<LocalDateTime> {
 
     private LocalDateTime storedDate = LocalDateTime.now();
     private LocalDateTime modifiedDate = storedDate;
+    private Set<TimePickerValueChanged> listeners = new HashSet<TimePicker.TimePickerValueChanged>();
 
     public TimePicker(final String title) {
         this.title = title;
@@ -65,6 +69,10 @@ public class TimePicker extends CustomField<LocalDateTime> {
             if (!isReadOnly()) {
                 showPopupTimePicker();
             }
+        });
+
+        displayTime.addValueChangeListener(e -> {
+            valueChanged(modifiedDate);
         });
     }
 
@@ -316,5 +324,20 @@ public class TimePicker extends CustomField<LocalDateTime> {
     private void clearValue() {
         field.setValue(EMPTY);
         displayTime.setValue(EMPTY);
+    }
+
+    public void addListener(final TimePickerValueChanged listener) {
+        listeners.add(listener);
+    }
+
+    private void valueChanged(final LocalDateTime value) {
+        for (final Iterator<TimePickerValueChanged> iterator = listeners.iterator(); iterator.hasNext();) {
+            final TimePickerValueChanged timePickerValueChanged = iterator.next();
+            timePickerValueChanged.valueChanged(value);
+        }
+    }
+
+    public interface TimePickerValueChanged {
+        void valueChanged(LocalDateTime value);
     }
 }
