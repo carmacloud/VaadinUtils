@@ -6,7 +6,6 @@ import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import au.com.vaadinutils.flow.helper.VaadinHelper;
@@ -46,10 +45,8 @@ public class NavigationLayout extends VerticalLayout {
         buildButtonLayout();
         enableEnterShortcut();
 
-        final Scroller scroller = new Scroller(contentPanel);
-        scroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
-        scroller.setSizeFull();
-        this.add(scroller, buttonLayout);
+        this.addAndExpand(contentPanel);
+        this.add(buttonLayout);
         this.setHorizontalComponentAlignment(Alignment.END, buttonLayout);
     }
 
