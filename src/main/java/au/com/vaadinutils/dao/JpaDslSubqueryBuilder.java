@@ -15,7 +15,7 @@ public class JpaDslSubqueryBuilder<P, E> extends JpaDslBuilder<E> {
     private Subquery<E> subQuery;
     private Root<P> parentRoot;
 
-    public JpaDslSubqueryBuilder(Class<E> entityClass, CriteriaQuery<?> query, Root<P> parentRoot) {
+    public JpaDslSubqueryBuilder(final Class<E> entityClass, final CriteriaQuery<?> query, final Root<P> parentRoot) {
         super(entityClass);
         criteria = null;
 
@@ -62,7 +62,7 @@ public class JpaDslSubqueryBuilder<P, E> extends JpaDslBuilder<E> {
     /**
      * join on parent = child.parent
      * 
-     * @param parentAttrib
+     * @param subQueryAttrib
      * @return
      */
     public AbstractCondition<E> joinParentQueryOnSubAttrib(final SingularAttribute<E, P> subQueryAttrib) {
@@ -78,7 +78,7 @@ public class JpaDslSubqueryBuilder<P, E> extends JpaDslBuilder<E> {
     /**
      * join on parent = child.parent
      * 
-     * @param parentAttrib
+     * @param subQueryAttrib
      * @return
      */
     public AbstractCondition<E> joinParentQueryOnSubAttrib(final SetAttribute<E, P> subQueryAttrib) {

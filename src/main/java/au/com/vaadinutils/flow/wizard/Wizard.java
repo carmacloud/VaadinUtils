@@ -202,7 +202,6 @@ public class Wizard extends VerticalLayout {
      * Adds a step after an existing step
      * 
      * @param newStep      - new step to add
-     * @param newId        - id for the new step
      * @param existingStep - an existing step after which the step will be inserted
      */
     public void addStepAfterStep(final WizardStep newStep, final WizardStep existingStep) {

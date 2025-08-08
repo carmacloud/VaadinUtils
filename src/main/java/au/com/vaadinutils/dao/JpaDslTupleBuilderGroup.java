@@ -24,30 +24,30 @@ import au.com.vaadinutils.dao.JpaBaseDao.Condition;
  * 
  * <pre>
  * <code>
- * 	final JpaDslTupleBuilderGroup<TblSalesCustCallItem> queryGroup = new JpaDslTupleBuilderGroup<>(
+ * 	final JpaDslTupleBuilderGroup&lt;TblSalesCustCallItem&gt; queryGroup = new JpaDslTupleBuilderGroup&lt;&gt;(
  * 			TblSalesCustCallItem.class);
  * 	queryGroup.multiselect(TblSalesCustCallItem_.iid);
- * 	queryGroup.setCommon(new JpaDslTupleBuilderGroupCommon<TblSalesCustCallItem>()
+ * 	queryGroup.setCommon(new JpaDslTupleBuilderGroupCommon&lt;TblSalesCustCallItem&gt;()
  * 	{
  * 		&#64;Override
- * 		public void conditionsWillBeAdded(JpaDslTupleBuilder<TblSalesCustCallItem> builder,
- * 				List<Condition<TblSalesCustCallItem>> conditions)
+ * 		public void conditionsWillBeAdded(JpaDslTupleBuilder&lt;TblSalesCustCallItem&gt; builder,
+ * 				List&lt;Condition&lt;TblSalesCustCallItem&gt;&gt; conditions)
  * 		{
  * 			conditions.add(builder.eq(TblSalesCustCallItem_.contact, contact));
  * 		}
  * 	});
  * 
- * 	queryGroup.addItem(new JpaDslTupleBuilderGroupItem<TblSalesCustCallItem>()
+ * 	queryGroup.addItem(new JpaDslTupleBuilderGroupItem&lt;TblSalesCustCallItem&gt;()
  * 	{
  * 		&#64;Override
- * 		public void conditionsWillBeAdded(JpaDslTupleBuilder<TblSalesCustCallItem> builder,
- * 				List<Condition<TblSalesCustCallItem>> conditions)
+ * 		public void conditionsWillBeAdded(JpaDslTupleBuilder&lt;TblSalesCustCallItem&gt; builder,
+ * 				List&lt;Condition&lt;TblSalesCustCallItem&gt;&gt; conditions)
  * 		{
  * 			conditions.add(builder.eq(TblSalesCustCallItem_.salesperson, salesperson));
  * 		}
  * 	});
  * 
- * final List<Long> itemIds = new ArrayList<>();
+ * final List&lt;Long&gt; itemIds = new ArrayList&lt;&gt;();
  * for (Tuple result : queryGroup.getResults())
  * {
  * 			itemIds.add(queryGroup.get(result, TblSalesCustCallItem_.iid));
@@ -70,23 +70,23 @@ public class JpaDslTupleBuilderGroup<E> {
         this.entityClass = entityClass;
     }
 
-    public void addItem(JpaDslTupleBuilderGroupItem<E> builder) {
+    public void addItem(final JpaDslTupleBuilderGroupItem<E> builder) {
         builders.add(builder);
     }
 
     public interface JpaDslTupleBuilderGroupItem<E> {
-        public void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
+        void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
     }
 
-    public void setCommon(JpaDslTupleBuilderGroupCommon<E> common) {
+    public void setCommon(final JpaDslTupleBuilderGroupCommon<E> common) {
         this.common = common;
     }
 
     public interface JpaDslTupleBuilderGroupCommon<E> {
-        public void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
+        void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
     }
 
-    public <T> void multiselect(SingularAttribute<E, T> attribute) {
+    public <T> void multiselect(final SingularAttribute<E, T> attribute) {
         multiselects.put(attribute, positionCounter++);
     }
 
@@ -101,7 +101,7 @@ public class JpaDslTupleBuilderGroup<E> {
         // If this is the case then just return null
         try {
             return tuple.get(alias);
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             return null;
         }
     }
@@ -115,7 +115,7 @@ public class JpaDslTupleBuilderGroup<E> {
         }
 
         if (builders.size() > 0) {
-            for (JpaDslTupleBuilderGroupItem<E> builder : builders) {
+            for (final JpaDslTupleBuilderGroupItem<E> builder : builders) {
                 results.addAll(makeQuery(builder));
             }
         } else {
@@ -134,7 +134,7 @@ public class JpaDslTupleBuilderGroup<E> {
     private List<Tuple> makeQuery(final JpaDslTupleBuilderGroupItem<E> builder) {
         final JpaDslTupleBuilder<E> q = new JpaDslTupleBuilder<>(entityClass);
 
-        for (Entry<SingularAttribute<E, ?>, Integer> multiselect : multiselects.entrySet()) {
+        for (final Entry<SingularAttribute<E, ?>, Integer> multiselect : multiselects.entrySet()) {
             q.multiselect(multiselect.getKey());
         }
 
@@ -154,7 +154,7 @@ public class JpaDslTupleBuilderGroup<E> {
 
         q.where(conditions);
 
-        for (JpaDslOrder order : orders) {
+        for (final JpaDslOrder order : orders) {
             q.orderBy(order.getField(), order.getAscending());
         }
 

@@ -75,7 +75,7 @@ public class JpaDslSubquerySelectBuilder<P, E> extends JpaDslBuilder<E> {
     /**
      * join on parent = child.parent
      * 
-     * @param parentAttrib
+     * @param subQueryAttrib
      * @return
      */
     public AbstractCondition<E> joinParentQueryOnSubAttrib(final SingularAttribute<E, P> subQueryAttrib) {
@@ -91,7 +91,7 @@ public class JpaDslSubquerySelectBuilder<P, E> extends JpaDslBuilder<E> {
     /**
      * join on parent = child.parent
      * 
-     * @param parentAttrib
+     * @param subQueryAttrib
      * @return
      */
     public AbstractCondition<E> joinParentQueryOnSubAttrib(final SetAttribute<E, P> subQueryAttrib) {

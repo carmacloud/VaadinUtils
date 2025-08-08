@@ -9,13 +9,12 @@ import com.vaadin.flow.component.UI;
  *
  * @author bsutton
  *
- * @param <T>
  */
 public abstract class RunnableUI implements Runnable {
 
     final private UI ui;
 
-    public RunnableUI(UI ui) {
+    public RunnableUI(final UI ui) {
         this.ui = ui;
     }
 
@@ -29,5 +28,4 @@ public abstract class RunnableUI implements Runnable {
     }
 
     protected abstract void run(UI ui);
-
 }

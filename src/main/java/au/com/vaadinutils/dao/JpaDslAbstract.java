@@ -557,8 +557,6 @@ public abstract class JpaDslAbstract<E, R> {
     /**
      * for use with vaadin JPAContainer queryDelegate
      * 
-     * @param criteriaBuilder
-     * @param query
      * @param predicates
      */
     public void filtersWillBeAdded(final List<Predicate> predicates) {
@@ -1538,8 +1536,7 @@ public abstract class JpaDslAbstract<E, R> {
     /**
      * WARNING, order will not be honoured by this method
      * 
-     * @param attribute
-     * @param value
+     * @param updatemap
      * 
      * @return
      */

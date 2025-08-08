@@ -101,7 +101,7 @@ public enum EntityManagerProvider {
      *
      * @param em
      */
-    public static void setCurrentEntityManager(EntityManager em) {
+    public static void setCurrentEntityManager(final EntityManager em) {
         final EntityManager oldem = INSTANCE.entityManagerThreadLocal.get();
 
         Preconditions.checkArgument(em == null || (oldem == null && em != null),
@@ -147,7 +147,7 @@ public enum EntityManagerProvider {
      *
      * @param emf
      */
-    public static void setEntityManagerFactory(javax.persistence.EntityManagerFactory emf) {
+    public static void setEntityManagerFactory(final javax.persistence.EntityManagerFactory emf) {
         INSTANCE.emf = emf;
     }
 
@@ -158,7 +158,7 @@ public enum EntityManagerProvider {
      * @return
      * @throws Exception
      */
-    public static <T> T setThreadLocalEntityManager(EntityWorker<T> worker) throws Exception {
+    public static <T> T setThreadLocalEntityManager(final EntityWorker<T> worker) throws Exception {
 
         try (AutoCloseable closer = EntityManagerProvider.setThreadLocalEntityManagerTryWithResources()) {
             return worker.exec();
@@ -201,7 +201,7 @@ public enum EntityManagerProvider {
                 if (em != null) {
                     try {
                         em.getTransaction().commit();
-                    } catch (ConstraintViolationException e) {
+                    } catch (final ConstraintViolationException e) {
                         // ensure we get the cause of an underlying constraint
                         // violation
                         ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
@@ -243,7 +243,7 @@ public enum EntityManagerProvider {
             public void run() {
                 try (AutoCloseableEM closer = EntityManagerProvider.setThreadLocalEntityManagerTryWithResources()) {
                     runnable.run();
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     ErrorWindow.showErrorWindow(e, getClass().getSimpleName());
                 }
 
@@ -252,11 +252,12 @@ public enum EntityManagerProvider {
     }
 
     /**
-     * Allows you to pass in a Callable to wrap in an entity manager. A new Callable
-     * is returned which should then be called to run your Callable. i.e. don't run
-     * you own Callable directly rather use the returned Callable.
+     * Allows you to pass in a {@link Callable} to wrap in an entity manager. A new
+     * {@link Callable} is returned which should then be called to run your
+     * {@link Callable}. i.e. don't run you own {@link Callable} directly rather use
+     * the returned {@link Callable}.
      *
-     * @param Callable - the Callable to run as contains an entity manager.
+     * @param callable - the {@link Callable} to run as contains an entity manager.
      * @return
      */
 
@@ -303,26 +304,26 @@ public enum EntityManagerProvider {
      *
      * @param entity
      */
-    public static <T> T merge(T entity) {
+    public static <T> T merge(final T entity) {
         return getEntityManager().merge(entity);
     }
 
-    public static <T> void remove(T entity) {
+    public static <T> void remove(final T entity) {
         getEntityManager().remove(entity);
 
     }
 
-    public static <T> void persist(T record) {
+    public static <T> void persist(final T record) {
         getEntityManager().persist(record);
 
     }
 
-    public static <T> void refresh(T record) {
+    public static <T> void refresh(final T record) {
         getEntityManager().refresh(record);
 
     }
 
-    public static <T> void detach(T record) {
+    public static <T> void detach(final T record) {
         getEntityManager().detach(record);
 
     }
@@ -336,7 +337,7 @@ public enum EntityManagerProvider {
      *
      * @param runnable The Action to run when the em is cleared.
      */
-    public static void registerTransientPostAction(Runnable runnable) {
+    public static void registerTransientPostAction(final Runnable runnable) {
         Preconditions.checkNotNull(getEntityManager());
         Preconditions.checkState(getEntityManager().isOpen());
         List<Runnable> actionList = transientPostTransactionActions.get();
@@ -357,12 +358,12 @@ public enum EntityManagerProvider {
 
     }
 
-    private static void runRunnableActions(List<Runnable> actions) {
+    private static void runRunnableActions(final List<Runnable> actions) {
         if (actions != null) {
-            for (Runnable action : actions) {
+            for (final Runnable action : actions) {
                 try {
                     action.run();
-                } catch (Throwable e) {
+                } catch (final Throwable e) {
                     logger.error(e, e);
                 }
             }
@@ -391,7 +392,7 @@ public enum EntityManagerProvider {
      *
      * @param action The action to run before begin is called on a transaction.
      */
-    public static void registerPreAction(EMAction action) {
+    public static void registerPreAction(final EMAction action) {
         synchronized (registeredPreActions) {
             registeredPreActions.add(action);
         }
@@ -409,13 +410,13 @@ public enum EntityManagerProvider {
      *
      * @param action The action to run before begin is called on a transaction.
      */
-    public static void registerPostAction(Runnable action) {
+    public static void registerPostAction(final Runnable action) {
         synchronized (registeredPostActions) {
             registeredPostActions.add(action);
         }
     }
 
-    public static void runPreActions(EntityManager em) {
+    public static void runPreActions(final EntityManager em) {
         synchronized (registeredPreActions) {
             runActions(registeredPreActions, em);
         }
@@ -429,12 +430,12 @@ public enum EntityManagerProvider {
         }
     }
 
-    public static void runActions(List<EMAction> actions, EntityManager em) {
+    public static void runActions(final List<EMAction> actions, final EntityManager em) {
         if (actions != null) {
-            for (EMAction action : actions) {
+            for (final EMAction action : actions) {
                 try {
                     action.run(em);
-                } catch (Throwable e) {
+                } catch (final Throwable e) {
                     logger.error(e, e);
                 }
             }

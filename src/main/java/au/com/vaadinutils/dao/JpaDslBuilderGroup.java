@@ -18,28 +18,28 @@ import au.com.vaadinutils.dao.JpaBaseDao.Condition;
  * 
  * <pre>
  * <code>
- * final JpaDslBuilderGroup<TblSalesCustCallItem> queryGroup = new JpaDslBuilderGroup<>(TblSalesCustCallItem.class);
- * queryGroup.setCommon(new JpaDslBuilderGroupCommon<TblSalesCustCallItem>()
+ * final JpaDslBuilderGroup&lt;TblSalesCustCallItem&gt; queryGroup = new JpaDslBuilderGroup&lt;&gt;(TblSalesCustCallItem.class);
+ * queryGroup.setCommon(new JpaDslBuilderGroupCommon&lt;TblSalesCustCallItem&gt;()
  * {
  * 		&#64;Override
- * 		public void conditionsWillBeAdded(JpaDslBuilder<TblSalesCustCallItem> builder,
- * 				List<Condition<TblSalesCustCallItem>> conditions)
+ * 		public void conditionsWillBeAdded(JpaDslBuilder&lt;TblSalesCustCallItem&gt; builder,
+ * 				List&lt;Condition&lt;TblSalesCustCallItem&gt;&gt; conditions)
  * 		{
  * 			conditions.add(builder.eq(TblSalesCustCallItem_.contact, contact));
  * 		}
  * });
  *  
- * queryGroup.addItem(new JpaDslBuilderGroupItem<TblSalesCustCallItem>()
+ * queryGroup.addItem(new JpaDslBuilderGroupItem&lt;TblSalesCustCallItem&gt;()
  * {
  * 		&#64;Override
- * 		public void conditionsWillBeAdded(JpaDslBuilder<TblSalesCustCallItem> builder,
- * 				List<Condition<TblSalesCustCallItem>> conditions)
+ * 		public void conditionsWillBeAdded(JpaDslBuilder&lt;TblSalesCustCallItem&gt; builder,
+ * 				List&lt;Condition&lt;TblSalesCustCallItem&gt;&gt; conditions)
  * 		{
  * 			conditions.add(builder.eq(TblSalesCustCallItem_.salesperson, salesperson));
  * 		}
  * });
  *  
- * final List<TblSalesCustCallItem> results = queryGroup.getResults();
+ * final List&lt;TblSalesCustCallItem&gt; results = queryGroup.getResults();
  * </code>
  * </pre>
  *
@@ -56,20 +56,20 @@ public class JpaDslBuilderGroup<E> {
         this.entityClass = entityClass;
     }
 
-    public void addItem(JpaDslBuilderGroupItem<E> builder) {
+    public void addItem(final JpaDslBuilderGroupItem<E> builder) {
         builders.add(builder);
     }
 
     public interface JpaDslBuilderGroupItem<E> {
-        public void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
+        void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
     }
 
-    public void setCommon(JpaDslBuilderGroupCommon<E> common) {
+    public void setCommon(final JpaDslBuilderGroupCommon<E> common) {
         this.common = common;
     }
 
     public interface JpaDslBuilderGroupCommon<E> {
-        public void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
+        void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
     }
 
     public List<E> getResults() {
@@ -81,7 +81,7 @@ public class JpaDslBuilderGroup<E> {
         }
 
         if (builders.size() > 0) {
-            for (JpaDslBuilderGroupItem<E> builder : builders) {
+            for (final JpaDslBuilderGroupItem<E> builder : builders) {
                 results.addAll(makeQuery(builder));
             }
         } else {
@@ -115,7 +115,7 @@ public class JpaDslBuilderGroup<E> {
 
         q.where(conditions);
 
-        for (JpaDslOrder order : orders) {
+        for (final JpaDslOrder order : orders) {
             q.orderBy(order.getField(), order.getAscending());
         }
 
