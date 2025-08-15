@@ -33,7 +33,7 @@ public class InputFormDialog extends Dialog {
     private boolean validationError = false;
     private boolean layoutIsForm = false;
 
-    public InputFormDialog(final String title, final HasValidation primaryFocusField, final Component form,
+    public InputFormDialog(final String title, final Focusable<?> primaryFocusField, final Component form,
             final InputFormDialogRecipient recipient) {
         this.add(new Text(title));
         this.setModal(true);
