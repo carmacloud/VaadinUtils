@@ -386,7 +386,7 @@ public class GridExtender<T> {
     private void addActionItems(final Map<String, String> headersMap, final HorizontalLayout gridHeader) {
         final Popup popup = new Popup();
         popup.setFor(uniqueId);
-        actionIcon.addClickListener(e -> {
+        this.registrations.add(actionIcon.addClickListener(e -> {
             final VerticalLayout layout = new VerticalLayout();
             layout.setWidthFull();
             layout.setSpacing(false);
@@ -453,7 +453,7 @@ public class GridExtender<T> {
             popup.removeAll();
             popup.add(layout);
             popup.show();
-        });
+        }));
         gridHeader.add(popup);
     }
 
@@ -563,8 +563,8 @@ public class GridExtender<T> {
     }
 
     /**
-     * Convenience method to set all columns non-sortable.<br> This overrides any
-     * settings that allowed a partial sort.
+     * Convenience method to set all columns non-sortable.<br>
+     * This overrides any settings that allowed a partial sort.
      */
     public void setAllColumnsNonSortable() {
         final Set<String> keys = new HashSet<>();
