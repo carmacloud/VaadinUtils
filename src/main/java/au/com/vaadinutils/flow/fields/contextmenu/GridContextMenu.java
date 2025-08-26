@@ -79,10 +79,7 @@ public class GridContextMenu<E> extends EntityContextMenu<E> {
 
         reg = addOpenedChangeListener(event -> {
             if (event.isOpened()) {
-                // Commented out. Was used when when left-click target was another component.
-                // Leave it in if needed to overcome grid selection issues on left-click with
-                // target as the grid.
-//                    grid.select(getTargetEntity());
+                grid.select(getTargetEntity());
             }
         });
 
