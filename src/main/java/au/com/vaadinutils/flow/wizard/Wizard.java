@@ -52,7 +52,7 @@ public class Wizard extends VerticalLayout {
 
     public Wizard() {
         setId(this.getClass().getSimpleName());
-        setPadding(true);
+        setPadding(false);
         setMargin(false);
         setSpacing(false);
         contentPanel = new VerticalLayout();
