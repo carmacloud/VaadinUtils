@@ -23,6 +23,7 @@ public class NavigationLayout extends VerticalLayout {
     private String primaryNotificationDescription = "Any changes you have made have been saved";
     private String secondaryNotificationCaption = "Changes discarded";
     private String secondaryNotificationDescription = "Any changes you have made have been discarded";
+    private final VaadinHelper vaadinHelper = new VaadinHelper();
 
     public NavigationLayout() {
         this(null);
@@ -130,7 +131,7 @@ public class NavigationLayout extends VerticalLayout {
     private void showPrimaryNotification() {
         if (!Optional.ofNullable(primaryNotificationCaption).orElse("").isEmpty()
                 || !Optional.ofNullable(primaryNotificationDescription).orElse("").isEmpty()) {
-            VaadinHelper.notificationDialog(primaryNotificationCaption, primaryNotificationDescription,
+            vaadinHelper.notificationDialog(primaryNotificationCaption, primaryNotificationDescription,
                     NotificationType.TRAY);
         }
     }
@@ -138,7 +139,7 @@ public class NavigationLayout extends VerticalLayout {
     private void showSecondaryNotification() {
         if (!Optional.ofNullable(secondaryNotificationCaption).orElse("").isEmpty()
                 || !Optional.ofNullable(secondaryNotificationDescription).orElse("").isEmpty()) {
-            VaadinHelper.notificationDialog(secondaryNotificationCaption, secondaryNotificationDescription,
+            vaadinHelper.notificationDialog(secondaryNotificationCaption, secondaryNotificationDescription,
                     NotificationType.TRAY);
         }
     }
