@@ -1,6 +1,6 @@
 package au.com.vaadinutils.dao;
 
-import javax.persistence.metamodel.Attribute;
+import jakarta.persistence.metamodel.Attribute;
 
 public class JoinOnBuilder<K, V> {
     enum JoinOnType {

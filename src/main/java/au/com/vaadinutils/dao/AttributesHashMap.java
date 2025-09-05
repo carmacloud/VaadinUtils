@@ -2,7 +2,7 @@ package au.com.vaadinutils.dao;
 
 import java.util.HashMap;
 
-import javax.persistence.metamodel.SingularAttribute;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 /**
  * This class is to be used with the find*By*Attributes methods in JpaBaseDao.
@@ -23,12 +23,12 @@ public class AttributesHashMap<T> extends HashMap<SingularAttribute<T, Object>, 
     }
 
     @SuppressWarnings("unchecked")
-    public <K> void safePut(SingularAttribute<T, K> key, K value) {
+    public <K> void safePut(final SingularAttribute<T, K> key, final K value) {
         super.put((SingularAttribute<T, Object>) key, value);
     }
 
     @Override
-    public Object put(SingularAttribute<T, Object> key, Object value) {
+    public Object put(final SingularAttribute<T, Object> key, final Object value) {
         throw new RuntimeException("Use safePut method!");
     }
 }

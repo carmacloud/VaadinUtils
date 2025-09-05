@@ -5,18 +5,28 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.ListAttribute;
-import javax.persistence.metamodel.SetAttribute;
-import javax.persistence.metamodel.SingularAttribute;
+//import javax.persistence.criteria.CriteriaBuilder;
+//import javax.persistence.criteria.Expression;
+//import javax.persistence.criteria.Join;
+//import javax.persistence.criteria.JoinType;
+//import javax.persistence.criteria.Predicate;
+//import javax.persistence.criteria.Root;
+//import javax.persistence.metamodel.Attribute;
+//import javax.persistence.metamodel.ListAttribute;
+//import javax.persistence.metamodel.SetAttribute;
+//import javax.persistence.metamodel.SingularAttribute;
 
 import au.com.vaadinutils.dao.JoinOnBuilder.JoinOnType;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.metamodel.Attribute;
+import jakarta.persistence.metamodel.ListAttribute;
+import jakarta.persistence.metamodel.SetAttribute;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 public class JoinBuilder<E, K> {
     final List<JoinOnBuilder<K, ?>> joinOnBuilders = new LinkedList<>();
@@ -40,7 +50,7 @@ public class JoinBuilder<E, K> {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -86,9 +96,9 @@ public class JoinBuilder<E, K> {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public Join<E, K> getJoin(Root<E> root, CriteriaBuilder builder) {
+    public Join<E, K> getJoin(final Root<E> root, final CriteriaBuilder builder) {
         Join p = null;
-        for (JoinMetaData join : joins) {
+        for (final JoinMetaData join : joins) {
             if (p == null) {
                 p = join.getJoin(root);
             } else {
@@ -103,9 +113,9 @@ public class JoinBuilder<E, K> {
         return p;
     }
 
-    public <V> Join<E, K> getOnJoin(Join<E, K> join, CriteriaBuilder builder) {
+    public <V> Join<E, K> getOnJoin(final Join<E, K> join, final CriteriaBuilder builder) {
         final List<Predicate> predicates = new ArrayList<>(joinOnBuilders.size());
-        for (JoinOnBuilder<K, ?> joinOnBuilder : joinOnBuilders) {
+        for (final JoinOnBuilder<K, ?> joinOnBuilder : joinOnBuilders) {
             switch (joinOnBuilder.getType()) {
             case EQUAL:
                 predicates.add(builder.equal(castGet(joinOnBuilder.getAttribute(), join), joinOnBuilder.getValue()));
@@ -121,7 +131,7 @@ public class JoinBuilder<E, K> {
     }
 
     @SuppressWarnings("unchecked")
-    private <V> Expression<?> castGet(final Attribute<K, V> attribute, Join<E, K> join) {
+    private <V> Expression<?> castGet(final Attribute<K, V> attribute, final Join<E, K> join) {
         if (attribute instanceof SingularAttribute) {
             return join.get((SingularAttribute<K, V>) attribute);
         } else if (attribute instanceof ListAttribute) {

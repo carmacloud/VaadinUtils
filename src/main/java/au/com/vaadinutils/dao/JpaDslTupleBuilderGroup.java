@@ -9,10 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.persistence.Tuple;
-import javax.persistence.metamodel.SingularAttribute;
-
 import au.com.vaadinutils.dao.JpaBaseDao.Condition;
+import jakarta.persistence.Tuple;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 /**
  * Sometimes it is faster to run multiple queries returning the same entity than

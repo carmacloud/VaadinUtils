@@ -10,22 +10,21 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.base.Preconditions;
-import com.vaadin.componentfactory.Popup;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.shared.Registration;
 
@@ -384,7 +383,7 @@ public class GridExtender<T> {
     }
 
     private void addActionItems(final Map<String, String> headersMap, final HorizontalLayout gridHeader) {
-        final Popup popup = new Popup();
+        final Popover popup = new Popover();
         popup.setFor(uniqueId);
         this.registrations.add(actionIcon.addClickListener(e -> {
             final VerticalLayout layout = new VerticalLayout();
@@ -419,7 +418,7 @@ public class GridExtender<T> {
                         // If there are no stored settings, bypass this section and assume the current
                         // settings are the ones to use.
                         if (!storedVisibleSetting.isEmpty()) {
-                            if (StringUtils.equals(storedVisibleSetting, "false")) {
+                            if (Strings.CS.equals(storedVisibleSetting, "false")) {
                                 column.setVisible(false);
                             } else {
                                 column.setVisible(true);
@@ -432,7 +431,7 @@ public class GridExtender<T> {
                             show.setColor(VaadinHelper.CARMA_WHITE);
                         }
 
-                        final HorizontalLayout recordLayout = new HorizontalLayout(show, new Label(header));
+                        final HorizontalLayout recordLayout = new HorizontalLayout(show, new Span(header));
                         recordLayout.setPadding(false);
                         recordLayout.setAlignItems(Alignment.BASELINE);
 
@@ -452,7 +451,7 @@ public class GridExtender<T> {
             });
             popup.removeAll();
             popup.add(layout);
-            popup.show();
+            popup.open();
         }));
         gridHeader.add(popup);
     }

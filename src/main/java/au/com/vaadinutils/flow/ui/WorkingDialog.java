@@ -8,7 +8,7 @@ import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.progressbar.ProgressBar;
@@ -49,7 +49,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     private static final long serialVersionUID = 8696022982897542946L;
     private final Logger logger = LogManager.getLogger();
-    private Label messageLabel;
+    private Span messageLabel;
     private VerticalLayout content;
     private Button cancel;
     private CancelListener cancelListener;
@@ -101,7 +101,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
         final ProgressBar progress = new ProgressBar();
         progressArea.add(progress);
         progress.setIndeterminate(true);
-        messageLabel = new Label(message);
+        messageLabel = new Span(message);
         messageLabel.setSizeFull();
         progressArea.add(messageLabel);
         layout.add(progressArea);

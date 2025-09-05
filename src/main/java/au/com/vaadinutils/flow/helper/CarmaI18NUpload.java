@@ -16,7 +16,6 @@ public class CarmaI18NUpload extends UploadI18N {
     public CarmaI18NUpload() {
         setDropFiles(new DropFiles().setOne("Drop file here").setMany("Drop files here"));
         setAddFiles(new AddFiles().setOne("Upload File...").setMany("Upload Files..."));
-        setCancel("Cancel");
         setError(new Error().setTooManyFiles("Too Many Files.").setFileIsTooBig("File is Too Big.")
                 .setIncorrectFileType("Incorrect File Type."));
         setUploading(new Uploading()

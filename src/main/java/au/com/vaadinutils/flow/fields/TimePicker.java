@@ -19,7 +19,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.customfield.CustomField;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
@@ -120,7 +120,7 @@ public class TimePicker extends CustomField<LocalDateTime> {
     public void setReadOnly(final boolean value) {
         field.setReadOnly(value);
         icon.setColor(value ? VaadinHelper.CARMA_LIGHT_GREY : VaadinHelper.CARMA_BLUE);
-        super.setReadOnly(value);
+//        super.setReadOnly(value);
     }
 
     private void showPopupTimePicker() {
@@ -145,7 +145,7 @@ public class TimePicker extends CustomField<LocalDateTime> {
         hourAndAmPmLayout.setSpacing(false);
         hourAndAmPmLayout.setWidth("200px");
 
-        final Label hourLabel = new Label("Hour");
+        final Span hourLabel = new Span("Hour");
         hourAndAmPmLayout.add(hourLabel);
 
         final HorizontalLayout hourPanelsLayout = new HorizontalLayout();
@@ -171,7 +171,7 @@ public class TimePicker extends CustomField<LocalDateTime> {
         minuteLayout.setId("MinuteLayout");
         minuteLayout.setSpacing(false);
         minuteLayout.setPadding(false);
-        final Label minuteLabel = new Label("Minute");
+        final Span minuteLabel = new Span("Minute");
         minuteLabel.setWidth("45px");
         minuteLayout.add(minuteLabel);
 

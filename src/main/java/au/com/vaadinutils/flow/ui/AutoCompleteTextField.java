@@ -4,20 +4,20 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.google.common.base.Preconditions;
-import com.vaadin.componentfactory.Popup;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
 public class AutoCompleteTextField<E> extends TextField {
 
     private static final long serialVersionUID = -6634513296678504250L;
-    private final Popup popup = new Popup();
+    private final Popover popover = new Popover();
     private final Map<E, String> options = new LinkedHashMap<>();
     private AutoCompleteQueryListener<E> listener;
     private AutoCompleteOptionSelected<E> optionListener;
@@ -30,6 +30,7 @@ public class AutoCompleteTextField<E> extends TextField {
      * sample usage
      * 
      * 	AutoCompleteTextField<PostCode> suburb = new AutoCompleteTextField<>();
+     * suburb.init(component, "Label", "_link");
      * 
      * suburb.setQueryListener(new AutoCompleteQueryListener<PostCode>()
      * {
@@ -70,9 +71,9 @@ public class AutoCompleteTextField<E> extends TextField {
      */
     public void addEnterKeyListener(final EnterListener enterListener) {
         addKeyDownListener(Key.ENTER, e -> {
-            // Clear list and hide
-            popup.removeAll();
-            popup.hide();
+            // Clear list and close
+            popover.removeAll();
+            popover.close();
             // Pass back value that is in the text field.
             enterListener.value(getValue());
         });
@@ -101,16 +102,16 @@ public class AutoCompleteTextField<E> extends TextField {
         setId(listCaption);
         setLabel(fieldCaption);
         setClearButtonVisible(true);
-        popup.setFor(listCaption);
+        popover.setFor(listCaption);
 
-        component.add(popup);
+        component.add(popover);
 
         // Set as Lazy and if also set, there can be a timeout value.
         setValueChangeMode(ValueChangeMode.LAZY);
         addValueChangeListener(valueChangeListener -> {
             if (listener != null) {
                 options.clear();
-                popup.removeAll();
+                popover.removeAll();
                 listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
             }
 
@@ -119,14 +120,14 @@ public class AutoCompleteTextField<E> extends TextField {
                     showOptionMenu();
                 }
             } else {
-                popup.removeAll();
+                popover.removeAll();
             }
         });
     }
 
     private void showOptionMenu() {
-        popup.removeAll();
-        popup.show();
+        popover.removeAll();
+        popover.open();
         final VerticalLayout layout = new VerticalLayout();
         layout.setMargin(false);
         layout.setSpacing(false);
@@ -134,19 +135,19 @@ public class AutoCompleteTextField<E> extends TextField {
         layout.setId(this.getClass().getSimpleName() + "-Layout");
         for (final E item : options.keySet()) {
             final String label = options.get(item);
-            final Label labelHeader = new Label(label);
+            final Span labelHeader = new Span(label);
             labelHeader.setId(label);
             final Div div = new Div(labelHeader);
             layout.add(div);
             div.addClickListener(e -> {
                 optionListener.optionSelected(AutoCompleteTextField.this, item);
-                // Clear list and hide
-                popup.removeAll();
-                popup.hide();
+                // Clear list and close
+                popover.removeAll();
+                popover.close();
             });
         }
 
-        popup.add(layout);
+        popover.add(layout);
     }
 
     public long getDropDownWidth() {
@@ -178,6 +179,6 @@ public class AutoCompleteTextField<E> extends TextField {
     }
 
     public void hideAutoComplete() {
-        popup.hide();
+        popover.close();
     }
 }

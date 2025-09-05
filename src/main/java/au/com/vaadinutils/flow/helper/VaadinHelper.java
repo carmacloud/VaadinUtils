@@ -1,17 +1,10 @@
 package au.com.vaadinutils.flow.helper;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
@@ -24,7 +17,8 @@ import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.server.StreamResource;
+import com.vaadin.flow.server.streams.DownloadHandler;
+import com.vaadin.flow.server.streams.FileDownloadHandler;
 
 public class VaadinHelper {
 
@@ -35,8 +29,6 @@ public class VaadinHelper {
     public enum NotificationType {
         ERROR, WARNING, TRAY, INFO
     }
-
-    private final static Logger logger = LogManager.getLogger();
 
     /**
      * Standard carma colour blue
@@ -116,40 +108,14 @@ public class VaadinHelper {
     private static final DatePickerI18n DATE_FORMAT_I18N = new DatePickerI18n();
 
     /**
-     * Given the full file path (on the local filesystem) to a data file, return the
-     * contents as an array of <code>byte</code> data.
      * 
-     * @param filePath A {@link String} being the full file path.
-     * @return An array of <code>byte</code> data, or null if the file could not be
-     *         found.
+     * @param filePath
+     * @return
      */
-    public static byte[] getResourceBytes(final String filePath) {
+    public static DownloadHandler getFileHandlerResource(final String filePath) {
         final File file = new File(filePath);
-        try {
-            final byte[] fileContent = Files.readAllBytes(file.toPath());
-            return fileContent;
-        } catch (final IOException e) {
-            logger.error("File not found for file path '" + filePath + "'");
-            return null;
-        }
-    }
-
-    /**
-     * Returns a {@link StreamResource} given a <code>byte</code> array of data.
-     * 
-     * @param filePath A {@link String} being the full file path.
-     * @return A {@link StreamResource} or null if there is no <code>byte</code>
-     *         array of data.
-     * @throws IOException Thrown if there are any IO errors during processing.
-     */
-    public static StreamResource getStreamResource(final String filePath) throws IOException {
-        final byte[] pdfBytes = getResourceBytes(filePath);
-        if (pdfBytes != null) {
-            return new StreamResource(FilenameUtils.getName(filePath.replace("/", "")),
-                    () -> new ByteArrayInputStream(pdfBytes));
-        } else {
-            return null;
-        }
+        final FileDownloadHandler fdh = new FileDownloadHandler(file);
+        return fdh;
     }
 
     // Dates

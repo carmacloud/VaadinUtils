@@ -1,7 +1,7 @@
 package au.com.vaadinutils.dao;
 
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Root;
 
 public interface JoinMetaData<E, K> {
 

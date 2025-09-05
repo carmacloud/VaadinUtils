@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 
 import org.apache.logging.log4j.Logger;
@@ -13,6 +12,8 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.base.Preconditions;
 
 import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 /**
  * The class is a place holder to allow access to an 'non-injected' entity
@@ -85,7 +86,7 @@ public enum EntityManagerProvider {
     private static List<Runnable> registeredPostActions = new ArrayList<>();
 
     private ThreadLocal<EntityManager> entityManagerThreadLocal = new ThreadLocal<>();
-    private javax.persistence.EntityManagerFactory emf;
+    private EntityManagerFactory emf;
 
     /**
      * Get the entity manager attached to this thread.
@@ -147,7 +148,7 @@ public enum EntityManagerProvider {
      *
      * @param emf
      */
-    public static void setEntityManagerFactory(final javax.persistence.EntityManagerFactory emf) {
+    public static void setEntityManagerFactory(final EntityManagerFactory emf) {
         INSTANCE.emf = emf;
     }
 

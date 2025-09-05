@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.persistence.Query;
+import jakarta.persistence.Query;
 
 public class JpaSettings {
     static Map<String, Object> queryHints = new HashMap<>(2);
@@ -18,7 +18,7 @@ public class JpaSettings {
     }
 
     public static void setQueryHints(final Query query) {
-        for (Entry<String, Object> queryHint : queryHints.entrySet()) {
+        for (final Entry<String, Object> queryHint : queryHints.entrySet()) {
             query.setHint(queryHint.getKey(), queryHint.getValue());
         }
     }

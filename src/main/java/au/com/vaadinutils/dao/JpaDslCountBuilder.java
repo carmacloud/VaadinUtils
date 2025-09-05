@@ -1,9 +1,9 @@
 package au.com.vaadinutils.dao;
 
-import javax.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Expression;
 
 public class JpaDslCountBuilder<E> extends JpaDslAbstract<E, Long> {
-    public JpaDslCountBuilder(Class<E> entityClass) {
+    public JpaDslCountBuilder(final Class<E> entityClass) {
         this.entityClass = entityClass;
         builder = getEntityManager().getCriteriaBuilder();
 
@@ -11,6 +11,7 @@ public class JpaDslCountBuilder<E> extends JpaDslAbstract<E, Long> {
         root = criteria.from(entityClass);
     }
 
+    @Override
     public Long count() {
         if (predicate != null) {
             criteria.where(predicate);
@@ -29,7 +30,7 @@ public class JpaDslCountBuilder<E> extends JpaDslAbstract<E, Long> {
         return getEntityManager().createQuery(criteria).getSingleResult();
     }
 
-    public Long countDistinct(Expression<?> x) {
+    public Long countDistinct(final Expression<?> x) {
         if (predicate != null) {
             criteria.where(predicate);
         }

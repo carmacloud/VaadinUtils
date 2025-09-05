@@ -1,6 +1,6 @@
 package au.com.vaadinutils.dao;
 
-import javax.persistence.metamodel.SingularAttribute;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 public class JpaDslSelectAttributeBuilder<E, R> extends JpaDslAbstract<E, R> {
     public JpaDslSelectAttributeBuilder(Class<E> entityClass, SingularAttribute<? super E, R> resultAttribute) {

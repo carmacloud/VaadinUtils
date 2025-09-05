@@ -3,10 +3,9 @@ package au.com.vaadinutils.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.SingularAttribute;
-
 import au.com.vaadinutils.flow.dao.CrudEntity;
+import jakarta.persistence.metamodel.Attribute;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 public class Path {
     private List<Attribute<? extends CrudEntity, ? extends Object>> entities = new ArrayList<Attribute<? extends CrudEntity, ? extends Object>>();
@@ -16,19 +15,19 @@ public class Path {
 
     }
 
-    public Path(SingularAttribute<? extends CrudEntity, ? extends CrudEntity> lhsEntity,
-            SingularAttribute<? extends CrudEntity, ? extends Object> rhsField) {
+    public Path(final SingularAttribute<? extends CrudEntity, ? extends CrudEntity> lhsEntity,
+            final SingularAttribute<? extends CrudEntity, ? extends Object> rhsField) {
         this.entities.add(lhsEntity);
         this.entities.add(rhsField);
     }
 
     @SafeVarargs
-    public Path(Attribute<? extends CrudEntity, ? extends Object>... entities) {
+    public Path(final Attribute<? extends CrudEntity, ? extends Object>... entities) {
         if (!(entities[entities.length - 1] instanceof SingularAttribute)) {
             throw new IllegalStateException("Last argument must be a SingularAttribute");
         }
 
-        for (Attribute<? extends CrudEntity, ? extends Object> entity : entities) {
+        for (final Attribute<? extends CrudEntity, ? extends Object> entity : entities) {
             this.entities.add(entity);
         }
     }
@@ -42,7 +41,7 @@ public class Path {
      */
     public Path evict() {
         boolean first = true;
-        for (Attribute<? extends CrudEntity, ? extends Object> entity : entities) {
+        for (final Attribute<? extends CrudEntity, ? extends Object> entity : entities) {
             if (!first) {
                 EntityManagerProvider.getEntityManager().getEntityManagerFactory().getCache()
                         .evict(entity.getDeclaringType().getJavaType());
@@ -56,7 +55,7 @@ public class Path {
 
     public String getName() {
         String path = new String();
-        for (Attribute<? extends CrudEntity, ? extends Object> entity : entities) {
+        for (final Attribute<? extends CrudEntity, ? extends Object> entity : entities) {
             if (path.length() > 0) {
                 path += ".";
             }
@@ -73,7 +72,7 @@ public class Path {
         return path;
     }
 
-    public Path add(SingularAttribute<? extends CrudEntity, ? extends Object> entity) {
+    public Path add(final SingularAttribute<? extends CrudEntity, ? extends Object> entity) {
         if (transientField != null) {
             throw new IllegalStateException("A transient field has already been added");
         }
@@ -90,7 +89,7 @@ public class Path {
      * @param entity the transient field name
      * @return the Path
      */
-    public Path addTransient(String entity) {
+    public Path addTransient(final String entity) {
         if (transientField != null) {
             throw new IllegalStateException("A transient field has already been added");
         }

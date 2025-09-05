@@ -1,10 +1,9 @@
 package au.com.vaadinutils.servlet;
 
-import javax.persistence.EntityManagerFactory;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
 import au.com.vaadinutils.dao.EntityManagerProvider;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 /**
  * You need to hook this class as a servlet context listener in your web.xml
@@ -20,14 +19,14 @@ public abstract class VUEntityManagerContextListener implements ServletContextLi
 
     @Override
     @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD", justification = "There is only a single instance of the ContextListener")
-    public void contextInitialized(ServletContextEvent event) {
+    public void contextInitialized(final ServletContextEvent event) {
 
         emf = getEntityManagerFactory();
         EntityManagerProvider.setEntityManagerFactory(emf);
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent event) {
+    public void contextDestroyed(final ServletContextEvent event) {
         if (emf != null)
             emf.close();
     }

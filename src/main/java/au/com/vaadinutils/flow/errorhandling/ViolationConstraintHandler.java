@@ -1,6 +1,5 @@
 package au.com.vaadinutils.flow.errorhandling;
 
-import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
@@ -8,6 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.DescriptorException;
+
+import jakarta.persistence.PersistenceException;
 
 //import com.vaadin.data.Buffered;
 //import com.vaadin.data.Buffered.SourceException;

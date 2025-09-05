@@ -23,7 +23,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
-import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 
@@ -273,8 +273,8 @@ public class ErrorWindow {
         saveButton.setId(ERROR_WINDOW_CLOSE_BUTTON);
 
         layout.add(message, describe, notes, uploadStatus);
-        layout.add(new Label("Information about this error will be sent to " + getSupportCompanyName()));
-        window.add(layout);
+        layout.add(new Span("Information about this error will be sent to " + getSupportCompanyName()));
+        window.setText(layout);
         window.open();
     }
 

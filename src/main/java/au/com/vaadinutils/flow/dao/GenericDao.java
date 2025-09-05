@@ -17,8 +17,8 @@ package au.com.vaadinutils.flow.dao;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.EntityTransaction;
-import javax.persistence.metamodel.SingularAttribute;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 /**
  * Use for ParentCrud DataProvider implementation.
@@ -29,7 +29,7 @@ public interface GenericDao<E, K> {
 
     void persist(E currentEntity);
 
-    public E findById(K id);
+    E findById(K id);
 
     void refresh(E currentEntity);
 

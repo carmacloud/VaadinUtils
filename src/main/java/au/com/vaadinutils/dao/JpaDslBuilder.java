@@ -1,10 +1,10 @@
 package au.com.vaadinutils.dao;
 
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 public class JpaDslBuilder<E> extends JpaDslAbstract<E, E> {
-    public JpaDslBuilder(Class<E> entityClass) {
+    public JpaDslBuilder(final Class<E> entityClass) {
         this.entityClass = entityClass;
         builder = getEntityManager().getCriteriaBuilder();
 
@@ -20,7 +20,7 @@ public class JpaDslBuilder<E> extends JpaDslAbstract<E, E> {
      * @param entityClass
      */
     @SuppressWarnings("unchecked")
-    public JpaDslBuilder(CriteriaQuery<E> query, Class<E> entityClass) {
+    public JpaDslBuilder(final CriteriaQuery<E> query, final Class<E> entityClass) {
         this.entityClass = entityClass;
         builder = getEntityManager().getCriteriaBuilder();
 

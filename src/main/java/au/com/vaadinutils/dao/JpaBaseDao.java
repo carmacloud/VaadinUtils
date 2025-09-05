@@ -10,23 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import javax.persistence.Table;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
-import javax.persistence.metamodel.SingularAttribute;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,6 +17,22 @@ import com.google.common.base.Preconditions;
 
 import au.com.vaadinutils.flow.dao.CrudEntity;
 import au.com.vaadinutils.flow.dao.GenericDao;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
+import jakarta.persistence.Table;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.metamodel.EntityType;
+import jakarta.persistence.metamodel.Metamodel;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     protected Class<E> entityClass;
@@ -223,8 +222,6 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         final Root<E> root = criteria.from(entityClass);
         criteria.select(root);
 
-        // TODO: This would be better if all entities extended BaseCrudEntity, then it
-        // would look like BaseCrudEntity_.id instead of "id"
         criteria.where(root.get(idAttribute).in(idsToFind));
 
         final TypedQuery<E> query = getEntityManager().createQuery(criteria);

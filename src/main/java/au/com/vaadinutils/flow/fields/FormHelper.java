@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.metamodel.SingularAttribute;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,6 +38,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import au.com.vaadinutils.flow.converter.LongNoGroupingConverter;
 import au.com.vaadinutils.flow.dao.CrudEntity;
 import au.com.vaadinutils.flow.helper.VaadinHelper;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 /**
  * A class to enable quickly creating basic field types and optionally adding
@@ -316,7 +315,7 @@ public class FormHelper<E extends CrudEntity> {
                 component.setWidthFull();
 
                 if (dataProvider != null) {
-                    component.setDataProvider(dataProvider);
+//                    component.setDataProvider(dataProvider);
                 } else {
                     throw new NullPointerException("You must provide a DataProvider.");
                 }

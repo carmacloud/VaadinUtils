@@ -3,15 +3,15 @@ package au.com.vaadinutils.dao;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.Tuple;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Selection;
-import javax.persistence.metamodel.SingularAttribute;
+import jakarta.persistence.Tuple;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Selection;
+import jakarta.persistence.metamodel.SingularAttribute;
 
 public class JpaDslTupleBuilder<E> extends JpaDslAbstract<E, Tuple> {
     private List<Selection<?>> multiselects = new LinkedList<>();
 
-    public JpaDslTupleBuilder(Class<E> entityClass) {
+    public JpaDslTupleBuilder(final Class<E> entityClass) {
         this.entityClass = entityClass;
         builder = getEntityManager().getCriteriaBuilder();
 

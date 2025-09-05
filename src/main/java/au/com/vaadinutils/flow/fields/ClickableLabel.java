@@ -2,12 +2,11 @@ package au.com.vaadinutils.flow.fields;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
 
 /**
- * Adds a {@link Label} in to a {@link Span} to allow a simple {@link Button}
- * like feature.<br>
+ * Adds a {@link Component} in to a {@link Span} to allow a simple
+ * {@link Button} like feature.<br>
  * Use the Click Listener from the layout to respond to click events.
  */
 public class ClickableLabel extends Span {
