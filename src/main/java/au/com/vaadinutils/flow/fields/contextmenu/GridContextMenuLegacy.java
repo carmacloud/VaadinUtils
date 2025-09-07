@@ -17,8 +17,7 @@ import au.com.vaadinutils.flow.user.GridExtender;
 import elemental.json.JsonObject;
 
 /**
- * Retained until issues with AdminNotesHelper and it's extended classes are
- * resolved.
+ * Retained for use with AdminNotesHelper and it's extended classes.
  * 
  * @param <E>
  */

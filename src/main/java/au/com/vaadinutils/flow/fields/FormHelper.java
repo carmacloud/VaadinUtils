@@ -70,6 +70,7 @@ public class FormHelper<E extends CrudEntity> {
 
     // Store and form items so they can be retrieved and enabled/shown etc.
     private final Map<Component, FormItem> fieldsWithFormItems = new HashMap<>(10);
+    private Integer formLabelWidth;
 
     /**
      * Use this if you do not require binding and will add components to a layout
@@ -584,6 +585,9 @@ public class FormHelper<E extends CrudEntity> {
                     }
                 }
                 final FormItem formItem = ((FormLayout) layout).addFormItem(field, caption);
+                if (formLabelWidth != null) {
+                    formItem.getStyle().set("--vaadin-form-item-label-width", formLabelWidth + "em");
+                }
                 fieldsWithFormItems.put(field, formItem);
             } else if (layout instanceof GridLayout) {
                 ((GridLayout) layout).addComponent(field);
@@ -671,5 +675,9 @@ public class FormHelper<E extends CrudEntity> {
      */
     public Map<Component, FormItem> getFieldsWithFormItems() {
         return this.fieldsWithFormItems;
+    }
+
+    public void setFormLabelWidth(final int formLabelWidth) {
+        this.formLabelWidth = formLabelWidth;
     }
 }

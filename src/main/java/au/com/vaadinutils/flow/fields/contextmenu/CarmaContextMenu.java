@@ -29,7 +29,7 @@ public class CarmaContextMenu<E> extends GridContextMenu<E> implements ListenerC
 
     public CarmaContextMenu(final Grid<E> target) {
         super(target);
-        logger.info("Creating context menu '" + getClass().getSimpleName() + "'");
+        logger.debug("Creating context menu '" + getClass().getSimpleName() + "'");
 
         setDynamicContentHandler(record -> {
             selectedRow = record;
