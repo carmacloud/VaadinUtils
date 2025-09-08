@@ -280,11 +280,6 @@
 			<artifactId>vcf-gridlayout</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-		<!--<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-charts-flow</artifactId>
-			<version>9.0.0</version>$NO-MVN-MAN-VER$
-		</dependency>-->
 		<dependency>
 			<groupId>com.flowingcode.vaadin.addons</groupId>
 			<artifactId>twincolgrid</artifactId>
@@ -294,9 +289,9 @@
 
 	<profiles>
 		<profile>
-			<id>doclint-java8-disable</id>
+			<id>doclint-java17-disable</id>
 			<activation>
-				<jdk>[1.8,)</jdk>
+				<jdk>[17,)</jdk>
 			</activation>
 			<properties>
 				<javadoc.opts>-Xdoclint:none</javadoc.opts>
