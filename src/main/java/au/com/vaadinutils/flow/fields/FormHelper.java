@@ -315,7 +315,7 @@ public class FormHelper<E extends CrudEntity> {
                 component.setWidthFull();
 
                 if (dataProvider != null) {
-//                    component.setDataProvider(dataProvider);
+                    component.setItems(dataProvider);
                 } else {
                     throw new NullPointerException("You must provide a DataProvider.");
                 }
@@ -463,7 +463,7 @@ public class FormHelper<E extends CrudEntity> {
                 component.setFieldWidth("100%");
 
                 if (dataProvider != null) {
-                    component.setDataProvider(dataProvider);
+                    component.setItems(dataProvider);
                 } else {
                     throw new NullPointerException("You must provide a DataProvider.");
                 }

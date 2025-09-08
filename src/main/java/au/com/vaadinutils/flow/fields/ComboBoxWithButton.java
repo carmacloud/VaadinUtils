@@ -78,9 +78,9 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
         field.setItems(items);
     }
 
-    public void setDataProvider(final DataProvider<T, String> dataProvider) {
+    public void setItems(final DataProvider<T, String> dataProvider) {
         this.dataProvider = dataProvider;
-//        field.setDataProvider(dataProvider);
+        field.setItems(dataProvider);
     }
 
     public String getLabel() {
