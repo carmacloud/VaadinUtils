@@ -161,7 +161,7 @@ public class VaadinHelper {
      *                positioning of the {@link Notification}.
      */
     public Notification notificationDialog(final String caption, final NotificationType type) {
-        return createNotification(caption, type, new Span());
+        return createNotification(caption, type, null);
     }
 
     /**
@@ -252,7 +252,10 @@ public class VaadinHelper {
             break;
         }
 
-        final VerticalLayout layout = new VerticalLayout(header, contents);
+        final VerticalLayout layout = new VerticalLayout(header);
+        if (contents != null) {
+            layout.add(contents);
+        }
         layout.setId("NotificationType-Layout");
         layout.addClickListener(e -> {
             notification.close();
