@@ -1,6 +1,5 @@
 package au.com.vaadinutils.flow.helper;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -17,8 +16,6 @@ import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.server.streams.DownloadHandler;
-import com.vaadin.flow.server.streams.FileDownloadHandler;
 
 public class VaadinHelper {
 
@@ -106,17 +103,6 @@ public class VaadinHelper {
     public static final String CARMA_WHITE = "#FFFFFF";
 
     private static final DatePickerI18n DATE_FORMAT_I18N = new DatePickerI18n();
-
-    /**
-     * 
-     * @param filePath
-     * @return
-     */
-    public static DownloadHandler getFileHandlerResource(final String filePath) {
-        final File file = new File(filePath);
-        final FileDownloadHandler fdh = new FileDownloadHandler(file);
-        return fdh;
-    }
 
     // Dates
     public static Date convertFromLocalDateTime(final LocalDateTime dateTime) {
