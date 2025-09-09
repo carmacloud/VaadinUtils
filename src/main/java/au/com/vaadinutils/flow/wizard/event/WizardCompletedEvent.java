@@ -6,8 +6,7 @@ public class WizardCompletedEvent extends AbstractWizardEvent {
 
     private static final long serialVersionUID = 431597612721013346L;
 
-    public WizardCompletedEvent(Wizard source, boolean fromClient) {
+    public WizardCompletedEvent(final Wizard source, final boolean fromClient) {
         super(source, fromClient);
     }
-
 }

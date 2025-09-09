@@ -6,7 +6,7 @@ public class WizardStepSetChangedEvent extends AbstractWizardEvent {
 
     private static final long serialVersionUID = 8327572270357966942L;
 
-    public WizardStepSetChangedEvent(Wizard source, boolean fromClient) {
+    public WizardStepSetChangedEvent(final Wizard source, final boolean fromClient) {
         super(source, fromClient);
     }
 }

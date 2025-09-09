@@ -8,7 +8,7 @@ public class AbstractWizardEvent extends ComponentEvent<Wizard> {
 
     private static final long serialVersionUID = 5593764289204456275L;
 
-    public AbstractWizardEvent(Wizard source, boolean fromClient) {
+    public AbstractWizardEvent(final Wizard source, final boolean fromClient) {
         super(source, fromClient);
     }
 

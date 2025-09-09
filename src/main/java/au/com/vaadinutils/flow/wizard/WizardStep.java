@@ -15,7 +15,7 @@ public interface WizardStep {
      * 
      * @return the caption of this WizardStep.
      */
-    public String getCaption();
+    String getCaption();
 
     /**
      * Returns the {@link Component} that is to be used as the actual content of
@@ -23,7 +23,7 @@ public interface WizardStep {
      * 
      * @return the content of this WizardStep as a Component.
      */
-    public Component getContent();
+    Component getContent();
 
     /**
      * Returns true if user is allowed to navigate forward past this WizardStep.
@@ -32,7 +32,7 @@ public interface WizardStep {
      * 
      * @return true if user is allowed to navigate past this WizardStep.
      */
-    public boolean onAdvance();
+    boolean onAdvance();
 
     /**
      * Returns true if user is allowed to navigate backwards from this WizardStep.
@@ -41,5 +41,5 @@ public interface WizardStep {
      * 
      * @return true if user is allowed to navigate backwards from this WizardStep.
      */
-    public boolean onBack();
+    boolean onBack();
 }

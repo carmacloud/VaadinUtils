@@ -8,7 +8,7 @@ public class WizardStepActivationEvent extends AbstractWizardEvent {
     private static final long serialVersionUID = 5298014833826937000L;
     private final WizardStep activatedStep;
 
-    public WizardStepActivationEvent(Wizard source, boolean fromClient, WizardStep activatedStep) {
+    public WizardStepActivationEvent(final Wizard source, final boolean fromClient, final WizardStep activatedStep) {
         super(source, fromClient);
         this.activatedStep = activatedStep;
     }
