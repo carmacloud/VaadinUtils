@@ -7,7 +7,7 @@ public abstract class ProgressBarTask<T> {
 
     protected final UIReference ui;
 
-    public ProgressBarTask(ProgressTaskListener<T> listener, final UIReference ui2) {
+    public ProgressBarTask(final ProgressTaskListener<T> listener, final UIReference ui2) {
         this.listener = listener;
         this.ui = ui2;
     }

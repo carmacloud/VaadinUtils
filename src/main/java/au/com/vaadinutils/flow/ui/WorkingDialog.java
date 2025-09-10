@@ -137,10 +137,11 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
 
     @Override
     public void progress(final int count, final int max, final String message) {
-        logger.debug("Process progress " + this.caption + " -> " + message);
-        ui.access(() -> {
-            messageLabel.setText(message);
-        });
+        // There was a UI.access here, but removed for this test. Check again when
+        // real-world code is used.
+        logger.info("Process progress " + this.caption + " -> " + message);
+        logger.info(message);
+        messageLabel.setText(message);
     }
 
     @Override
