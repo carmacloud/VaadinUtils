@@ -16,7 +16,12 @@ import com.vaadin.flow.shared.Registration;
 import au.com.vaadinutils.flow.user.GridExtender;
 import elemental.json.JsonObject;
 
-public class GridContextMenu<E> extends EntityContextMenu<E> {
+/**
+ * Retained for use with AdminNotesHelper and it's extended classes.
+ * 
+ * @param <E>
+ */
+public class GridContextMenuLegacy<E> extends EntityContextMenu<E> {
 
     private static final long serialVersionUID = -5882295471669681116L;
 
