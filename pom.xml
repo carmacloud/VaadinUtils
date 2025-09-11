@@ -10,7 +10,7 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<gson.version>2.13.1</gson.version>
+		<gson.version>2.13.2</gson.version>
 		<commons-validator.version>1.10.0</commons-validator.version>
 		<open.csv.version>5.12.0</open.csv.version>
 		<jakarta.servlet-api-version>6.1.0</jakarta.servlet-api-version>
@@ -22,7 +22,8 @@
 		<vaadin.version>24.8.7</vaadin.version>
 		<!-- Vaadin addon-->
 		<twincolgrid-version>3.1.0</twincolgrid-version>
-		<!-- Update any of the following, update dbupgrade.sh in carma as well-->
+		<!-- Update any of the following, update dbupgrade.sh in carma as
+		well-->
 		<log4j.version>2.25.1</log4j.version>
 		<eclipselink.version>4.0.7</eclipselink.version>
 	</properties>
@@ -83,23 +84,23 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
- 				<artifactId>maven-enforcer-plugin</artifactId>
- 				<version>3.6.1</version>
-  				<executions>
-    				<execution>
-      					<id>enforce-maven</id>
-      						<goals>
-       							 <goal>enforce</goal>
-      						</goals>
-      						<configuration>
-       							 <rules>
-          							<requireMavenVersion>
-            							<version>[3.6.3,)</version>
-          							</requireMavenVersion>
-        						</rules>
-      						</configuration>
-    				</execution>
-  				</executions>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.6.1</version>
+				<executions>
+					<execution>
+						<id>enforce-maven</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>[3.6.3,)</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -125,7 +126,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.11.2</version>
+				<version>3.11.3</version>
 				<configuration>
 					<additionalOptions>${javadoc.opts}</additionalOptions>
 				</configuration>
