@@ -16,8 +16,8 @@
 		<jakarta.servlet-api-version>6.1.0</jakarta.servlet-api-version>
 		<jakarta.annotation.api.version>3.1.1</jakarta.annotation.api.version>
 		<hibernate.validator.annotation.processor.version>9.0.1.Final</hibernate.validator.annotation.processor.version>
-		<!-- Testing -->
-		<junit.version>4.13.2</junit.version>
+		<!-- Testing dependency versions -->
+		<junit-jupiter-api.version>6.0.0-M2</junit-jupiter-api.version>
 		<!-- Vaadin 14 properties -->
 		<vaadin.version>24.8.7</vaadin.version>
 		<!-- Vaadin addon-->
@@ -72,7 +72,8 @@
 
 	<distributionManagement>
 		<repository>
-			<!-- these properties are stored in settings.xml, this is handy if you 
+			<!-- these properties are stored in settings.xml, this is handy if
+			you 
 				want to deploy to your own repository -->
 			<id>${distribution.id}</id>
 			<name>${distribution.name}</name>
@@ -182,7 +183,8 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin</artifactId>
 			<exclusions>
-				<!-- Webjars are only needed when running in Vaadin 13 compatibility 
+				<!-- Webjars are only needed when running in Vaadin 13
+				compatibility 
 					mode -->
 				<exclusion>
 					<groupId>com.vaadin.webjar</groupId>
@@ -272,10 +274,11 @@
 			<version>${gson.version}</version>
 			<scope>compile</scope>
 		</dependency>
+		<!--https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit-jupiter-api.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

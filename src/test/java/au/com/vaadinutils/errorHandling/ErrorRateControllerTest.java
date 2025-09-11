@@ -1,12 +1,12 @@
 package au.com.vaadinutils.errorHandling;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.base.Stopwatch;
 
@@ -19,27 +19,26 @@ public class ErrorRateControllerTest {
 
     @Test
     public void test() throws InterruptedException {
-        ErrorRateController errorRateController = new ErrorRateController(BURST, RATE, TimeUnit.SECONDS);
-        Stopwatch timer = Stopwatch.createStarted();
-        int counter = runRateTest(errorRateController, 100);
+        final ErrorRateController errorRateController = new ErrorRateController(BURST, RATE, TimeUnit.SECONDS);
+        final Stopwatch timer = Stopwatch.createStarted();
+        final int counter = runRateTest(errorRateController, 100);
         final long expected = expected(timer);
-        assertTrue("exptected " + expected + " got " + counter, Math.abs(counter - expected) <= RATE);
-
+        assertTrue(Math.abs(counter - expected) <= RATE, "expected " + expected + " got " + counter);
     }
 
     @Test
     public void testBurst() throws InterruptedException {
-        ErrorRateController errorRateController = new ErrorRateController(BURST, RATE, TimeUnit.SECONDS);
+        final ErrorRateController errorRateController = new ErrorRateController(BURST, RATE, TimeUnit.SECONDS);
         int counter = runRateTest(errorRateController, 0);
         Thread.sleep(2000);
         counter += runRateTest(errorRateController, 0);
 
-        assertTrue("exptected " + (BURST + (RATE * 2)) + " got " + counter,
-                Math.abs(counter - (BURST + (RATE * 2))) <= RATE);
-
+        assertTrue(Math.abs(counter - (BURST + (RATE * 2))) <= RATE,
+                "expected " + (BURST + (RATE * 2)) + " got " + counter);
     }
 
-    private int runRateTest(ErrorRateController errorRateController, long delay) throws InterruptedException {
+    private int runRateTest(final ErrorRateController errorRateController, final long delay)
+            throws InterruptedException {
 
         int counter = 0;
         for (int i = 0; i < 30; i++) {
@@ -49,42 +48,38 @@ public class ErrorRateControllerTest {
             }
             Thread.sleep(delay);
         }
-        return counter;
 
+        return counter;
     }
 
     @Test
     public void multiThreadTest() throws InterruptedException {
         final ErrorRateController errorRateController = new ErrorRateController(BURST, RATE, TimeUnit.SECONDS);
-        Stopwatch timer = Stopwatch.createStarted();
+        final Stopwatch timer = Stopwatch.createStarted();
 
         final AtomicInteger count = new AtomicInteger();
         final CountDownLatch latch = new CountDownLatch(10);
         for (int i = 0; i < 10; i++) {
-            Runnable r = new Runnable() {
+            final Runnable r = new Runnable() {
 
                 @Override
                 public void run() {
                     try {
                         count.addAndGet(runRateTest(errorRateController, 100));
                         latch.countDown();
-                    } catch (InterruptedException e) {
+                    } catch (final InterruptedException e) {
                         e.printStackTrace();
                     }
-
                 }
             };
             new Thread(r).start();
         }
         latch.await();
         final long expected = expected(timer);
-        assertTrue("exptected " + expected + " got " + count.get(), Math.abs(count.get() - expected) <= RATE);
-
+        assertTrue(Math.abs(count.get() - expected) <= RATE, "expected " + expected + " got " + count.get());
     }
 
-    // Logger logger = org.apache.logging.log4j.LogManager.getLogger();
-
-    private long expected(Stopwatch timer) {
+    private long expected(final Stopwatch timer) {
         return 20 + (timer.elapsed(TimeUnit.SECONDS) * RATE);
     }
 }
