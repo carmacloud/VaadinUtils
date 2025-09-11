@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.validation.ConstraintViolationException;
-
 import org.apache.logging.log4j.Logger;
 
 import com.google.common.base.Preconditions;
@@ -14,6 +12,7 @@ import com.google.common.base.Preconditions;
 import au.com.vaadinutils.flow.errorhandling.ErrorWindow;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.validation.ConstraintViolationException;
 
 /**
  * The class is a place holder to allow access to an 'non-injected' entity

@@ -14,6 +14,8 @@
 		<commons-validator.version>1.10.0</commons-validator.version>
 		<open.csv.version>5.12.0</open.csv.version>
 		<jakarta.servlet-api-version>6.1.0</jakarta.servlet-api-version>
+		<jakarta.annotation.api.version>3.1.1</jakarta.annotation.api.version>
+		<hibernate.validator.annotation.processor.version>9.0.1.Final</hibernate.validator.annotation.processor.version>
 		<!-- Testing -->
 		<junit.version>4.13.2</junit.version>
 		<!-- Vaadin 14 properties -->
@@ -213,9 +215,9 @@
 			<version>${eclipselink.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator-annotation-processor</artifactId>
-			<version>4.2.0.Final</version>
+			<version>${hibernate.validator.annotation.processor.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -284,6 +286,11 @@
 			<groupId>com.flowingcode.vaadin.addons</groupId>
 			<artifactId>twincolgrid</artifactId>
 			<version>${twincolgrid-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>${jakarta.annotation.api.version}</version>
 		</dependency>
 	</dependencies>
 
