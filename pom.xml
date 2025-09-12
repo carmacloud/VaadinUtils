@@ -17,7 +17,7 @@
 		<jakarta.annotation.api.version>3.1.1</jakarta.annotation.api.version>
 		<hibernate.validator.annotation.processor.version>9.0.1.Final</hibernate.validator.annotation.processor.version>
 		<!-- Testing dependency versions -->
-		<junit-jupiter-api.version>6.0.0-M2</junit-jupiter-api.version>
+		<junit-jupiter-api.version>5.13.4</junit-jupiter-api.version>
 		<!-- Vaadin 14 properties -->
 		<vaadin.version>24.8.7</vaadin.version>
 		<!-- Vaadin addon-->
@@ -72,8 +72,7 @@
 
 	<distributionManagement>
 		<repository>
-			<!-- these properties are stored in settings.xml, this is handy if
-			you 
+			<!-- these properties are stored in settings.xml, this is handy if you
 				want to deploy to your own repository -->
 			<id>${distribution.id}</id>
 			<name>${distribution.name}</name>
