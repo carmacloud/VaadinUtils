@@ -17,9 +17,10 @@
 		<!-- Testing dependency versions -->
 		<junit-jupiter-api.version>5.13.4</junit-jupiter-api.version>
 		<!-- Vaadin 14 properties -->
-		<vaadin.version>24.8.7</vaadin.version>
+		<vaadin.version>24.8.8</vaadin.version>
 		<!-- Vaadin addon-->
 		<twincolgrid-version>3.1.0</twincolgrid-version>
+		<!-- Only include stable builds for dependency and plugin checks -->
 		<maven.version.ignore>(?i).*-(alpha|beta|m|rc|b)([-. ]?\d+)?</maven.version.ignore>
 		<!-- Update any of the following, update dbupgrade.sh in carma as well-->
 		<log4j.version>2.25.1</log4j.version>
