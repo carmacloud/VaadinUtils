@@ -1312,7 +1312,7 @@ public class FormHelper<E> implements Serializable {
 
         }
         logger.error(sb.toString());
-        VaadinHelper.notificationDialog(sb.toString(), NotificationType.ERROR);
+        new VaadinHelper().notificationDialog(sb.toString(), NotificationType.ERROR);
     }
 
     protected AbstractLayout getForm() {

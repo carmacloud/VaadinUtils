@@ -198,7 +198,7 @@ public class VaadinHelper {
      * @param type    A {@link NotificationType} that determines the colour and
      *                positioning of the {@link Notification}.
      */
-    public static Notification notificationDialog(final String caption, final NotificationType type) {
+    public Notification notificationDialog(final String caption, final NotificationType type) {
         return createNotification(caption, type, new Span());
     }
 
@@ -216,8 +216,7 @@ public class VaadinHelper {
      * @param type    A {@link NotificationType} that determines the colour and
      *                positioning of the {@link Notification}.
      */
-    public static Notification notificationDialog(final String caption, final String message,
-            final NotificationType type) {
+    public Notification notificationDialog(final String caption, final String message, final NotificationType type) {
         final Span contents = new Span(new Text(message));
         return createNotification(caption, type, contents);
     }
@@ -237,8 +236,7 @@ public class VaadinHelper {
      * @param type    A {@link NotificationType} that determines the colour and
      *                positioning of the {@link Notification}.
      */
-    public static Notification notificationDialog(final String caption, final Html message,
-            final NotificationType type) {
+    public Notification notificationDialog(final String caption, final Html message, final NotificationType type) {
         final Span contents = new Span(message);
         return createNotification(caption, type, contents);
     }
@@ -258,14 +256,13 @@ public class VaadinHelper {
      * @param type      A {@link NotificationType} that determines the colour and
      *                  positioning of the {@link Notification}.
      */
-    public static Notification notificationDialog(final String caption, final Component component,
+    public Notification notificationDialog(final String caption, final Component component,
             final NotificationType type) {
         final Span contents = new Span(component);
         return createNotification(caption, type, contents);
     }
 
-    private static Notification createNotification(final String caption, final NotificationType type,
-            final Span contents) {
+    private Notification createNotification(final String caption, final NotificationType type, final Span contents) {
         final Notification notification = new Notification();
         final HorizontalLayout header = new HorizontalLayout(new Text(caption));
         header.setAlignItems(Alignment.CENTER);

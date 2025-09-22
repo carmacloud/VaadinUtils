@@ -5,7 +5,7 @@ import com.vaadin.flow.component.contextmenu.ContextMenu;
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.flow.dao.CrudEntity;
 
-public abstract class EntityContextMenu<E> extends ContextMenu {
+public abstract class EntityContextMenu<E> extends ContextMenu implements ListenerCleanup {
     private static final long serialVersionUID = 1L;
 
     private E targetEntity;
@@ -17,7 +17,7 @@ public abstract class EntityContextMenu<E> extends ContextMenu {
         return targetEntity;
     }
 
-    protected void setTargetEntity(E targetEntity) {
+    protected void setTargetEntity(final E targetEntity) {
         this.targetEntity = targetEntity;
     }
 

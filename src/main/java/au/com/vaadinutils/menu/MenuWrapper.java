@@ -1,5 +1,6 @@
 package au.com.vaadinutils.menu;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.vaadin.ui.MenuBar;
@@ -7,17 +8,16 @@ import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
 
 /**
- * because MenuBar and MenuItem have no common ancestor with the addItem method
+ * Because MenuBar and MenuItem have no common ancestor with the addItem method
  * 
  * @author rsutton Will be removed once dependent classes are removed.
  */
 public class MenuWrapper {
-    Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+    private Logger logger = LogManager.getLogger();
     Object innerMenuObject;
 
     MenuWrapper(final MenuBar bar) {
         innerMenuObject = bar;
-
     }
 
     MenuWrapper(final MenuItem item) {
@@ -53,11 +53,7 @@ public class MenuWrapper {
             if (!done) {
                 menuItem.addItem(displayName, command);
                 logger.debug("for menu " + menuItem.getText() + " Inserting " + displayName);
-
             }
-
         }
-
     }
-
 }

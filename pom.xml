@@ -18,10 +18,10 @@
 		<!-- Testing -->
 		<junit.version>4.13.2</junit.version>
 		<!-- Vaadin 14 properties -->
-		<vaadin.version>14.12.7</vaadin.version>
+		<vaadin.version>14.13.2</vaadin.version>
 		<twincolgrid-version>2.9.5</twincolgrid-version>
 		<!-- Update any of the following, update dbupgrade.sh in carma as well-->
-		<log4j.version>2.24.1</log4j.version>
+		<log4j.version>2.24.3</log4j.version>
 		<eclipselink.version>2.6.9</eclipselink.version>
 	</properties>
 
@@ -411,7 +411,7 @@
 		<dependency>
 			<groupId>org.vaadin.addons.componentfactory</groupId>
 			<artifactId>vcf-gridlayout</artifactId>
-			<version>1.1.0</version>
+			<version>1.1.1</version>
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
