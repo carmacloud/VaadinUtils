@@ -386,7 +386,7 @@ public class GridExtender<T> {
     private void addActionItems(final Map<String, String> headersMap, final HorizontalLayout gridHeader) {
         final Popup popup = new Popup();
         popup.setFor(uniqueId);
-        actionIcon.addClickListener(e -> {
+        this.registrations.add(actionIcon.addClickListener(e -> {
             final VerticalLayout layout = new VerticalLayout();
             layout.setWidthFull();
             layout.setSpacing(false);
@@ -453,7 +453,7 @@ public class GridExtender<T> {
             popup.removeAll();
             popup.add(layout);
             popup.show();
-        });
+        }));
         gridHeader.add(popup);
     }
 
