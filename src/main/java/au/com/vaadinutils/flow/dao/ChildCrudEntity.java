@@ -24,6 +24,21 @@ package au.com.vaadinutils.flow.dao;
  * </code>
  * </pre>
  * 
+ * It can also be implemented as a transient variable, without the need to add a
+ * GUID column in the database<br>
+ * if it doesn't already exist.
+ * 
+ * <pre>
+ * <code>
+ *&#64;Override
+ * public String getGuid() {
+ *     return guid;
+ * }
+ * 
+ * @Transient
+ *  private String guid = UUID.randomUUID().toString();
+ *  </code>
+ * </pre>
  */
 public interface ChildCrudEntity extends CrudEntity {
     String getGuid();

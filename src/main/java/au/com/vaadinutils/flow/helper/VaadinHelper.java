@@ -107,6 +107,10 @@ public class VaadinHelper {
      */
     public static final String CARMA_DEEP_PURPLE = "#4B0082";
     /**
+     * Standard colour magenta used in the Sales Totals Grid
+     */
+    public static final String CARMA_MAGENTA = "#FF33CC";
+    /**
      * Standard colour white that can be used to 'hide' an icon by setting it to the
      * standard background colour, rather than setting the icon as not visible
      * (which affects render).
