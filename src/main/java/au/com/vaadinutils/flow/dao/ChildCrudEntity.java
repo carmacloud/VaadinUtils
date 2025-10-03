@@ -23,7 +23,6 @@ package au.com.vaadinutils.flow.dao;
 * private String guid = UUID.randomUUID().toString();
  * </code>
  * </pre>
- * 
  */
 public interface ChildCrudEntity extends CrudEntity {
     String getGuid();
