@@ -13,7 +13,7 @@
 		<open.csv.version>5.12.0</open.csv.version>
 		<jakarta.servlet-api-version>6.1.0</jakarta.servlet-api-version>
 		<jakarta.annotation.api.version>3.1.1</jakarta.annotation.api.version>
-		<hibernate.validator.annotation.processor.version>9.0.1.Final</hibernate.validator.annotation.processor.version>
+		<hibernate.validator.annotation.processor.version>9.1.0.Final</hibernate.validator.annotation.processor.version>
 		<!-- Testing dependency versions -->
 		<junit-jupiter-api.version>6.0.1</junit-jupiter-api.version>
 		<!-- Vaadin 14 properties -->
@@ -176,39 +176,10 @@
 	</build>
 
 	<dependencies>
-		<!-- Added Vaadin 14 dependencies below here -->
+		<!-- Added Vaadin 24 dependencies below here -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin</artifactId>
-			<exclusions>
-				<!-- Webjars are only needed when running in Vaadin 13
-				compatibility 
-					mode -->
-				<exclusion>
-					<groupId>com.vaadin.webjar</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.insites</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.polymer</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.polymerelements</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.vaadin</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.webcomponents</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
