@@ -225,6 +225,18 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
+    public <J, V extends Comparable<? super V>> Condition<E> between(final JoinBuilder<E, J> join,
+            final SingularAttribute<J, V> field, final V start, final V end) {
+        return new AbstractCondition<E>() {
+
+            @SuppressWarnings({ "unchecked", "rawtypes" })
+            @Override
+            public Predicate getPredicates() {
+                return builder.between(getJoin(join).get((SingularAttribute) field), start, end);
+            }
+        };
+    }
+
     public <T> Expression<T> coalesce(final SingularAttribute<E, T> attribute1,
             final SingularAttribute<E, T> attribute2) {
         return builder.coalesce(root.get(attribute1), root.get(attribute2));
@@ -764,6 +776,17 @@ public abstract class JpaDslAbstract<E, R> {
             @Override
             public Predicate getPredicates() {
                 return builder.lessThanOrEqualTo(getJoin(join).get(field), getJoin(join2).get(field2));
+            }
+        };
+    }
+
+    public <J, V extends Comparable<? super V>> Condition<E> lessThanOrEqualTo(final JoinBuilder<E, J> join,
+            final SingularAttribute<J, V> field, final V value) {
+        return new AbstractCondition<E>() {
+
+            @Override
+            public Predicate getPredicates() {
+                return builder.lessThanOrEqualTo(getJoin(join).get(field), copyEntityForQuery(value));
             }
         };
     }
