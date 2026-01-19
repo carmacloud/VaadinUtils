@@ -11,7 +11,7 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jasperreports.version>6.4.1</jasperreports.version>
-		<guava.version>33.2.1-jre</guava.version>
+		<guava.version>33.5.0-jre</guava.version>
 		<gson.version>2.13.2</gson.version>
 		<commons-validator.version>1.10.0</commons-validator.version>
 		<servlet-api.version>4.0.1</servlet-api.version>
@@ -198,7 +198,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator-annotation-processor</artifactId>
-			<version>4.2.0.Final</version>
+			<version>8.0.3.Final</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -210,7 +210,7 @@
 		<dependency>
 			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>5.6</version>
+			<version>5.12.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-validator</groupId>
