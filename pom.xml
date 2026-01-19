@@ -16,11 +16,11 @@
 		<jakarta.annotation.api.version>3.1.1</jakarta.annotation.api.version>
 		<hibernate.validator.annotation.processor.version>9.1.0.Final</hibernate.validator.annotation.processor.version>
 		<!-- Testing dependency versions -->
-		<junit-jupiter-api.version>6.0.1</junit-jupiter-api.version>
+		<junit-jupiter-api.version>6.0.2</junit-jupiter-api.version>
 		<!-- Vaadin 14 properties -->
 		<vaadin.version>24.9.8</vaadin.version>
 		<!-- Vaadin addon-->
-		<twincolgrid-version>3.1.0</twincolgrid-version>
+		<twincolgrid-version>4.0.0</twincolgrid-version>
 		<!-- Only include stable builds for dependency and plugin checks -->
 		<maven.version.ignore>(?i).*-(alpha|beta|m|rc|b)([-. ]?\d+)?</maven.version.ignore>
 		<!-- Update any of the following, update dbupgrade.sh in carma as well-->
