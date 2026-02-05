@@ -8,7 +8,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin7.version>7.7.40</vaadin7.version>
+		<vaadin7.version>7.7.50</vaadin7.version>
 		<jasperreports.version>6.4.1</jasperreports.version>
 		<guava.version>33.2.1-jre</guava.version>
 		<gson.version>2.8.9</gson.version>
@@ -18,10 +18,10 @@
 		<!-- Testing -->
 		<junit.version>4.13.2</junit.version>
 		<!-- Vaadin 14 properties -->
-		<vaadin.version>14.13.2</vaadin.version>
-		<twincolgrid-version>2.9.5</twincolgrid-version>
+		<vaadin.version>14.14.1</vaadin.version>
+		<twincolgrid-version>3.1.0</twincolgrid-version>
 		<!-- Update any of the following, update dbupgrade.sh in carma as well-->
-		<log4j.version>2.24.3</log4j.version>
+		<log4j.version>2.25.3</log4j.version>
 		<eclipselink.version>2.6.9</eclipselink.version>
 	</properties>
 
@@ -30,30 +30,7 @@
 			<id>vaadin-addons</id>
 			<url>https://maven.vaadin.com/vaadin-addons</url>
 		</repository>
-		<repository>
-			<id>vaadin-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
 	</repositories>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>vaadin-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 
 	<dependencyManagement>
 		<dependencies>
@@ -79,10 +56,30 @@
 
 	<build>
 		<plugins>
+		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+ 				<artifactId>maven-enforcer-plugin</artifactId>
+ 				<version>3.6.2</version>
+  				<executions>
+    				<execution>
+      					<id>enforce-maven</id>
+      						<goals>
+       							 <goal>enforce</goal>
+      						</goals>
+      						<configuration>
+       							 <rules>
+          							<requireMavenVersion>
+            							<version>[3.6.3,)</version>
+          							</requireMavenVersion>
+        						</rules>
+      						</configuration>
+    				</execution>
+  				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.14.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -127,7 +124,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.2.1</version>
+				<version>3.4.0</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -140,7 +137,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.4.0</version>
+				<version>3.12.0</version>
 				<configuration>
 					<additionalOptions>${javadoc.opts}</additionalOptions>
 				</configuration>
