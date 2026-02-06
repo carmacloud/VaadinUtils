@@ -59,8 +59,6 @@ public class FormHelper<E extends CrudEntity> {
 
     private final Logger logger = LogManager.getLogger();
     public static final String STANDARD_COMBO_WIDTH = "220";
-    // Default width for form label.
-    private String labelWidth = "12em";
 
     private final Class<E> entityClass;
     private final Component layout;
