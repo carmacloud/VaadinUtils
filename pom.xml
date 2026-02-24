@@ -16,7 +16,7 @@
 		<jakarta.annotation.api.version>3.1.1</jakarta.annotation.api.version>
 		<hibernate.validator.annotation.processor.version>9.1.0.Final</hibernate.validator.annotation.processor.version>
 		<!-- Testing dependency versions -->
-		<junit-jupiter-api.version>6.0.2</junit-jupiter-api.version>
+		<junit-jupiter-api.version>6.0.3</junit-jupiter-api.version>
 		<!-- Vaadin 14 properties -->
 		<vaadin.version>24.9.10</vaadin.version>
 		<!-- Vaadin addon-->
