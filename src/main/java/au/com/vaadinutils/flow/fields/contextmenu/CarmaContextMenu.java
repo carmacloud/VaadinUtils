@@ -56,8 +56,8 @@ public class CarmaContextMenu<E> extends GridContextMenu<E> implements ListenerC
             reg.remove();
             count++;
         });
-        if (count <= 1) {
-            logger.debug("No Registrations removed for: " + this.getClass().getSimpleName());
+        if (count < 1) {
+            logger.warn("No Registrations removed for: " + this.getClass().getSimpleName());
         } else {
             logger.warn(count + " registrations removed for: " + this.getClass().getSimpleName());
         }
