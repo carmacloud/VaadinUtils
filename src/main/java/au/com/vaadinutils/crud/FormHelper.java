@@ -12,6 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.metamodel.ListAttribute;
@@ -677,7 +678,7 @@ public class FormHelper<E> implements Serializable {
         public <K> EntityFieldBuilderV2<L, C> addDisplayField(final SingularAttribute<? super L, K> listField,
                 final String caption) {
 
-            headingBuilder.createColumn(StringUtils.defaultString(caption, listField.getName()), listField.getName())
+            headingBuilder.createColumn(Objects.toString(caption, listField.getName()), listField.getName())
                     .setLockedState(true).addColumn();
 
             sortColumns.add(listField.getName());
@@ -688,7 +689,7 @@ public class FormHelper<E> implements Serializable {
         public <K> EntityFieldBuilderV2<L, C> addDisplayFieldExtends(final SingularAttribute<? extends L, K> listField,
                 final String caption) {
 
-            headingBuilder.createColumn(StringUtils.defaultString(caption, listField.getName()), listField.getName())
+            headingBuilder.createColumn(Objects.toString(caption, listField.getName()), listField.getName())
                     .setLockedState(true).addColumn();
 
             sortColumns.add(listField.getName());
@@ -1347,16 +1348,17 @@ public class FormHelper<E> implements Serializable {
         return field;
     }
 
-//    public CKEditorEmailField bindEditorField(AbstractLayout form, ValidatingFieldGroup<E> group, String fieldName,
-//            boolean readonly, ConfigModifier configModifier) {
-//        SplitEditorField field = new SplitEditorField(readonly, configModifier);
-//        field.setWidth("100%");
-//        field.setImmediate(true);
-//        addValueChangeListeners(field);
-//        doBinding(group, fieldName, field);
-//        form.addComponent(field);
-//        return field;
-//    }
+    // public CKEditorEmailField bindEditorField(AbstractLayout form,
+    // ValidatingFieldGroup<E> group, String fieldName,
+    // boolean readonly, ConfigModifier configModifier) {
+    // SplitEditorField field = new SplitEditorField(readonly, configModifier);
+    // field.setWidth("100%");
+    // field.setImmediate(true);
+    // addValueChangeListeners(field);
+    // doBinding(group, fieldName, field);
+    // form.addComponent(field);
+    // return field;
+    // }
 
     public <EN extends Enum<EN>> ComboBox bindEnumField(final String fieldLabel,
             final SingularAttribute<E, EN> fieldName) {

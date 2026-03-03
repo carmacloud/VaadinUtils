@@ -3,6 +3,7 @@ package au.com.vaadinutils.fields;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -262,7 +263,7 @@ public class ComboBoxWithSearchFieldChooserWindow<T extends CrudEntity, C extend
     public void setNullSelectionAllowed(final boolean b, final String prompt) {
         if (b) {
             if (noneButton == null) {
-                noneButton = new Button(StringUtils.defaultString(prompt, "Select None"));
+                noneButton = new Button(Objects.toString(prompt, "Select None"));
                 noneButton.setWidth("100%");
                 noneButton.setStyleName(ValoTheme.BUTTON_FRIENDLY);
                 noneButton.addClickListener(new ClickListener() {
