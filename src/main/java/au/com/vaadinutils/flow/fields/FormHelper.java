@@ -259,6 +259,23 @@ public class FormHelper<E extends CrudEntity> {
     public TextArea bindTextArea(final String caption, final SingularAttribute<E, String> propertyAttribute,
             final Validator<String> validator) {
         final String bindingProperty = propertyAttribute.getName();
+
+        return bindTextArea(caption, bindingProperty, validator);
+    }
+
+    /**
+     * Creates and binds a {@link TextArea} for {@link String} attribute types only.
+     * 
+     * @param caption         A {@link String} that will be used to caption the
+     *                        field.
+     * @param bindingProperty A {@link String} property for binding.
+     * @param validator       A {@link Validator} of type {@link String} to add
+     *                        validation to the field. if null, validation is not
+     *                        set.
+     * @return A {@link TextArea}, bound to the {@link Binder}.
+     */
+    public TextArea bindTextArea(final String caption, final String bindingProperty,
+            final Validator<String> validator) {
         checkState(bindingProperty);
         final TextArea field = new TextArea(caption);
         field.setWidthFull();
@@ -401,6 +418,30 @@ public class FormHelper<E extends CrudEntity> {
     public TextFieldWithButton bindTextFieldWithButton(final String caption, final Button button,
             final SingularAttribute<E, String> propertyAttribute, final Validator<String> validator) {
         final String bindingProperty = propertyAttribute.getName();
+
+        return bindTextFieldWithButton(caption, button, bindingProperty, validator);
+    }
+
+    /**
+     * Creates and binds a {@link TextFieldWithButton} for {@link String} attribute
+     * types only.
+     * 
+     * @param caption         A {@link String} that will be used to caption the
+     *                        field.
+     * @param button          A {@link Button} to add to the field. Note, if none
+     *                        supplied, {@link TextFieldWithButton} will create a
+     *                        default button with no caption. This button can be
+     *                        accessed via the fields interface to add
+     *                        functionality.
+     * @param bindingProperty A {@link String} property for binding.
+     * @param validator       A {@link Validator} of type {@link String} to add
+     *                        validation to the field. if null, validation is not
+     *                        set.
+     * @return A {@link TextFieldWithButton}, the field bound to the {@link Binder}
+     *         (but not the button).
+     */
+    public TextFieldWithButton bindTextFieldWithButton(final String caption, final Button button,
+            final String bindingProperty, final Validator<String> validator) {
         checkState(bindingProperty);
         final TextFieldWithButton field = new TextFieldWithButton(caption, button);
         field.setFieldWidth("100%");
