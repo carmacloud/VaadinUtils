@@ -20,25 +20,25 @@ public class ClickableLabel extends Span {
     }
 
     public ClickableLabel(final Component value) {
-        setComponent(value);
+        this.setComponent(value);
     }
 
     public void setComponent(final Component value) {
-        setId("ClickableLabel" + value.getId().orElse(""));
-        removeAll();
-        label = value;
-        add(label);
+        this.setId("ClickableLabel" + value.getId().orElse(""));
+        this.removeAll();
+        this.label = value;
+        this.add(this.label);
     }
 
     public Component getValue() {
-        return label != null ? label : null;
+        return this.label != null ? this.label : null;
     }
 
     public Component getComponent() {
-        return label;
+        return this.label;
     }
 
     public void setDescription(final String toolTip) {
-        getElement().setAttribute("title", toolTip);
+        this.setTitle(toolTip);
     }
 }

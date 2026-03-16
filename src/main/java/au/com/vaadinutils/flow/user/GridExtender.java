@@ -563,8 +563,30 @@ public class GridExtender<T> {
     }
 
     /**
-     * Convenience method to set all columns non-sortable.<br>
-     * This overrides any settings that allowed a partial sort.
+     * Set column(s) sortable.
+     * 
+     * @param keys The List of keys for the columns. If the key name is incorrect,
+     *             or not added to the column, there is no change to column sorting
+     *             status.
+     */
+    public void setColumnsSortable(final Set<String> keys) {
+        // Set all columns non-sortable, so the nonSortKeys list is current, then remove
+        // any keys passed in through the parameter.
+        setAllColumnsNonSortable();
+        keys.forEach(key -> {
+            final Column<?> column = this.grid.getColumnByKey(key);
+
+            // Check in case a key has not been set for a column
+            if (column != null) {
+                column.setSortable(true);
+                nonSortKeys.remove(key);
+            }
+        });
+    }
+
+    /**
+     * Convenience method to set all columns non-sortable.<br. This overrides any
+     * settings that allowed a partial sort.
      */
     public void setAllColumnsNonSortable() {
         final Set<String> keys = new HashSet<>();
