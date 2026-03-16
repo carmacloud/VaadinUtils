@@ -63,7 +63,10 @@ public class TextFieldWithButton extends HorizontalLayout {
     public void setReadOnly(final boolean readOnly) {
         field.setReadOnly(readOnly);
         button.setEnabled(!readOnly);
-        button.setVisible(!readOnly);
+    }
+
+    public void setFieldEnabled(final boolean enabled) {
+        field.setEnabled(enabled);
     }
 
     public String getLabel() {
