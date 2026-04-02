@@ -25,7 +25,7 @@
 		<maven.version.ignore>(?i).*-(alpha|beta|m|rc|b)([-. ]?\d+)?</maven.version.ignore>
 		<!-- Update any of the following, update dbupgrade.sh in carma as well-->
 		<log4j.version>2.25.3</log4j.version>
-		<eclipselink.version>4.0.9</eclipselink.version>
+		<eclipselink.version>5.0.0</eclipselink.version>
 	</properties>
 
 	<repositories>
