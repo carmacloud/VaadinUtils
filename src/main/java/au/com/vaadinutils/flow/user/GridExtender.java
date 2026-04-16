@@ -145,7 +145,7 @@ public class GridExtender<T> {
                     final T selected = selectedItems.get(selectedItems.size() - 1);
                     if (selected != null) {
                         e.getAllSelectedItems().forEach(row -> {
-                            // Make sure we don't attempt to delselect any rows other than the currently
+                            // Make sure we don't attempt to de-select any rows other than the currently
                             // selected.
                             if (row.equals(selected) && !userSelectedRows.contains(row)) {
                                 grid.deselect(selected);
