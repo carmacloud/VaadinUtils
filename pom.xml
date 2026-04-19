@@ -8,7 +8,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<guava.version>33.5.0-jre</guava.version>
+		<guava.version>33.6.0-jre</guava.version>
 		<gson.version>2.13.2</gson.version>
 		<commons-validator.version>1.10.1</commons-validator.version>
 		<open.csv.version>5.12.0</open.csv.version>
@@ -24,7 +24,7 @@
 		<!-- Only include stable builds for dependency and plugin checks -->
 		<maven.version.ignore>(?i).*-(alpha|beta|m|rc|b)([-. ]?\d+)?</maven.version.ignore>
 		<!-- Update any of the following, update dbupgrade.sh in carma as well-->
-		<log4j.version>2.25.3</log4j.version>
+		<log4j.version>2.25.4</log4j.version>
 		<eclipselink.version>5.0.0</eclipselink.version>
 	</properties>
 
