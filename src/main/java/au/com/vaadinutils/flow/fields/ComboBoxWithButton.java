@@ -33,6 +33,7 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
         field = createField(label);
 
         setAlignItems(Alignment.END);
+        setJustifyContentMode(JustifyContentMode.EVENLY);
         add(field, this.button);
     }
 
