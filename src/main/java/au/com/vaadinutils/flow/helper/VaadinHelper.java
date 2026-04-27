@@ -41,6 +41,10 @@ public class VaadinHelper {
      */
     public static final String CARMA_BLUE_MID = "#003366";
     /**
+     * Standard carma bright colour blue. Used on Material Amendment checkboxes.
+     */
+    public static final String CARMA_BLUE_STD = "#0000FF";
+    /**
      * Standard carma colour red for error
      */
     public static final String CARMA_ERROR = "#CC0000";
