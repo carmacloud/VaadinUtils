@@ -33,7 +33,15 @@ public class ComboBoxWithButton<T> extends HorizontalLayout {
         field = createField(label);
 
         setAlignItems(Alignment.END);
+        setJustifyContentMode(JustifyContentMode.EVENLY);
         add(field, this.button);
+    }
+
+    public void setButtonVisible(final boolean visible) {
+        this.button.setVisible(visible);
+        if (!visible) {
+            setFieldWidth("100%");
+        }
     }
 
     public void select(final T itemId) {
