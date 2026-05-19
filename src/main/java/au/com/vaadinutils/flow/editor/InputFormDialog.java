@@ -31,7 +31,6 @@ public class InputFormDialog extends Dialog {
     private final Button cancelButton;
     private final Button ok;
     private boolean validationError = false;
-    private boolean layoutIsForm = false;
 
     public InputFormDialog(final String title, final Focusable<?> primaryFocusField, final Component form,
             final InputFormDialogRecipient recipient) {
@@ -76,7 +75,6 @@ public class InputFormDialog extends Dialog {
 
         if (form instanceof FormLayout) {
             setWidth("500px");
-            layoutIsForm = true;
         }
     }
 
@@ -97,7 +95,7 @@ public class InputFormDialog extends Dialog {
     }
 
     private void validateFormComponents(final Component form) {
-        if (!validationError && !layoutIsForm) {
+        if (!validationError) {
             try {
                 form.getChildren().forEach(child -> {
                     // Only validate if the component has the HasValidation interface. Otherwise
