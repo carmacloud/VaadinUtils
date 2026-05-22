@@ -3,6 +3,9 @@ package au.com.vaadinutils.flow.ui;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.common.base.Preconditions;
 import com.vaadin.componentfactory.Popup;
 import com.vaadin.flow.component.HasComponents;
@@ -17,6 +20,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 public class AutoCompleteTextField<E> extends TextField {
 
     private static final long serialVersionUID = -6634513296678504250L;
+    final Logger logger = LogManager.getLogger();
     private final Popup popup = new Popup();
     private final Map<E, String> options = new LinkedHashMap<>();
     private AutoCompleteQueryListener<E> listener;
@@ -25,33 +29,20 @@ public class AutoCompleteTextField<E> extends TextField {
     private long dropDownWidth = 120;
 
     /**
-     * <pre>
-     * {@code
-     * sample usage
+     * <pre> {@code sample usage
      * 
-     * 	AutoCompleteTextField<PostCode> suburb = new AutoCompleteTextField<>();
+     * AutoCompleteTextField<PostCode> suburb = new AutoCompleteTextField<>();
      * 
-     * suburb.setQueryListener(new AutoCompleteQueryListener<PostCode>()
+     * suburb.setQueryListener(new AutoCompleteQueryListener<PostCode>() {
+     * 
+     * &#64;Override public void handleQuery(AutoCompleteTextField<PostCode>
+     * field,String queryText) { field.addOption(new PostCode(3241),"Title"); } });
+     * 
+     * suburb.setOptionSelectionListener(new AutoCompleteOptionSelected<PostCode>()
      * {
      * 
-     * 	    &#64;Override
-     * 	    public void handleQuery(AutoCompleteTextField<PostCode> field,String queryText)
-     * 	    {
-     * 		    field.addOption(new PostCode(3241),"Title");
-     * 	    }
-     * 	});
-     * 
-     * 	suburb.setOptionSelectionListener(new AutoCompleteOptionSelected<PostCode>()
-     * 	{
-     * 	    
-     * 	    &#64;Override
-     * 	    public void optionSelected(AutoCompleteTextField<PostCode> field, PostCode option)
-     * 	    {
-     * 		field.setValue(option.getSuburb());
-     * 	    }
-     * 	});
-     * }
-     * </pre>
+     * &#64;Override public void optionSelected(AutoCompleteTextField<PostCode>
+     * field, PostCode option) { field.setValue(option.getSuburb()); } }); } </pre>
      * 
      */
     public AutoCompleteTextField() {
@@ -108,10 +99,12 @@ public class AutoCompleteTextField<E> extends TextField {
         // Set as Lazy and if also set, there can be a timeout value.
         setValueChangeMode(ValueChangeMode.LAZY);
         addValueChangeListener(valueChangeListener -> {
-            if (listener != null) {
-                options.clear();
-                popup.removeAll();
-                listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
+            if (valueChangeListener.isFromClient()) {
+                if (listener != null) {
+                    options.clear();
+                    popup.removeAll();
+                    listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
+                }
             }
 
             if (!options.isEmpty()) {
