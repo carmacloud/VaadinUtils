@@ -3,7 +3,7 @@ package au.com.vaadinutils.flow.jasper;
 public enum AttachmentType {
     PDF("application/pdf", ".pdf"), CSV("text/csv", ".csv"), HTML("text/html", ".html"), EML("application/eml", ".eml"),
     ZIP("application/zip", ".zip"), TXT("text/plain", ".txt"), GIF("image/gif", ".gif"), JPG("image/jpg", ".jpg"),
-    JPEG("image/jpeg", ".jpeg"), PNG("image/png", "png"),
+    JPEG("image/jpeg", ".jpeg"), PNG("image/png", ".png"),
     DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".docx"),
     XZIP("application/x-zip", ".zip"), XZIPC("application/x-zip-compressed", ".zip");
 
