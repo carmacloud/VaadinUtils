@@ -25,34 +25,21 @@ public class AutoCompleteTextField<E> extends TextField {
     private long dropDownWidth = 120;
 
     /**
-     * <pre>
-     * {@code
-     * sample usage
+     * <pre> {@code sample usage
      * 
      * 	AutoCompleteTextField<PostCode> suburb = new AutoCompleteTextField<>();
      * suburb.init(component, "Label", "_link");
      * 
-     * suburb.setQueryListener(new AutoCompleteQueryListener<PostCode>()
+     * suburb.setQueryListener(new AutoCompleteQueryListener<PostCode>() {
+     * 
+     * &#64;Override public void handleQuery(AutoCompleteTextField<PostCode>
+     * field,String queryText) { field.addOption(new PostCode(3241),"Title"); } });
+     * 
+     * suburb.setOptionSelectionListener(new AutoCompleteOptionSelected<PostCode>()
      * {
      * 
-     * 	    &#64;Override
-     * 	    public void handleQuery(AutoCompleteTextField<PostCode> field,String queryText)
-     * 	    {
-     * 		    field.addOption(new PostCode(3241),"Title");
-     * 	    }
-     * 	});
-     * 
-     * 	suburb.setOptionSelectionListener(new AutoCompleteOptionSelected<PostCode>()
-     * 	{
-     * 	    
-     * 	    &#64;Override
-     * 	    public void optionSelected(AutoCompleteTextField<PostCode> field, PostCode option)
-     * 	    {
-     * 		field.setValue(option.getSuburb());
-     * 	    }
-     * 	});
-     * }
-     * </pre>
+     * &#64;Override public void optionSelected(AutoCompleteTextField<PostCode>
+     * field, PostCode option) { field.setValue(option.getSuburb()); } }); } </pre>
      * 
      */
     public AutoCompleteTextField() {

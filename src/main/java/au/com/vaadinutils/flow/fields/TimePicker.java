@@ -71,8 +71,8 @@ public class TimePicker extends CustomField<LocalDateTime> {
             }
         });
 
-        displayTime.addValueChangeListener(e -> {
-            valueChanged(modifiedDate);
+        field.addValueChangeListener(e -> {
+            updateTime(e);
         });
     }
 
@@ -186,18 +186,7 @@ public class TimePicker extends CustomField<LocalDateTime> {
         displayTime.setWidth("100px");
 
         Registration reg = displayTime.addValueChangeListener(e -> {
-            if (e.isFromClient()) {
-                LocalDateTime parsedDate;
-                try {
-                    parsedDate = parseDate(e.getValue());
-                    if (parsedDate != null) {
-                        modifiedDate = parsedDate;
-                        setNewValue();
-                    }
-                } catch (final DateTimeException e1) {
-                    logger.error(e1.getMessage());
-                }
-            }
+            updateTime(e);
         });
         popupRegistrations.add(reg);
 
@@ -236,6 +225,22 @@ public class TimePicker extends CustomField<LocalDateTime> {
         window.addDialogCloseActionListener(r -> {
             popupRegistrations.forEach(reg1 -> reg1.remove());
         });
+    }
+
+    private void updateTime(final ComponentValueChangeEvent<TextField, String> e) {
+        if (e.isFromClient()) {
+            LocalDateTime parsedDate;
+            try {
+                parsedDate = parseDate(e.getValue());
+                if (parsedDate != null) {
+                    modifiedDate = parsedDate;
+                    setNewValue();
+                }
+            } catch (final DateTimeException e1) {
+                logger.error(e1.getMessage());
+            }
+        }
+        valueChanged(modifiedDate);
     }
 
     private void addHourButtons(final HorizontalLayout hourButtonPanel, final int rows, final int cols) {

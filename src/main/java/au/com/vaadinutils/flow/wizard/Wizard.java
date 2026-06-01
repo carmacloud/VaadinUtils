@@ -55,6 +55,8 @@ public class Wizard extends VerticalLayout {
         setPadding(false);
         setMargin(false);
         setSpacing(false);
+        getStyle().set("margin-top", "var(--lumo-space-s)");
+
         contentPanel = new VerticalLayout();
         contentPanel.getStyle().set("border", "1px solid " + VaadinHelper.CARMA_LIGHT_GREY);
         contentPanel.setPadding(false);
