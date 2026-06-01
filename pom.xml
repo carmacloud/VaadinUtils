@@ -20,7 +20,7 @@
 		<!-- Vaadin 14 properties -->
 		<vaadin.version>24.10.1</vaadin.version>
 		<!-- Vaadin addon-->
-		<twincolgrid-version>4.0.0</twincolgrid-version>
+		<twincolgrid-version>4.0.1</twincolgrid-version>
 		<!-- Only include stable builds for dependency and plugin checks -->
 		<maven.version.ignore>(?i).*-(alpha|beta|m|rc|b)([-. ]?\d+)?</maven.version.ignore>
 		<!-- Update any of the following, update dbupgrade.sh in carma as well-->
