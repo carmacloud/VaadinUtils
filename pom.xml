@@ -17,7 +17,7 @@
 		<!-- Testing dependency versions -->
 		<junit-jupiter-api.version>6.1.0</junit-jupiter-api.version>
 		<!-- Vaadin 14 properties -->
-		<vaadin.version>24.10.1</vaadin.version>
+		<vaadin.version>24.10.6</vaadin.version>
 		<!-- Vaadin addon-->
 		<twincolgrid-version>4.0.1</twincolgrid-version>
 		<!-- Only include stable builds for dependency and plugin checks -->
