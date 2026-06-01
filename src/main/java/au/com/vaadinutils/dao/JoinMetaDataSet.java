@@ -6,12 +6,6 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.metamodel.SetAttribute;
 
-//import javax.persistence.criteria.Fetch;
-//import javax.persistence.criteria.Join;
-//import javax.persistence.criteria.JoinType;
-//import javax.persistence.criteria.Root;
-//import javax.persistence.metamodel.SetAttribute;
-
 public class JoinMetaDataSet<E, K> implements JoinMetaData<E, K> {
     final SetAttribute<E, K> attribute;
     final JoinType type;

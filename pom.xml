@@ -14,7 +14,6 @@
 		<open.csv.version>5.12.0</open.csv.version>
 		<jakarta.servlet-api-version>6.1.0</jakarta.servlet-api-version>
 		<jakarta.annotation.api.version>3.1.1</jakarta.annotation.api.version>
-		<hibernate.validator.annotation.processor.version>9.1.0.Final</hibernate.validator.annotation.processor.version>
 		<!-- Testing dependency versions -->
 		<junit-jupiter-api.version>6.1.0</junit-jupiter-api.version>
 		<!-- Vaadin 14 properties -->
@@ -163,12 +162,6 @@
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>eclipselink</artifactId>
 			<version>${eclipselink.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.validator</groupId>
-			<artifactId>hibernate-validator-annotation-processor</artifactId>
-			<version>${hibernate.validator.annotation.processor.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.servlet</groupId>

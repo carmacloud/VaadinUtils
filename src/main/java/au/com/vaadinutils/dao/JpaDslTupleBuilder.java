@@ -51,19 +51,19 @@ public class JpaDslTupleBuilder<E> extends JpaDslAbstract<E, Tuple> {
 
     @Override
     public List<Tuple> getResultList() {
-        criteria.multiselect(multiselects);
+        criteria.select(builder.tuple(multiselects));
         return super.getResultList();
     }
 
     @Override
     public Tuple getSingleResult() {
-        criteria.multiselect(multiselects);
+        criteria.select(builder.tuple(multiselects));
         return super.getSingleResult();
     }
 
     @Override
     public Tuple getSingleResultOrNull() {
-        criteria.multiselect(multiselects);
+        criteria.select(builder.tuple(multiselects));
         return super.getSingleResultOrNull();
     }
 }

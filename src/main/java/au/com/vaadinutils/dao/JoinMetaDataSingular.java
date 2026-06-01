@@ -6,12 +6,6 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.metamodel.SingularAttribute;
 
-//import javax.persistence.criteria.Fetch;
-//import javax.persistence.criteria.Join;
-//import javax.persistence.criteria.JoinType;
-//import javax.persistence.criteria.Root;
-//import javax.persistence.metamodel.SingularAttribute;
-
 public class JoinMetaDataSingular<E, K> implements JoinMetaData<E, K> {
     final SingularAttribute<E, K> attribute;
     final JoinType type;

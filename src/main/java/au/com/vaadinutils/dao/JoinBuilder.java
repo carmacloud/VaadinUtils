@@ -5,17 +5,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-//import javax.persistence.criteria.CriteriaBuilder;
-//import javax.persistence.criteria.Expression;
-//import javax.persistence.criteria.Join;
-//import javax.persistence.criteria.JoinType;
-//import javax.persistence.criteria.Predicate;
-//import javax.persistence.criteria.Root;
-//import javax.persistence.metamodel.Attribute;
-//import javax.persistence.metamodel.ListAttribute;
-//import javax.persistence.metamodel.SetAttribute;
-//import javax.persistence.metamodel.SingularAttribute;
-
 import au.com.vaadinutils.dao.JoinOnBuilder.JoinOnType;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
