@@ -9,7 +9,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.Key;
-import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -31,7 +30,6 @@ public class InputFormDialog extends Dialog {
     private final Button cancelButton;
     private final Button ok;
     private boolean validationError = false;
-    private boolean layoutIsForm = false;
 
     public InputFormDialog(final String title, final Focusable<?> primaryFocusField, final Component form,
             final InputFormDialogRecipient recipient) {
@@ -59,7 +57,7 @@ public class InputFormDialog extends Dialog {
         ok = createOkButton(form, recipient);
         ok.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         ok.setId("Ok");
-        ok.addClickShortcut(Key.ENTER, KeyModifier.ALT);
+        ok.addClickShortcut(Key.ENTER);
         ok.addThemeName("default");
 
         buttonLayout.add(cancelButton, ok);
@@ -76,7 +74,6 @@ public class InputFormDialog extends Dialog {
 
         if (form instanceof FormLayout) {
             setWidth("500px");
-            layoutIsForm = true;
         }
     }
 
@@ -97,7 +94,7 @@ public class InputFormDialog extends Dialog {
     }
 
     private void validateFormComponents(final Component form) {
-        if (!validationError && !layoutIsForm) {
+        if (!validationError) {
             try {
                 form.getChildren().forEach(child -> {
                     // Only validate if the component has the HasValidation interface. Otherwise
