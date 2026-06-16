@@ -315,7 +315,7 @@ public class TimePicker extends CustomField<LocalDateTime> {
     private void setNewValue() {
         hourToSet = ("PM".equals(periodClicked) ? hourToSet + 12 : (hourToSet > 12 ? hourToSet - 12 : hourToSet));
         modifiedDate = modifiedDate.withHour(hourToSet).withMinute(minuteToSet);
-        field.setValue(modifiedDate.format(dtf));
+        setValue(modifiedDate);
         displayTime.setValue(modifiedDate.format(dtf));
     }
 
