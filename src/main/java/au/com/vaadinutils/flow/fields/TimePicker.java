@@ -45,13 +45,16 @@ public class TimePicker extends CustomField<LocalDateTime> {
     private final List<Registration> popupRegistrations = new ArrayList<>();
 
     // Formats
-    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern(TIME_FORMAT);
     public static final String TIME_FORMAT = "hh:mm a";
+    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern(TIME_FORMAT);
     private static final String EMPTY = "--:--";
 
-    private LocalDateTime storedDate = LocalDateTime.now();
+    private LocalDateTime storedDate = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
     private LocalDateTime modifiedDate = storedDate;
-    private Set<TimePickerValueChanged> listeners = new HashSet<TimePicker.TimePickerValueChanged>();
+    private Set<TimePickerValueChanged> listeners = new HashSet<TimePickerValueChanged>();
+    private int hourToSet;
+    private String periodClicked = "AM";
+    private int minuteToSet = 0;
 
     public TimePicker(final String title) {
         this.title = title;
@@ -112,7 +115,7 @@ public class TimePicker extends CustomField<LocalDateTime> {
 
     @Override
     public void setValue(final LocalDateTime value) {
-        storedDate = modifiedDate = value;
+        modifiedDate = storedDate = value;
         super.setValue(value);
     }
 
@@ -233,7 +236,9 @@ public class TimePicker extends CustomField<LocalDateTime> {
             try {
                 parsedDate = parseDate(e.getValue());
                 if (parsedDate != null) {
-                    modifiedDate = parsedDate;
+                    hourToSet = parsedDate.getHour();
+                    minuteToSet = parsedDate.getMinute();
+                    periodClicked = e.getValue().substring(6, e.getValue().length());
                     setNewValue();
                 }
             } catch (final DateTimeException e1) {
@@ -250,20 +255,13 @@ public class TimePicker extends CustomField<LocalDateTime> {
             rowsLayout.setId("RowLayout" + col);
             rowsLayout.setSpacing(false);
             rowsLayout.setPadding(false);
-            rowsLayout.setMargin(false);
             rowsLayout.setJustifyContentMode(JustifyContentMode.START);
             for (int row = 0; row < rows; row++) {
                 final Button button = new Button("" + numbers[col + (row * cols)]);
                 button.addThemeVariants(ButtonVariant.LUMO_ICON);
                 rowsLayout.add(button);
                 button.addClickListener(e -> {
-                    int hourToSet = Integer.parseInt(button.getText());
-                    hourToSet %= 12;
-
-                    if (this.modifiedDate.getHour() >= 12) {
-                        hourToSet += 12;
-                    }
-                    this.modifiedDate = modifiedDate.withHour(hourToSet);
+                    hourToSet = Integer.parseInt(button.getText());
                     setNewValue();
                 });
             }
@@ -283,17 +281,11 @@ public class TimePicker extends CustomField<LocalDateTime> {
         pm.addThemeVariants(ButtonVariant.LUMO_ICON);
         amPmButtonPanel.add(am, pm);
         am.addClickListener(e -> {
-            final int hour = modifiedDate.getHour();
-            if (hour >= 12) {
-                this.modifiedDate = modifiedDate.minusHours(12);
-            }
+            periodClicked = "AM";
             setNewValue();
         });
         pm.addClickListener(e -> {
-            final int hour = modifiedDate.getHour();
-            if (hour < 12) {
-                this.modifiedDate = modifiedDate.plusHours(12);
-            }
+            periodClicked = "PM";
             setNewValue();
         });
     }
@@ -305,7 +297,6 @@ public class TimePicker extends CustomField<LocalDateTime> {
             rowsLayout.setId("RowLayout" + col);
             rowsLayout.setSpacing(false);
             rowsLayout.setPadding(false);
-            rowsLayout.setMargin(false);
             rowsLayout.setJustifyContentMode(JustifyContentMode.START);
             for (int row = 0; row < rows; row++) {
                 final Button button = new Button("" + numbers[row + (col * rows)]);
@@ -313,7 +304,7 @@ public class TimePicker extends CustomField<LocalDateTime> {
                 rowsLayout.add(button);
                 button.addClickListener(e -> {
                     final String title = button.getText();
-                    modifiedDate = modifiedDate.withMinute(Integer.parseInt(title));
+                    minuteToSet = Integer.parseInt(title);
                     setNewValue();
                 });
             }
@@ -322,7 +313,9 @@ public class TimePicker extends CustomField<LocalDateTime> {
     }
 
     private void setNewValue() {
-        field.setValue(modifiedDate.format(dtf));
+        hourToSet = ("PM".equals(periodClicked) ? hourToSet + 12 : (hourToSet > 12 ? hourToSet - 12 : hourToSet));
+        modifiedDate = modifiedDate.withHour(hourToSet).withMinute(minuteToSet);
+        setValue(modifiedDate);
         displayTime.setValue(modifiedDate.format(dtf));
     }
 
