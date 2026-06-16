@@ -13,14 +13,16 @@ import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasValue.ValueChangeListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Unit;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+
+import au.com.vaadinutils.flow.helper.VaadinHelper;
 
 public class AutoCompleteTextField<E> extends HorizontalLayout {
 
@@ -28,7 +30,7 @@ public class AutoCompleteTextField<E> extends HorizontalLayout {
     final Logger logger = LogManager.getLogger();
     private final Popup popup = new Popup();
     private final TextField field = new TextField();
-    private final Button button = new Button();
+    private final Icon icon = VaadinIcon.SEARCH.create();
     private final Map<E, String> options = new LinkedHashMap<>();
     private AutoCompleteQueryListener<E> listener;
     private AutoCompleteOptionSelected<E> optionListener;
@@ -72,16 +74,20 @@ public class AutoCompleteTextField<E> extends HorizontalLayout {
      *                      screen.
      */
     public void addEnterKeyListener(final EnterListener enterListener) {
-        button.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
-        button.addClickShortcut(Key.ENTER);
-        button.addClickListener(e -> {
+        // Create a tiny invisible icon so it squeezes in beside the search field.
+        icon.setSize("1px");
+        icon.setColor(VaadinHelper.CARMA_WHITE);
+
+        icon.addClickShortcut(Key.ENTER);
+        icon.addClickListener(e -> {
             // Clear list and hide
             popup.removeAll();
             popup.hide();
             // Pass back value that is in the text field.
             enterListener.value(field.getValue());
         });
-        add(button);
+        setAlignItems(Alignment.CENTER);
+        add(icon);
     }
 
     public interface EnterListener {
