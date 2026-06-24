@@ -128,7 +128,14 @@ public class TimePicker extends CustomField<LocalDateTime> {
 
     private void showPopupTimePicker() {
         displayTime.setValue(field.getValue());
-
+        LocalDateTime parsedDate;
+        try {
+            parsedDate = parseDate(field.getValue());
+            hourToSet = parsedDate.getHour();
+            minuteToSet = parsedDate.getMinute();
+        } catch (final DateTimeException e1) {
+            logger.error(e1.getMessage());
+        }
         final Dialog window = new Dialog();
         window.setModal(true);
         window.setResizable(false);
