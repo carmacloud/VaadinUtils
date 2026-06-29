@@ -79,7 +79,7 @@ public class GridExtender<T> {
     public GridExtender(final Grid<T> grid, final String uniqueId, final List<Registration> registrations) {
         this.grid = grid;
         this.uniqueId = uniqueId;
-        this.registrations = registrations;
+        this.registrations = Optional.ofNullable(registrations).orElse(new ArrayList<>());
         actionIcon.setColor(VaadinHelper.CARMA_BLUE);
         actionIcon.setSize("12px");
         actionIcon.setId(uniqueId);
