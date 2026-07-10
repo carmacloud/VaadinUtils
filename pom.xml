@@ -21,7 +21,7 @@
 		<vaadin.version>14.14.3</vaadin.version>
 		<twincolgrid-version>3.1.0</twincolgrid-version>
 		<!-- Update any of the following, update dbupgrade.sh in carma as well-->
-		<log4j.version>2.26.0</log4j.version>
+		<log4j.version>2.26.1</log4j.version>
 		<eclipselink.version>2.7.16</eclipselink.version>
 	</properties>
 
