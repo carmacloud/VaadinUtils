@@ -3,21 +3,34 @@ package au.com.vaadinutils.flow.ui;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.common.base.Preconditions;
+import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
 import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.HasValue.ValueChangeListener;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.popover.Popover;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 
-public class AutoCompleteTextField<E> extends TextField {
+import au.com.vaadinutils.flow.helper.VaadinHelper;
+
+public class AutoCompleteTextField<E> extends HorizontalLayout {
 
     private static final long serialVersionUID = -6634513296678504250L;
+    final Logger logger = LogManager.getLogger();
     private final Popover popover = new Popover();
+    private final TextField field = new TextField();
+    private final Icon icon = VaadinIcon.SEARCH.create();
     private final Map<E, String> options = new LinkedHashMap<>();
     private AutoCompleteQueryListener<E> listener;
     private AutoCompleteOptionSelected<E> optionListener;
@@ -27,7 +40,7 @@ public class AutoCompleteTextField<E> extends TextField {
     /**
      * <pre> {@code sample usage
      * 
-     * 	AutoCompleteTextField<PostCode> suburb = new AutoCompleteTextField<>();
+     * AutoCompleteTextField<PostCode> suburb = new AutoCompleteTextField<>();
      * suburb.init(component, "Label", "_link");
      * 
      * suburb.setQueryListener(new AutoCompleteQueryListener<PostCode>() {
@@ -43,10 +56,15 @@ public class AutoCompleteTextField<E> extends TextField {
      * 
      */
     public AutoCompleteTextField() {
+        setSpacing(false);
+        setPadding(false);
+        setMargin(false);
+        field.setWidthFull();
+        add(field);
     }
 
     /**
-     * 
+     *
      * @param enterListener The {@link EnterListener} to allow the value in the
      *                      {@link TextField} to be passed back to the calling
      *                      class.<br>
@@ -57,13 +75,20 @@ public class AutoCompleteTextField<E> extends TextField {
      *                      screen.
      */
     public void addEnterKeyListener(final EnterListener enterListener) {
-        addKeyDownListener(Key.ENTER, e -> {
+        // Create a tiny invisible icon so it squeezes in beside the search field.
+        icon.setSize("1px");
+        icon.setColor(VaadinHelper.CARMA_WHITE);
+
+        icon.addClickShortcut(Key.ENTER);
+        icon.addClickListener(e -> {
             // Clear list and close
             popover.removeAll();
             popover.close();
             // Pass back value that is in the text field.
-            enterListener.value(getValue());
+            enterListener.value(field.getValue());
         });
+        setAlignItems(Alignment.CENTER);
+        add(icon);
     }
 
     public interface EnterListener {
@@ -85,21 +110,24 @@ public class AutoCompleteTextField<E> extends TextField {
         Preconditions.checkNotNull(listCaption, "List Caption is required to link the popup to the field.");
         Preconditions.checkArgument(listCaption.length() > 0,
                 "List Caption is required to link the popup to the field.");
-        setClassName(listCaption);
-        setId(listCaption);
-        setLabel(fieldCaption);
-        setClearButtonVisible(true);
+        field.setClassName(listCaption);
+        field.setId(listCaption);
+        field.setLabel(fieldCaption);
+        field.setClearButtonVisible(true);
         popover.setFor(listCaption);
 
         component.add(popover);
 
-        // Set as Lazy and if also set, there can be a timeout value.
-        setValueChangeMode(ValueChangeMode.LAZY);
-        addValueChangeListener(valueChangeListener -> {
-            if (listener != null) {
-                options.clear();
-                popover.removeAll();
-                listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
+        // Set as Lazy with a default timeout of 400 ms. Use setValueChangeTimeout() to
+        // override.
+        field.setValueChangeMode(ValueChangeMode.LAZY);
+        field.addValueChangeListener(valueChangeListener -> {
+            if (valueChangeListener.isFromClient()) {
+                if (listener != null) {
+                    options.clear();
+                    popover.removeAll();
+                    listener.handleQuery(AutoCompleteTextField.this, valueChangeListener.getValue());
+                }
             }
 
             if (!options.isEmpty()) {
@@ -167,5 +195,22 @@ public class AutoCompleteTextField<E> extends TextField {
 
     public void hideAutoComplete() {
         popover.close();
+    }
+
+    public void setValueChangeTimeout(final int delay) {
+        field.setValueChangeTimeout(delay);
+    }
+
+    public void setFieldWidth(final String width) {
+        field.setWidth(width);
+    }
+
+    public TextField getField() {
+        return field;
+    }
+
+    public void addValueChangeListener(
+            final ValueChangeListener<? super ComponentValueChangeEvent<TextField, String>> event) {
+        field.addValueChangeListener(event);
     }
 }
