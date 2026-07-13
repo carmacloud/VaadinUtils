@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.ModalityMode;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.customfield.CustomField;
@@ -137,7 +138,7 @@ public class TimePicker extends CustomField<LocalDateTime> {
             logger.error(e1.getMessage());
         }
         final Dialog window = new Dialog();
-        window.setModal(true);
+        window.setModality(ModalityMode.VISUAL);
         window.setResizable(false);
         window.setWidth("375px");
         window.setCloseOnEsc(false);

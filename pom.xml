@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>au.com.vaadinutils</groupId>
 	<artifactId>VaadinUtils</artifactId>
-	<version>24.0</version>
+	<version>25.0</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -12,12 +12,9 @@
 		<gson.version>2.14.0</gson.version>
 		<commons-validator.version>1.10.1</commons-validator.version>
 		<open.csv.version>5.12.0</open.csv.version>
-		<jakarta.servlet-api-version>6.1.0</jakarta.servlet-api-version>
 		<jakarta.annotation.api.version>3.1.1</jakarta.annotation.api.version>
-		<!-- Testing dependency versions -->
-		<junit-jupiter-api.version>6.1.1</junit-jupiter-api.version>
-		<!-- Vaadin 14 properties -->
-		<vaadin.version>24.10.7</vaadin.version>
+		<!-- Vaadin 25 properties -->
+		<vaadin.version>25.2.1</vaadin.version>
 		<!-- Vaadin addon-->
 		<twincolgrid-version>4.0.1</twincolgrid-version>
 		<!-- Only include stable builds for dependency and plugin checks -->
@@ -83,7 +80,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.15.0</version>
 				<configuration>
-					<release>17</release>
+					<release>21</release>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -153,10 +150,15 @@
 	</build>
 
 	<dependencies>
-		<!-- Added Vaadin 24 dependencies below here -->
+		<!-- Added Vaadin 25 dependencies below here -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>33.6.0-jre</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
@@ -166,7 +168,6 @@
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
-			<version>${jakarta.servlet-api-version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -218,7 +219,6 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>${junit-jupiter-api.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -240,9 +240,9 @@
 
 	<profiles>
 		<profile>
-			<id>doclint-java17-disable</id>
+			<id>doclint-java21-disable</id>
 			<activation>
-				<jdk>[17,)</jdk>
+				<jdk>[21,)</jdk>
 			</activation>
 			<properties>
 				<javadoc.opts>-Xdoclint:none</javadoc.opts>

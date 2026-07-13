@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.ModalityMode;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -81,7 +82,7 @@ public class WorkingDialog extends Dialog implements ProgressListener<String> {
         this.caption = caption;
         logger.debug("Process started for " + caption + " -> " + message);
         this.ui = UI.getCurrent();
-        this.setModal(true);
+        this.setModality(ModalityMode.VISUAL);
         this.setResizable(false);
         content = new VerticalLayout(new Html("<b>" + caption + "</b>"));
         this.setWidth("500px");

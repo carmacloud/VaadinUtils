@@ -121,9 +121,9 @@ public enum EntityManagerProvider {
                 "Current entity manager is still open, commit and close any transactions and then close the EntityManager first");
 
         if (em == null) {
-            logger.debug("Clearing entity manager for thread {}", Thread.currentThread().getId());
+            logger.debug("Clearing entity manager for thread {}", Thread.currentThread().threadId());
         } else {
-            logger.debug("Setting entity manager for thread {}", Thread.currentThread().getId());
+            logger.debug("Setting entity manager for thread {}", Thread.currentThread().threadId());
             if (INSTANCE.entityManagerThreadLocal.get() != null) {
                 logger.error("Setting the entitymanager but the entityManager is already Set.");
             }

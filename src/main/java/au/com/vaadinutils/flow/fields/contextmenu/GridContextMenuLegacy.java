@@ -2,7 +2,6 @@ package au.com.vaadinutils.flow.fields.contextmenu;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -11,17 +10,20 @@ import org.apache.logging.log4j.Logger;
 
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
+import com.vaadin.flow.component.grid.contextmenu.GridContextMenu;
 import com.vaadin.flow.function.SerializablePredicate;
 import com.vaadin.flow.shared.Registration;
-
-import au.com.vaadinutils.flow.user.GridExtender;
-import elemental.json.JsonObject;
+//import elemental.json.JsonObject;
 
 /**
- * Retained for use with AdminNotesHelper and it's extended classes.
+ * @deprecated It contains legacy methods from Vaadin 24 that are no longer
+ *             supplied in 25. The 1 class that uses this needs to be fixed to
+ *             allow {@link GridContextMenu} to be used in it's place. Retained
+ *             for use with AdminNotesHelper and it's extended classes.
  * 
  * @param <E>
  */
+@Deprecated
 public class GridContextMenuLegacy<E> extends EntityContextMenu<E> {
 
     private static final long serialVersionUID = -5882295471669681116L;
@@ -101,55 +103,55 @@ public class GridContextMenuLegacy<E> extends EntityContextMenu<E> {
         this.dynamicContentHandler = dynamicContentHandler;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    protected boolean onBeforeOpenMenu(final JsonObject eventDetail) {
-        // Depending on which method is used to show a menu, decide which column is
-        // selected and button clicked to show or hide a menu.
-        boolean showMenu = true;
-        final String column = Optional.ofNullable(columnClicked.get()).map(col -> col.getKey()).orElse(null);
-        switch (contextType) {
-        case GRID:
-            showMenu = buttonClicked != 0 && !GridExtender.ACTION_MENU.equals(column);
-            break;
-        case LEFT_CLICK:
-            showMenu = buttonClicked == 0 && GridExtender.ACTION_MENU.equals(column);
-        default:
-            break;
-        }
-
-        // Reset these to 'not selected'. Will only be set on a left-click.
-        buttonClicked = -1;
-        columnClicked.set(null);
-
-        if (!showMenu) {
-            return false;
-        }
-        if (getTarget() instanceof Grid) {
-            final Grid<E> grid = (Grid<E>) getTarget();
-            final String key = eventDetail.getString("key");
-
-            if (getDynamicContentHandler() != null) {
-                final E item = grid.getDataCommunicator().getKeyMapper().get(key);
-                if (getDynamicContentHandler().test(item)) {
-                    if (item == null) {
-                        return true;
-                    }
-
-                    if (loadCrud.get()) {
-                        setTargetEntity(loadEntity(item));
-                    } else {
-                        setTargetEntity(item);
-                    }
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-
-        return super.onBeforeOpenMenu(eventDetail);
-    }
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    protected boolean onBeforeOpenMenu(final JsonObject eventDetail) {
+//        // Depending on which method is used to show a menu, decide which column is
+//        // selected and button clicked to show or hide a menu.
+//        boolean showMenu = true;
+//        final String column = Optional.ofNullable(columnClicked.get()).map(col -> col.getKey()).orElse(null);
+//        switch (contextType) {
+//        case GRID:
+//            showMenu = buttonClicked != 0 && !GridExtender.ACTION_MENU.equals(column);
+//            break;
+//        case LEFT_CLICK:
+//            showMenu = buttonClicked == 0 && GridExtender.ACTION_MENU.equals(column);
+//        default:
+//            break;
+//        }
+//
+//        // Reset these to 'not selected'. Will only be set on a left-click.
+//        buttonClicked = -1;
+//        columnClicked.set(null);
+//
+//        if (!showMenu) {
+//            return false;
+//        }
+//        if (getTarget() instanceof Grid) {
+//            final Grid<E> grid = (Grid<E>) getTarget();
+//            final String key = eventDetail.getString("key");
+//
+//            if (getDynamicContentHandler() != null) {
+//                final E item = grid.getDataCommunicator().getKeyMapper().get(key);
+//                if (getDynamicContentHandler().test(item)) {
+//                    if (item == null) {
+//                        return true;
+//                    }
+//
+//                    if (loadCrud.get()) {
+//                        setTargetEntity(loadEntity(item));
+//                    } else {
+//                        setTargetEntity(item);
+//                    }
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//            }
+//        }
+//
+//        return super.onBeforeOpenMenu(eventDetail);
+//    }
 
     @Override
     public void removeRegistrations() {

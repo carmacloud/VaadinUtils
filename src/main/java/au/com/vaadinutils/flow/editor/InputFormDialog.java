@@ -9,6 +9,7 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Focusable;
 import com.vaadin.flow.component.HasValidation;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.ModalityMode;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -34,7 +35,7 @@ public class InputFormDialog extends Dialog {
     public InputFormDialog(final String title, final Focusable<?> primaryFocusField, final Component form,
             final InputFormDialogRecipient recipient) {
         this.add(new Text(title));
-        this.setModal(true);
+        this.setModality(ModalityMode.VISUAL);
 
         this.setClosable(false);
         this.setResizable(false);
