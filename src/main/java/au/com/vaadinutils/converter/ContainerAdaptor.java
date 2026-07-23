@@ -3,16 +3,19 @@ package au.com.vaadinutils.converter;
 import java.util.Collection;
 
 import com.vaadin.data.Container.Filter;
+
+import au.com.vaadinutils.flow.dao.CrudEntity;
+
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 
-import au.com.vaadinutils.crud.CrudEntity;
-
-public interface ContainerAdaptor<T extends CrudEntity>
-{
+/**
+ * Will be removed once dependent classes are removed.
+ */
+public interface ContainerAdaptor<T extends CrudEntity> {
 
     Item getItem(Object id);
-    
+
     Property<Object> getProperty(T entity, Object id);
 
     T getEntity(Object id);
@@ -25,6 +28,6 @@ public interface ContainerAdaptor<T extends CrudEntity>
 
     void addContainerFilter(Filter filter);
 
-	Class<T> getEntityClass();
+    Class<T> getEntityClass();
 
 }

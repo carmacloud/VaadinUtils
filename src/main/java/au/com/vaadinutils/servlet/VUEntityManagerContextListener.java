@@ -12,36 +12,33 @@ import au.com.vaadinutils.dao.EntityManagerProvider;
  * You then need to create an EntityManagerFactory which the rest of the code
  * relies on.
  *
- * @author bsutton
- *
+ * @author bsutton (LC: Possibly not used. Retain in case called via
+ *         reflection.)
  */
-public abstract class VUEntityManagerContextListener implements ServletContextListener
-{
-	private static EntityManagerFactory emf;
+public abstract class VUEntityManagerContextListener implements ServletContextListener {
+    private static EntityManagerFactory emf;
 
-	@Override
-	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD", justification = "There is only a single instance of the ContextListener")
-	public void contextInitialized(ServletContextEvent event)
-	{
+    @Override
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD", justification = "There is only a single instance of the ContextListener")
+    public void contextInitialized(ServletContextEvent event) {
 
-		emf = getEntityManagerFactory();
-		EntityManagerProvider.setEntityManagerFactory(emf);
-	}
+        emf = getEntityManagerFactory();
+        EntityManagerProvider.setEntityManagerFactory(emf);
+    }
 
-	@Override
-	public void contextDestroyed(ServletContextEvent event)
-	{
-		if (emf != null)
-			emf.close();
-	}
+    @Override
+    public void contextDestroyed(ServletContextEvent event) {
+        if (emf != null)
+            emf.close();
+    }
 
-	/**
-	 * Implement this method to provide a factory. e.g.
-	 *
-	 * return Persistence.createEntityManagerFactory("scoutmaster");
-	 *
-	 * @return an EntityManagerFactory
-	 */
-	abstract protected EntityManagerFactory getEntityManagerFactory();
+    /**
+     * Implement this method to provide a factory. e.g.
+     *
+     * return Persistence.createEntityManagerFactory("scoutmaster");
+     *
+     * @return an EntityManagerFactory
+     */
+    abstract protected EntityManagerFactory getEntityManagerFactory();
 
 }

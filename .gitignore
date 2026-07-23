@@ -3,6 +3,5 @@
 /target
 /.classpath
 /target/
-/.gradle/
-/build/
-/gradle/
+/.eclipse/
+/.vaadin/

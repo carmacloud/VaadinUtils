@@ -5,24 +5,23 @@ import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container;
 
-import au.com.vaadinutils.crud.CrudEntity;
+import au.com.vaadinutils.flow.dao.CrudEntity;
 
-public class ContainerAdaptorFactory<T extends CrudEntity>
-{
+/**
+ * Will be removed once dependent classes are removed.
+ */
+public class ContainerAdaptorFactory<T extends CrudEntity> {
 
     @SuppressWarnings("unchecked")
-    public static<T extends CrudEntity> ContainerAdaptor<T > getAdaptor(Container container)
-    {
-	if (container instanceof JPAContainer)
-	{
-	    return new ContainerAdaptorJPA<T>((JPAContainer<T>) container);
-	}
+    public static <T extends CrudEntity> ContainerAdaptor<T> getAdaptor(final Container container) {
+        if (container instanceof JPAContainer) {
+            return new ContainerAdaptorJPA<T>((JPAContainer<T>) container);
+        }
 
-	if (container instanceof EntityContainer)
-	{
-	    return new ContainerAdaptorEntity<T>((EntityContainer<T>) container);
-	}
-	throw new RuntimeException("Unknown container type");
+        if (container instanceof EntityContainer) {
+            return new ContainerAdaptorEntity<T>((EntityContainer<T>) container);
+        }
+        throw new RuntimeException("Unknown container type");
     }
 
 }

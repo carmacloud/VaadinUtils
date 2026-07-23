@@ -4,14 +4,14 @@ pipeline {
     }
     agent {
         docker {
-            image 'maven:3.6.1-jdk-8-alpine'
+            image 'maven:3.8.6-jdk-8'
             args '-e MAVEN_CONFIG=/var/jenkins_home/.m2'
         }
     }
     stages {
         stage('Preparation') {
             steps {
-                git url: 'https://github.com/carmacloud/VaadinUtils.git'
+                git url: 'https://github.com/carmacloud/VaadinUtils.git', branch: 'upgrade14'
             }
         }
         stage('Build') {
@@ -34,4 +34,3 @@ pipeline {
         }
     }
 }
-

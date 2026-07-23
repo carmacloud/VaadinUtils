@@ -1,9 +1,6 @@
 package au.com.vaadinutils.dao;
 
+public interface EntityWorker<T> {
 
-public interface EntityWorker<T>
-{
-
-	T exec() throws Exception;
-
+    T exec() throws Exception;
 }

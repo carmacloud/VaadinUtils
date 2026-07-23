@@ -3,44 +3,39 @@ package au.com.vaadinutils.crud.splitFields;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Label;
 
-public class SplitDateField extends DateField implements SplitField
-{
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 8992992230293865429L;
-	private Label label;
+/**
+ * Replaced in V14 migration.
+ */
+public class SplitDateField extends DateField implements SplitField {
 
-	public SplitDateField(String label)
-	{
-		this.label = new Label(label);
-		setCaption(label);
+    private static final long serialVersionUID = 8992992230293865429L;
+    private final Label label;
 
-	}
+    public SplitDateField(final String label) {
+        this.label = new Label(label);
+        setCaption(label);
 
-	@Override
-	public void setVisible(boolean visible)
-	{
-		label.setVisible(visible);
-		super.setVisible(visible);
-	}
+    }
 
-	@Override
-	public Label getLabel()
-	{
-		return label;
-	}
+    @Override
+    public void setVisible(final boolean visible) {
+        label.setVisible(visible);
+        super.setVisible(visible);
+    }
 
-	@Override
-	public String getCaption()
-	{
-		return label.getValue();
-	}
+    @Override
+    public Label getLabel() {
+        return label;
+    }
 
-	@Override
-	public void hideLabel()
-	{
-		setCaption(null);
+    @Override
+    public String getCaption() {
+        return label.getValue();
+    }
 
-	}
+    @Override
+    public void hideLabel() {
+        setCaption(null);
+
+    }
 }

@@ -44,114 +44,89 @@ import au.com.vaadinutils.dao.JpaBaseDao.Condition;
  * </pre>
  *
  */
-public class JpaDslBuilderGroup<E>
-{
+public class JpaDslBuilderGroup<E> {
+    private List<JpaDslBuilderGroupItem<E>> builders = new ArrayList<>();
+    private JpaDslBuilderGroupCommon<E> common;
+    private Class<E> entityClass;
+    private List<E> results;
+    private boolean distinct = false;
+    private List<JpaDslOrder> orders = new ArrayList<>();
 
-	private List<JpaDslBuilderGroupItem<E>> builders = new ArrayList<>();
-	private JpaDslBuilderGroupCommon<E> common;
-	private Class<E> entityClass;
-	private List<E> results;
-	private boolean distinct = false;
-	private List<JpaDslOrder> orders = new ArrayList<>();
+    public JpaDslBuilderGroup(final Class<E> entityClass) {
+        this.entityClass = entityClass;
+    }
 
-	public JpaDslBuilderGroup(final Class<E> entityClass)
-	{
-		this.entityClass = entityClass;
-	}
+    public void addItem(JpaDslBuilderGroupItem<E> builder) {
+        builders.add(builder);
+    }
 
-	public void addItem(JpaDslBuilderGroupItem<E> builder)
-	{
-		builders.add(builder);
-	}
+    public interface JpaDslBuilderGroupItem<E> {
+        public void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
+    }
 
-	public interface JpaDslBuilderGroupItem<E>
-	{
-		public void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
-	}
+    public void setCommon(JpaDslBuilderGroupCommon<E> common) {
+        this.common = common;
+    }
 
-	public void setCommon(JpaDslBuilderGroupCommon<E> common)
-	{
-		this.common = common;
-	}
+    public interface JpaDslBuilderGroupCommon<E> {
+        public void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
+    }
 
-	public interface JpaDslBuilderGroupCommon<E>
-	{
-		public void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
-	}
+    public List<E> getResults() {
+        final Collection<E> results;
+        if (distinct) {
+            results = new HashSet<>();
+        } else {
+            results = new ArrayList<>();
+        }
 
-	public List<E> getResults()
-	{
-		final Collection<E> results;
-		if (distinct)
-		{
-			results = new HashSet<>();
-		}
-		else
-		{
-			results = new ArrayList<>();
-		}
+        if (builders.size() > 0) {
+            for (JpaDslBuilderGroupItem<E> builder : builders) {
+                results.addAll(makeQuery(builder));
+            }
+        } else {
+            results.addAll(makeQuery(null));
+        }
 
-		if (builders.size() > 0)
-		{
-			for (JpaDslBuilderGroupItem<E> builder : builders)
-			{
-				results.addAll(makeQuery(builder));
-			}
-		}
-		else
-		{
-			results.addAll(makeQuery(null));
-		}
+        if (distinct) {
+            this.results = new ArrayList<>(results);
+        } else {
+            this.results = (List<E>) results;
+        }
 
-		if (distinct)
-		{
-			this.results = new ArrayList<>(results);
-		}
-		else
-		{
-			this.results = (List<E>) results;
-		}
+        return this.results;
+    }
 
-		return this.results;
-	}
+    private List<E> makeQuery(final JpaDslBuilderGroupItem<E> builder) {
+        final JpaDslBuilder<E> q = new JpaDslBuilder<>(entityClass);
+        final List<Condition<E>> conditions = new LinkedList<>();
 
-	private List<E> makeQuery(final JpaDslBuilderGroupItem<E> builder)
-	{
-		final JpaDslBuilder<E> q = new JpaDslBuilder<>(entityClass);
-		final List<Condition<E>> conditions = new LinkedList<>();
+        if (common != null) {
+            common.conditionsWillBeAdded(q, conditions);
+        }
 
-		if (common != null)
-		{
-			common.conditionsWillBeAdded(q, conditions);
-		}
+        if (builder != null) {
+            builder.conditionsWillBeAdded(q, conditions);
+        }
 
-		if (builder != null)
-		{
-			builder.conditionsWillBeAdded(q, conditions);
-		}
+        if (distinct) {
+            q.distinct();
+        }
 
-		if (distinct)
-		{
-			q.distinct();
-		}
+        q.where(conditions);
 
-		q.where(conditions);
+        for (JpaDslOrder order : orders) {
+            q.orderBy(order.getField(), order.getAscending());
+        }
 
-		for (JpaDslOrder order : orders)
-		{
-			q.orderBy(order.getField(), order.getAscending());
-		}
+        return q.getResultList();
+    }
 
-		return q.getResultList();
-	}
+    public void distinct() {
+        distinct = true;
+    }
 
-	public void distinct()
-	{
-		distinct = true;
-	}
-
-	public void orderBy(final String field, final boolean ascending)
-	{
-		orders.add(new JpaDslOrder(field, ascending));
-	}
+    public void orderBy(final String field, final boolean ascending) {
+        orders.add(new JpaDslOrder(field, ascending));
+    }
 }

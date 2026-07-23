@@ -5,48 +5,40 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.TextField;
 
-public abstract class OnEnterKeyHandler
-{
+public abstract class OnEnterKeyHandler {
 
-	final ShortcutListener enterShortcut = new ShortcutListener("EnterKeyShorcut", ShortcutAction.KeyCode.ENTER, null)
-	{
+    final ShortcutListener enterShortcut = new ShortcutListener("EnterKeyShorcut", ShortcutAction.KeyCode.ENTER, null) {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		@Override
-		public void handleAction(Object sender, Object target)
-		{
-			enterKeyPressed();
-		}
-	};
+        @Override
+        public void handleAction(Object sender, Object target) {
+            enterKeyPressed();
+        }
+    };
 
-	public void attachTo(final TextField component)
-	{
-		component.addFocusListener(new FieldEvents.FocusListener()
-		{
+    public void attachTo(final TextField component) {
+        component.addFocusListener(new FieldEvents.FocusListener() {
 
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public void focus(FieldEvents.FocusEvent event)
-			{
-				component.addShortcutListener(enterShortcut);
-			}
-		});
+            @Override
+            public void focus(FieldEvents.FocusEvent event) {
+                component.addShortcutListener(enterShortcut);
+            }
+        });
 
-		component.addBlurListener(new FieldEvents.BlurListener()
-		{
+        component.addBlurListener(new FieldEvents.BlurListener() {
 
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
-			public void blur(FieldEvents.BlurEvent event)
-			{
-				component.removeShortcutListener(enterShortcut);
-			}
-		});
-	}
+            @Override
+            public void blur(FieldEvents.BlurEvent event) {
+                component.removeShortcutListener(enterShortcut);
+            }
+        });
+    }
 
-	public abstract void enterKeyPressed();
+    public abstract void enterKeyPressed();
 
 }

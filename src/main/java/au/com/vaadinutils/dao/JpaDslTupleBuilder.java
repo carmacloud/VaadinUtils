@@ -8,76 +8,62 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Selection;
 import javax.persistence.metamodel.SingularAttribute;
 
-public class JpaDslTupleBuilder<E> extends JpaDslAbstract<E, Tuple>
-{
-	private List<Selection<?>> multiselects = new LinkedList<>();
+public class JpaDslTupleBuilder<E> extends JpaDslAbstract<E, Tuple> {
+    private List<Selection<?>> multiselects = new LinkedList<>();
 
-	public JpaDslTupleBuilder(Class<E> entityClass)
-	{
-		this.entityClass = entityClass;
-		builder = getEntityManager().getCriteriaBuilder();
+    public JpaDslTupleBuilder(Class<E> entityClass) {
+        this.entityClass = entityClass;
+        builder = getEntityManager().getCriteriaBuilder();
 
-		criteria = builder.createTupleQuery();
-		root = criteria.from(entityClass);
-	}
+        criteria = builder.createTupleQuery();
+        root = criteria.from(entityClass);
+    }
 
-	public <T> Path<T> multiselect(final SingularAttribute<E, T> attribute)
-	{
-		final Path<T> path = root.get(attribute);
-		multiselects.add(path);
+    public <T> Path<T> multiselect(final SingularAttribute<E, T> attribute) {
+        final Path<T> path = root.get(attribute);
+        multiselects.add(path);
+        return path;
+    }
 
-		return path;
-	}
+    public <T> Path<T> multiselect(final Path<T> path) {
+        multiselects.add(path);
+        return path;
+    }
 
-	public <T> Path<T> multiselect(final Path<T> path)
-	{
-		multiselects.add(path);
+    public <J, T> Path<T> multiselect(final JoinBuilder<E, J> join, final SingularAttribute<J, T> attribute) {
+        final Path<T> path = getJoin(join).get(attribute);
+        multiselects.add(path);
+        return path;
+    }
 
-		return path;
-	}
+    public <J, T> Selection<T> multiselect(final JoinBuilder<E, J> join, final SingularAttribute<J, T> attribute,
+            final String alias) {
+        final Selection<T> selection = getJoin(join).get(attribute).alias(alias);
+        multiselects.add(selection);
 
-	public <J, T> Path<T> multiselect(final JoinBuilder<E, J> join, final SingularAttribute<J, T> attribute)
-	{
-		final Path<T> path = getJoin(join).get(attribute);
-		multiselects.add(path);
+        return selection;
+    }
 
-		return path;
-	}
+    public JpaDslTupleBuilder<E> multiselect(final Selection<?> selection) {
+        multiselects.add(selection);
+        return this;
+    }
 
-	public <J, T> Selection<T> multiselect(final JoinBuilder<E, J> join, final SingularAttribute<J, T> attribute,
-			final String alias)
-	{
-		final Selection<T> selection = getJoin(join).get(attribute).alias(alias);
-		multiselects.add(selection);
+    @Override
+    public List<Tuple> getResultList() {
+        criteria.multiselect(multiselects);
+        return super.getResultList();
+    }
 
-		return selection;
-	}
+    @Override
+    public Tuple getSingleResult() {
+        criteria.multiselect(multiselects);
+        return super.getSingleResult();
+    }
 
-	public JpaDslTupleBuilder<E> multiselect(final Selection<?> selection)
-	{
-		multiselects.add(selection);
-		return this;
-	}
-
-	@Override
-	public List<Tuple> getResultList()
-	{
-		criteria.multiselect(multiselects);
-		return super.getResultList();
-	}
-
-	@Override
-	public Tuple getSingleResult()
-	{
-		criteria.multiselect(multiselects);
-		return super.getSingleResult();
-	}
-
-	@Override
-	public Tuple getSingleResultOrNull()
-	{
-		criteria.multiselect(multiselects);
-		return super.getSingleResultOrNull();
-	}
-
+    @Override
+    public Tuple getSingleResultOrNull() {
+        criteria.multiselect(multiselects);
+        return super.getSingleResultOrNull();
+    }
 }

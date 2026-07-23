@@ -1,8 +1,8 @@
 package au.com.vaadinutils.fields;
 
-public interface SelectionListener
-{
-
-	void selectedItems(int count);
-
+/**
+ * Replaced in Vaadin 14 migration.
+ */
+public interface SelectionListener {
+    void selectedItems(int count);
 }

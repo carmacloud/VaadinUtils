@@ -1,6 +1,5 @@
 package au.com.vaadinutils.dao;
 
-
 /**
  * Pass a Runnable that needs to be wrapped in an EM transaction with its own
  * EM.
@@ -13,35 +12,28 @@ package au.com.vaadinutils.dao;
  *
  * @formatter:off
  *
- *  emr = new EntityManagerRunnable( new Runnable () { public void run() { do something with dao };
- *  new Thread(emr).start();
+ *                emr = new EntityManagerRunnable( new Runnable () { public void
+ *                run() { do something with dao }; new Thread(emr).start();
  *
  * @formatter:on
  *
  * @author bsutton
  *
  */
-public final class EntityManagerRunnable implements Runnable
-{
+public final class EntityManagerRunnable implements Runnable {
 
-	private final Runnable wrapper;
+    private final Runnable wrapper;
 
-	public EntityManagerRunnable(Runnable runnable)
-	{
-		wrapper = EntityManagerProvider.setThreadLocalEntityManager(runnable);
+    public EntityManagerRunnable(Runnable runnable) {
+        wrapper = EntityManagerProvider.setThreadLocalEntityManager(runnable);
+    }
 
-	}
+    public EntityManagerRunnable(RunnableUI runnable) {
+        wrapper = EntityManagerProvider.setThreadLocalEntityManager(runnable);
+    }
 
-	public EntityManagerRunnable(RunnableUI runnable)
-	{
-		wrapper = EntityManagerProvider.setThreadLocalEntityManager(runnable);
-
-	}
-
-	@Override
-	public void run()
-	{
-		wrapper.run();
-	}
-
+    @Override
+    public void run() {
+        wrapper.run();
+    }
 }

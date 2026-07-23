@@ -4,21 +4,25 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>au.com.vaadinutils</groupId>
 	<artifactId>VaadinUtils</artifactId>
-	<version>0.1.2</version>
+	<version>0.2.0</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.7.40</vaadin.version>
-		<log4j.version>2.18.0</log4j.version>
+		<vaadin7.version>7.7.53</vaadin7.version>
 		<jasperreports.version>6.4.1</jasperreports.version>
-		<eclipselink.version>2.6.9</eclipselink.version>
-		<guava.version>29.0-jre</guava.version>
+		<guava.version>33.6.0-jre</guava.version>
 		<gson.version>2.8.9</gson.version>
 		<commons-email.version>1.5</commons-email.version>
 		<commons-validator.version>1.7</commons-validator.version>
 		<openjpa.version>2.3.0</openjpa.version>
 		<!-- Testing -->
-		<junit.version>4.13</junit.version>
+		<junit.version>4.13.2</junit.version>
+		<!-- Vaadin 14 properties -->
+		<vaadin.version>14.14.3</vaadin.version>
+		<twincolgrid-version>3.1.0</twincolgrid-version>
+		<!-- Update any of the following, update dbupgrade.sh in carma as well-->
+		<log4j.version>2.26.0</log4j.version>
+		<eclipselink.version>2.6.9</eclipselink.version>
 	</properties>
 
 	<repositories>
@@ -26,30 +30,19 @@
 			<id>vaadin-addons</id>
 			<url>https://maven.vaadin.com/vaadin-addons</url>
 		</repository>
-		<repository>
-			<id>vaadin-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
 	</repositories>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>vaadin-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-bom</artifactId>
+				<version>${vaadin.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<distributionManagement>
 		<repository>
@@ -63,10 +56,30 @@
 
 	<build>
 		<plugins>
+		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+ 				<artifactId>maven-enforcer-plugin</artifactId>
+ 				<version>3.6.2</version>
+  				<executions>
+    				<execution>
+      					<id>enforce-maven</id>
+      						<goals>
+       							 <goal>enforce</goal>
+      						</goals>
+      						<configuration>
+       							 <rules>
+          							<requireMavenVersion>
+            							<version>[3.6.3,)</version>
+          							</requireMavenVersion>
+        						</rules>
+      						</configuration>
+    				</execution>
+  				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+				<version>3.14.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -89,6 +102,12 @@
 							</processors>
 							<optionMap>
 								<openjpa.metamodel>true</openjpa.metamodel>
+								<!-- set source version to 5 to prevent
+								timestamps being generated 
+									which
+								causes git to constantly need to commit
+								otherwise identical files -->
+								<openjpa.source>5</openjpa.source>
 							</optionMap>
 							<outputDirectory>${basedir}/src/generated</outputDirectory>
 						</configuration>
@@ -105,7 +124,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.2.1</version>
+				<version>3.4.0</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -118,7 +137,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.2.0</version>
+				<version>3.12.0</version>
 				<configuration>
 					<additionalOptions>${javadoc.opts}</additionalOptions>
 				</configuration>
@@ -169,29 +188,60 @@
 	</build>
 
 	<dependencies>
-	<!-- Remove after Vaadin 14 migration -->
+		<!-- Added Vaadin 14 dependencies below here -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-themes</artifactId>
-			<version>${vaadin.version}</version>
-		</dependency>
-		<!-- Remove after Vaadin 14 migration -->
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-server</artifactId>
-			<version>${vaadin.version}</version>
+			<artifactId>vaadin</artifactId>
 			<exclusions>
+				<!-- Webjars are only needed when running in Vaadin 13 compatibility 
+					mode -->
 				<exclusion>
-					<groupId>org.jsoup</groupId>
-					<artifactId>jsoup</artifactId>
+					<groupId>com.vaadin.webjar</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.insites</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.polymer</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.polymerelements</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.vaadin</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.webjars.bowergithub.webcomponents</groupId>
+					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
-			<groupId>org.jsoup</groupId>
-			<artifactId>jsoup</artifactId>
-			<version>1.14.3</version>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-themes</artifactId>
+			<version>${vaadin7.version}</version>
+		</dependency>
+		<!-- Remove after Vaadin 14 migration -->
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-server</artifactId>
+			<version>${vaadin7.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.gwt</groupId>
+					<artifactId>gwt-elemental</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jsoup</groupId>
+					<artifactId>jsoup</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
@@ -204,11 +254,6 @@
 			<groupId>com.vaadin.addon</groupId>
 			<artifactId>jpacontainer</artifactId>
 			<version>3.2.1-nj</version>
-		</dependency>
-		<dependency>
-			<groupId>org.vaadin.addons</groupId>
-			<artifactId>aceeditor</artifactId>
-			<version>0.8.14</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -228,18 +273,6 @@
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
-			<groupId>org.vaadin.addons</groupId>
-			<artifactId>ckeditor-wrapper-for-vaadin</artifactId>
-			<version>7.10.10</version>
-		</dependency>
-		<!-- Remove after Vaadin 14 migration -->
-		<dependency>
-			<groupId>org.vaadin.addons</groupId>
-			<artifactId>wizards-for-vaadin</artifactId>
-			<version>1.1.2</version>
-			<!-- currently at https://github.com/rlsutton1/WizardsForVaadin.git -->
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-email</artifactId>
 			<version>${commons-email.version}</version>
@@ -250,16 +283,10 @@
 			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- deprecated and should move to use Java 8 classes -->
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.3</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.opencsv</groupId>
+			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>2.3</version>
+			<version>5.6</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-validator</groupId>
@@ -357,12 +384,6 @@
 		</dependency>
 		<!-- Remove after Vaadin 14 migration -->
 		<dependency>
-			<groupId>org.vaadin.alump.gridstack</groupId>
-			<artifactId>gridstack-addon</artifactId>
-			<version>0.3.1-nj</version>
-		</dependency>
-		<!-- Remove after Vaadin 14 migration -->
-		<dependency>
 			<groupId>org.vaadin</groupId>
 			<artifactId>viritin</artifactId>
 			<version>1.62</version>
@@ -377,6 +398,31 @@
 			<groupId>org.vaadin.addons</groupId>
 			<artifactId>popupbutton</artifactId>
 			<version>2.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.vaadin.addons.componentfactory</groupId>
+			<artifactId>vcf-gridlayout</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<!-- Remove after Vaadin 14 migration -->
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>mpr-v7</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-charts-flow</artifactId>
+			<version>9.0.0</version><!--$NO-MVN-MAN-VER$-->
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin.componentfactory</groupId>
+			<artifactId>popup</artifactId>
+			<version>2.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.flowingcode.vaadin.addons</groupId>
+			<artifactId>twincolgrid</artifactId>
+			<version>${twincolgrid-version}</version>
 		</dependency>
 	</dependencies>
 
