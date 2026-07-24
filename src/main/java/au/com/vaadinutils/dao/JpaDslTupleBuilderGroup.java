@@ -24,30 +24,30 @@ import au.com.vaadinutils.dao.JpaBaseDao.Condition;
  * 
  * <pre>
  * <code>
- * 	final JpaDslTupleBuilderGroup<TblSalesCustCallItem> queryGroup = new JpaDslTupleBuilderGroup<>(
+ * 	final JpaDslTupleBuilderGroup&lt;TblSalesCustCallItem&gt; queryGroup = new JpaDslTupleBuilderGroup&lt;&gt;(
  * 			TblSalesCustCallItem.class);
  * 	queryGroup.multiselect(TblSalesCustCallItem_.iid);
- * 	queryGroup.setCommon(new JpaDslTupleBuilderGroupCommon<TblSalesCustCallItem>()
+ * 	queryGroup.setCommon(new JpaDslTupleBuilderGroupCommon&lt;TblSalesCustCallItem&gt;()
  * 	{
  * 		&#64;Override
- * 		public void conditionsWillBeAdded(JpaDslTupleBuilder<TblSalesCustCallItem> builder,
- * 				List<Condition<TblSalesCustCallItem>> conditions)
+ * 		public void conditionsWillBeAdded(JpaDslTupleBuilder&lt;TblSalesCustCallItem&gt; builder,
+ * 				List&lt;Condition&lt;TblSalesCustCallItem&gt;&gt; conditions)
  * 		{
  * 			conditions.add(builder.eq(TblSalesCustCallItem_.contact, contact));
  * 		}
  * 	});
  * 
- * 	queryGroup.addItem(new JpaDslTupleBuilderGroupItem<TblSalesCustCallItem>()
+ * 	queryGroup.addItem(new JpaDslTupleBuilderGroupItem&lt;TblSalesCustCallItem&gt;()
  * 	{
  * 		&#64;Override
- * 		public void conditionsWillBeAdded(JpaDslTupleBuilder<TblSalesCustCallItem> builder,
- * 				List<Condition<TblSalesCustCallItem>> conditions)
+ * 		public void conditionsWillBeAdded(JpaDslTupleBuilder&lt;TblSalesCustCallItem&gt; builder,
+ * 				List&lt;Condition&lt;TblSalesCustCallItem&gt;&gt; conditions)
  * 		{
  * 			conditions.add(builder.eq(TblSalesCustCallItem_.salesperson, salesperson));
  * 		}
  * 	});
  * 
- * final List<Long> itemIds = new ArrayList<>();
+ * final List&lt;Long&gt; itemIds = new ArrayList&lt;&gt;();
  * for (Tuple result : queryGroup.getResults())
  * {
  * 			itemIds.add(queryGroup.get(result, TblSalesCustCallItem_.iid));
@@ -70,7 +70,7 @@ public class JpaDslTupleBuilderGroup<E> {
         this.entityClass = entityClass;
     }
 
-    public void addItem(JpaDslTupleBuilderGroupItem<E> builder) {
+    public void addItem(final JpaDslTupleBuilderGroupItem<E> builder) {
         builders.add(builder);
     }
 

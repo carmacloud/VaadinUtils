@@ -23,17 +23,14 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.vaadin.addons.lazyquerycontainer.EntityContainer;
 
 import com.google.common.base.Preconditions;
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.flow.dao.CrudEntity;
 import au.com.vaadinutils.flow.dao.GenericDao;
@@ -85,7 +82,6 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
                         + "separate thread or servlet request");
 
         return em;
-
     }
 
     public JpaBaseDao(final Class<E> class1) {
@@ -227,15 +223,12 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         final Root<E> root = criteria.from(entityClass);
         criteria.select(root);
 
-        // TODO: This would be better is all entities extended BaseCrudEntity, then it
-        // would look like BaseCrudEntity_.id instead of "id"
-        criteria.where(root.get(idAttribute).in(idsToFind));
+		criteria.where(root.get(idAttribute).in(idsToFind));
 
         final TypedQuery<E> query = getEntityManager().createQuery(criteria);
         JpaSettings.setQueryHints(query);
 
         return query.getResultList();
-
     }
 
     /**
@@ -328,8 +321,8 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         if (limit != null) {
             query = query.setMaxResults(limit);
         }
-        return query.getResultList();
 
+        return query.getResultList();
     }
 
     public <SK> List<E> findAllByAttributeLike(final SingularAttribute<E, String> vKey, final String value,
@@ -463,33 +456,6 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         return query.getSingleResult();
     }
 
-    /**
-     */
-    public JPAContainer<E> createVaadinContainer() {
-        final JPAContainer<E> container = new JPAContainer<>(entityClass);
-        container.setEntityProvider(new BatchingPerRequestEntityProvider<>(entityClass));
-        return container;
-    }
-
-    /**
-     */
-    public EntityContainer<E> createLazyQueryContainer() {
-        final EntityManager em = getEntityManager();
-        final boolean compositeItmes = true;
-
-        final boolean detachedEntities = true;
-        final String propertyId = getIdField().getName();
-        final boolean applicationManagedTransactions = true;
-        final EntityContainer<E> entityContainer = new EntityContainer<>(em, entityClass, propertyId, Integer.MAX_VALUE,
-                applicationManagedTransactions, detachedEntities, compositeItmes);
-
-        for (final Attribute<? super E, ?> attrib : getIdField().getDeclaringType().getAttributes()) {
-            entityContainer.addContainerProperty(attrib.getName(), attrib.getJavaType(), null, true, true);
-        }
-
-        return entityContainer;
-    }
-
     static public <T> SingularAttribute<T, Long> getIdField(final Class<T> type) {
         final Metamodel metaModel = getEntityManager().getMetamodel();
         final EntityType<T> entityType = metaModel.entity(type);
@@ -539,12 +505,10 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
 
         criteria.where(builder.equal(join.get(vKey), value));
 
-//        getEntityManager().getClass();
         final Query query = getEntityManager().createQuery(criteria);
         JpaSettings.setQueryHints(query);
 
         return query.executeUpdate();
-
     }
 
     /**
@@ -803,7 +767,6 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
     @Override
     public void commitAndContinue() {
         EntityManagerProvider.commitAndContinue();
-
     }
 
     @Override

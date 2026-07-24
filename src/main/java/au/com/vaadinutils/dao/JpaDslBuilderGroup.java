@@ -18,28 +18,28 @@ import au.com.vaadinutils.dao.JpaBaseDao.Condition;
  * 
  * <pre>
  * <code>
- * final JpaDslBuilderGroup<TblSalesCustCallItem> queryGroup = new JpaDslBuilderGroup<>(TblSalesCustCallItem.class);
- * queryGroup.setCommon(new JpaDslBuilderGroupCommon<TblSalesCustCallItem>()
+ * final JpaDslBuilderGroup&lt;TblSalesCustCallItem&gt; queryGroup = new JpaDslBuilderGroup&lt;&gt;(TblSalesCustCallItem.class);
+ * queryGroup.setCommon(new JpaDslBuilderGroupCommon&lt;TblSalesCustCallItem&gt;()
  * {
  * 		&#64;Override
- * 		public void conditionsWillBeAdded(JpaDslBuilder<TblSalesCustCallItem> builder,
- * 				List<Condition<TblSalesCustCallItem>> conditions)
+ * 		public void conditionsWillBeAdded(JpaDslBuilder&lt;TblSalesCustCallItem&gt; builder,
+ * 				List&lt;Condition&lt;TblSalesCustCallItem&gt;&gt; conditions)
  * 		{
  * 			conditions.add(builder.eq(TblSalesCustCallItem_.contact, contact));
  * 		}
  * });
  *  
- * queryGroup.addItem(new JpaDslBuilderGroupItem<TblSalesCustCallItem>()
+ * queryGroup.addItem(new JpaDslBuilderGroupItem&lt;TblSalesCustCallItem&gt;()
  * {
  * 		&#64;Override
- * 		public void conditionsWillBeAdded(JpaDslBuilder<TblSalesCustCallItem> builder,
- * 				List<Condition<TblSalesCustCallItem>> conditions)
+ * 		public void conditionsWillBeAdded(JpaDslBuilder&lt;TblSalesCustCallItem&gt; builder,
+ * 				List&lt;Condition&lt;TblSalesCustCallItem&gt;&gt; conditions)
  * 		{
  * 			conditions.add(builder.eq(TblSalesCustCallItem_.salesperson, salesperson));
  * 		}
  * });
  *  
- * final List<TblSalesCustCallItem> results = queryGroup.getResults();
+ * final List&lt;TblSalesCustCallItem&gt; results = queryGroup.getResults();
  * </code>
  * </pre>
  *

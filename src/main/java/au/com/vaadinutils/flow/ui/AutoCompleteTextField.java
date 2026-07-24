@@ -3,9 +3,6 @@ package au.com.vaadinutils.flow.ui;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.common.base.Preconditions;
 import com.vaadin.componentfactory.Popup;
 import com.vaadin.flow.component.AbstractField.ComponentValueChangeEvent;
@@ -27,7 +24,6 @@ import au.com.vaadinutils.flow.helper.VaadinHelper;
 public class AutoCompleteTextField<E> extends HorizontalLayout {
 
     private static final long serialVersionUID = -6634513296678504250L;
-    final Logger logger = LogManager.getLogger();
     private final Popup popup = new Popup();
     private final TextField field = new TextField();
     private final Icon icon = VaadinIcon.SEARCH.create();

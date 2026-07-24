@@ -1572,8 +1572,7 @@ public abstract class JpaDslAbstract<E, R> {
     /**
      * WARNING, order will not be honoured by this method
      * 
-     * @param attribute
-     * @param value
+     * @param updatemap
      * 
      * @return
      */
