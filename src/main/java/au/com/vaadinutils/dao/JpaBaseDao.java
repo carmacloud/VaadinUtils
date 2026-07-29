@@ -223,9 +223,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
         final Root<E> root = criteria.from(entityClass);
         criteria.select(root);
 
-        // TODO: This would be better if all entities extended BaseCrudEntity, then it
-        // would look like BaseCrudEntity_.id instead of "id"
-        criteria.where(root.get(idAttribute).in(idsToFind));
+		criteria.where(root.get(idAttribute).in(idsToFind));
 
         final TypedQuery<E> query = getEntityManager().createQuery(criteria);
         JpaSettings.setQueryHints(query);

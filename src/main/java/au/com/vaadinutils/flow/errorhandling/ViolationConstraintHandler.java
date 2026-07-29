@@ -9,34 +9,27 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.eclipse.persistence.exceptions.DescriptorException;
 
-//import com.vaadin.data.Buffered;
-//import com.vaadin.data.Buffered.SourceException;
-
 public class ViolationConstraintHandler {
     private final static Logger logger = LogManager.getLogger();
 
     /**
-     * logs the initial error and calls the recusive version of it'self. always
-     * throws a runtime exception
+     * Logs the initial error and calls the recursive version of itself. Always
+     * throws a runtime exception.
      *
      * @param e
      */
     static void expandException(final Throwable e) {
-//        if (e instanceof RuntimeException && e.getCause() instanceof Buffered.SourceException) {
-//            SourceException ex = (Buffered.SourceException) e.getCause();
-//            if (ex.getCause() instanceof PersistenceException) {
-//                handlePersistenceException(ex);
-//            }
-
-//        }
+        if (e instanceof PersistenceException) {
+            handlePersistenceException((PersistenceException) e);
+        }
         logger.error(e, e);
         handleConstraintViolationException(e, 5);
         throw new RuntimeException(e);
     }
 
     /**
-     * digs down looking for a useful exception, it will throw a runtime exception
-     * if it finds an useful exception
+     * Digs down looking for a useful exception, it will throw a runtime exception
+     * if it finds a useful exception.
      *
      * @param e
      * @param nestLimit
@@ -65,11 +58,9 @@ public class ViolationConstraintHandler {
             }
 
             handleConstraintViolationException(e.getCause(), nestLimit);
-
         }
     }
 
-    @SuppressWarnings("unused")
     static private void handlePersistenceException(final Exception e) {
         if (e.getCause() instanceof PersistenceException) {
             String tmp = e.getMessage();

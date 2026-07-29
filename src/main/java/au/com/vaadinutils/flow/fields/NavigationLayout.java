@@ -70,6 +70,18 @@ public class NavigationLayout extends VerticalLayout {
         return contentPanel.getComponentAt(0);
     }
 
+    public VerticalLayout getContentPanel() {
+        return contentPanel;
+    }
+
+    public void removeContentPanel(final VerticalLayout contentPanel) {
+        remove(contentPanel);
+    }
+
+    public void setContentPanel(final VerticalLayout contentPanel) {
+        addAndExpand(contentPanel);
+    }
+
     public void setButtonsVisible(final boolean visible) {
         buttonLayout.setVisible(visible);
     }
