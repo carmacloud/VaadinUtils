@@ -9,9 +9,6 @@ import jakarta.persistence.PersistenceException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
-//import com.vaadin.data.Buffered;
-//import com.vaadin.data.Buffered.SourceException;
-
 public class ViolationConstraintHandler {
     private final static Logger logger = LogManager.getLogger();
 
