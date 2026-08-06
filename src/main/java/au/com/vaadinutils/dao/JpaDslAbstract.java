@@ -1,6 +1,7 @@
 package au.com.vaadinutils.dao;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,6 +42,12 @@ import jakarta.persistence.metamodel.SetAttribute;
 import jakarta.persistence.metamodel.SingularAttribute;
 
 /**
+ * Note: With the move to use Java17, the use of {@link Date} in queries will
+ * slowly be removed.<br>
+ * Currently there are duplicate date methods, 1 with {@link Date}, 1 with
+ * {@link LocalDateTime}.<br>
+ * Once all {@link Date} query methods in calling projects are removed, these
+ * {@link Date} methods will be removed.
  * 
  * @author rsutton
  *
@@ -188,6 +195,28 @@ public abstract class JpaDslAbstract<E, R> {
 
     public Expression<String> asString(final SingularAttribute<E, ?> field) {
         return root.get(field).as(String.class);
+    }
+
+    /**
+     * Uses {@link LocalDateTime}
+     * 
+     * @param <V>
+     * @param joinBuilder
+     * @param field
+     * @param start
+     * @param end
+     * @return
+     */
+    public <V> Condition<E> between(final JoinBuilder<E, V> joinBuilder,
+            final SingularAttribute<V, LocalDateTime> field, final LocalDateTime start, final LocalDateTime end) {
+        return new AbstractCondition<E>() {
+
+            @SuppressWarnings({ "unchecked", "rawtypes" })
+            @Override
+            public Predicate getPredicates() {
+                return builder.between(getJoin(joinBuilder).get((SingularAttribute) field), start, end);
+            }
+        };
     }
 
     public <V> Condition<E> between(final JoinBuilder<E, V> joinBuilder, final SingularAttribute<V, Date> field,
@@ -736,6 +765,26 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
+    /**
+     * Uses {@link LocalDateTime}
+     * 
+     * @param <J>
+     * @param join
+     * @param field
+     * @param value
+     * @return
+     */
+    public <J> Condition<E> lessThan(final JoinBuilder<E, J> join, final SingularAttribute<J, LocalDateTime> field,
+            final LocalDateTime value) {
+        return new AbstractCondition<E>() {
+
+            @Override
+            public Predicate getPredicates() {
+                return builder.lessThan(getJoin(join).get(field), value);
+            }
+        };
+    }
+
     public <J> Condition<E> lessThan(final JoinBuilder<E, J> join, final SingularAttribute<J, Date> field,
             final Date value) {
         return new AbstractCondition<E>() {
@@ -919,6 +968,20 @@ public abstract class JpaDslAbstract<E, R> {
         return this;
     }
 
+    /**
+     * Uses {@link LocalDateTime}
+     * 
+     * @param <V>
+     * @param joinBuilder
+     * @param field
+     * @param value
+     * @return
+     */
+    public <V> Condition<E> gtEq(final JoinBuilder<E, V> joinBuilder, final SingularAttribute<V, LocalDateTime> field,
+            final LocalDateTime value) {
+        return greaterThanOrEqualTo(joinBuilder, field, value);
+    }
+
     public <V> Condition<E> gtEq(final JoinBuilder<E, V> joinBuilder, final SingularAttribute<V, Date> field,
             final Date value) {
         return greaterThanOrEqualTo(joinBuilder, field, value);
@@ -937,6 +1000,17 @@ public abstract class JpaDslAbstract<E, R> {
     public <J, V extends Comparable<? super V>> Condition<E> gtEq(final SingularAttribute<? super E, J> joinAttribute,
             final JoinType joinType, final SingularAttribute<J, V> field, final V value) {
         return greaterThanOrEqualTo(joinAttribute, joinType, field, value);
+    }
+
+    /**
+     * uses {@link LocalDateTime}
+     * 
+     * @param field
+     * @param value
+     * @return
+     */
+    public Condition<E> gtEq(final SingularAttribute<E, LocalDateTime> field, final LocalDateTime value) {
+        return greaterThanOrEqualTo(field, value);
     }
 
     public Condition<E> gtEq(final SingularAttribute<E, Date> field, final Date value) {
@@ -1203,6 +1277,26 @@ public abstract class JpaDslAbstract<E, R> {
         };
     }
 
+    /**
+     * Uses {@link LocalDateTime}
+     * 
+     * @param <J>
+     * @param join
+     * @param field
+     * @param value
+     * @return
+     */
+    public <J> Condition<E> lessThanOrEqualTo(final JoinBuilder<E, J> join,
+            final SingularAttribute<J, LocalDateTime> field, final LocalDateTime value) {
+        return new AbstractCondition<E>() {
+
+            @Override
+            public Predicate getPredicates() {
+                return builder.lessThanOrEqualTo(getJoin(join).get(field), value);
+            }
+        };
+    }
+
     public <J> Condition<E> lessThanOrEqualTo(final JoinBuilder<E, J> join, final SingularAttribute<J, Date> field,
             final Date value) {
         return new AbstractCondition<E>() {
@@ -1326,6 +1420,17 @@ public abstract class JpaDslAbstract<E, R> {
         return this;
     }
 
+    /**
+     * Uses {@link LocalDateTime}
+     * 
+     * @param field
+     * @param value
+     * @return
+     */
+    public Condition<E> lt(final SingularAttribute<? super E, LocalDateTime> field, final LocalDateTime value) {
+        return lessThan(field, value);
+    }
+
     public Condition<E> lt(final SingularAttribute<? super E, Date> field, final Date value) {
         return lessThan(field, value);
     }
@@ -1333,6 +1438,20 @@ public abstract class JpaDslAbstract<E, R> {
     public <J, V extends Comparable<? super V>> Condition<E> lt(final SingularAttribute<? super E, J> joinAttribute,
             final JoinType joinType, final SingularAttribute<J, V> field, final V value) {
         return lessThan(joinAttribute, joinType, field, copyEntityForQuery(value));
+    }
+
+    /**
+     * Uses {@link LocalDateTime}
+     * 
+     * @param <V>
+     * @param joinBuilder
+     * @param field
+     * @param value
+     * @return
+     */
+    public <V> Condition<E> ltEq(final JoinBuilder<E, V> joinBuilder, final SingularAttribute<V, LocalDateTime> field,
+            final LocalDateTime value) {
+        return lessThanOrEqualTo(joinBuilder, field, value);
     }
 
     public <V> Condition<E> ltEq(final JoinBuilder<E, V> joinBuilder, final SingularAttribute<V, Date> field,
@@ -1353,6 +1472,17 @@ public abstract class JpaDslAbstract<E, R> {
     public <J, V extends Comparable<? super V>> Condition<E> ltEq(final SingularAttribute<? super E, J> joinAttribute,
             final JoinType joinType, final SingularAttribute<J, V> field, final V value) {
         return lessThanOrEqualTo(joinAttribute, joinType, field, value);
+    }
+
+    /**
+     * Uses {@link LocalDateTime}
+     * 
+     * @param field
+     * @param value
+     * @return
+     */
+    public Condition<E> ltEq(final SingularAttribute<E, LocalDateTime> field, final LocalDateTime value) {
+        return lessThanOrEqualTo(field, value);
     }
 
     public Condition<E> ltEq(final SingularAttribute<E, Date> field, final Date value) {
