@@ -3,6 +3,7 @@ package au.com.vaadinutils.flow.fields.contextmenu;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +27,7 @@ public class GridContextMenuLegacy<E> extends EntityContextMenu<E> {
     private static final long serialVersionUID = -5882295471669681116L;
 
     private final Logger logger = LogManager.getLogger();
-    private boolean loadCrud = false;
+    private AtomicBoolean loadCrud = new AtomicBoolean(false);
     private SerializablePredicate<E> dynamicContentHandler;
 
     // Used to determine which menu is opened or hidden.
@@ -70,7 +71,7 @@ public class GridContextMenuLegacy<E> extends EntityContextMenu<E> {
 
     private void defaultContextActions(final Grid<E> grid, final boolean loadCrud) {
         super.setTarget(grid);
-        this.loadCrud = loadCrud;
+        this.loadCrud.set(loadCrud);
 
         grid.addItemClickListener(e -> {
             buttonClicked = e.getButton();
@@ -135,7 +136,7 @@ public class GridContextMenuLegacy<E> extends EntityContextMenu<E> {
                         return true;
                     }
 
-                    if (loadCrud) {
+                    if (loadCrud.get()) {
                         setTargetEntity(loadEntity(item));
                     } else {
                         setTargetEntity(item);

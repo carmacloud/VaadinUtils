@@ -11,7 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import au.com.vaadinutils.flow.helper.VaadinHelper;
 import au.com.vaadinutils.flow.helper.VaadinHelper.NotificationType;
 
-public class NavigationLayout extends VerticalLayout {
+public class NavigationLayoutBasic extends VerticalLayout {
 
     private static final long serialVersionUID = 1873531700509420953L;
     private VerticalLayout contentPanel = new VerticalLayout();
@@ -25,11 +25,11 @@ public class NavigationLayout extends VerticalLayout {
     private String secondaryNotificationDescription = "Any changes you have made have been discarded";
     private final VaadinHelper vaadinHelper = new VaadinHelper();
 
-    public NavigationLayout() {
+    public NavigationLayoutBasic() {
         this(null);
     }
 
-    public NavigationLayout(final Component content) {
+    public NavigationLayoutBasic(final Component content) {
         this.setId(this.getClass().getSimpleName());
         this.setSizeFull();
         setPadding(false);
