@@ -75,18 +75,18 @@ public class JpaDslTupleBuilderGroup<E> {
     }
 
     public interface JpaDslTupleBuilderGroupItem<E> {
-        public void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
+        void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
     }
 
-    public void setCommon(JpaDslTupleBuilderGroupCommon<E> common) {
+    public void setCommon(final JpaDslTupleBuilderGroupCommon<E> common) {
         this.common = common;
     }
 
     public interface JpaDslTupleBuilderGroupCommon<E> {
-        public void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
+        void conditionsWillBeAdded(final JpaDslTupleBuilder<E> builder, final List<Condition<E>> conditions);
     }
 
-    public <T> void multiselect(SingularAttribute<E, T> attribute) {
+    public <T> void multiselect(final SingularAttribute<E, T> attribute) {
         multiselects.put(attribute, positionCounter++);
     }
 
@@ -101,7 +101,7 @@ public class JpaDslTupleBuilderGroup<E> {
         // If this is the case then just return null
         try {
             return tuple.get(alias);
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             return null;
         }
     }
@@ -115,7 +115,7 @@ public class JpaDslTupleBuilderGroup<E> {
         }
 
         if (builders.size() > 0) {
-            for (JpaDslTupleBuilderGroupItem<E> builder : builders) {
+            for (final JpaDslTupleBuilderGroupItem<E> builder : builders) {
                 results.addAll(makeQuery(builder));
             }
         } else {
@@ -134,7 +134,7 @@ public class JpaDslTupleBuilderGroup<E> {
     private List<Tuple> makeQuery(final JpaDslTupleBuilderGroupItem<E> builder) {
         final JpaDslTupleBuilder<E> q = new JpaDslTupleBuilder<>(entityClass);
 
-        for (Entry<SingularAttribute<E, ?>, Integer> multiselect : multiselects.entrySet()) {
+        for (final Entry<SingularAttribute<E, ?>, Integer> multiselect : multiselects.entrySet()) {
             q.multiselect(multiselect.getKey());
         }
 
@@ -154,7 +154,7 @@ public class JpaDslTupleBuilderGroup<E> {
 
         q.where(conditions);
 
-        for (JpaDslOrder order : orders) {
+        for (final JpaDslOrder order : orders) {
             q.orderBy(order.getField(), order.getAscending());
         }
 

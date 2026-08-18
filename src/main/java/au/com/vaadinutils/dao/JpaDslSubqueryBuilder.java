@@ -15,7 +15,7 @@ public class JpaDslSubqueryBuilder<P, E> extends JpaDslBuilder<E> {
     private Subquery<E> subQuery;
     private Root<P> parentRoot;
 
-    public JpaDslSubqueryBuilder(Class<E> entityClass, CriteriaQuery<?> query, Root<P> parentRoot) {
+    public JpaDslSubqueryBuilder(final Class<E> entityClass, final CriteriaQuery<?> query, final Root<P> parentRoot) {
         super(entityClass);
         criteria = null;
 

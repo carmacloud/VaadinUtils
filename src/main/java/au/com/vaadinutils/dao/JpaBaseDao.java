@@ -115,7 +115,7 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
             }
             return null;
         }
-        return getEntityManager().find(entityClass, new Long(id));
+        return getEntityManager().find(entityClass, Long.valueOf(id));
     }
 
     public <T> JpaDslSelectAttributeBuilder<E, T> select(final SingularAttribute<? super E, T> attribute) {
@@ -777,18 +777,19 @@ public class JpaBaseDao<E, K> implements GenericDao<E, K> {
 
     /**
      * Convenience method to split a {@link List} of {@link Long} ids into a number
-     * of lists with the count <=2000. This prevents excessive records being
-     * returned if we use min and max numbers and between to find records when
-     * caching.<br>
-     * If the list passed in is > allowed size, then the {@link Map} is populated
-     * with as many lists as required to accommodate all the ids. If it is empty,
-     * then the list of ids is < allowed size and can be processed as is.
+     * of lists with the 'count less than or equal to2000'. This prevents excessive
+     * records being returned if we use min and max numbers and between to find
+     * records when caching.<br>
+     * If the list passed in is greater than allowed size, then the {@link Map} is
+     * populated with as many lists as required to accommodate all the ids. If it is
+     * empty, then the list of ids is less than allowed size and can be processed as
+     * is.
      * 
-     * @param ids A {@link List} of Long ids to be split into lists with length <
-     *            2000.
-     * @return A {@link Map} of {@link Integer}/ {@link List}< {@link Long}> pairs
-     *         which are the split lists from the passed in list. If empty, the list
-     *         was under the allowed size.
+     * @param ids A {@link List} of Long ids to be split into lists with length less
+     *            than 2000.
+     * @return A {@link Map} of {@link Integer}/ {@link List} greater than
+     *         {@link Long} greater than pairs which are the split lists from the
+     *         passed in list. If empty, the list was under the allowed size.
      */
     protected Map<Integer, List<Long>> createSplitLists(final List<Long> ids) {
         int remaining = ids.size();

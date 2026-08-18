@@ -56,20 +56,20 @@ public class JpaDslBuilderGroup<E> {
         this.entityClass = entityClass;
     }
 
-    public void addItem(JpaDslBuilderGroupItem<E> builder) {
+    public void addItem(final JpaDslBuilderGroupItem<E> builder) {
         builders.add(builder);
     }
 
     public interface JpaDslBuilderGroupItem<E> {
-        public void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
+        void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
     }
 
-    public void setCommon(JpaDslBuilderGroupCommon<E> common) {
+    public void setCommon(final JpaDslBuilderGroupCommon<E> common) {
         this.common = common;
     }
 
     public interface JpaDslBuilderGroupCommon<E> {
-        public void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
+        void conditionsWillBeAdded(final JpaDslBuilder<E> builder, final List<Condition<E>> conditions);
     }
 
     public List<E> getResults() {
@@ -81,7 +81,7 @@ public class JpaDslBuilderGroup<E> {
         }
 
         if (builders.size() > 0) {
-            for (JpaDslBuilderGroupItem<E> builder : builders) {
+            for (final JpaDslBuilderGroupItem<E> builder : builders) {
                 results.addAll(makeQuery(builder));
             }
         } else {
@@ -115,7 +115,7 @@ public class JpaDslBuilderGroup<E> {
 
         q.where(conditions);
 
-        for (JpaDslOrder order : orders) {
+        for (final JpaDslOrder order : orders) {
             q.orderBy(order.getField(), order.getAscending());
         }
 

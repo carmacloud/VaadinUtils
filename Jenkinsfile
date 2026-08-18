@@ -4,7 +4,7 @@ pipeline {
     }
     agent {
         docker {
-            image 'maven:3.8.6-jdk-8'
+            image 'maven:3.9.2-jdk-11'
             args '-e MAVEN_CONFIG=/var/jenkins_home/.m2'
         }
     }

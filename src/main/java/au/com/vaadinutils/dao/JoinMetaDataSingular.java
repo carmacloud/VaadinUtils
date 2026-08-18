@@ -19,23 +19,23 @@ public class JoinMetaDataSingular<E, K> implements JoinMetaData<E, K> {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }
-        JoinMetaDataSingular other = (JoinMetaDataSingular) obj;
+        final JoinMetaDataSingular other = (JoinMetaDataSingular) obj;
         return type == other.type && attribute == other.attribute && fetch == other.fetch;
     }
 
     @Override
     public int hashCode() {
-        return type.hashCode() + attribute.hashCode() + new Boolean(fetch).hashCode();
+        return type.hashCode() + attribute.hashCode() + Boolean.valueOf(fetch).hashCode();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public Join<E, K> getJoin(Root<E> root) {
-        for (Fetch<E, ?> join : root.getFetches()) {
+    public Join<E, K> getJoin(final Root<E> root) {
+        for (final Fetch<E, ?> join : root.getFetches()) {
             if (join.getAttribute().equals(attribute) && join.getJoinType().equals(type)) {
                 return (Join<E, K>) join;
             }
@@ -45,7 +45,7 @@ public class JoinMetaDataSingular<E, K> implements JoinMetaData<E, K> {
             return (Join<E, K>) root.fetch(attribute, type);
         }
 
-        for (Join<E, ?> join : root.getJoins()) {
+        for (final Join<E, ?> join : root.getJoins()) {
             if (join.getAttribute().equals(attribute) && join.getJoinType().equals(type)) {
                 return (Join<E, K>) join;
             }
@@ -56,8 +56,8 @@ public class JoinMetaDataSingular<E, K> implements JoinMetaData<E, K> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Join<E, K> getJoin(Join<?, E> join) {
-        for (Fetch<E, ?> existingJoin : join.getFetches()) {
+    public Join<E, K> getJoin(final Join<?, E> join) {
+        for (final Fetch<E, ?> existingJoin : join.getFetches()) {
             if (existingJoin.getAttribute().equals(attribute) && existingJoin.getJoinType().equals(type)) {
                 return (Join<E, K>) existingJoin;
             }
@@ -67,7 +67,7 @@ public class JoinMetaDataSingular<E, K> implements JoinMetaData<E, K> {
             return (Join<E, K>) join.fetch(attribute, type);
         }
 
-        for (Join<E, ?> existingJoin : join.getJoins()) {
+        for (final Join<E, ?> existingJoin : join.getJoins()) {
             if (existingJoin.getAttribute().equals(attribute) && existingJoin.getJoinType().equals(type)) {
                 return (Join<E, K>) existingJoin;
             }

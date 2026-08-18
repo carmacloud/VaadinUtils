@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -145,7 +145,7 @@ public class GridExtender<T> {
                     final T selected = selectedItems.get(selectedItems.size() - 1);
                     if (selected != null) {
                         e.getAllSelectedItems().forEach(row -> {
-                            // Make sure we don't attempt to de-select any rows other than the currently
+							// Make sure we don't attempt to delselect any rows other than the currently
                             // selected.
                             if (row.equals(selected) && !userSelectedRows.contains(row)) {
                                 grid.deselect(selected);
@@ -419,7 +419,7 @@ public class GridExtender<T> {
                         // If there are no stored settings, bypass this section and assume the current
                         // settings are the ones to use.
                         if (!storedVisibleSetting.isEmpty()) {
-                            if (StringUtils.equals(storedVisibleSetting, "false")) {
+							if (Strings.CS.equals(storedVisibleSetting, "false")) {
                                 column.setVisible(false);
                             } else {
                                 column.setVisible(true);
@@ -585,8 +585,8 @@ public class GridExtender<T> {
     }
 
     /**
-     * Convenience method to set all columns non-sortable.<br. This overrides any
-     * settings that allowed a partial sort.
+     * Convenience method to set all columns non-sortable.<br>
+     * . This overrides any settings that allowed a partial sort.
      */
     public void setAllColumnsNonSortable() {
         final Set<String> keys = new HashSet<>();

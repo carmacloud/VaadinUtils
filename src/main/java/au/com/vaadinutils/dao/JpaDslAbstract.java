@@ -569,8 +569,6 @@ public abstract class JpaDslAbstract<E, R> {
     /**
      * for use with vaadin JPAContainer queryDelegate
      * 
-     * @param criteriaBuilder
-     * @param query
      * @param predicates
      */
     public void filtersWillBeAdded(final List<Predicate> predicates) {
