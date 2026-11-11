@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.datepicker.DatePicker.DatePickerI18n;
 import com.vaadin.flow.component.html.Span;
@@ -239,9 +240,15 @@ public class VaadinHelper {
      * @param message A {@link Html} being the message body.
      * @param type    A {@link NotificationType} that determines the colour and
      *                positioning of the {@link Notification}.
+     * @param size    An {@link Integer} being the optional width setting for the
+     *                {@link Notification}. If null, the width is ignored.
      */
-    public Notification notificationDialog(final String caption, final Html message, final NotificationType type) {
+    public Notification notificationDialog(final String caption, final Html message, final NotificationType type,
+            final Integer size) {
         final Span contents = new Span(message);
+        if (size != null && size > 0) {
+            contents.setWidth(size, Unit.PIXELS);
+        }
         return createNotification(caption, type, contents);
     }
 
