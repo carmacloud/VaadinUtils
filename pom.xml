@@ -81,7 +81,7 @@
 		<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
  				<artifactId>maven-enforcer-plugin</artifactId>
- 				<version>3.6.2</version>
+ 				<version>3.7.0</version>
   				<executions>
     				<execution>
       					<id>enforce-maven</id>
@@ -101,7 +101,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.14.1</version>
+				<version>3.16.0</version>
 						<configuration>
 					<source>8</source>
 					<target>8</target>
