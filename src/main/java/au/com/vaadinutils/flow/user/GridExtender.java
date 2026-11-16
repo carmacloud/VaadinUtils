@@ -130,37 +130,37 @@ public class GridExtender<T> {
 		this.checkboxSelectionOnRowdisabled = disabled;
 	}
 
-	/**
-	 * Call this to disable the row selection from setting the check box on a
-	 * multi-select grid. (Should really only be needed on a multi-select and only
-	 * when a context menu attached.)
-	 */
-	public void disableCheckboxSelectionOnRowClick() {
-		this.registrations.add(grid.getSelectionModel().addSelectionListener(e -> {
-			if (!e.isFromClient() && !checkboxSelectionOnRowdisabled) {
-				if (!e.getAllSelectedItems().isEmpty()) {
-					final List<T> selectedItems = new ArrayList<T>(e.getAllSelectedItems());
-					// In a multi-select grid, the selected items are stored at the end, so the
-					// most recent entry (the last) is the most current selection.
-					final T selected = selectedItems.get(selectedItems.size() - 1);
-					if (selected != null) {
-						e.getAllSelectedItems().forEach(row -> {
+    /**
+     * Call this to disable the row selection from setting the check box on a
+     * multi-select grid. (Should really only be needed on a multi-select and only
+     * when a context menu attached.)
+     */
+    public void disableCheckboxSelectionOnRowClick() {
+        this.registrations.add(grid.getSelectionModel().addSelectionListener(e -> {
+            if (!e.isFromClient() && !checkboxSelectionOnRowdisabled) {
+                if (!e.getAllSelectedItems().isEmpty()) {
+                    final List<T> selectedItems = new ArrayList<T>(e.getAllSelectedItems());
+                    // In a multi-select grid, the selected items are stored at the end, so the
+                    // most recent entry (the last) is the most current selection.
+                    final T selected = selectedItems.get(selectedItems.size() - 1);
+                    if (selected != null) {
+                        e.getAllSelectedItems().forEach(row -> {
 							// Make sure we don't attempt to delselect any rows other than the currently
-							// selected.
-							if (row.equals(selected) && !userSelectedRows.contains(row)) {
-								grid.deselect(selected);
-							}
-						});
-					}
-				}
-			} else {
-				// Keep a record of rows selected by the user, we don't want to deselect any of
-				// those.
-				userSelectedRows.clear();
-				userSelectedRows.addAll(e.getAllSelectedItems());
-			}
-		}));
-	}
+                            // selected.
+                            if (row.equals(selected) && !userSelectedRows.contains(row)) {
+                                grid.deselect(selected);
+                            }
+                        });
+                    }
+                }
+            } else {
+                // Keep a record of rows selected by the user, we don't want to deselect any of
+                // those.
+                userSelectedRows.clear();
+                userSelectedRows.addAll(e.getAllSelectedItems());
+            }
+        }));
+    }
 
 	public List<String> getVisibleColumns() {
 		final List<String> columnKeys = new ArrayList<>();
@@ -416,15 +416,15 @@ public class GridExtender<T> {
 								: MemberSettingsStorageFactory.getUserSettingsStorage()
 										.get(keyStub + "-" + column.getKey());
 
-						// If there are no stored settings, bypass this section and assume the current
-						// settings are the ones to use.
-						if (!storedVisibleSetting.isEmpty()) {
+                        // If there are no stored settings, bypass this section and assume the current
+                        // settings are the ones to use.
+                        if (!storedVisibleSetting.isEmpty()) {
 							if (Strings.CS.equals(storedVisibleSetting, "false")) {
-								column.setVisible(false);
-							} else {
-								column.setVisible(true);
-							}
-						}
+                                column.setVisible(false);
+                            } else {
+                                column.setVisible(true);
+                            }
+                        }
 
 						if (column.isVisible()) {
 							show.setColor(VaadinHelper.CARMA_DARK_BLACK);
@@ -584,16 +584,16 @@ public class GridExtender<T> {
 		});
 	}
 
-	/**
-	 * Convenience method to set all columns non-sortable.<br>
-	 * . This overrides any settings that allowed a partial sort.
-	 */
-	public void setAllColumnsNonSortable() {
-		final Set<String> keys = new HashSet<>();
-		grid.getColumns().forEach(col -> {
-			keys.add(col.getKey());
-		});
-		nonSortKeys = new HashSet<String>();
-		setColumnsNonSortable(keys);
-	}
+    /**
+     * Convenience method to set all columns non-sortable.<br>
+     * . This overrides any settings that allowed a partial sort.
+     */
+    public void setAllColumnsNonSortable() {
+        final Set<String> keys = new HashSet<>();
+        grid.getColumns().forEach(col -> {
+            keys.add(col.getKey());
+        });
+        nonSortKeys = new HashSet<String>();
+        setColumnsNonSortable(keys);
+    }
 }

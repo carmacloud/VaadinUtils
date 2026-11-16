@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -131,8 +132,8 @@ public class TimePicker extends CustomField<LocalDateTime> {
         LocalDateTime parsedDate;
         try {
             parsedDate = parseDate(field.getValue());
-            hourToSet = parsedDate.getHour();
-            minuteToSet = parsedDate.getMinute();
+            hourToSet = Optional.ofNullable(parsedDate).map(ldt -> ldt.getHour()).orElse(0);
+            minuteToSet = Optional.ofNullable(parsedDate).map(ldt -> ldt.getMinute()).orElse(0);
         } catch (final DateTimeException e1) {
             logger.error(e1.getMessage());
         }
@@ -321,7 +322,8 @@ public class TimePicker extends CustomField<LocalDateTime> {
 
     private void setNewValue() {
         hourToSet = ("PM".equals(periodClicked) ? hourToSet + 12 : (hourToSet > 12 ? hourToSet - 12 : hourToSet));
-        modifiedDate = modifiedDate.withHour(hourToSet).withMinute(minuteToSet);
+        modifiedDate = Optional.ofNullable(modifiedDate).orElse(LocalDateTime.now()).withHour(hourToSet)
+                .withMinute(minuteToSet);
         setValue(modifiedDate);
         displayTime.setValue(modifiedDate.format(dtf));
     }
